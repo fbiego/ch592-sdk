@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : hidconsumer.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2020/08/06
- * Description        : 蓝牙拍照器应用程序，初始化广播连接参数，然后广播，直至连接主机后，定时上传音量键下键
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : hiddenconsumer.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/06
+* Description: Bluetooth photo shooter application, initialize the broadcast connection parameters, and then broadcast until the host is connected, and upload the volume key to the down key.
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

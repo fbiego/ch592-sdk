@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "hiddev.h"
@@ -33,16 +33,15 @@ const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #define IAP_SAFE_FLAG_BLE        0x30de5821
 #define IAP_SAFE_FLAG_MASK       0x30de5820
 
-/* 用于APP判断文件有效性 */
+/* Used to determine the validity of files on the APP */
 __attribute__((aligned(4))) uint32_t save_Flag __attribute__((section(".ImageFlag"))) = IAP_SAFE_FLAG_BLE;
 
-/*********************************************************************
- * @fn      Main_Circulation
- *
- * @brief   主循环
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn Main_Circulation
+*
+* @brief main loop
+*
+* @return none */
 __HIGH_CODE
 __attribute__((noinline))
 void Main_Circulation()
@@ -139,13 +138,12 @@ void trans_RF_receive( uint8_t *pData, uint8_t len )
     PRINT("RF %x\n",pData[0] );
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
     PowerMonitor(ENABLE, LPLevel_2V5);

@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : rf_device.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/15
- * Description        : rf收发测试例程，单向发送
- *                      PB15低电平为发送模式，默认为接收模式
- *
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: rf_device.c
+* Author: WCH
+* Version: V1.0
+* Date: 2022/03/15
+* Description: rf send and receive test routine, one-way send
+* PB15 low level is the sending mode, default is the receiving mode
+*
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include <rf.h>
 #include <SLEEP.h>
 #include "rf_device.h"
@@ -26,7 +26,7 @@
 
 #define  RF_TEST_PERIDOC   500  // 2K
 
-#define RF_REPORT_DISCONNECT_DELAY      (160*4)//延迟上报断开，防止睡眠唤醒的短暂断连影响状态上报
+#define RF_REPORT_DISCONNECT_DELAY      (160*4)// Delay reporting disconnection to prevent short-term interruption of sleep awakening from affecting status reporting
 
 RF_con_status_t RF_state;
 
@@ -54,13 +54,12 @@ uint8_t self_mac[6] = {0};
 
 uint8_t gRetry = 0;
 
-/*********************************************************************
- * @fn      RF_check_con_status
- *
- * @brief   检查当前连接状态
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RF_check_con_status
+*
+* @brief Check the current connection status
+*
+* @return none */
 __HIGH_CODE
 uint8_t RF_check_con_status(RF_con_status_t status)
 {
@@ -70,28 +69,26 @@ uint8_t RF_check_con_status(RF_con_status_t status)
         return (FALSE) ;
 }
 
-/*********************************************************************
- * @fn      RF_set_con_status
- *
- * @brief   设置当前连接状态
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RF_set_con_status
+*
+* @brief Set the current connection status
+*
+* @return none */
 __HIGH_CODE
 void RF_set_con_status(RF_con_status_t status)
 {
     RF_state=status;
 }
 
-/*******************************************************************************
- * @fn      rf_get_txbuf_num
- *
- * @brief   RF 获取当前发送缓冲中的包个数
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_get_txbuf_num
+*
+* @brief RF Get the number of packets in the current sending buffer
+*
+* @param None.
+*
+* @return None. */
 uint8_t rf_get_txbuf_num( void )
 {
     int num;
@@ -106,15 +103,14 @@ uint8_t rf_get_txbuf_num( void )
     return count;
 }
 
-/*******************************************************************************
- * @fn      rf_get_data
- *
- * @brief   获取一包RF接收DMA中的数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_get_data
+*
+* @brief Get a packet of RF receiving data in DMA
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 uint8_t *rf_get_data( uint8_t *pLen)
 {
@@ -128,15 +124,14 @@ uint8_t *rf_get_data( uint8_t *pLen)
     }
 }
 
-/*******************************************************************************
- * @fn      rf_delete_data
- *
- * @brief   删除一包RF接收DMA中的数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_delete_data
+*
+* @brief Delete a packet of RF receiving data in DMA
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void rf_delete_data()
 {
@@ -144,15 +139,14 @@ void rf_delete_data()
     pDMARxGet = (RF_DMADESCTypeDef *) pDMARxGet->NextDescAddr;
 }
 
-/*******************************************************************************
- * @fn      rf_send_data
- *
- * @brief   向RF发送DMA中添加一包数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_send_data
+*
+* @brief Add a packet of data to send DMA to RF
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 uint8_t rf_send_data( uint8_t *pData, uint8_t len)
 {
@@ -178,24 +172,23 @@ uint8_t rf_send_data( uint8_t *pData, uint8_t len)
 }
 
 
-/*******************************************************************************
- * @fn      RF_ProcessCallBack
- *
- * @brief   RF 状态回调，注意此函数为中断中调用
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_ProcessCallBack
+*
+* @brief RF state callback, note that this function is called in interrupt
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
 {
-    // 收到数据回调
+    // Received a data callback
     if( sta & RF_STATE_RX )
     {
         tmos_set_event( rfTaskID, RF_RECV_PROCESS_EVENT );
     }
-    // 接收DMA满
+    // Receive DMA full
     if( sta & RF_STATE_RBU )
     {
         PRINT( "!rbu\n" );
@@ -215,15 +208,14 @@ void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
 //    }
 }
 
-/*******************************************************************************
- * @fn      rfRoleBoundProcess
- *
- * @brief   连接绑定状态回调
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rfRoleBoundProcess
+*
+* @brief Connection binding status callback
+*
+* @param None.
+*
+* @return None. */
 void rfRoleBoundProcess( staBound_t *pSta )
 {
     PRINT( "bound %x\n",pSta->status );
@@ -238,14 +230,14 @@ void rfRoleBoundProcess( staBound_t *pSta )
 //        tmos_start_reload_task(rfTaskID, RF_TEST_TX_EVENT, 1600);
         RF_set_con_status(RF_CON_CONNECTED);
         gDeviceId = pSta->devId;
-        // 判断当前RF角色
+        // Determine the current RF role
         if( !(pSta->role&1) )
         {
-            // 当前为接收端（dongle）
+            // Currently the receiver (dongle)
         }
         else
         {
-            // 当前为发送端（鼠标）
+            // Currently the sending end (mouse)
             if((nvs_flash_info.rf_device_id!=pSta->devId) ||
                 (!tmos_memcmp(nvs_flash_info.peer_mac, pSta->PeerInfo, 6)))
             {
@@ -266,13 +258,13 @@ void rfRoleBoundProcess( staBound_t *pSta )
     {
         if( !(pSta->role&1) )
         {
-            // 当前为接收端（dongle）
+            // Currently the receiver (dongle)
         }
         else
         {
-            // 当前为发送端（鼠标）
+            // Currently the sending end (mouse)
         }
-        // RF自动回连超时失败
+        // RF automatic reconnection timeout failed
         if( pSta->status == FAILURE )
         {
             if(RF_check_con_status(RF_CON_CONNECTED))
@@ -284,11 +276,11 @@ void rfRoleBoundProcess( staBound_t *pSta )
             RF_set_con_status(RF_CON_IDEL);
             tmos_set_event( rfTaskID, RF_START_BOUND_EVENT );
         }
-        // RF当前连接断开，自动启用回连
+        // RF is currently disconnected, and the connection is automatically enabled
         else if( pSta->status == bleTimeout )
         {
 #if(CLK_OSC32K)
-            Lib_Calibration_LSI(); // 校准内部RC
+            Lib_Calibration_LSI(); // Calibrate internal RC
 #endif
             PRINT( "t o.\n" );
             tmos_start_task(rfTaskID, RF_REPORT_DISCONNECT_EVENT, RF_REPORT_DISCONNECT_DELAY);
@@ -296,15 +288,14 @@ void rfRoleBoundProcess( staBound_t *pSta )
     }
 }
 
-/*******************************************************************************
- * @fn      RF_ProcessEvent
- *
- * @brief   RF层系统任务处理
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_ProcessEvent
+*
+* @brief RF layer system task processing
+*
+* @param None.
+*
+* @return None. */
 tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
     if( events & SYS_EVENT_MSG )
@@ -329,10 +320,10 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 //        PRINT("start tx mode\n");
 #if (KEYBOARD)
         bound.devType = DEVICE_KEYBOARD_TYPE;
-        bound.deviceId = DEVICE_KEYBOARD; // RF_ROLE_ID_INVALD表示由dongle端决定ID号，也可指定ID号
+        bound.deviceId = DEVICE_KEYBOARD; // RF_ROLE_ID_INVALD means that the ID number is determined by the dongle end, and the ID number can also be specified.
 #elif (MOUSE)
         bound.devType = DEVICE_MOUSE_TYPE;
-        bound.deviceId = RF_ROLE_ID_INVALD; // RF_ROLE_ID_INVALD表示由dongle端决定ID号，也可指定ID号
+        bound.deviceId = RF_ROLE_ID_INVALD; // RF_ROLE_ID_INVALD means that the ID number is determined by the dongle end, and the ID number can also be specified.
 #else
         PRINT("devType ERR!\n");
         while(1);
@@ -396,8 +387,8 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
             RFRole_Shut();
             peripheral_enter_sleep();
             PWR_PeriphWakeUpCfg( DISABLE, RB_SLP_RTC_WAKE, Long_Delay );
-//            LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND ); //只保留24+2K SRAM 供电
-            HSECFG_Current(HSE_RCur_100); // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+// LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND ); //Only 24+2K SRAM power supply is retained
+            HSECFG_Current(HSE_RCur_100); // Reduced to rated current (HSE bias current is increased in low power consumption function)
 //            LowPower_Shutdown(RB_PWR_RAM2K);
 //            SYS_ResetExecute();
             RFIP_WakeUpRegInit();
@@ -454,15 +445,14 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
     return 0;
 }
 
-/*******************************************************************************
- * @fn      RF_ReStart
- *
- * @brief   RF重新初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_ReStart
+*
+* @brief RF reinitialization
+*
+* @param None.
+*
+* @return None. */
 void RF_ReStart( void )
 {
     RFRole_Shut();
@@ -511,15 +501,14 @@ void RF_stop( void )
     RF_set_con_status(RF_CON_IDEL);
 }
 
-/*******************************************************************************
- * @fn      RF_Init
- *
- * @brief   RF应用层初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_Init
+*
+* @brief RF application layer initialization
+*
+* @param None.
+*
+* @return None. */
 void RF_Init( void )
 {
     rfTaskID = TMOS_ProcessEventRegister( RF_ProcessEvent );

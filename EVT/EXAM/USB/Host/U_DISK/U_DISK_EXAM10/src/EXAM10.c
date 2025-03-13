@@ -1,20 +1,20 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : EXAM10.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2020/08/11
- * Description        :
- * C语言的U盘文件创建，修改文件属性，删除文件等操作
- * 支持: FAT12/FAT16/FAT32
- * 注意包含 CHRV3UFI.LIB/USBHOST.C/DEBUG.C
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: EXAM10.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/11
+* Description:
+* C language USB disk file creation, modify file attributes, delete files, etc.
+* Support: FAT12/FAT16/FAT32
+* Note that CHRV3UFI.LIB/USBHOST.C/DEBUG.C is included
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
-/** 不使用U盘文件系统库，需要在工程属性预编译中修改 DISK_LIB_ENABLE=0        */
-/** U盘挂载USBhub下面，需要在工程属性预编译中修改 DISK_WITHOUT_USB_HUB=0  */
+/* * Do not use the U disk file system library, need to modify DISK_LIB_ENABLE=0 in precompilation of engineering properties. */
+/* * When the USB drive is mounted under USBhub, you need to modify DISK_WITHOUT_USB_HUB=0 */
 
 #include "CH59x_common.h"
 #include "CHRV3UFI.H"
@@ -22,40 +22,38 @@
 __attribute__((aligned(4))) uint8_t RxBuffer[MAX_PACKET_SIZE]; // IN, must even address
 __attribute__((aligned(4))) uint8_t TxBuffer[MAX_PACKET_SIZE]; // OUT, must even address
 
-uint8_t buf[100]; //长度可以根据应用自己指定
+uint8_t buf[100]; // The length can be specified by the application itself
 
-/*********************************************************************
- * @fn      mStopIfError
- *
- * @brief   检查操作状态,如果错误则显示错误代码并停机
- *
- * @param   iError  - 错误码
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mStopIfError
+*
+* @brief Check operation status, if it is wrong, the error code will be displayed and the operation will be shut down
+*
+* @param iError - Error code
+*
+* @return none */
 void mStopIfError(uint8_t iError)
 {
     if(iError == ERR_SUCCESS)
     {
-        return; /* 操作成功 */
+        return; /* Operation is successful */
     }
-    PRINT("Error: %02X\n", (uint16_t)iError); /* 显示错误 */
-    /* 遇到错误后,应该分析错误码以及CHRV3DiskStatus状态,例如调用CHRV3DiskReady查询当前U盘是否连接,如果U盘已断开那么就重新等待U盘插上再操作,
-     建议出错后的处理步骤:
-     1、调用一次CHRV3DiskReady,成功则继续操作,例如Open,Read/Write等
-     2、如果CHRV3DiskReady不成功,那么强行将从头开始操作(等待U盘连接，CH554DiskReady等) */
+    PRINT("Error: %02X\n", (uint16_t)iError); /* Display error */
+    /* After encountering an error, the error code and CHRV3DiskStatus status should be analyzed. For example, call CHRV3DiskReady to check whether the current USB disk is connected. If the USB disk is disconnected, wait for the USB disk to be plugged in before operation.
+Recommended steps to deal with errors:
+1. Call CHRV3DiskReady once, and continue to operate successfully, such as Open, Read/Write, etc.
+2. If CHRV3DiskReady fails, then the operation will be forced from scratch (waiting for the USB flash drive connection, CH554DiskReady, etc.) */
     while(1)
     {
     }
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main()
 {
     uint8_t s, c, i;
@@ -71,33 +69,33 @@ int main()
     pHOST_RX_RAM_Addr = RxBuffer;
     pHOST_TX_RAM_Addr = TxBuffer;
     USB_HostInit();
-    CHRV3LibInit(); //初始化U盘程序库以支持U盘文件
+    CHRV3LibInit(); // Initialize the USB disk library to support USB disk files
 
     FoundNewDev = 0;
     while(1)
     {
         s = ERR_SUCCESS;
-        if(R8_USB_INT_FG & RB_UIF_DETECT) // 如果有USB主机检测中断则处理
+        if(R8_USB_INT_FG & RB_UIF_DETECT) // If there is a USB host detection interrupt, it will be handled
         {
-            R8_USB_INT_FG = RB_UIF_DETECT; // 清连接中断标志
-            s = AnalyzeRootHub();          // 分析ROOT-HUB状态
+            R8_USB_INT_FG = RB_UIF_DETECT; // Clear connection interrupt flag
+            s = AnalyzeRootHub();          // Analyze ROOT-HUB status
             if(s == ERR_USB_CONNECT)
                 FoundNewDev = 1;
         }
 
-        if(FoundNewDev || s == ERR_USB_CONNECT) // 有新的USB设备插入
+        if(FoundNewDev || s == ERR_USB_CONNECT) // There is a new USB device plugged in
         {
             FoundNewDev = 0;
-            mDelaymS(200);        // 由于USB设备刚插入尚未稳定,故等待USB设备数百毫秒,消除插拔抖动
-            s = InitRootDevice(); // 初始化USB设备
+            mDelaymS(200);        // Since the USB device has just been plugged in, it is not stable yet, so wait for the USB device to be hundreds of milliseconds to eliminate plug-in and unplug jitter
+            s = InitRootDevice(); // Initialize USB device
             if(s == ERR_SUCCESS)
             {
-                // U盘操作流程：USB总线复位、U盘连接、获取设备描述符和设置USB地址、可选的获取配置描述符，之后到达此处，由CHRV3子程序库继续完成后续工作
+                // USB drive operation process: USB bus reset, USB drive connection, obtain device descriptors and set USB address, optional obtain configuration descriptors, and then arrive here, and the CHRV3 subroutine library continues to complete the subsequent work.
                 CHRV3DiskStatus = DISK_USB_ADDR;
                 for(i = 0; i != 10; i++)
                 {
                     PRINT("Wait DiskReady\n");
-                    s = CHRV3DiskReady(); //等待U盘准备好
+                    s = CHRV3DiskReady(); // Wait for the USB drive to be ready
                     if(s == ERR_SUCCESS)
                     {
                         break;
@@ -111,49 +109,49 @@ int main()
 
                 if(CHRV3DiskStatus >= DISK_MOUNTED)
                 {
-                    //创建文件演示
+                    // Create a file demo
                     PRINT("Create\n");
-                    strcpy((uint8_t *)mCmdParam.Create.mPathName, "/NEWFILE.TXT"); /* 新文件名,在根目录下,中文文件名 */
-                    s = CHRV3FileCreate();                                         /* 新建文件并打开,如果文件已经存在则先删除后再新建 */
+                    strcpy((uint8_t *)mCmdParam.Create.mPathName, "/NEWFILE.TXT"); /* New file name, in the root directory, Chinese file name */
+                    s = CHRV3FileCreate();                                         /* Create a new file and open it. If the file already exists, delete it first and then create it. */
                     mStopIfError(s);
                     PRINT("ByteWrite\n");
-                    //实际应该判断写数据长度和定义缓冲区长度是否相符，如果大于缓冲区长度则需要多次写入
-                    i = sprintf((uint8_t *)buf, "Note: \xd\xa这个程序是以字节为单位进行U盘文件读写,RV3简单演示功能。\xd\xa"); /*演示 */
+                    // In fact, it should be determined whether the length of the write data and the length of the definition buffer match. If it is greater than the length of the buffer, it needs to be written multiple times.
+                    i = sprintf((uint8_t *)buf, "Note: \xd\xaU,RV3\xd\xa"); /* Demo */
                     for(c = 0; c < 10; c++)
                     {
-                        mCmdParam.ByteWrite.mByteCount = i;    /* 指定本次写入的字节数 */
-                        mCmdParam.ByteWrite.mByteBuffer = buf; /* 指向缓冲区 */
-                        s = CHRV3ByteWrite();                  /* 以字节为单位向文件写入数据 */
+                        mCmdParam.ByteWrite.mByteCount = i;    /* Specify the number of bytes written this time */
+                        mCmdParam.ByteWrite.mByteBuffer = buf; /* Point to the buffer */
+                        s = CHRV3ByteWrite();                  /* Write data to a file in bytes */
                         mStopIfError(s);
-                        PRINT("成功写入 %02X次\n", (uint16_t)c);
+                        PRINT(" %02X\n", (uint16_t)c);
                     }
-                    //演示修改文件属性
+                    // Demonstrate modifying file properties
                     PRINT("Modify\n");
-                    mCmdParam.Modify.mFileAttr = 0xff;                        //输入参数: 新的文件属性,为0FFH则不修改
-                    mCmdParam.Modify.mFileTime = 0xffff;                      //输入参数: 新的文件时间,为0FFFFH则不修改,使用新建文件产生的默认时间
-                    mCmdParam.Modify.mFileDate = MAKE_FILE_DATE(2015, 5, 18); //输入参数: 新的文件日期: 2015.05.18
-                    mCmdParam.Modify.mFileSize = 0xffffffff;                  // 输入参数: 新的文件长度,以字节为单位写文件应该由程序库关闭文件时自动更新长度,所以此处不修改
-                    i = CHRV3FileModify();                                    //修改当前文件的信息,修改日期
+                    mCmdParam.Modify.mFileAttr = 0xff;                        // Input parameters: New file attribute, if it is 0FFH, it will not be modified.
+                    mCmdParam.Modify.mFileTime = 0xffff;                      // Input parameters: If the new file time is 0FFFFH, it will not be modified. The default time generated by using the new file
+                    mCmdParam.Modify.mFileDate = MAKE_FILE_DATE(2015, 5, 18); // Input parameters: New file date: 2015.05.18
+                    mCmdParam.Modify.mFileSize = 0xffffffff;                  // Input parameters: New file length, writing files in bytes should be automatically updated when the library closes the file, so it will not be modified here
+                    i = CHRV3FileModify();                                    // Modify the information of the current file, date of modification
                     mStopIfError(i);
                     PRINT("Close\n");
-                    mCmdParam.Close.mUpdateLen = 1; /* 自动计算文件长度,以字节为单位写文件,建议让程序库关闭文件以便自动更新文件长度 */
+                    mCmdParam.Close.mUpdateLen = 1; /* Automatically calculate file length and write files in bytes. It is recommended that the program library close the file so that the file length can be automatically updated. */
                     i = CHRV3FileClose();
                     mStopIfError(i);
 
-//                    strcpy((uint8_t *)mCmdParam.Create.mPathName, "/NEWFILE.TXT"); /* 新文件名,在根目录下,中文文件名 */
-//                    s = CHRV3FileOpen();                                           /* 新建文件并打开,如果文件已经存在则先删除后再新建 */
+// strcpy((uint8_t *)mCmdParam.Create.mPathName, "/NEWFILE.TXT"); /* New file name, in the root directory, Chinese file name */
+// s = CHRV3FileOpen(); /* Create a new file and open it. If the file already exists, delete it first and then create it */
 //                    mStopIfError(s);
 
-                    /* 删除某文件 */
+                    /* Delete a file */
                     PRINT("Erase\n");
-                    strcpy((uint8_t *)mCmdParam.Create.mPathName, "/OLD"); //将被删除的文件名,在根目录下
-                    i = CHRV3FileErase();                                  //删除文件并关闭
+                    strcpy((uint8_t *)mCmdParam.Create.mPathName, "/OLD"); // The file name that will be deleted is in the root directory
+                    i = CHRV3FileErase();                                  // Delete the file and close it
                     if(i != ERR_SUCCESS)
-                        PRINT("Error: %02X\n", (uint16_t)i); //显示错误
+                        PRINT("Error: %02X\n", (uint16_t)i); // Display error
                 }
             }
         }
-        mDelaymS(100);  // 模拟单片机做其它事
-        SetUsbSpeed(1); // 默认为全速
+        mDelaymS(100);  // Simulate a microcontroller to do other things
+        SetUsbSpeed(1); // Default is full speed
     }
 }

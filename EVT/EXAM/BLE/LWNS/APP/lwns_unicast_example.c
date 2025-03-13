@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : lwns_unicast_example.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2021/06/19
- * Description        : lwns单播传输例子
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : lwns_unicast_example.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2021/06/19
+* Description        : lwns单播传输例子
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 #include "lwns_unicast_example.h"
 
-//每个文件单独debug打印的开关，置0可以禁止本文件内部打印
+// Each file has a separate debug print switch, setting 0 can prohibit internal printing of this file.
 #define DEBUG_PRINT_IN_THIS_FILE    1
 #if DEBUG_PRINT_IN_THIS_FILE
   #define PRINTF(...)    PRINT(__VA_ARGS__)
@@ -23,7 +23,7 @@
 #endif
 
 #if 1
-static lwns_addr_t dst_addr = {{0xab, 0xdf, 0x38, 0xe4, 0xc2, 0x84}}; //目标节点地址，测试时，请根据电路板芯片MAC地址不同进行修改。修改为接收方的MAC地址，请勿使用自己的MAC地址
+static lwns_addr_t dst_addr = {{0xab, 0xdf, 0x38, 0xe4, 0xc2, 0x84}}; // When testing, please modify the target node address according to the different MAC address of the circuit board chip.Modify it to the recipient's MAC address, please do not use your own MAC address
 #else
 static lwns_addr_t dst_addr = {{0xd9, 0x37, 0x3c, 0xe4, 0xc2, 0x84}};
 #endif
@@ -32,34 +32,33 @@ static uint8_t TX_DATA[10] =
     {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
 static uint8_t  RX_DATA[10];
 static uint16_t lwns_unicast_ProcessEvent(uint8_t task_id, uint16_t events);
-static void     unicast_recv(lwns_controller_ptr c, const lwns_addr_t *from); //单播接收回调函数
-static void     unicast_sent(lwns_controller_ptr ptr);                        //单播发送完成回调函数
+static void     unicast_recv(lwns_controller_ptr c, const lwns_addr_t *from); // Unicast receiving callback function
+static void     unicast_sent(lwns_controller_ptr ptr);                        // Unicast send complete callback function
 
-static lwns_unicast_controller unicast; //声明单播控制结构体
+static lwns_unicast_controller unicast; // Declare unicast control structure
 
-static uint8_t unicast_taskID; //声明单播控制任务id
+static uint8_t unicast_taskID; // Declare unicast control task id
 
-/*********************************************************************
- * @fn      unicast_recv
- *
- * @brief   lwns unicast接收回调函数
- *
- * @param   ptr     -   本次接收到的数据所属的单播控制结构体指针.
- * @param   sender  -   本次接收到的数据的发送者地址指针.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn unicast_recv
+*
+* @brief lwns unicast receive callback function
+*
+* @param ptr - The unicast control structure pointer to which the data received this time belongs.
+* @param sender - The sender address pointer of the data received this time.
+*
+* @return None. */
 static void unicast_recv(lwns_controller_ptr ptr, const lwns_addr_t *sender)
 {
     uint8_t len;
-    len = lwns_buffer_datalen(); //获取当前缓冲区接收到的数据长度
+    len = lwns_buffer_datalen(); // Get the data length received in the current buffer
     if(len == 10)
     {
-        lwns_buffer_save_data(RX_DATA); //接收数据到用户数据区域
+        lwns_buffer_save_data(RX_DATA); // Receive data to user data area
         PRINTF("unicast %d rec from %02x %02x %02x %02x %02x %02x\n",
                get_lwns_object_port(ptr),
                sender->v8[0], sender->v8[1], sender->v8[2], sender->v8[3],
-               sender->v8[4], sender->v8[5]); //sender为接收到的数据的发送方地址
+               sender->v8[4], sender->v8[5]); // sender is the sender address of the received data
         PRINTF("data:");
         for(uint8_t i = 0; i < len; i++)
         {
@@ -73,41 +72,38 @@ static void unicast_recv(lwns_controller_ptr ptr, const lwns_addr_t *sender)
     }
 }
 
-/*********************************************************************
- * @fn      unicast_sent
- *
- * @brief   lwns unicast发送完成回调函数
- *
- * @param   ptr     -   本次发送完成的可靠单播控制结构体指针.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn unicast_sent
+*
+* @brief lwns unicast send complete callback function
+*
+* @param ptr - The reliable unicast control structure pointer completed by this sending.
+*
+* @return None. */
 static void unicast_sent(lwns_controller_ptr ptr)
 {
     PRINTF("unicast %d sent\n", get_lwns_object_port(ptr));
 }
 
-/**
- * lwns 单播回调函数结构体，注册回调函数
- */
+/* *
+* lwns unicast callback function structure, register callback function */
 static const struct lwns_unicast_callbacks unicast_callbacks =
     {unicast_recv, unicast_sent};
 
-/*********************************************************************
- * @fn      lwns_unicast_process_init
- *
- * @brief   lwns unicast例程初始化.
- *
- * @param   None.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn lwns_unicast_process_init
+*
+* @brief lwns unicast routine initialization.
+*
+* @param None.
+*
+* @return None. */
 void lwns_unicast_process_init(void)
 {
     unicast_taskID = TMOS_ProcessEventRegister(lwns_unicast_ProcessEvent);
     lwns_unicast_init(&unicast,
-                      136,                 //打开一个端口号为136的单播
-                      &unicast_callbacks); //返回0代表打开失败。返回1打开成功。
+                      136,                 // Open a unicast with port number 136
+                      &unicast_callbacks); // Returning 0 means opening failed.Return to 1 Open successfully.
     tmos_start_task(unicast_taskID, UNICAST_EXAMPLE_TX_PERIOD_EVT,
                     MS1_TO_SYSTEM_TIME(1000));
 }
@@ -133,13 +129,13 @@ uint16_t lwns_unicast_ProcessEvent(uint8_t task_id, uint16_t events)
         temp = TX_DATA[0];
         for(uint8_t i = 0; i < 9; i++)
         {
-            TX_DATA[i] = TX_DATA[i + 1]; //移位发送数据，以便观察效果
+            TX_DATA[i] = TX_DATA[i + 1]; // Shift the data to observe the effect
         }
         TX_DATA[9] = temp;
-        lwns_buffer_load_data(TX_DATA, sizeof(TX_DATA)); //载入需要发送的数据到缓冲区
-        lwns_unicast_send(&unicast, &dst_addr);          //单播发送数据给指定节点
+        lwns_buffer_load_data(TX_DATA, sizeof(TX_DATA)); // Load the data to be sent to the buffer
+        lwns_unicast_send(&unicast, &dst_addr);          // Unicast sends data to the specified node
         tmos_start_task(unicast_taskID, UNICAST_EXAMPLE_TX_PERIOD_EVT,
-                        MS1_TO_SYSTEM_TIME(1000)); //周期性发送
+                        MS1_TO_SYSTEM_TIME(1000)); // Periodic sending
         return events ^ UNICAST_EXAMPLE_TX_PERIOD_EVT;
     }
     if(events & SYS_EVENT_MSG)

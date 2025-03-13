@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "peripheral.h"
 
 /*********************************************************************
@@ -53,7 +53,7 @@ uint8_t EC10_scan()
     {
         if(EC_B_ST)
         {
-            //正转
+            // Turning forward
             PRINT("EC +\n");
             sys_data_byte[1] = 0xE9;
             sys_data_byte[2] = 0x00;
@@ -61,7 +61,7 @@ uint8_t EC10_scan()
         }
         else
         {
-            //反转
+            // Reversal
             PRINT("EC -\n");
             sys_data_byte[1] = 0xEA;
             sys_data_byte[2] = 0x00;
@@ -91,12 +91,12 @@ uint8_t EC10_scan()
         peripheral_sleep_update();
         if(new_A_st == last_A_st)
         {
-            //正转
+            // Turning forward
 //            PRINT("EC +\n");
             ret = 0x01;
         }
         else {
-            //反转
+            // Reversal
 //            PRINT("EC -\n");
             ret = 0xFF;
         }

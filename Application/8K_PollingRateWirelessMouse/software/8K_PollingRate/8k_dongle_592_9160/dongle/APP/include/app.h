@@ -41,7 +41,7 @@ extern "C" {
 #define REPORT_ID_MANUFACTURER  0x05
 #define REPORT_ID_IAP           0x09
 
-// RF基本数据
+// RF
 #define CMD_CLASS_KEYBOARD      0x81
 #define CMD_ALL_KEYBOARD        0x82
 #define CMD_CONSUMER            0x83

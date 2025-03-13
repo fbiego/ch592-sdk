@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Main.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2020/08/06
- * Description        : SPI0演示 Master/Slave 模式数据收发
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : Main.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2020/08/06
+* Description        : SPI0演示 Master/Slave 模式数据收发
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 #include "CH59x_common.h"
 
@@ -29,12 +29,12 @@ int main()
 
     SetSysClock(CLK_SOURCE_PLL_60MHz);
 
-    /* 配置串口调试 */
+    /* Configure serial debugging */
     DebugInit();
     PRINT("Start @ChipID=%02X\n", R8_CHIP_ID);
 
 #if 1
-    /* 主机模式 */
+    /* Host Mode */
     PRINT("1.spi0 mul master mode send data ...\n");
     DelayMs(100);
 
@@ -44,7 +44,7 @@ int main()
     GPIOA_ModeCfg(GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
     SPI0_MasterDefInit();
 
-    // 单字节发送
+    // Single byte send
     GPIOA_ResetBits(GPIO_Pin_12);
     SPI0_MasterSendByte(0x55);
     GPIOA_SetBits(GPIO_Pin_12);
@@ -55,7 +55,7 @@ int main()
     DelayMs(2);
     PRINT("receive %x\n",i);
 
-    // FIFO 连续发送
+    // FIFO continuous sending
     GPIOA_ResetBits(GPIO_Pin_12);
     SPI0_MasterTrans(spiBuff, 8);
     GPIOA_SetBits(GPIO_Pin_12);
@@ -71,7 +71,7 @@ int main()
     }
     PRINT("\n");
 
-    // DMA 连续发送
+    // DMA continuous sending
     GPIOA_ResetBits(GPIO_Pin_12);
     SPI0_MasterDMATrans(spiBuff, 12);
     GPIOA_SetBits(GPIO_Pin_12);
@@ -91,7 +91,7 @@ int main()
 #endif
 
 #if 0
-    /* 设备模式 */
+    /* Device Mode */
     PRINT("1.spi0 mul slave mode \n");
     GPIOA_ModeCfg(GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15, GPIO_ModeIN_PU);
     SPI0_SlaveInit();

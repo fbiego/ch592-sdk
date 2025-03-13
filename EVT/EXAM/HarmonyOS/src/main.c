@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2023/11/10
- * Description        : kernel_liteos_m例程，使用硬件压栈，中断嵌套可选，中断函数不再使用修饰
- *                      __attribute__((interrupt("WCH-Interrupt-fast")))，
- *                      中断函数直接按照普通函数定义，只使用HIGHCODE修饰即可。
- * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.0
+* Date: 2023/11/10
+* Description: kernel_liteos_m routine, using hardware stack pressing, interrupt nesting is optional, interrupt function is no longer modified
+* __attribute__((interrupt("WCH-Interrupt-fast"))),
+* The interrupt function is directly defined according to the normal function, and only uses HIGHCODE to modify it.
+* Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CH59x_common.h"
 #include "stdarg.h"
 #include "los_tick.h"
@@ -38,7 +38,7 @@ static UINT32 gs_printMutexId;
 __HIGH_CODE
 void App_Printf(const char *fmt, ...)
 {
-    char  buf_str[128]; /* 需要注意在这里的内存空间是否足够打印 */
+    char  buf_str[128]; /* Pay attention to whether the memory space here is enough to print */
     va_list   v_args;
 
     va_start(v_args, fmt);
@@ -48,10 +48,10 @@ void App_Printf(const char *fmt, ...)
                                   v_args);
     va_end(v_args);
 
-    /* 互斥量操作，不可在中断中使用 */
+    /* Mutex operation, not used in interrupts */
     LOS_MuxPend(gs_printMutexId , LOS_WAIT_FOREVER);
     printf("%s", buf_str);
-    LOS_MuxPost(gs_printMutexId);   //给出互斥量
+    LOS_MuxPost(gs_printMutexId);   // Give mutex
 }
 
 /*********************************************************************
@@ -212,7 +212,7 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 __HIGH_CODE
 void GPIOA_IRQHandler(void)
 {
-    /* 本函数可以作为在本工程LiteOS中的中断函数写法示例 */
+    /* This function can be used as an example of interrupt function writing method in LiteOS of this project */
     uint16_t flag;
 
     flag = GPIOA_ReadITFlagPort();
@@ -220,7 +220,7 @@ void GPIOA_IRQHandler(void)
     {
         LOS_SemPost(g_semId);
     }
-    GPIOA_ClearITFlagBit(flag); //清除中断标志
+    GPIOA_ClearITFlagBit(flag); // Clear the interrupt flag
 }
 
 /******************************** endfile @ main ******************************/

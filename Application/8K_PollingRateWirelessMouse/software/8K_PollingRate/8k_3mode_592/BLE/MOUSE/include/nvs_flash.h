@@ -99,7 +99,7 @@ typedef struct __PACKED
     uint8_t   ble_name_len;
     uint8_t   ble_name_data[22];
     uint8_t   led_light;
-//    uint8_t   sys_mode;   // 由于硬件支持开关控制，无需存储记忆
+//    uint8_t   sys_mode;   // 
     uint8_t   work_mode;
     uint8_t   rf_device_id;
     uint8_t   peer_mac[6];

@@ -1,16 +1,16 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Main.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2020/08/06
- * Description        : rt-thread nano移植例程，使用硬件压栈，中断嵌套可选，中断函数不再使用修饰
- *                      __attribute__((interrupt("WCH-Interrupt-fast")))，
- *                      中断函数直接按照普通函数定义，只使用HIGHCODE修饰即可。
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: Main.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/06
+* Description: rt-thread nano migration routine, using hardware stack pressing, interrupt nesting is optional, interrupt function is no longer modified
+* __attribute__((interrupt("WCH-Interrupt-fast"))),
+* The interrupt function is directly defined according to the normal function, and only uses HIGHCODE to modify it.
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 #include "CH59x_common.h"
 #include <rtthread.h>
@@ -19,13 +19,12 @@ ALIGN(RT_ALIGN_SIZE)
 static char task1_stack[512];
 static struct rt_thread task1_thread;
 
-/*********************************************************************
- * @fn      task1_entry
- *
- * @brief   task1任务函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn task1_entry
+*
+* @brief task1 task function
+*
+* @return none */
 __HIGH_CODE
 void task1_entry(void *parameter)
 {
@@ -40,13 +39,12 @@ ALIGN(RT_ALIGN_SIZE)
 static char task2_stack[512];
 static struct rt_thread task2_thread;
 
-/*********************************************************************
- * @fn      task2_entry
- *
- * @brief   task2任务函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn task2_entry
+*
+* @brief task2 task function
+*
+* @return none */
 __HIGH_CODE
 void task2_entry(void *parameter)
 {
@@ -62,13 +60,12 @@ static char task3_stack[512];
 static struct rt_thread task3_thread;
 static rt_sem_t gpioa_sem = RT_NULL;
 
-/*********************************************************************
- * @fn      task3_entry
- *
- * @brief   task3任务函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn task3_entry
+*
+* @brief task3 task function
+*
+* @return none */
 __HIGH_CODE
 void task3_entry(void *parameter)
 {
@@ -80,7 +77,7 @@ void task3_entry(void *parameter)
         PFIC_EnableIRQ(GPIO_A_IRQn);
         while(1)
         {
-            rt_sem_take(gpioa_sem, RT_WAITING_FOREVER); /* 等待信号量 */
+            rt_sem_take(gpioa_sem, RT_WAITING_FOREVER); /* Wait for semaphore */
             rt_kprintf("gpioa sem get\r\n");
         }
     }
@@ -90,15 +87,14 @@ void task3_entry(void *parameter)
     }
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @note    main is one of threads in rt-thread.
- *
- * @return  none
- */
+/* ********************************************************************
+* @fn      main
+*
+* @brief   主函数
+*
+* @note    main is one of threads in rt-thread.
+*
+* @return  none */
 int main()
 {
     rt_enter_critical();
@@ -153,13 +149,13 @@ MSH_CMD_EXPORT(msh_test_print, this is a msh test);
 __HIGH_CODE
 void GPIOA_IRQHandler(void)
 {
-    /* 本函数可以作为在本工程rt-thread nano中的中断函数写法示例 */
+    /* This function can be used as an example of interrupt function writing in rt-thread nano in this project */
     uint16_t flag;
     flag = GPIOA_ReadITFlagPort();
     if((flag & GPIO_Pin_12) != 0)
     {
-        rt_sem_release(gpioa_sem);  /* 释放信号量 */
+        rt_sem_release(gpioa_sem);  /* Release semaphore */
     }
-    GPIOA_ClearITFlagBit(flag); /* 清除中断标志 */
+    GPIOA_ClearITFlagBit(flag); /* Clear the interrupt flag */
 }
 

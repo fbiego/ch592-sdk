@@ -5,393 +5,367 @@
  * GLOBAL MACROS
  */
 /*****************filter*****************/
-#define FILTER_NONE    		      0       //--无滤波器--
-#define FILTER_MODE_1    	      1       //--滤波器模式1, 可输出多个按键--
-#define FILTER_MODE_3    	      3       //--滤波器模式3, 可输出多个按键--
-#define FILTER_MODE_5             5       //--滤波器模式5, 可输出多个按键--
-#define FILTER_MODE_7             7       //--滤波器模式7, 可输出多个按键--
-#define FILTER_MODE_9             9       //--密集模式专用滤波器--
-#define FILTER_MODE_CS10          2       //--CS10V专用滤波器模式--
+#define FILTER_NONE    		      0       // --No filter-
+#define FILTER_MODE_1    	      1       // --Filter mode 1, multiple keys can be output-
+#define FILTER_MODE_3    	      3       // --Filter mode 3, multiple keys can be output-
+#define FILTER_MODE_5             5       // --Filter mode 5, multiple keys can be output-
+#define FILTER_MODE_7             7       // --Filter mode 7, multiple keys can be output-
+#define FILTER_MODE_9             9       // --Dense mode dedicated filter-
+#define FILTER_MODE_CS10          2       // --CS10V dedicated filter mode-
 /**************single key mode***********/
-#define TKY_SINGLE_KEY_MULTI      0       //--多按键输出，即超过阈值的按键都会触发
-#define TKY_SINGLE_KEY_MAX        1       //--最大值单按键输出，即超过阈值的按键中只上报变化量最大的按键
-#define TKY_SINGLE_KEY_MUTU       2       //--互斥单按键输出，即当前按键释放后才会上报下一个变化量最大的按键，
-                                          //  否则其他按键无论变化量多大都不上报
+#define TKY_SINGLE_KEY_MULTI      0       // --Multiple key output, that is, keys exceeding the threshold will trigger
+#define TKY_SINGLE_KEY_MAX        1       // --The maximum value single key output, that is, only the key with the largest change is reported among the keys that exceed the threshold
+#define TKY_SINGLE_KEY_MUTU       2       // --Mutually exclusive single key output, that is, the next key with the largest change will be reported only after the current key is released.
+                                          // Otherwise, no matter how much the other buttons change, they will not be reported.
 /***************lib param****************/
 #define TKY_BUFLEN  			  24
 /*----------------------------------------*/
 typedef struct
 {
-	uint8_t maxQueueNum;				    //--测试队列数量--
-	uint8_t singlePressMod;                	//---单按键模式---
-	uint8_t shieldEn;                       //---屏蔽使能---
-	uint8_t filterMode;				        //--滤波器模式--
-	uint8_t filterGrade;				    //--滤波器等级--
-	uint8_t peakQueueNum;                	//---按键最大偏移队列---
-	uint8_t peakQueueOffset;             	//---按键最大偏移队列的偏移值---
-	uint8_t baseRefreshOnPress;			    //--基线在按键按下时是否进行--
-	uint8_t baseUpRefreshDouble;        	//---基线向上刷新倍速参数---
-	uint8_t baseDownRefreshSlow;       		//---基线向下更新降速参数---
-	uint32_t baseRefreshSampleNum;     		//--基线刷新采样次数--
-	uint8_t *tkyBufP;					 	//--测试通道数据缓冲区指针--
+	uint8_t maxQueueNum;				    // --Number of test queues-
+	uint8_t singlePressMod;                	// ---Single button mode---
+	uint8_t shieldEn;                       // ---Blocking enable---
+	uint8_t filterMode;				        // --Filter mode --
+	uint8_t filterGrade;				    // --Filter Level-
+	uint8_t peakQueueNum;                	// ---Maximum offset queue for keys---
+	uint8_t peakQueueOffset;             	// ---The offset value of the maximum offset queue of keys---
+	uint8_t baseRefreshOnPress;			    // --Whether the baseline is performed when the key is pressed-
+	uint8_t baseUpRefreshDouble;        	// ---Baseline refreshes the double speed parameter upward---
+	uint8_t baseDownRefreshSlow;       		// ---Baseline updates downward speed down parameters---
+	uint32_t baseRefreshSampleNum;     		// --Number of baseline refresh samples-
+	uint8_t *tkyBufP;					 	// --Test channel data buffer pointer-
 }TKY_BaseInitTypeDef;
 
 typedef struct
 {
-	uint8_t queueNum;                 		//--该通道在测试队列的序号--
-	uint8_t channelNum;               		//--该通道对应的ADC通道标号--
-	uint8_t chargeTime;		            	//--该通道充电时间--
-	uint8_t disChargeTime;            		//--该通道放电时间--
-	uint8_t sleepStatus;		          	//--休眠--
-	uint16_t baseLine;  	   	        	//--基线--
-	uint16_t threshold;		            	//--阈值--
-	uint16_t threshold2;              		//--阈值2--
+	uint8_t queueNum;                 		// --The serial number of the channel in the test queue-
+	uint8_t channelNum;               		// --The ADC channel label corresponding to this channel-
+	uint8_t chargeTime;		            	// --The charging time of this channel-
+	uint8_t disChargeTime;            		// --The discharge time of this channel-
+	uint8_t sleepStatus;		          	// --Dormant-
+	uint16_t baseLine;  	   	        	// --Baseline-
+	uint16_t threshold;		            	// --Threshold-
+	uint16_t threshold2;              		// --Threshold 2--
 }TKY_ChannelInitTypeDef;
 
 
-/*******************************************************************************
- * @fn              TKY_BaseInit
- * 
- * @brief           TouchKey总体参数初始化
- * 
- * @param           TKY_BaseInitStruct  初识化的参数
- * 
- * @return          初始化结果 - 0x00：初始化成功
- *                             - 0x01：滤波器模式参数错误
- *                             - 0x02：滤波器等级参数错误
- */
+/* *********************************************************************************************
+* @fn TKY_BaseInit
+*
+* @brief TouchKey overall parameter initialization
+*
+* @param TKY_BaseInitStruct initially identified parameters
+*
+* @return Initialization result - 0x00: Initialization successful
+* - 0x01: Filter mode parameter error
+* - 0x02: Filter level parameter error */
 extern uint8_t TKY_BaseInit(TKY_BaseInitTypeDef TKY_BaseInitStruct);
 
-/*******************************************************************************
- * @fn              TKY_CHInit
- * 
- * @brief           TouchKey通道参数初始化
- * 
- * @param           TKY_CHInitStruct - 初始化的参数
- * 
- * @return          初始化结果 - 0x00：初始化成功
- *                             - 0x01：触摸通道参数有错
- *                             - 0x02：通道转换队列位置错误(超过最大转换通道数量)
- *                             - 0x04：基线值设置错误
- *                             - 0x08：阈值设置错误
- */
+/* *********************************************************************************************
+* @fn TKY_CHInit
+*
+* @brief TouchKey channel parameter initialization
+*
+* @param TKY_CHInitStruct - Initialized parameters
+*
+* @return Initialization result - 0x00: Initialization successful
+* - 0x01: There is an error in the touch channel parameters
+* - 0x02: Channel conversion queue position error (exceeding the maximum number of conversion channels)
+* - 0x04: Baseline value setting error
+* - 0x08: Threshold setting error */
 extern uint8_t TKY_CHInit(TKY_ChannelInitTypeDef TKY_CHInitStruct);
 
-/*******************************************************************************
- * @fn              TKY_GetCurChannelMean
- * @brief           获取当前通道的平均值，主要用于设置baseline和门槛值用途。
- * 
- * @param           curChNum      - 当前转换通道
- * @param           chargeTime    - 是当前通道的充电时间
- * @param           disChargeTime - 是当前通道的放电时间
- * @param           averageNum    - 是平均求和总数
- * 
- * @return          多次测量的平均值
- */
+/* *********************************************************************************************
+* @fn TKY_GetCurChannelMean
+* @brief Gets the average value of the current channel, mainly used to set baseline and threshold value.
+*
+* @param curChNum - Current conversion channel
+* @param chargeTime - is the charging time of the current channel
+* @param disChargeTime - is the discharge time of the current channel
+* @param averageNum - is the average sum total number
+*
+* @return Average of multiple measurements */
 extern uint16_t TKY_GetCurChannelMean(uint8_t curChNum, uint8_t chargeTime, uint8_t disChargeTime, uint16_t averageNum);
 
-/*******************************************************************************
- * @fn              TKY_CaliCrowedModBaseLine
- * @brief           校准密集模式下的基线值，在所有通道初识化完成之后进行,包括驱动屏蔽引脚
- * 
- * @param           curQueueNum - 当前转换通道序号
- * @param           averageNum  - 平均求和总数
- * 
- * @return          当前测试的基线值。
- */
+/* *********************************************************************************************
+* @fn TKY_CaliCrowedModBaseLine
+* @brief The baseline value in calibration dense mode is performed after all channels are initially identified, including the driver shield pin
+*
+* @param curQueueNum - Current conversion channel number
+* @param averageNum - Average sum total
+*
+* @return The baseline value of the current test. */
 extern uint16_t TKY_CaliCrowedModBaseLine( uint8_t curQueueNum,uint16_t averageNum);
 
-/*******************************************************************************
- * @fn              TKY_GetCurQueueValue
- * 
- * @brief           获取指定通道处理后的值
- * 
- * @param           curQueueNum - 当前需要取值的通道
- * 
- * @return          滤波模式 1 时为所选择的通道滤波后的测量值(和基线值取差值，再和阈值比
- *                  较)，滤波模式 3、5、7、9、CS10 和 CS10BLE 时为所选择的通道滤波后的
- *                  变化值(可直接和阈值比较)
- */
+/* *********************************************************************************************
+* @fn TKY_GetCurQueueValue
+*
+* @brief Get the value processed by the specified channel
+*
+* @param curQueueNum - The channel that currently needs to get the value
+*
+* @return Filter mode 1 is used for the filtered measurement value (the difference is given to the baseline value and then the threshold value is compared.
+* Comparison), filtering modes 3, 5, 7, 9, CS10 and CS10BLE are filtered for the selected channel
+* Change value (can be compared directly with the threshold) */
 extern int16_t TKY_GetCurQueueValue(uint8_t curQueueNum);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_1
- * 
- * @brief           TouchKey主循环轮询模式，适合滤波器1滤波
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有
- *                  按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_1
+*
+* @brief TouchKey main loop polling mode, suitable for filter 1 filtering
+*
+* @return The key value of each channel, and the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has
+* key, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_1(void);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_3
- * 
- * @brief           TouchKey主循环轮询模式，适合滤波器3滤波，执行过程阻塞
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有按键,
- *  				对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_3
+*
+* @brief TouchKey main loop polling mode, suitable for filter 3 filtering, blocking of execution process
+*
+* @return The key value of each channel, the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has a key.
+* Corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_3(void);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_5
- * 
- * @brief           TouchKey主循环轮询模式，与FilerMode3效果一致，执行过程非阻塞
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有
- * 					 按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_5
+*
+* @brief TouchKey main loop polling mode, consistent with FilerMode3 effect, non-blocking of execution
+*
+* @return The key value of each channel, and the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has
+* key, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_5(void);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_7
- * 
- * @brief           TouchKey主循环轮询模式，适合滤波器7滤波，执行过程阻塞
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有
- * 					按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_7
+*
+* @brief TouchKey main loop polling mode, suitable for filter 7 filtering, blocking of execution process
+*
+* @return The key value of each channel, and the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has
+* key, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_7(void);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_9
- * 
- * @brief           TouchKey主循环轮询模式，适合密集模式滤波器,执行过程阻塞
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有
- * 					 按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_9
+*
+* @brief TouchKey main loop polling mode, suitable for dense mode filters, blocking of execution process
+*
+* @return The key value of each channel, and the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has
+* key, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_9(void);
 
-/*******************************************************************************
- * @fn              TKY_PollForFilterMode_CS10
- * 
- * @brief           TouchKey主循环轮询模式，适合用于CS10V测试
- * 
- * @return          各通道按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸通道有
- * 					 按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_PollForFilterMode_CS10
+*
+* @brief TouchKey main loop polling mode, suitable for CS10V testing
+*
+* @return The key value of each channel, and the return value of each bit corresponds to the keys of each queue. For example, the touch channel of queue 0 has
+* key, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_PollForFilterMode_CS10(void);
 
 
-/*******************************************************************************
- * @fn              TKY_ScanForWakeUp
- * 
- * @brief           TouchKey休眠检测，主循环定时轮询
- * 
- * @param           scanBitValue - 该值的置 1 的位，为指定扫描位
- *   				 例 0x0013，则对序列 0、1、4 通道进行扫描
- * 
- * @return          扫描通道疑似按键值，返回值各个位对应各个队列的按键，例如队列 0 的触摸
- *  				 通道有按键，对应最低位置 1。注意并非 ADC 通道编号
- */
+/* *********************************************************************************************
+* @fn TKY_ScanForWakeUp
+*
+* @brief TouchKey sleep detection, main loop timed poll
+*
+* @param scanBitValue - The bit of the value is set to 1, which is the specified scan bit
+* Example 0x0013, scan the sequence 0, 1, and 4 channels
+*
+* @return The scan channel is suspected to have a key value, and the return value of each bit corresponds to the keys of each queue, such as the touch of queue 0
+* The channel has a button, corresponding to the lowest position 1.Note that it is not the ADC channel number */
 extern uint16_t TKY_ScanForWakeUp(uint16_t scanBitValue);
 
-/*******************************************************************************
- * @fn              TKY_SetCurQueueSleepStatus
- * 
- * @brief           设置指定队列通道的休眠模式，休眠后函数 TKY_PollForFilterMode
- *  				将不再对该通道进行扫描
- * 
- * @param           curQueueNum - 当前需要设置的通道
- * @param           sleepStatus - 0：不休眠
- *                              - 1：休眠
- * 
- * @return         设置状态  -  0：设置成功
- *                       - 1：超出队列最大长度
- */
+/* *********************************************************************************************
+* @fn TKY_SetCurQueueSleepStatus
+*
+* @brief Sets the sleep mode of the specified queue channel, and the function TKY_PollForFilterMode after sleep
+* This channel will no longer be scanned
+*
+* @param curQueueNum - The channel that needs to be set currently
+* @param sleepStatus - 0: No sleep
+* - 1: Sleep
+*
+* @return Set status - 0: Setting successfully
+* - 1: Exceeded the maximum queue length */
 extern uint8_t TKY_SetCurQueueSleepStatus(uint8_t curQueueNum, uint8_t sleepStatus);
 
-/*******************************************************************************
- * @fn              TKY_SetSleepStatusValue
- * 
- * @brief           设置所有队列通道的休眠模式，与函数 TKY_SetCurQueueSleepStatus
- * 					 相比，本函数是直接配置全部通道休眠状态
- * 
- * @param           setValue - 以检测队列顺序按位设置睡眠状态，0：不休眠，1：休眠。
- * 
- * @return          None
- */
+/* *********************************************************************************************
+* @fn TKY_SetSleepStatusValue
+*
+* @brief Sets the sleep mode of all queue channels, with the function TKY_SetCurQueueSleepStatus
+* Compared to this function, this function directly configures all channels to sleep state
+*
+* @param setValue - Sets the sleep state bitwise in order of detection queues, 0: not sleep, 1: sleep.
+*
+* @return None */
 extern void TKY_SetSleepStatusValue(uint16_t setValue);
 
-/*******************************************************************************
- * @fn              TKY_ReadSleepStatusValue
- * 
- * @brief           获取所有队列通道的休眠模式
- * 
- * @param           None
- * 
- * @return          返回所有通道的休眠状态，对应位为 0 则不休眠，为 1 则休眠
- */
+/* *********************************************************************************************
+* @fn TKY_ReadSleepStatusValue
+*
+* @brief Gets the sleep mode of all queue channels
+*
+* @param None
+*
+* @return Returns the sleep state of all channels. If the corresponding bit is 0, it will not sleep. If it is 1, it will sleep. */
 extern uint16_t TKY_ReadSleepStatusValue(void);
 
-/*******************************************************************************
- * @fn              TKY_SetCurQueueChargeTime
- * 
- * @brief           设置指定队列通道的充放电时间。对于滤波模式1&5,为确保安全更新设置,
- *                  请查询空闲状态(TKY_GetCurIdleStatus),在空闲时进行更新
- * 
- * @param           curQueueNum   - 当前需要设置的测量通道，注意并非ADC通道编号
- * @param           chargeTime    - 所设置的充电时间参数，参数值含义请查阅芯片手册
- * @param           disChargeTime - 所设置的放电时间参数，参数值含义请查阅芯片手册
- * 
- * @return          0 - 设置成功
- *                  1 - 超出队列最大长度。
- *******************************************************************************/
+/* *********************************************************************************************
+* @fn TKY_SetCurQueueChargeTime
+*
+* @brief Sets the charge and discharge time of the specified queue channel.For filter mode 1&5, to ensure security update settings,
+* Please check the idle status (TKY_GetCurIdleStatus) and update it when it is idle
+*
+* @param curQueueNum - The measurement channel that needs to be set at present, note that it is not the ADC channel number
+* @param chargeTime - For the set charging time parameters, the parameter value is of the meaning, please refer to the chip manual
+* @param disChargeTime - The set discharge time parameters, the parameter value and meaning are consulted for the chip manual
+*
+* @return 0 - Setting successfully
+* 1 - Maximum queue length exceeded.
+********************************************************************************************* */
 extern uint8_t TKY_SetCurQueueChargeTime( uint8_t curQueueNum,
 										uint8_t chargeTime,
 										uint8_t disChargeTime );
 
-/*******************************************************************************
- * @fn              TKY_SetCurQueueThreshold
- * @brief           设置指定队列通道的阈值。对于滤波模式1&5,为确保安全更新设置，
- *                  请查询空闲状态(TKY_GetCurIdleStatus)，在空闲时进行更新
- *
- * @param           curQueueNum - 当前需要设置的通道。
- * @param           Threshold   - 该通道的上限阈值，即按键检测"按下"状态的判决值
- * @param           Threshold2  - 该通道的下限阈值，即按键检测"释放"状态的判决值
- *
- * @return          0 - 则设置成功
- *                  1 - 为超出队列最大长度
- *******************************************************************************/
+/* *********************************************************************************************
+* @fn TKY_SetCurQueueThreshold
+* @brief Sets the threshold for the specified queue channel.For filter mode 1&5, to ensure security update settings,
+* Please check the idle status (TKY_GetCurIdleStatus) and update it when it is idle
+*
+* @param curQueueNum - The channel that needs to be set currently.
+* @param Threshold - The upper limit threshold of this channel, that is, the decision value of the "press" state when the key is detected
+* @param Threshold2 - The lower limit threshold of this channel, that is, the decision value of the "release" state when the key is used to detect
+*
+* @return 0 - then the setting is successful
+* 1 - Exceed the maximum queue length
+********************************************************************************************* */
 extern uint8_t TKY_SetCurQueueThreshold(uint8_t curQueueNum,
 									  uint16_t threshold,
 									  uint16_t threshold2);
 
-/*******************************************************************************
- * @fn              TKY_GetCurIdleStatus
- * 
- * @brief           获取空闲状态
- * 
- * @return          返回是否空闲
- *******************************************************************************/
+/* *********************************************************************************************
+* @fn TKY_GetCurIdleStatus
+*
+* @brief Get idle status
+*
+* @return Return whether it is idle
+********************************************************************************************* */
 extern uint8_t TKY_GetCurIdleStatus(void);
 
-/*******************************************************************************
- * @fn              TKY_GetCurVersion
- * 
- * @brief           获取当前版本号
- * 
- * @return          当前版本号
- */
+/* *********************************************************************************************
+* @fn TKY_GetCurVersion
+*
+* @brief Get the current version number
+*
+* @return Current version number */
 extern uint16_t TKY_GetCurVersion(void);
 
-/*******************************************************************************
- * @fn              TKY_GetCurQueueBaseLine
- * 
- * @brief           获取指定通道基线值
- * 
- * @param           curQueueNum - 所选择的测量触摸通道队列编号，注意并非 ADC 通道编号
- * 
- * @return          所选择队列通道的基线值
- */
+/* *********************************************************************************************
+* @fn TKY_GetCurQueueBaseLine
+*
+* @brief Get the specified channel baseline value
+*
+* @param curQueueNum - The selected measurement touch channel queue number, note that it is not the ADC channel number
+*
+* @return Baseline value of selected queue channel */
 extern uint16_t TKY_GetCurQueueBaseLine(uint8_t curQueueNum);
 
-/*******************************************************************************
- * @fn              TKY_SetCurQueueBaseLine
- * 
- * @brief           获取指定通道基线值。
- * 
- * @param           curQueueNum - 当前需要设置值的通道
- * @param           baseLineValue - 当前通道的设置值。
- * 
- * @return          当前通道的处理值。
- */
+/* *********************************************************************************************
+* @fn TKY_SetCurQueueBaseLine
+*
+* @brief Gets the specified channel baseline value.
+*
+* @param curQueueNum - The channel that currently needs to set the value
+* @param baseLineValue - The setting value of the current channel.
+*
+* @return The processing value of the current channel. */
 extern void TKY_SetCurQueueBaseLine(uint8_t curQueueNum, uint16_t baseLineValue);
 
-/*******************************************************************************
- * @fn              TKY_SetBaseRefreshSampleNum
- * 
- * @brief           设置基线刷新采样次数，每隔多少次采样刷新一次基线。对于滤波模式1&5,
- *                  为确保安全更新设置，请查询空闲状态(TKY_GetCurIdleStatus)，
- *                  在空闲时进行更新
- * 
- * @param           newValue - 新采样次数
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_SetBaseRefreshSampleNum
+*
+* @brief Set the number of baseline refresh samples, and refresh the baseline every how many samples.For filter mode 1&5,
+* To ensure security update settings, please check the idle status (TKY_GetCurIdleStatus),
+* Update when idle
+*
+* @param newValue - New samples
+*
+* @return None */
 extern void TKY_SetBaseRefreshSampleNum(uint32_t newValue);
 
-/*******************************************************************************
- * @fn              TKY_SetBaseDownRefreshSlow
- * 
- * @brief           设置基线向上更新的倍数参数。对于滤波模式1&5,为确保安全更新设置，
- *                  请查询空闲状态(TKY_GetCurIdleStatus)，在空闲时进行更新
- * 
- * @param           newValue - 新参数
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_SetBaseDownRefreshSlow
+*
+* @brief Sets the multiple parameter for the baseline up update.For filter mode 1&5, to ensure security update settings,
+* Please check the idle status (TKY_GetCurIdleStatus) and update it when it is idle
+*
+* @param newValue - New parameters
+*
+* @return None */
 extern void TKY_SetBaseUpRefreshDouble(uint8_t newValue);
 
-/*******************************************************************************
- * @fn              TKY_SetBaseDownRefreshSlow
- * 
- * @brief           设置基线向下更新的减速参数。对于滤波模式1&5,为确保安全更新设置，
- *                  请查询空闲状态(TKY_GetCurIdleStatus)，在空闲时进行更新
- * 
- * @param           newValue - 新参数
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_SetBaseDownRefreshSlow
+*
+* @brief Sets the deceleration parameters that update the baseline downwards.For filter mode 1&5, to ensure security update settings,
+* Please check the idle status (TKY_GetCurIdleStatus) and update it when it is idle
+*
+* @param newValue - New parameters
+*
+* @return None */
 extern void TKY_SetBaseDownRefreshSlow(uint8_t newValue);
 
-/*******************************************************************************
- * @fn              TKY_SetFilterMode
- * 
- * @brief           设置新滤波模式。一般场景不建议使用，仅使用在休眠场景下特殊场景切换
- * 
- * @param           newValue - 滤波器模式
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_SetFilterMode
+*
+* @brief Sets the new filtering mode.It is not recommended to use in general scenarios, only use special scenario switching in hibernation scenarios
+*
+* @param newValue - Filter mode
+*
+* @return None */
 extern void TKY_SetFilterMode(uint8_t newValue);
 
-/*******************************************************************************
- * @fn              TKY_ClearHistoryData
- * 
- * @brief           清除当前滤波器的历史数据。应用在触摸转换被较长时间打断，
- *                  历史数据无意义的场景。
- * 
- * @param           curFilterMode - 当前滤波模式
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_ClearHistoryData
+*
+* @brief Clears the historical data of the current filter.The application is interrupted for a long time in touch conversion.
+* Scenarios where historical data are meaningless.
+*
+* @param curFilterMode - Current filtering mode
+*
+* @return None */
 extern void TKY_ClearHistoryData(uint8_t curFilterMode);
 
-/*******************************************************************************
- * @fn              TKY_SaveAndStop
- * 
- * @brief           保存触摸相关寄存器值，并且在判断触摸扫描空闲时暂停触摸功能，
- *                  以腾出 ADC 模块用于 ADC 转换
- * 
- * @param           无
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_SaveAndStop
+*
+* @brief saves the touch-related register value and pauses the touch function when judging that the touch scan is idle.
+* to free up the ADC module for ADC conversion
+*
+* @param None
+*
+* @return None */
 extern void TKY_SaveAndStop(void);
 
-/*******************************************************************************
- * @fn              TKY_LoadAndRun
- * 
- * @brief           载入触摸相关寄存器值，并重新启动被暂停的触摸按键功能
- * 
- * @param           无
- * 
- * @return          无
- */
+/* *********************************************************************************************
+* @fn TKY_LoadAndRun
+*
+* @brief Load the touch-related register value and restart the paused touch button function
+*
+* @param None
+*
+* @return None */
 extern void TKY_LoadAndRun(void);
 
-/*******************************************************************************
- * @fn              TKY_GetCurQueueRealVal
- * 
- * @brief           获取指定通道原始测量值,未滤波的值。
- * 
- * @param           curQueueNum - 当前需要取值的通道。
- * 
- * @return          当前通道的原始测量值。
- */
+/* *********************************************************************************************
+* @fn TKY_GetCurQueueRealVal
+*
+* @brief Gets the original measured value of the specified channel, unfiltered value.
+*
+* @param curQueueNum - The channel that currently needs to take the value.
+*
+* @return The original measurement value of the current channel. */
 extern uint16_t TKY_GetCurQueueRealVal(uint8_t curQueueNum);
 
 #endif

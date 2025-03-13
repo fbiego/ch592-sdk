@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "test_dtm.h"
@@ -30,7 +30,7 @@ const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 /*********************************************************************
  * @fn      Main_Circulation
  *
- * @brief   主循环
+ * @brief   
  *
  * @return  none
  */
@@ -44,13 +44,12 @@ void Main_Circulation()
     }
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
 #if(defined(DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)
@@ -62,7 +61,7 @@ int main(void)
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
 #ifdef DEBUG
-#if  DEBUG == 0     // 0为默认UART0打印，UART1为测试(在工程配置中修改DEBUG)
+#if  DEBUG == 0     // 0 is the default UART0 printing, UART1 is the test (modify DEBUG in the project configuration)
     GPIOB_SetBits(bTXD0);
     GPIOB_ModeCfg(bTXD0, GPIO_ModeOut_PP_5mA);
     UART0_DefInit();

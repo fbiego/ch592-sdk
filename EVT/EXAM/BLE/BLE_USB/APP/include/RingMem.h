@@ -37,16 +37,16 @@
 
 typedef int (*RingMemProtection_t)(uint8_t enable);
 
-//缓冲区结构体
+//
 typedef struct
 {
-    uint8_t volatile *pData;       //缓冲区首地址
-    uint8_t volatile *pWrite;      //写指针
-    uint8_t volatile *pRead;       //读指针
-    uint8_t volatile *pEnd;        //缓冲区末地址
-    uint32_t volatile RemanentLen; //剩余空间大小
-    uint32_t volatile CurrentLen;  //已用空间大小
-    uint32_t volatile MaxLen;      //总空间大小
+    uint8_t volatile *pData;       //
+    uint8_t volatile *pWrite;      //
+    uint8_t volatile *pRead;       //
+    uint8_t volatile *pEnd;        //
+    uint32_t volatile RemanentLen; //
+    uint32_t volatile CurrentLen;  //
+    uint32_t volatile MaxLen;      //
 } RingMemParm_t;
 
 /*********************************************************************

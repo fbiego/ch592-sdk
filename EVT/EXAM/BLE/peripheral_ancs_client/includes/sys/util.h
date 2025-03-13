@@ -372,15 +372,15 @@ uint8_t u8_to_dec(char *buf, uint8_t buflen, uint8_t value);
  *
  * @htmlonly
  * Example:
- *      char test_str[] = "€€€";
+ *      char test_str[] = "";
  *      char trunc_utf8[8];
  *
- *      printf("Original : %s\n", test_str); // €€€
+ *      printf("Original : %s\n", test_str); // 
  *      strncpy(trunc_utf8, test_str, sizeof(trunc_utf8));
  *      trunc_utf8[sizeof(trunc_utf8) - 1] = '\0';
- *      printf("Bad      : %s\n", trunc_utf8); // €€�
+ *      printf("Bad      : %s\n", trunc_utf8); // 
  *      utf8_trunc(trunc_utf8);
- *      printf("Truncated: %s\n", trunc_utf8); // €€
+ *      printf("Truncated: %s\n", trunc_utf8); // 
  * @endhtmlonly
  *
  * @param utf8_str NULL-terminated string

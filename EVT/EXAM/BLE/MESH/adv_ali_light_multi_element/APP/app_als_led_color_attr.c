@@ -23,39 +23,39 @@
 
 #define ALI_DEF_TTL    (10)
 
-// 模拟led_color值
+// Simulate LED_color value
 int32_t device_led_color_adj = 0;
 
-/*******************************************************************************
- * Function Name  : read_led_color
- * Description    : 获取当前led_color
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: read_led_color
+* Description: Get the current led_color
+* Input: None
+* Return : None
+********************************************************************************************* */
 void read_led_color(int32_t *pcolor)
 {
     APP_DBG("device_led_color_adj: %d ", (int32_t)device_led_color_adj);
     *pcolor = device_led_color_adj;
 }
 
-/*******************************************************************************
- * Function Name  : set_led_colors
- * Description    : 设置当前led_color
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name : set_led_colors
+* Description: Set the current led_color
+* Input: None
+* Return : None
+********************************************************************************************* */
 void set_led_color(int32_t color)
 {
     device_led_color_adj = color;
 }
 
-/*******************************************************************************
- * Function Name  : gen_led_color_status
- * Description    : 回复天猫精灵led_color
- * Input          : model: 模型参数
- *										ctx：数据参数
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_led_color_status
+* Description: Reply to Tmall Elf led_color
+* Input: model: Model parameters
+* ctx: Data parameters
+* Return : None
+********************************************************************************************* */
 static void gen_led_color_status(struct bt_mesh_model   *model,
                                  struct bt_mesh_msg_ctx *ctx)
 {
@@ -90,14 +90,14 @@ static void gen_led_color_status(struct bt_mesh_model   *model,
     }
 }
 
-/*******************************************************************************
- * Function Name  : gen_led_color_get
- * Description    : 天猫精灵下发的获取led_color命令
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_led_color_get
+* Description: The get led_color command issued by Tmall elves
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_led_color_get(struct bt_mesh_model   *model,
                        struct bt_mesh_msg_ctx *ctx,
                        struct net_buf_simple  *buf)
@@ -106,15 +106,15 @@ void gen_led_color_get(struct bt_mesh_model   *model,
     gen_led_color_status(model, ctx);
 }
 
-/*******************************************************************************
-* Function Name  : gen_led_color_set
-* Description    : 天猫精灵下发的设置led_color命令
-                                        如果与当前led_color不同,还需要发送ind给天猫
-* Input          : model: 模型参数
-*										ctx：数据参数
-*										buf: 数据内容
-* Return         : None
-*******************************************************************************/
+/* *********************************************************************************************
+* Function Name : gen_led_color_set
+* Description: The setting led_color command issued by Tmall elves
+If it is different from the current led_color, it is also necessary to send an ind to Tmall
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_led_color_set(struct bt_mesh_model   *model,
                        struct bt_mesh_msg_ctx *ctx,
                        struct net_buf_simple  *buf)
@@ -134,7 +134,7 @@ void gen_led_color_set(struct bt_mesh_model   *model,
         APP_DBG("%x %x %x %x %x %x ",
                 buf->data[0], buf->data[1], buf->data[2], buf->data[3], buf->data[4], buf->data[5]);
         int32_t color = (buf->data[3] | (buf->data[4] << 8) | (buf->data[5] << 16) | (buf->data[6] << 24));
-        // 命令为设定值
+        // The command is the set value
         set_led_color(color);
     }
 
@@ -156,14 +156,14 @@ void gen_led_color_set(struct bt_mesh_model   *model,
     gen_led_color_status(model, ctx);
 }
 
-/*******************************************************************************
- * Function Name  : gen_led_color_set_unack
- * Description    : 天猫精灵下发的设置led_color命令(无应答)
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name : gen_led_color_set_unack
+* Description: The setting led_color command issued by Tmall elves (no response)
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_led_color_set_unack(struct bt_mesh_model   *model,
                              struct bt_mesh_msg_ctx *ctx,
                              struct net_buf_simple  *buf)
@@ -173,7 +173,7 @@ void gen_led_color_set_unack(struct bt_mesh_model   *model,
     if((buf->data[1] | (buf->data[2] << 8)) == ALI_GEN_ATTR_TYPE_LIGHTCOLOR_ADJ)
     {
         uint32_t color = (buf->data[3] | (buf->data[4] << 8) | (buf->data[5] << 16) | (buf->data[6] << 24));
-        // 命令为设定值
+        // The command is the set value
         set_led_color(color);
     }
 }

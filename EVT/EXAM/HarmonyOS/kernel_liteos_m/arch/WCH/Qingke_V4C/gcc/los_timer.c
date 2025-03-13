@@ -95,8 +95,8 @@ STATIC UINT32 SysTickStart(HWI_PROC_FUNC handler)
     g_archTickTimer.freq = OS_SYS_CLOCK;
     g_cyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
 
-    SetVTFIRQ((uint32_t)SW_Handler, SWI_IRQn, 0, ENABLE);                   /* 提升任务切换速度，不从统一入口执行，在处理期间不可中断嵌套 */
-    SetVTFIRQ((uint32_t)SysTick_Handler, SysTick_IRQn, 1, ENABLE);          /* 提升systick中断速度，不从统一入口执行，在处理期间不可中断嵌套 */
+    SetVTFIRQ((uint32_t)SW_Handler, SWI_IRQn, 0, ENABLE);                   /*  */
+    SetVTFIRQ((uint32_t)SysTick_Handler, SysTick_IRQn, 1, ENABLE);          /* systick */
 
     PFIC_SetPriority(SysTick_IRQn, 0xf0);
     PFIC_SetPriority(SWI_IRQn, 0xf0);

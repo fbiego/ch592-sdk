@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : iap.h
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/15
- * Description        : UART IAP例程
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : iap.h
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2022/03/15
+* Description        : UART IAP例程
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 #ifndef _IAP_H_
 #define _IAP_H_
 
@@ -25,13 +25,13 @@
 #define FLAG_USER_CALL_IAP   0x55
 #define FLAG_USER_CALL_APP   0xaa
 
-/* 存放在DataFlash地址，不能占用蓝牙的位置 */
+/* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define IAP_FLAG_DATAFLASH_ADD               0
 
-/* 存放在DataFlash里的OTA信息 */
+/* OTA information stored in DataFlash */
 typedef struct
 {
-    unsigned char ImageFlag;            //记录的当前的image标志
+    unsigned char ImageFlag;            // The current image flag of the record
     unsigned char Revd[3];
 } IAPDataFlashInfo_t;
 
@@ -110,14 +110,14 @@ extern void Main_Circulation();
 
 typedef enum
 {
-    IAP_ERR_UNKNOWN = 0,/* 命令未知，不可能出现 */
-    IAP_ERR_OVERTIME,/* 每次串口有数据后，超过10个字符时间没有新数据，并且也解析不到一个合法的数据包，即报错 */
-    IAP_ERR_CHECK,/* 一个合法的数据包中校验和不通过，即报错 */
-    IAP_ERR_ADDR,/* 擦除时，地址不对 */
-    IAP_ERR_ERASE_FAIL,/* 擦除失败 */
-    IAP_ERR_PROG_NO_ERASE,/* 没有先擦除，再写入 */
-    IAP_ERR_WRITE_FAIL,/* 没有写入失败 */
-    IAP_ERR_VERIFY,/* 校验失败 */
+    IAP_ERR_UNKNOWN = 0,/* The command is unknown, it is impossible to appear */
+    IAP_ERR_OVERTIME,/* After each serial port has data, there is no new data for more than 10 characters, and no legal data packet can be parsed, that is, an error is reported. */
+    IAP_ERR_CHECK,/* If the checksum fails in a legal data packet, an error will be reported. */
+    IAP_ERR_ADDR,/* When erasing, the address is wrong */
+    IAP_ERR_ERASE_FAIL,/* Erase failed */
+    IAP_ERR_PROG_NO_ERASE,/* No erase, then write */
+    IAP_ERR_WRITE_FAIL,/* No write failure */
+    IAP_ERR_VERIFY,/* Verification failed */
 } IAP_ERR_t;
 
 typedef enum

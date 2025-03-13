@@ -48,7 +48,7 @@ extern "C"
 #define  ALIGNED4(x)       ((x+3)/4*4)
 
 #define  RF_RXBUFNB        16
-#define  RF_TXBUFNB        16  // 不能小于8
+#define  RF_TXBUFNB        16  // 8
 
 #define  RF_RX_BUF_SZE     64
 #define  RF_TX_BUF_SZE     64

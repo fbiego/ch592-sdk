@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : lwns_adapter_csma_mac.h
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2021/06/20
- * Description        : lwns适配器，模拟csma的mac协议
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : lwns_adapter_csma_mac.h
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2021/06/20
+* Description        : lwns适配器，模拟csma的mac协议
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 #ifndef _LWNS_ADAPTER_CSMA_MAC_H_
 #define _LWNS_ADAPTER_CSMA_MAC_H_
 
@@ -18,7 +18,7 @@ extern "C" {
 
 #include "lwns_config.h"
 
-#define LWNS_USE_CSMA_MAC    0  //是否使能模仿csma的mac协议，注意只能使能一个mac层协议。
+#define LWNS_USE_CSMA_MAC    0  // Whether to enable the mac protocol that mimics CSS, please note that only one mac layer protocol can be enabled.
 
 #if LWNS_USE_CSMA_MAC
 
@@ -26,7 +26,7 @@ struct csma_mac_phy_manage_struct
 {
     struct csma_mac_phy_manage_struct *next;
     uint8_t                           *data;
-}; //模拟csma mac层发送管理结构体
+}; // Simulate the csma mac layer sending management structure
 
 typedef enum
 {
@@ -36,21 +36,21 @@ typedef enum
     BLE_PHY_MANAGE_STATE_SENDING,
 } BLE_PHY_MANAGE_STATE_t;
 
-  #define LWNS_MAC_TRANSMIT_TIMES          2                      //一次发送，调用硬件发送几次
+  #define LWNS_MAC_TRANSMIT_TIMES          2                      // Send once, call hardware to send several times
 
-  #define LWNS_MAC_PERIOD_MS               20                     //mac发送接收检测周期，如果有需要发送的数据包，则开始随机延迟检测冲突。//为(1000/HTIMER_SECOND_NUM)
+  #define LWNS_MAC_PERIOD_MS               20                     // Mac sends and receives detection cycle, and if there is a packet that needs to be sent, a random delay detection conflict will begin.// is (1000/HTIMER_SECOND_NUM)
 
-  #define LWNS_MAC_SEND_DELAY_MAX_625US    LWNS_NEIGHBOR_MAX_NUM  //随机延迟，该值越小，越容易出现错误，推荐大一些，8测试概率还可以。
+  #define LWNS_MAC_SEND_DELAY_MAX_625US    LWNS_NEIGHBOR_MAX_NUM  // Random delay, the smaller the value, the more likely it is to make errors. It is recommended to be larger, and the 8-test probability is OK.
 
   #define BLE_PHY_ONE_PACKET_MAX_625US     5
 
-  #define LWNS_MAC_SEND_PACKET_MAX_NUM     8                      //发送链表最多支持几个数据包等待发送
+  #define LWNS_MAC_SEND_PACKET_MAX_NUM     8                      // The sending linked list supports up to several packets waiting for sending
 
-  #define LWNS_MAC_SEND_DELAY_MAX_TIMES    LWNS_NEIGHBOR_MAX_NUM / 2 //在发送被取消，延迟几次后，不再随机等待，立刻发送
+  #define LWNS_MAC_SEND_DELAY_MAX_TIMES    LWNS_NEIGHBOR_MAX_NUM / 2 // After the sending is cancelled and delayed several times, no longer wait randomly, send immediately
 
-  #define LLE_MODE_ORIGINAL_RX             (0x80) //如果配置LLEMODE时加上此宏，则接收第一字节为原始数据（原来为RSSI）
+  #define LLE_MODE_ORIGINAL_RX             (0x80) // If this macro is added when configuring LLEMODE, the first byte is received as the original data (originally RSSI)
 
-    //RF_TX和RF_RX所用的类型，可以修改，不推荐改
+    // The types used by RF_TX and RF_RX can be modified, but it is not recommended to change them.
   #define USER_RF_RX_TX_TYPE               0xff
 
   #define LWNS_PHY_OUTPUT_TIMEOUT_MS       5

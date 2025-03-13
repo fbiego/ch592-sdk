@@ -46,10 +46,10 @@ extern "C" {
 /**
  * @brief  unit of controllable power supply
  */
-#define UNIT_SYS_LSE         RB_CLK_XT32K_PON   // 外部32K 时钟振荡
-#define UNIT_SYS_LSI         RB_CLK_INT32K_PON  // 内部32K 时钟振荡
-#define UNIT_SYS_HSE         RB_CLK_XT32M_PON   // 外部32M 时钟振荡
-#define UNIT_SYS_PLL         RB_CLK_PLL_PON     // PLL 时钟振荡
+#define UNIT_SYS_LSE         RB_CLK_XT32K_PON   // 32K 
+#define UNIT_SYS_LSI         RB_CLK_INT32K_PON  // 32K 
+#define UNIT_SYS_HSE         RB_CLK_XT32M_PON   // 32M 
+#define UNIT_SYS_PLL         RB_CLK_PLL_PON     // PLL 
 
 /**
  * @brief  wakeup mode define
@@ -66,13 +66,13 @@ typedef enum
  */
 typedef enum
 {
-    /* 下面等级将使用高精度监控，210uA消耗 */
+    /* 210uA */
     HALevel_1V9 = 0, // 1.7-1.9
     HALevel_2V1,     // 1.9-2.1
     HALevel_2V3,     // 2.1-2.3
     HALevel_2V5,     // 2.3-2.5
 
-    /* 下面等级将使用低功耗监控，1uA消耗 */
+    /* 1uA */
     LPLevel_1V8 = 0x80,
     LPLevel_1V9,
     LPLevel_2V0,
@@ -85,80 +85,80 @@ typedef enum
 } VolM_LevelypeDef;
 
 /**
- * @brief   启用内部DC/DC电源，用于节约系统功耗
+ * @brief   DC/DC
  *
- * @param   s   - 是否打开DCDC电源
+ * @param   s   - DCDC
  */
 void PWR_DCDCCfg(FunctionalState s);
 
 /**
- * @brief   可控单元模块的电源控制
+ * @brief   
  *
- * @param   s       - 是否打开电源
+ * @param   s       - 
  * @param   unit    - please refer to unit of controllable power supply
  */
 void PWR_UnitModCfg(FunctionalState s, uint8_t unit);
 
 /**
- * @brief   外设时钟控制位
+ * @brief   
  *
- * @param   s       - 是否打开对应外设时钟
+ * @param   s       - 
  * @param   perph   - please refer to Peripher CLK control bit define
  */
 void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph);
 
 /**
- * @brief   睡眠唤醒源配置
+ * @brief   
  *
- * @param   s       - 是否打开此外设睡眠唤醒功能
- * @param   perph   - 需要设置的唤醒源
- *                    RB_SLP_USB_WAKE   -  USB 为唤醒源
- *                    RB_SLP_RTC_WAKE   -  RTC 为唤醒源
- *                    RB_SLP_GPIO_WAKE  -  GPIO 为唤醒源
- *                    RB_SLP_BAT_WAKE   -  BAT 为唤醒源
+ * @param   s       - 
+ * @param   perph   - 
+ *                    RB_SLP_USB_WAKE   -  USB 
+ *                    RB_SLP_RTC_WAKE   -  RTC 
+ *                    RB_SLP_GPIO_WAKE  -  GPIO 
+ *                    RB_SLP_BAT_WAKE   -  BAT 
  * @param   mode    - refer to WakeUP_ModeypeDef
  */
 void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode);
 
 /**
- * @brief   电源监控
+ * @brief   
  *
- * @param   s       - 是否打开此功能
+ * @param   s       - 
  * @param   vl      - refer to VolM_LevelypeDef
  */
 void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl);
 
 /**
- * @brief   低功耗-Idle模式
+ * @brief   -Idle
  */
 void LowPower_Idle(void);
 
 /**
- * @brief   低功耗-Halt模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
+ * @brief   -HaltHSI/5
  */
 void LowPower_Halt(void);
 
 /**
- * @brief   低功耗-Sleep模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
- *          @note 注意调用此函数，DCDC功能强制关闭，唤醒后可以手动再次打开
+ * @brief   -SleepHSI/5
+ *          @note DCDC
  *
- * @param   rm      - 供电模块选择
- *                    RB_PWR_RAM2K  -   2K retention SRAM 供电
- *                    RB_PWR_RAM16K -   16K main SRAM 供电
- *                    RB_PWR_EXTEND -   USB 和 BLE 单元保留区域供电
- *                    RB_PWR_XROM   -   FlashROM 供电
- *                    NULL          -   以上单元都断电
+ * @param   rm      - 
+ *                    RB_PWR_RAM2K  -   2K retention SRAM 
+ *                    RB_PWR_RAM16K -   16K main SRAM 
+ *                    RB_PWR_EXTEND -   USB  BLE 
+ *                    RB_PWR_XROM   -   FlashROM 
+ *                    NULL          -   
  */
 void LowPower_Sleep(uint16_t rm);
 
 /**
- * @brief   低功耗-Shutdown模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
- *          @note 注意调用此函数，DCDC功能强制关闭，唤醒后可以手动再次打开
+ * @brief   -ShutdownHSI/5
+ *          @note DCDC
  *
- * @param   rm      - 供电模块选择
- *                    RB_PWR_RAM2K  -   2K retention SRAM 供电
- *                    RB_PWR_RAM16K -   16K main SRAM 供电
- *                    NULL          -   以上单元都断电
+ * @param   rm      - 
+ *                    RB_PWR_RAM2K  -   2K retention SRAM 
+ *                    RB_PWR_RAM16K -   16K main SRAM 
+ *                    NULL          -   
  */
 void LowPower_Shutdown(uint16_t rm);
 

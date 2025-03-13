@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "peripheral.h"
 
 /*********************************************************************
@@ -59,7 +59,7 @@ __HIGH_CODE
 uint8_t spi_read_byte(void)
 {
     R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR;
-    R8_SPI0_BUFFER = 0xFF; // 启动传输
+    R8_SPI0_BUFFER = 0xFF; // Start the transfer
     while(!(R8_SPI0_INT_FLAG & RB_SPI_FREE));
     return (R8_SPI0_BUFFER);
 }
@@ -81,8 +81,8 @@ void spi_init(void)
 //    R8_SPI0_CLOCK_DIV = 250;
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
     R8_SPI0_CTRL_MOD = RB_SPI_MOSI_OE | RB_SPI_SCK_OE;
-    R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // 访问BUFFER/FIFO自动清除IF_BYTE_END标志
-    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // 不启动DMA方式
+    R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // Access BUFFER/FIFO to automatically clear the IF_BYTE_END flag
+    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // Don't start DMA mode
 
     SPI0_DataMode(Mode3_HighBitINFront);
 }

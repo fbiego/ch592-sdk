@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Main.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2023/02/24
- * Description        : LCD演示
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : Main.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2023/02/24
+* Description        : LCD演示
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 #include "CH59x_common.h"
 #include "CH59x_lcd.h"
@@ -23,7 +23,7 @@ unsigned char const lcd[10]={0x7d, 0x60, 0x3e, 0x7a, 0x63, 0x5b, 0x5f, 0x70, 0x0
      |----| .P
        D
 */
-/* 注意：使用此例程，下载时需关闭外部手动复位功能 */
+/* Note: Using this routine, the external manual reset function must be turned off when downloading. */
 int main()
 {
     uint32_t VER = 0;
@@ -43,11 +43,11 @@ int main()
     LCD_WriteData8( lcd[8] );
 
 
-    /* LCD + sleep 示例 */
+    /* LCD + sleep example */
 #if 1
-    /* 配置唤醒源为 GPIO - PB0 */
+    /* Configure wakeup source as GPIO - PB0 */
     GPIOB_ModeCfg(GPIO_Pin_0, GPIO_ModeIN_PU);
-    GPIOB_ITModeCfg(GPIO_Pin_0, GPIO_ITMode_FallEdge); // 下降沿唤醒
+    GPIOB_ITModeCfg(GPIO_Pin_0, GPIO_ITMode_FallEdge); // Wake up on the falling edge
     PFIC_EnableIRQ(GPIO_B_IRQn);
     PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
     VER = (*((PUINT32)ROM_CFG_VERISON));
@@ -55,12 +55,12 @@ int main()
     {
         aux_power = R16_AUX_POWER_ADJ;
         sys_safe_access_enable();
-        R16_AUX_POWER_ADJ |= RB_ULPLDO_ADJ;      //睡眠前必须加此代码
+        R16_AUX_POWER_ADJ |= RB_ULPLDO_ADJ;      // This code must be added before sleeping
         sys_safe_access_disable();
     }
-    // 注意当主频为80M时，Sleep睡眠唤醒中断不可调用flash内代码。
-    LowPower_Sleep(RB_PWR_RAM24K | RB_PWR_RAM2K | RB_XT_PRE_EN); //只保留24+2K SRAM 供电
-    HSECFG_Current(HSE_RCur_100);                 // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+    // Note that when the main frequency is 80M, the flash code cannot be called when the Sleep wake-up interrupt is interrupted.
+    LowPower_Sleep(RB_PWR_RAM24K | RB_PWR_RAM2K | RB_XT_PRE_EN); // Only 24+2K SRAM power supply is retained
+    HSECFG_Current(HSE_RCur_100);                 // Reduced to rated current (HSE bias current is increased in low power consumption function)
     if((VER&0xFF000000) == 0xFF000000)
     {
         sys_safe_access_enable();
@@ -73,13 +73,12 @@ int main()
 
 }
 
-/*********************************************************************
- * @fn      GPIOB_IRQHandler
- *
- * @brief   GPIOB中断函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOB_IRQHandler
+*
+* @brief GPIOB interrupt function
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void GPIOB_IRQHandler(void)

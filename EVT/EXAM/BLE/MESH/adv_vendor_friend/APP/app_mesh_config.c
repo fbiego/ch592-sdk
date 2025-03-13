@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "app_mesh_config.h"
 #include "MESH_LIB.h"
@@ -65,34 +65,32 @@ const ble_mesh_cfg_t app_mesh_cfg = {
     .rf_cfg.rf_channel_39 = CONFIG_MESH_RF_CHANNEL_39,
 };
 
-/*********************************************************************
- * @fn      read_flash
- *
- * @brief   read flash
- *
- * @param   offset  - 地址偏移
- * @param   data    - 数据指针
- * @param   len     - 长度
- *
- * @return  always success
- */
+/* ***************************************************************************
+* @fn read_flash
+*
+* @brief read flash
+*
+* @param offset - Address offset
+* @param data - Data pointer
+* @param len - length
+*
+* @return always success */
 int read_flash(int offset, void *data, unsigned int len)
 {
     EEPROM_READ(offset, data, len);
     return 0;
 }
 
-/*********************************************************************
- * @fn      write_flash
- *
- * @brief   write flash
- *
- * @param   offset  - 地址偏移
- * @param   data    - 数据指针
- * @param   len     - 长度
- *
- * @return  state
- */
+/* ***************************************************************************
+* @fn write_flash
+*
+* @brief write flash
+*
+* @param offset - Address offset
+* @param data - Data pointer
+* @param len - length
+*
+* @return state */
 int write_flash(int offset, const void *data, unsigned int len)
 {
     __attribute__((aligned(4))) uint8_t vec[64];
@@ -107,16 +105,15 @@ int write_flash(int offset, const void *data, unsigned int len)
     return EEPROM_WRITE(offset, (void *)vec, len);
 }
 
-/*********************************************************************
- * @fn      erase_flash
- *
- * @brief   erase flash
- *
- * @param   offset  - 地址偏移
- * @param   len     - 长度
- *
- * @return  state
- */
+/* ***************************************************************************
+* @fn erase_flash
+*
+* @brief erase flash
+*
+* @param offset - Address offset
+* @param len - length
+*
+* @return state */
 int erase_flash(int offset, unsigned int len)
 {
     return EEPROM_ERASE(offset, len);

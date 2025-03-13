@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : OTAprofile.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : OTA升级蓝牙通讯接口
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : OTAprofile.C
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2018/12/10
+* Description        : OTA升级蓝牙通讯接口
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 /*********************************************************************
  * INCLUDES
@@ -134,15 +134,14 @@ gattServiceCBs_t OTAProfileCBs = {
  * PUBLIC FUNCTIONS
  */
 
-/*********************************************************************
- * @fn      OTAProfile_AddService
- *
- * @brief   OTA Profile初始化
- *
- * @param   services    - 服务控制字
- *
- * @return  初始化的状态
- */
+/* ***************************************************************************
+* @fn OTAProfile_AddService
+*
+* @brief OTA Profile Initialization
+*
+* @param services - Service control word
+*
+* @return Initialized state */
 bStatus_t OTAProfile_AddService(uint32_t services)
 {
     uint8_t status = SUCCESS;
@@ -159,15 +158,14 @@ bStatus_t OTAProfile_AddService(uint32_t services)
     return (status);
 }
 
-/*********************************************************************
- * @fn      OTAProfile_RegisterAppCBs
- *
- * @brief   OTA Profile读写回调函数注册
- *
- * @param   appCallbacks    - 函数结构体指针
- *
- * @return  函数执行状态
- */
+/* ***************************************************************************
+* @fn OTAProfile_RegisterAppCBs
+*
+* @brief OTA Profile read and write callback function registration
+*
+* @param appCallbacks - Function structure pointer
+*
+* @return function execution status */
 bStatus_t OTAProfile_RegisterAppCBs(OTAProfileCBs_t *appCallbacks)
 {
     if(appCallbacks)
@@ -305,22 +303,21 @@ static bStatus_t OTAProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pA
     return (status);
 }
 
-/*********************************************************************
- * @fn      OTAProfile_SendData
- *
- * @brief   OTA Profile通道发送数据
- *
- * @param   paramID     - OTA通道选择
- * @param   p_data      - 数据指针
- * @param   send_len    - 发送数据长度
- *
- * @return  函数执行状态
- */
+/* ***************************************************************************
+* @fn OTAProfile_SendData
+*
+* @brief OTA Profile channel sends data
+*
+* @param paramID - OTA channel selection
+* @param p_data - Data pointer
+* @param send_len - Send data length
+*
+* @return function execution status */
 bStatus_t OTAProfile_SendData(unsigned char paramID, unsigned char *p_data, unsigned char send_len)
 {
     bStatus_t status = SUCCESS;
 
-    /* 数据长度超出范围 */
+    /* Data length is out of range */
     if(send_len > 20)
         return 0xfe;
 

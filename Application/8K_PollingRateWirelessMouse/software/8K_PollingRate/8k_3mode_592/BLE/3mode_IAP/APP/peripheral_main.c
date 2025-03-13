@@ -1,25 +1,25 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2019/11/05
- * Description        : 判断标志以及搬运代码到APP代码区
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2019/11/05
+* Description: Judgment flags and transfer codes to the APP code area
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CH59x_common.h"
 #include "peripheral.h"
 #include "OTA.h"
 
-/* 记录当前的Image */
+/* Record the current Image */
 unsigned char CurrImageFlag = 0xff;
 
-/* flash的数据临时存储 */
+/* Flash's data temporary storage */
 __attribute__((aligned(8))) uint8_t block_buf[16];
 
 #define IAP_SAFE_FLAG_2_4G       0x30de5820
@@ -33,15 +33,14 @@ __attribute__((aligned(8))) uint8_t block_buf[16];
  * GLOBAL TYPEDEFS
  */
 
-/*********************************************************************
- * @fn      SwitchImageFlag
- *
- * @brief   切换dataflash里的ImageFlag
- *
- * @param   new_flag    - 切换的ImageFlag
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SwitchImageFlag
+*
+* @brief Toggle ImageFlag in dataflash
+*
+* @param new_flag - ImageFlag toggle
+*
+* @return none */
 void SwitchImageFlag(uint8_t new_flag)
 {
     uint16_t i;
@@ -50,23 +49,22 @@ void SwitchImageFlag(uint8_t new_flag)
     /* 读取第一块 */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* 擦除第一块 */
+    /* Erase the first piece */
     EEPROM_ERASE(OTA_DATAFLASH_ADD, EEPROM_PAGE_SIZE);
 
-    /* 更新Image信息 */
+    /* Update Image Information */
     block_buf[0] = new_flag;
 
-    /* 编程DataFlash */
+    /* Programming DataFlash */
     EEPROM_WRITE(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 }
 
-/*********************************************************************
- * @fn      jump_APP
- *
- * @brief   切换APP程序
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn jump_APP
+*
+* @brief Switch APP program
+*
+* @return none */
 void jump_APP(void)
 {
     uint8_t *pData;
@@ -88,7 +86,7 @@ void jump_APP(void)
                 FLASH_ROM_WRITE(IMAGE_A_2_4G_START_ADD + (i * 1024), flash_Data, 1024);
             }
             SwitchImageFlag(IMAGE_A_FLAG);
-            // 销毁备份代码
+            // Destroy the backup code
             FLASH_ROM_ERASE(IMAGE_B_START_ADD, IMAGE_A_2_4G_SIZE);
         }
         else if(flash_flag == IAP_SAFE_FLAG_BLE)
@@ -100,7 +98,7 @@ void jump_APP(void)
                 FLASH_ROM_WRITE(IMAGE_A_BLE_START_ADD + (i * 1024), flash_Data, 1024);
             }
             SwitchImageFlag(IMAGE_A_FLAG);
-            // 销毁备份代码
+            // Destroy the backup code
             FLASH_ROM_ERASE(IMAGE_B_START_ADD, IMAGE_A_2_4G_SIZE);
         }
         else {
@@ -126,13 +124,12 @@ void jump_APP(void)
 
 }
 
-/*********************************************************************
- * @fn      ReadImageFlag
- *
- * @brief   读取当前的程序的Image标志，DataFlash如果为空，就默认是ImageA
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ReadImageFlag
+*
+* @brief Reads the Image flag of the current program. If DataFlash is empty, it is ImageA by default.
+*
+* @return none */
 void ReadImageFlag(void)
 {
     OTADataFlashInfo_t p_image_flash;
@@ -149,13 +146,12 @@ void ReadImageFlag(void)
     PRINT("Image Flag %02x\n", CurrImageFlag);
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
 #if(defined(DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)

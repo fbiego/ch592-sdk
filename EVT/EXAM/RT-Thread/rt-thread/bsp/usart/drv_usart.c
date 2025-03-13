@@ -22,10 +22,10 @@ int usart_init(void)
 {
     rt_ringbuffer_init(&rt_uart_ringbuf, rt_uart_buffer, RT_UART_RINGBUF_SIZE);
 
-    /* 配置串口1：先配置IO口模式，再配置串口 */
+    /* Configure serial port 1: first configure IO port mode, then configure serial port */
     GPIOA_SetBits(GPIO_Pin_9);
-    GPIOA_ModeCfg(GPIO_Pin_8, GPIO_ModeIN_PU);      // RXD-配置上拉输入
-    GPIOA_ModeCfg(GPIO_Pin_9, GPIO_ModeOut_PP_5mA); // TXD-配置推挽输出，注意先让IO口输出高电平
+    GPIOA_ModeCfg(GPIO_Pin_8, GPIO_ModeIN_PU);      // RXD-Configure pull-up input
+    GPIOA_ModeCfg(GPIO_Pin_9, GPIO_ModeOut_PP_5mA); // TXD-Configure push-pull output, be careful to let the IO port output high level first
 
     UART1_BaudRateCfg(115200);
     R8_UART1_FCR = (0 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN;

@@ -10,7 +10,7 @@
 
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include <RF.h>
 #include "CH59x_common.h"
 #include "wchrf.h"
@@ -55,15 +55,14 @@ void BB_IRQHandler( void )
     BB_LibIRQHandler( );
 }
 
-/*******************************************************************************
- * @fn      RTC_SetTignTime
- *
- * @brief   配置RTC触发时间
- *
- * @param   time    - 触发时间.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RTC_SetTignTime
+*
+* @brief Configure RTC trigger time
+*
+* @param time - Trigger time.
+*
+* @return None. */
 void RTC_SetTignTime(uint32_t time)
 {
     sys_safe_access_enable();
@@ -71,21 +70,20 @@ void RTC_SetTignTime(uint32_t time)
     sys_safe_access_disable();
 }
 
-/*******************************************************************************
- * @fn          RTC_IRQHandler
- *
- * @brief       RTC中断处理
- *
- * input parameters
- *
- * @param       None.
- *
- * output parameters
- *
- * @param       None.
- *
- * @return      None.
- */
+/* ******************************************************************************
+* @fn          RTC_IRQHandler
+*
+* @brief       RTC中断处理
+*
+* input parameters
+*
+* @param       None.
+*
+* output parameters
+*
+* @param       None.
+*
+* @return      None. */
 __INTERRUPT
 __HIGH_CODE
 void RTC_IRQHandler( void )
@@ -106,15 +104,14 @@ void RTC_IRQHandler( void )
 
 
 
-/*******************************************************************************
- * @fn      Lib_Calibration_LSI
- *
- * @brief   内部32k校准
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn Lib_Calibration_LSI
+*
+* @brief internal 32k calibration
+*
+* @param None.
+*
+* @return None. */
 void Lib_Calibration_LSI(void)
 {
     Calibration_LSI(Level_64);
@@ -159,20 +156,19 @@ static void SYS_SetTignOffest( int32_t val )
     R32_TMR3_CNT_END += (val-R32_TMR3_COUNT);
 }
 
-/*********************************************************************
- * @fn      TMR0_IRQHandler
- *
- * @brief   TMR0中断函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR0_IRQHandler
+*
+* @brief TMR0 interrupt function
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void TMR3_IRQHandler(void) // TMR3
 {
     uint32_t trig_time;
 
-    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // 清除中断标志
+    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // Clear the interrupt flag
     if( !TMOS_TimerIRQHandler( &trig_time )  )
     {
         if( trig_time ){
@@ -227,26 +223,25 @@ void HAL_TimeInit( void )
   conf.ClockMaxCount = RTC_MAX_COUNT;
   conf.getClockValue = SYS_GetClockValue;
 
-  // rf通信时间相关配置
+  // rf communication time related configuration
   conf.Clock1Frequency = GetSysClock( )/1000;  //kHz
   conf.getClock1Value = SYS_GetClock1Value;
   conf.SetPendingIRQ = SYS_SetPendingIRQ;
   conf.SetTign = SYS_SetTignOffest;
   TMOS_TimerInit( &conf );
 
-  TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // 开启中断
+  TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // Turn on interrupt
   PFIC_EnableIRQ(TMR3_IRQn);
 }
 
-/*******************************************************************************
- * @fn      rfRoleBoundProcess
- *
- * @brief   RF收发DMA初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rfRoleBoundProcess
+*
+* @brief RF Send and Receive DMA Initialization
+*
+* @param None.
+*
+* @return None. */
 void rfDMADescInit( void )
 {
     int num;
@@ -272,15 +267,14 @@ void rfDMADescInit( void )
     pDMATxGet = DMATxDscrTab;
 }
 
-/*******************************************************************************
- * @fn      RF_LibInit
- *
- * @brief   rf 库初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_LibInit
+*
+* @brief rf library initialization
+*
+* @param None.
+*
+* @return None. */
 void RF_LibInit( pfnRfRoleProcess cb )
 {
     rfRoleConfig_t conf={0};

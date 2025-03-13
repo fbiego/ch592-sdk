@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2024/02/27
- * Description        : 触摸按键结合蓝牙外设例程
- * Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2024/02/27
+* Description: Touch button combined with Bluetooth peripheral routine
+* Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "gattprofile.h"
@@ -26,13 +26,12 @@ __attribute__((aligned(4))) uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #endif
 
-/*********************************************************************
- * @fn      Main_Circulation
- *
- * @brief   主循环
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn Main_Circulation
+*
+* @brief main loop
+*
+* @return none */
 __HIGH_CODE
 __attribute__((noinline))
 void Main_Circulation()
@@ -43,16 +42,15 @@ void Main_Circulation()
 	}
 }
 
-/*********************************************************************
- * @fn      DebugInit
- *
- * @brief   串口打印初始化
- *
- * @return  none
- *
- * @note	Uart1的默认映射引脚可能与触摸通道冲突，
- * 			在触摸应用中应选用其他UART或将引脚重映射
- */
+/* ***************************************************************************
+* @fn DebugInit
+*
+* @brief serial port printing initialization
+*
+* @return none
+*
+* @note Uart1's default mapping pin may conflict with the touch channel,
+* In touch applications, other UARTs should be selected or pin remapping */
 void DebugInit(void)
 {
 #ifdef  DEBUG
@@ -79,13 +77,12 @@ void DebugInit(void)
 #endif
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
 #if(defined(DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)

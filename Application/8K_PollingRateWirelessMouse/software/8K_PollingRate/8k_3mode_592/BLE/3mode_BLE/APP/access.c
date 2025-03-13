@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "access.h"
@@ -82,7 +82,7 @@ uint16_t access_ProcessEvent( uint8_t task_id, uint16_t events )
     if( events & ACCESS_SLEEP_EVT )
     {
         PRINT( "ACCESS_SLEEP_EVT \n" );
-        // 深度睡眠，不开广播不连接
+        // Deep sleep, no broadcasting or connection
         access_state.sleep_en = TRUE;
         access_state.deep_sleep_flag = TRUE;
         tmos_stop_task(access_taskId, ACCESS_IDEL_SLEEP_EVT);
@@ -115,7 +115,7 @@ uint16_t access_ProcessEvent( uint8_t task_id, uint16_t events )
     if( events & ACCESS_IDEL_SLEEP_EVT )
     {
         PRINT("S@\n");
-        // 进入睡眠 ，ble保持连接
+        // Go to sleep, ble stays connected
         access_state.sleep_en = TRUE;
         access_state.idel_sleep_flag = TRUE;
         if((access_state.ble_idx > BLE_INDEX_IDEL) && (access_state.ble_idx < BLE_INDEX_MAX))
@@ -125,17 +125,17 @@ uint16_t access_ProcessEvent( uint8_t task_id, uint16_t events )
             PRINT( "S@ state %x\n", ble_state );
             if( ble_state == GAPROLE_CONNECTED )
             {
-                //正常连接
+                // Normal connection
             }
             else if( ble_state == GAPROLE_ADVERTISING )
             {
-                // 停止广播，并不再广播。
+                // Stop broadcasting and stop broadcasting.
                 access_state.ble_idx = BLE_INDEX_IDEL;
                 hidEmu_adv_enable( DISABLE );
             }
             else
             {
-                //没在广播没有连接，
+                // Not broadcasting, no connection,
                 access_state.ble_idx = BLE_INDEX_IDEL;
             }
         }
@@ -204,7 +204,7 @@ void access_receive_cb( uint8_t *pData, uint8_t len )
 //        access_update_idel_sleep_timeout(IDEL_SLEEP_EVT_TIMEOUT);
         if(access_state.idel_sleep_flag)
         {
-            // 停止睡眠
+            // Stop sleeping
             access_state.sleep_en = FALSE;
             tmos_set_event( access_taskId, ACCESS_WAKE_UP_EVT );
         }
@@ -228,14 +228,13 @@ void access_receive_cb( uint8_t *pData, uint8_t len )
 }
 
 
-/*********************************************************************
- * @fn      access_tran_report
- *
- * @brief   上报状态
- *
- * @return  none
-        peripheral_connecting_cb();
- */
+/* ***************************************************************************
+* @fn access_tran_report
+*
+* @brief Report status
+*
+* @return none
+peripheral_connecting_cb(); */
 void access_tran_report( uint8_t cmd, uint8_t data )
 {
     if(data == STATE_CON_TERMINATE)
@@ -264,14 +263,13 @@ void access_tran_report( uint8_t cmd, uint8_t data )
     }
 }
 
-/*********************************************************************
- * @fn      access_switch_ble_mode
- *
- * @brief   1、之前也是BLE模式，则判断模式与当前模式是否相同，是则不做任何事，否则停止连接和广播，随后在状态处理里会开启或者等待配对命令
- *          2、之前是其他模式，则根据模式是否已绑定选择开始或者等待配对命令
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn access_switch_ble_mode
+*
+* @brief 1. It was also BLE mode before, so it is determined whether the mode is the same as the current mode. If you do nothing, the connection and broadcast will be stopped, and then the pairing command will be turned on or wait for in the status processing.
+* 2. There were other modes before, select the start or wait for the pairing command based on whether the mode is bound or not
+*
+* @return none */
 void access_switch_ble_mode( void )
 {
     uint8_t ble_state;
@@ -319,7 +317,7 @@ void access_switch_ble_mode( void )
                 access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
             }
         }
-        else //上次ble也是这个通道
+        else // This was the channel last time
         {
             access_state.pairing_state = FALSE;
             GAPRole_GetParameter( GAPROLE_STATE, &ble_state );
@@ -381,20 +379,20 @@ void access_pairing_mode( void )
             // 当前还在连接中，断开连接，换地址
             hidEmu_disconnect();
             access_state.pairing_state = TRUE;
-            // 开启广播60s后进入睡眠，睡眠函数中如果还未连接，则停止广播直接睡眠
+            // After turning on the broadcast for 60s, enter sleep. If the sleep function is not connected yet, stop broadcasting and sleep directly.
 //            access_update_idel_sleep_timeout(ADV_IDEL_SLEEP_EVT_TIMEOUT);
             return;
         }
         if( hidEmu_is_ble_bonded( access_state.ble_idx ) )
         {
-            // 当前已经绑定过换地址
+            // Already bound to change the address
             access_state.pairing_state = TRUE;
         }
         if( ble_state == GAPROLE_ADVERTISING )
         {
             if( con_work_mode == access_state.ble_idx )
             {
-                // 同通道多次长按每次都要发STATE_PAIRING,不关广播
+                // Press the same channel many times and send STATE_PAIRING every time, and it does not turn off the broadcast.
                 PRINT( "same ch\n" );
                 access_tran_report( REPORT_CMD_STATE, STATE_PAIRING );
             }
@@ -406,7 +404,7 @@ void access_pairing_mode( void )
             access_tran_report( REPORT_CMD_STATE, STATE_PAIRING );
             hidEmu_adv_enable( ENABLE );
         }
-        // 开启广播60s后进入睡眠，睡眠函数中如果还未连接，则停止广播直接睡眠
+        // After turning on the broadcast for 60s, enter sleep. If the sleep function is not connected yet, stop broadcasting and sleep directly.
 //        access_update_idel_sleep_timeout(ADV_IDEL_SLEEP_EVT_TIMEOUT);
     }
     else
@@ -585,7 +583,7 @@ void access_enter_deep_sleep( void )
 __HIGH_CODE
 void access_weakup( void )
 {
-    // 停止睡眠
+    // Stop sleeping
     access_state.sleep_en = FALSE;
     tmos_set_event( access_taskId, ACCESS_WAKE_UP_EVT );
 }

@@ -29,7 +29,7 @@
 const uint8_t hand_shake_string[] = "WCH@TOOL";
 const uint32_t hex_num = 2;
 
-/* 用于APP判断文件有效性 */
+/* APP */
 __attribute__((aligned(4))) uint32_t save_Flag __attribute__((section(".ImageFlag"))) = IAP_SAFE_FLAG;
 
 /*********************************************************************
@@ -53,26 +53,26 @@ __attribute__((aligned(4))) uint32_t save_Flag __attribute__((section(".ImageFla
  */
 uint8_t ota_taskID;
 // OTA IAP VARIABLES
-/* OTA通讯的帧 */
+/* OTA */
 OTA_IAP_CMD_t iap_rec_data;
 
-/* OTA解析结果 */
+/* OTA */
 uint32_t OpParaDataLen = 0;
 uint32_t OpAdd = 0;
 
-/* flash的数据临时存储 */
+/* flash */
 __attribute__((aligned(8))) uint8_t block_buf[16];
 
-/* Image跳转函数地址定义 */
+/* Image */
 typedef int (*pImageTaskFn)(void);
 pImageTaskFn user_image_tasks;
 
-/* Flash 擦除过程 */
-uint32_t EraseAdd = 0;      //擦除地址
-uint32_t EraseBlockNum = 0; //需要擦除的块数
-uint32_t EraseBlockCnt = 0; //擦除的块计数
+/* Flash  */
+uint32_t EraseAdd = 0;      //
+uint32_t EraseBlockNum = 0; //
+uint32_t EraseBlockCnt = 0; //
 
-/* FLASH 校验过程 */
+/* FLASH  */
 uint8_t VerifyStatus = 0;
 
 uint32_t hex_index=0;
@@ -139,7 +139,7 @@ uint16_t OTA_ProcessEvent(uint8_t task_id, uint16_t events)
 //        status = FLASH_ROM_ERASE(EraseAdd + EraseBlockCnt * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE);
         status = FLASH_ROM_ERASE(EraseAdd ,EraseBlockNum * FLASH_BLOCK_SIZE);
 
-        /* 擦除失败 */
+        /*  */
         if(status != SUCCESS)
         {
             OTA_IAP_SendCMDDealSta(status);
@@ -148,7 +148,7 @@ uint16_t OTA_ProcessEvent(uint8_t task_id, uint16_t events)
 
 //        EraseBlockCnt++;
 //
-//        /* 擦除结束 */
+//        /*  */
 //        if(EraseBlockCnt >= EraseBlockNum)
         {
             PRINT("ERASE Complete\r\n");
@@ -161,11 +161,11 @@ uint16_t OTA_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & OTA_IAP_END_EVT)
     {
-        /* 当前的是ImageA */
-        /* 关闭当前所有使用中断，或者方便一点直接全部关闭 */
+        /* ImageA */
+        /*  */
         DisableAllIRQ();
 
-        /* 修改DataFlash，切换至ImageIAP */
+        /* DataFlashImageIAP */
         SwitchImageFlag(IMAGE_IAP_FLAG);
 
         SYS_ResetExecute();
@@ -185,10 +185,10 @@ uint16_t OTA_ProcessEvent(uint8_t task_id, uint16_t events)
 /*********************************************************************
  * @fn      OTA_IAP_SendData
  *
- * @brief   OTA IAP发送数据，使用时限制20字节以内
+ * @brief   OTA IAP20
  *
- * @param   p_send_data - 发送数据的指针
- * @param   send_len    - 发送数据的长度
+ * @param   p_send_data - 
+ * @param   send_len    - 
  *
  * @return  none
  */
@@ -200,9 +200,9 @@ void OTA_IAP_SendData()
 /*********************************************************************
  * @fn      OTA_IAP_SendCMDDealSta
  *
- * @brief   OTA IAP执行的状态返回
+ * @brief   OTA IAP
  *
- * @param   deal_status - 返回的状态
+ * @param   deal_status - 
  *
  * @return  none
  */
@@ -220,7 +220,7 @@ void OTA_IAP_SendCMDDealSta(uint8_t deal_status)
 /*********************************************************************
  * @fn      OTA_IAP_CMDErrDeal
  *
- * @brief   OTA IAP异常命令码处理
+ * @brief   OTA IAP
  *
  * @return  none
  */
@@ -232,31 +232,31 @@ void OTA_IAP_CMDErrDeal(void)
 /*********************************************************************
  * @fn      SwitchImageFlag
  *
- * @brief   切换dataflash里的ImageFlag
+ * @brief   dataflashImageFlag
  *
- * @param   new_flag    - 切换的ImageFlag
+ * @param   new_flag    - ImageFlag
  *
  * @return  none
  */
 void SwitchImageFlag(uint8_t new_flag)
 {
-    /* 读取第一块 */
+    /*  */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* 擦除第一块 */
+    /*  */
     EEPROM_ERASE(OTA_DATAFLASH_ADD, EEPROM_PAGE_SIZE);
 
-    /* 更新Image信息 */
+    /* Image */
     block_buf[0] = new_flag;
 
-    /* 编程DataFlash */
+    /* DataFlash */
     EEPROM_WRITE(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 }
 
 /*********************************************************************
  * @fn      DisableAllIRQ
  *
- * @brief   关闭所有的中断
+ * @brief   
  *
  * @return  none
  */
@@ -286,7 +286,7 @@ uint8_t OTA_get_checksum( uint8_t *pData, uint8_t len )
 /*********************************************************************
  * @fn      Rec_OTA_IAP_DataDeal
  *
- * @brief   接收到OTA数据包处理
+ * @brief   OTA
  *
  * @return  none
  */
@@ -294,7 +294,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
 {
     switch(iap_rec_data.other.buf[0])
     {
-        /* 握手 */
+        /*  */
         case CMD_HAND_SHAKE:
         {
             if( tmos_memcmp(iap_rec_data.handshake.string, hand_shake_string, 7))
@@ -310,7 +310,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
 
                 ota_send_buf[6] = OTA_get_checksum(ota_send_buf,6);
 
-                /* 发送信息 */
+                /*  */
                 OTA_IAP_SendData();
             }
             else
@@ -320,14 +320,14 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             }
             break;
         }
-        /* 编程 */
+        /*  */
         case CMD_IAP_PROM:
         {
             if( hex_index == 1 )
             {
                 uint8_t  status;
 
-                // IAP协议的数据长度包含了地址两字节
+                // IAP
                 iap_rec_data.program.len -= 2;
                 if(flash_buf_uesd_len==0)
                 {
@@ -360,7 +360,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                         }
                         flash_buf_uesd_len = 0;
                     }
-//                    /* 当前是ImageA，直接编程 */
+//                    /* ImageA */
 //                    status = FLASH_ROM_WRITE(OpAdd, iap_rec_data.program.buf, (uint16_t)OpParaDataLen);
 //                    if(status)
 //                    {
@@ -391,12 +391,12 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             }
             break;
         }
-        /* 擦除 -- 蓝牙擦除由主机控制 */
+        /*  --  */
         case CMD_IAP_ERASE:
         {
             if( hex_index == 1 )
             {
-                // IAP协议的数据长度包含了地址两字节
+                // IAP
                 iap_rec_data.program.len -= 2;
                 OpAdd = (uint32_t)(iap_rec_data.erase.addr[0]);
                 OpAdd |= ((uint32_t)(iap_rec_data.erase.addr[1]) << 8);
@@ -409,7 +409,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                 EraseAdd = OpAdd;
                 EraseBlockCnt = 0;
 
-                /* 检验就放在擦除里清0 */
+                /* 0 */
                 VerifyStatus = 0;
                 iap_ok = 1;
                 flash_verify_flag = 0;
@@ -423,7 +423,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                 }
                 else
                 {
-                    /* 启动擦除 */
+                    /*  */
                     tmos_set_event(ota_taskID, OTA_FLASH_ERASE_EVT);
                 }
             }
@@ -433,19 +433,19 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             }
             break;
         }
-        /* 校验 */
+        /*  */
         case CMD_IAP_VERIFY:
         {
             if( hex_index == 1 )
             {
-                // IAP协议的数据长度包含了地址两字节
+                // IAP
                 iap_rec_data.program.len -= 2;
                 uint8_t  status = 0;
                 if(flash_verify_flag ==0)
                 {
                     if(flash_buf_uesd_len)
                     {
-                        /* 当前是ImageA，直接编程 */
+                        /* ImageA */
                         status = FLASH_ROM_WRITE(OpAdd, flash_buf, flash_buf_uesd_len);
                         if(status)
                         {
@@ -471,7 +471,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                     flash_buf_uesd_len += OpParaDataLen;
                     if( flash_buf_uesd_len>(MAX_FLASH_BUFF_LEN-OpParaDataLen) )
                     {
-                        /* 当前是ImageA，直接读取ImageB校验 */
+                        /* ImageAImageB */
                         status = FLASH_ROM_VERIFY(OpAdd, flash_buf, flash_buf_uesd_len);
                         if(status)
                         {
@@ -487,7 +487,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                     flash_buf_uesd_len += OpParaDataLen;
                     if( flash_buf_uesd_len>(MAX_FLASH_BUFF_LEN-OpParaDataLen) )
                     {
-                        /* 当前是ImageA，直接读取ImageB校验 */
+                        /* ImageAImageB */
                         status = FLASH_ROM_VERIFY(OpAdd, flash_buf, flash_buf_uesd_len);
                         if(status)
                         {
@@ -508,7 +508,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             }
             break;
         }
-        /* 编程结束 */
+        /*  */
         case CMD_IAP_END:
         {
             if( hex_index == 1 )
@@ -519,7 +519,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                 {
                     OTA_IAP_SendCMDDealSta(IAP_STATE_SUCCESS);
 
-                    /* 延迟复位 */
+                    /*  */
                     tmos_start_task(ota_taskID, OTA_IAP_END_EVT, 160);
                 }
                 else {
@@ -559,7 +559,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                 ota_send_buf[9] = (CHIP_ID>>8)&0xFF;
                 ota_send_buf[10] = OTA_get_checksum(ota_send_buf,10);
 
-                /* 发送信息 */
+                /*  */
                 OTA_IAP_SendData();
             }
             else if( hex_index == 2 )
@@ -567,13 +567,13 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
                 return HEX_NOT_LOCAL;
             }
             else {
-                PRINT("？？？hex_index %d\r\n",hex_index);
+                PRINT("hex_index %d\r\n",hex_index);
                 OTA_IAP_SendCMDDealSta(IAP_STATE_FAILURE);
             }
             break;
         }
 
-        /* 单载波命令 */
+        /*  */
         case CMD_SINGLE_CHANNEL:
         {
             if(iap_rec_data.other.buf[1]==(unsigned char)(1))
@@ -590,7 +590,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             break;
         }
 
-        /* 单载波功率 */
+        /*  */
         case CMD_SINGLE_POWER:
         {
             if(iap_rec_data.other.buf[1]==(unsigned char)(1))
@@ -606,7 +606,7 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
             break;
         }
 
-        /* 负载电容 */
+        /*  */
         case CMD_CAPACITANCE:
         {
             if(iap_rec_data.other.buf[1]==(unsigned char)(1))
@@ -652,9 +652,9 @@ uint8_t Rec_OTA_IAP_DataDeal(void)
 /*********************************************************************
  * @fn      OTA_IAPReadDataComplete
  *
- * @brief   OTA 数据读取完成处理
+ * @brief   OTA 
  *
- * @param   index   - OTA 通道序号
+ * @param   index   - OTA 
  *
  * @return  none
  */
@@ -666,11 +666,11 @@ void OTA_IAPReadDataComplete(unsigned char index)
 /*********************************************************************
  * @fn      OTA_IAPWriteData
  *
- * @brief   OTA 通道数据接收完成处理
+ * @brief   OTA 
  *
- * @param   index   - OTA 通道序号
- * @param   p_data  - 写入的数据
- * @param   w_len   - 写入的长度
+ * @param   index   - OTA 
+ * @param   p_data  - 
+ * @param   w_len   - 
  *
  * @return  none
  */

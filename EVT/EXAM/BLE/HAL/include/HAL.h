@@ -40,12 +40,12 @@ extern tmosTaskID halTaskID;
  */
 
 /**
- * @brief   硬件初始化
+ * @brief   
  */
 extern void HAL_Init(void);
 
 /**
- * @brief   硬件层事务处理
+ * @brief   
  *
  * @param   task_id - The TMOS assigned task ID.
  * @param   events - events to process.  This is a bit map and can
@@ -54,19 +54,19 @@ extern void HAL_Init(void);
 extern tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events);
 
 /**
- * @brief   BLE 库初始化
+ * @brief   BLE 
  */
 extern void CH59x_BLEInit(void);
 
 /**
- * @brief   获取内部温感采样值，如果使用了ADC中断采样，需在此函数中暂时屏蔽中断.
+ * @brief   ADC.
  *
- * @return  内部温感采样值.
+ * @return  .
  */
 extern uint16_t HAL_GetInterTempValue(void);
 
 /**
- * @brief   内部32k校准
+ * @brief   32k
  */
 extern void Lib_Calibration_LSI(void);
 

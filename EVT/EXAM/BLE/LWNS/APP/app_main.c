@@ -9,7 +9,7 @@
 
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "CH59x_common.h"
 #include "HAL.h"
@@ -27,7 +27,7 @@
 #include "lwns_multinetflood_example.h"
 #include "lwns_mesh_example.h"
 
-//每个文件单独debug打印的开关，置0可以禁止本文件内部打印
+// Each file has a separate debug print switch, setting 0 can prohibit internal printing of this file.
 #define DEBUG_PRINT_IN_THIS_FILE 1
 #if DEBUG_PRINT_IN_THIS_FILE
 #define PRINTF(...) PRINT(__VA_ARGS__)
@@ -44,13 +44,13 @@ __attribute__((aligned(4))) uint32_t MEM_BUF[BLE_MEMHEAP_SIZE/4];
 uint8_t const MacAddr[6] = {0x84,0xC2,0xE4,0x03,0x02,0x02};
 #endif
 
-/*******************************************************************************
+/* ******************************************************************************
 * Function Name  : Main_Circulation
-* Description    : 主循环
+* Description    : 
 * Input          : None
 * Output         : None
 * Return         : None
-*******************************************************************************/
+****************************************************************************** */
 __attribute__((section(".highcode")))
 void Main_Circulation()
 {
@@ -59,13 +59,13 @@ void Main_Circulation()
   }
 }
 
-/*******************************************************************************
+/* ******************************************************************************
 * Function Name  : main
-* Description    : 主函数
+* Description    : 
 * Input          : None
 * Output         : None
 * Return         : None
-*******************************************************************************/
+****************************************************************************** */
 int main( void )
 {
 #if (defined (DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)
@@ -89,16 +89,16 @@ int main( void )
   HAL_Init(  );
   RF_RoleInit( );
   RF_Init( );
-  lwns_init();//初始lwns协议栈
-  //lwns_broadcast_process_init();//广播
-  //lwns_multicast_process_init();//组播
-  //lwns_unicast_process_init();//单播
-  //lwns_ruc_process_init();//可靠单播
-  //lwns_rucft_process_init();//可靠单播文件传输
-  lwns_netflood_process_init();//网络泛洪
-  //lwns_uninetflood_process_init();//单播网络泛洪
-  //lwns_multinetflood_process_init();//组播网络泛洪
-  //lwns_mesh_process_init();//mesh组网
+  lwns_init();// Initial lwns protocol stack
+  // lwns_broadcast_process_init();//Broadcast
+  // lwns_multicast_process_init();//
+  // lwns_unicast_process_init();//
+  // lwns_ruc_process_init();//Reliable unicast
+  // lwns_rucft_process_init();//Reliable unicast file transfer
+  lwns_netflood_process_init();//
+  // lwns_uninetflood_process_init();//Unicast network flooding
+  // lwns_multinetflood_process_init();//Multicast network flooding
+  // lwns_mesh_process_init();//mesh networking
   Main_Circulation();
 }
 /******************************** endfile @ main ******************************/

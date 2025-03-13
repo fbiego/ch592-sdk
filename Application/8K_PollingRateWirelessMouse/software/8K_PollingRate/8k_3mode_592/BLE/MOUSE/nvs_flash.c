@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "peripheral.h"
 #include "nvs_flash.h"
 
@@ -89,13 +89,12 @@ void nvs_flash_store(void)
     PFIC_EnableIRQ(RTC_IRQn);
 }
 
-/*********************************************************************
- * @fn      nvs_flash_init
- *
- * @brief   初始化其他功能之前调用，确保使用的是flash中的数据。
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn nvs_flash_init
+*
+* @brief is called before initializing other functions, ensuring that the data in flash is used.
+*
+* @return none */
 void nvs_flash_init(void)
 {
     EEPROM_READ(NVS_FLASH_INFO_ADDRESS, &nvs_flash_info, sizeof(nvs_flash_info_t));

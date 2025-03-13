@@ -1,13 +1,13 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : peripheral.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 外设从机多连接应用程序，初始化广播连接参数，然后广播，连接主机后，
- *                      请求更新连接参数，通过自定义服务传输数据
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : peripheral.C
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Peripheral slave multi-connection application, initialize broadcast connection parameters, and then broadcast, and after connecting to the host,
+* Request to update connection parameters and transfer data through custom services
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -81,8 +81,8 @@
  * LOCAL VARIABLES
  */
 
-UINT8V bleConnectState = 0; ///< 0:没有连接; 1:已连接
-UINT8V advState = 0;        ///< 0:停止广播; 1:正在广播
+UINT8V bleConnectState = 0; // /< 0:No connection; 1:Connected
+UINT8V advState = 0;        // /< 0: Stop broadcasting; 1: Broadcasting is being broadcasted
 
 uint8_t initial_advertising_enable = FALSE;
 

@@ -9,7 +9,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include <RF.h>
 #include <SLEEP.h>
 #include "wchrf.h"
@@ -28,15 +28,14 @@
 #define WAKE_UP_RTC_MAX_TIME                US_TO_RTC(1600)
 #endif
 
-/*******************************************************************************
- * @fn          RF_LowPower
- *
- * @brief       启动睡眠
- *
- * @param       time  -  睡眠的时间
- *
- * @return      none.
- */
+/* *********************************************************************************************
+* @fn RF_LowPower
+*
+* @brief Start sleep
+*
+* @param time - time of sleep
+*
+* @return none. */
 void RF_LowPower(uint32_t time)
 {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
@@ -44,7 +43,7 @@ void RF_LowPower(uint32_t time)
     unsigned long irq_status;
 
     sys_safe_access_enable();
-    R8_RTC_MODE_CTRL &= ~RB_RTC_TRIG_EN;  // 触发模式
+    R8_RTC_MODE_CTRL &= ~RB_RTC_TRIG_EN;  // Trigger mode
     sys_safe_access_disable();              //
     SYS_DisableAllIrq(&irq_status);
 
@@ -61,32 +60,31 @@ void RF_LowPower(uint32_t time)
     gSleepFlag = TRUE;
     SYS_RecoverIrq(irq_status);
     sys_safe_access_enable();
-    R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // 触发模式
+    R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // Trigger mode
     sys_safe_access_disable();              //
 
-    // LOW POWER-SLEEP模式
-    LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND ); //只保留24+2K SRAM 供电
-    HSECFG_Current(HSE_RCur_100); // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+    // LOW POWER-SLEEP mode
+    LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND ); // Only 24+2K SRAM power supply is retained
+    HSECFG_Current(HSE_RCur_100); // Reduced to rated current (HSE bias current is increased in low power consumption function)
 #endif
 }
 
-/*******************************************************************************
- * @fn      RF_SleepInit
- *
- * @brief   配置睡眠唤醒的方式   - RTC唤醒，触发模式
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_SleepInit
+*
+* @brief Configure sleep wake-up mode - RTC wake-up, trigger mode
+*
+* @param None.
+*
+* @return None. */
 void RF_SleepInit(void)
 {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     sys_safe_access_enable();
-    R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTC唤醒
+    R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTC wake up
     sys_safe_access_disable();              //
 //    sys_safe_access_enable();
-//    R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // 触发模式
+// R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN; // Trigger mode
 //    sys_safe_access_disable();              //
 //    PFIC_EnableIRQ(RTC_IRQn);
 #endif

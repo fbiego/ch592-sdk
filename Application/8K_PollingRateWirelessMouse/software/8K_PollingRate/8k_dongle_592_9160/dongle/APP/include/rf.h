@@ -44,7 +44,7 @@ extern "C"
 #endif
 #endif
 
-#define   TX_TOAL_COUNT            (1000000/TX_TIM_TX_INTERVAL)  // 1s时间可发送的数量
+#define   TX_TOAL_COUNT            (1000000/TX_TIM_TX_INTERVAL)  // 1s
 extern uint32_t gUartCount;
 extern uint32_t gTxCount;
 void RF_Tx( void );

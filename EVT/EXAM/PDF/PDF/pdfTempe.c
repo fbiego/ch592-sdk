@@ -28,7 +28,7 @@ uint8_t timeStart[6] = { 23,  7,  27,  12,  12,  12};
 #define   MINUTE_OFFSET        4
 #define   SECOND_OFFSET        5
 
-const char centigrade[3] ={ 0xA1, 0xE6,'\0' };  // ℃
+const char centigrade[3] ={ 0xA1, 0xE6,'\0' };  // 
 
 const char *device_info[] = {
     "Device Information",
@@ -80,9 +80,9 @@ static LPDF_REAL DataBuf[DATA_MAX_LEN];
  *          offset: The starting offset address of temperature data in memory;
  *          num: Pointer to an integer pointer used to store the number of temperature data obtained.
  *
- * @param   pBuf - 数据缓冲区
- *          offset - 偏移量
- *          num - 数据量
+ * @param   pBuf - 
+ *          offset - 
+ *          num - 
  *
  * @return  a pointer to the buffer where temperature data is stored, i.e. pBuf
  */
@@ -104,9 +104,9 @@ LPDF_REAL *pdf_get_temperature_data( LPDF_REAL *pBuf,LPDF_UINT offset, LPDF_UINT
  *          offset: The starting offset address of temperature data in memory;
  *          num: Pointer to an integer pointer used to store the number of temperature data obtained.
  *
- * @param   pBuf - 数据缓冲区
- *          offset - 偏移量
- *          num - 数据量
+ * @param   pBuf - 
+ *          offset - 
+ *          num - 
  *
  * @return  a pointer to the buffer where temperature data is stored, i.e. pBuf
  */
@@ -124,7 +124,7 @@ LPDF_REAL *pdf_get_humidity_data( LPDF_REAL *pBuf,LPDF_UINT offset, LPDF_UINT *n
  *
  * @brief   Complete the initialization of various information in the PDF document
  *
- * @param   info - 指向LPDF_info结构体的指针，存放PDF模板的各项属性
+ * @param   info - LPDF_infoPDF
  *
  * @return  none
  */
@@ -194,7 +194,7 @@ void pdf_temperature_init( LPDF_Info info )
  *
  * @brief   Create a PDF document
  *
- * @param   file_name - 文件名
+ * @param   file_name - 
  *
  * @return  none
  */
@@ -234,7 +234,7 @@ int pdf_create( char *file_name )
       LPDF_Page_LineTo(page[0], 575, 20);
       LPDF_Page_Stroke(page[0]);                       // Display the drawn lines on the page
 
-      // 页眉
+      // 
       LPDF_Page_SetRGBFill(page[0], 0.0, 0.0, 0.0);    // Set the font color of the page to black
       LPDF_Page_BeginText(page[0]);                    // Start drawing text
       LPDF_Page_MoveTextPos(page[0], 30, 815);         // Set the starting position of the text
@@ -278,7 +278,7 @@ int pdf_create( char *file_name )
           LPDF_Page_Stroke(page[0]);
       }
 
-      // 页脚
+      // 
       LPDF_Page_SetRGBFill(page[0], 0.0, 0.0, 0.0);
       LPDF_Page_BeginText(page[0]);
       LPDF_Page_MoveTextPos(page[0], 40, 10);

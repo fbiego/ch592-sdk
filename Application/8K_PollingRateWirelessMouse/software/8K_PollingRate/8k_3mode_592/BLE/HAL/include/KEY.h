@@ -29,7 +29,7 @@ extern "C" {
 #define HAL_KEY_SW_3             0x04  // key3
 #define HAL_KEY_SW_4             0x08  // key4
 
-/* 按键定义 */
+/*  */
 
 /* 1 - KEY */
 #define KEY1_BV                  BV(22)
@@ -52,7 +52,7 @@ extern "C" {
 #define KEY3_IN                  ()
 #define KEY4_IN                  ()
 
-#define HAL_PUSH_BUTTON1()       (KEY1_IN) //添加自定义按键
+#define HAL_PUSH_BUTTON1()       (KEY1_IN) //
 #define HAL_PUSH_BUTTON2()       (KEY2_IN)
 #define HAL_PUSH_BUTTON3()       (0)
 #define HAL_PUSH_BUTTON4()       (0)

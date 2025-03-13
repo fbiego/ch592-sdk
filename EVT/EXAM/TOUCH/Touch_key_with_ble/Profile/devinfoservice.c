@@ -1,12 +1,12 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : devinfoservice.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 设备信息服务
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: devinfoservice.c
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Equipment Information Service
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

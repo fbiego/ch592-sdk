@@ -37,7 +37,7 @@ extern "C" {
 #define VENDOR_MODEL_SRV_INDICATE_EVT        (1 << 2)
 
 /**
- * @brief 发送数据的开始和结束回调函数定义
+ * @brief 
  */
 struct bt_adv_trans_cb
 {
@@ -46,7 +46,7 @@ struct bt_adv_trans_cb
 };
 
 /**
- * @brief 发送参数结构体
+ * @brief 
  */
 struct send_param
 {
@@ -64,7 +64,7 @@ struct send_param
 };
 
 /**
- * @brief indicate 发送缓存
+ * @brief indicate 
  */
 struct bt_mesh_indicate
 {
@@ -73,7 +73,7 @@ struct bt_mesh_indicate
 };
 
 /**
- * @brief trans 发送缓存
+ * @brief trans 
  */
 struct bt_mesh_trans
 {
@@ -82,7 +82,7 @@ struct bt_mesh_trans
 };
 
 /**
- * @brief write 发送缓存
+ * @brief write 
  */
 struct bt_mesh_write
 {
@@ -91,7 +91,7 @@ struct bt_mesh_write
 };
 
 /**
- * @brief write 回调结构体
+ * @brief write 
  */
 struct bt_mesh_vendor_model_write
 {
@@ -101,7 +101,7 @@ struct bt_mesh_vendor_model_write
 };
 
 /**
- * @brief srv_trans 回调结构体
+ * @brief srv_trans 
  */
 struct bt_mesh_vendor_model_srv_trans
 {
@@ -140,7 +140,7 @@ typedef struct
 typedef void (*vendor_model_srv_rsp_handler_t)(const vendor_model_srv_status_t *val);
 
 /**
- * @brief 记录当前发送数据包的tid
+ * @brief tid
  */
 struct vendor_model_srv_tid
 {
@@ -165,48 +165,48 @@ struct bt_mesh_vendor_model_srv
 extern const struct bt_mesh_model_op vnd_model_srv_op[];
 
 /**
- * @brief   读取led状态
+ * @brief   led
  *
- * @param   led_pin - 引脚
+ * @param   led_pin - 
  *
- * @return  led状态
+ * @return  led
  */
 BOOL read_led_state(uint32_t led_pin);
 
 /**
- * @brief   设置led状态
+ * @brief   led
  *
- * @param   led_pin - 引脚
- * @param   on      - 状态
+ * @param   led_pin - 
+ * @param   on      - 
  */
 void set_led_state(uint32_t led_pin, BOOL on);
 
 /**
- * @brief   翻转led状态
+ * @brief   led
  *
- * @param   led_pin - 引脚
+ * @param   led_pin - 
  */
 void toggle_led_state(uint32_t led_pin);
 
 /**
- * @brief   indicate,有应答传输数据通道
+ * @brief   indicate,
  *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
+ * @param   param   - .
+ * @param   pData   - .
+ * @param   len     - ,(APP_MAX_TX_SIZE).
  *
- * @return  参考Global_Error_Code
+ * @return  Global_Error_Code
  */
 int vendor_message_srv_indicate(struct send_param *param, uint8_t *pData, uint16_t len);
 
 /**
- * @brief   send_trans,透传数据通道
+ * @brief   send_trans,
  *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
+ * @param   param   - .
+ * @param   pData   - .
+ * @param   len     - ,(APP_MAX_TX_SIZE).
  *
- * @return  参考Global_Error_Code
+ * @return  Global_Error_Code
  */
 int vendor_message_srv_send_trans(struct send_param *param, uint8_t *pData, uint16_t len);
 
@@ -218,14 +218,14 @@ int vendor_message_srv_send_trans(struct send_param *param, uint8_t *pData, uint
 uint8_t vendor_srv_tid_get(void);
 
 /**
- * @brief   复位厂商模型服务，取消所有正在发送的流程
+ * @brief   
  */
 void vendor_message_srv_trans_reset(void);
 
 /**
- * @brief   厂商模型初始化
+ * @brief   
  *
- * @param   model       - 指向厂商模型结构体
+ * @param   model       - 
  *
  * @return  always SUCCESS
  */

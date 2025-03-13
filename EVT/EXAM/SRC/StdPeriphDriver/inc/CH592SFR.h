@@ -1210,7 +1210,7 @@ extern "C" {
 #define  RB_LCD_BIAS        0x04                      // RW, LCD bias select:  0=1/2 bias,  1=1/3 bias
 #define  RB_LCD_DUTY        0x18                      // RW, LCD duty select:  00=1/2 duty,  01=1/3 duty,  10=1/4 duty
 #define  RB_LCD_SCAN_CLK    0x60                      // RW, LCD scan clock select: 00=256Hz, 01=512Hz, 10=1KHz, 11=128Hz
-#define  RB_LCD_VLCD_SEL    0x80                      // RW, LCD drive voltage：0=VIO33*100%(3.3V),1=VIO33*76%(2.5V)
+#define  RB_LCD_VLCD_SEL    0x80                      // RW, LCD drive voltage0=VIO33*100%(3.3V),1=VIO33*76%(2.5V)
 #define  RB_LCD_SEG0_7_EN   0xFF00                    // RW, SEG0-SEG7 enable
 #define  RB_LCD_SEG8_15_EN  0xFF0000                  // RW, SEG8-SEG15 enable
 #define  RB_LCD_SEG16_19_EN 0xF000000                 // RW, SEG16-SEG19 enable
@@ -1729,7 +1729,7 @@ extern "C" {
 #endif
 
 #ifndef USB_DEVICE_ADDR
-#define USB_DEVICE_ADDR         0x02    /* 默认的USB设备地址 */
+#define USB_DEVICE_ADDR         0x02    /* USB */
 #endif
 #ifndef DEFAULT_ENDP0_SIZE
 #define DEFAULT_ENDP0_SIZE      8       /* default maximum packet size for endpoint 0 */
@@ -1738,12 +1738,12 @@ extern "C" {
 #define MAX_PACKET_SIZE         64      /* maximum packet size */
 #endif
 #ifndef USB_BO_CBW_SIZE
-#define USB_BO_CBW_SIZE         0x1F    /* 命令块CBW的总长度 */
-#define USB_BO_CSW_SIZE         0x0D    /* 命令状态块CSW的总长度 */
+#define USB_BO_CBW_SIZE         0x1F    /* CBW */
+#define USB_BO_CSW_SIZE         0x0D    /* CSW */
 #endif
 #ifndef USB_BO_CBW_SIG
-#define USB_BO_CBW_SIG          0x43425355    /* 命令块CBW识别标志'USBC' */
-#define USB_BO_CSW_SIG          0x53425355    /* 命令状态块CSW识别标志'USBS' */
+#define USB_BO_CBW_SIG          0x43425355    /* CBW'USBC' */
+#define USB_BO_CSW_SIG          0x53425355    /* CSW'USBS' */
 #endif
 
 #ifndef __PACKED

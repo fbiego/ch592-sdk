@@ -23,19 +23,16 @@ extern "C" {
 
 /******************************************************************************/
 
-/**
- * @brief   应用层初始化
- */
+/* *
+* @brief Application layer initialization */
 void App_Init(void);
 
-/**
- * @brief   发送当前灯的状态给天猫精灵
- */
+/* *
+* @brief Send the current light status to Tmall Elf */
 void send_led_state(void);
 
-/**
- * @brief   发送复位事件给天猫精灵，发送完成后将清除配网状态，重置自身mesh网络
- */
+/* *
+* @brief Send a reset event to Tmall Genie. After the sending is completed, the distribution network status will be cleared and the self-mesh network will be reset. */
 void send_reset_indicate(void);
 
 /******************************************************************************/

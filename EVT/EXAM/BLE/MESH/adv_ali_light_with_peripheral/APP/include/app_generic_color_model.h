@@ -19,26 +19,23 @@ extern "C" {
 
 #include "MESH_LIB.h"
 
-/**
- * @brief   存储收到的命令码所对应处理函数的结构体数组
- */
+/* *
+* @brief The structure array of processing functions stored in the received command code */
 extern const struct bt_mesh_model_op gen_color_op[];
 
-/**
- * @brief   获取当前灯色温
- *
- * @param   led_pin     - LED引脚.
- *
- * @return  色温
- */
+/* *
+* @brief Get the current light color temperature
+*
+* @param led_pin - LED pin.
+*
+* @return Color temperature */
 uint16_t read_led_color(uint32_t led_pin);
 
-/**
- * @brief   设置当前灯色温
- *
- * @param   led_pin     - LED引脚.
- * @param   color   - 色温.
- */
+/* *
+* @brief Set the current light color temperature
+*
+* @param led_pin - LED pin.
+* @param color - Color temperature. */
 void set_led_color(uint32_t led_pin, uint16_t color);
 
 #ifdef __cplusplus

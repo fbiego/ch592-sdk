@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : lwns_ruc_example.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2021/06/30
- * Description        : reliable unicast，可靠单播传输例子
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : lwns_ruc_example.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2021/06/30
+* Description        : reliable unicast，可靠单播传输例子
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 #include "lwns_ruc_example.h"
 
-//每个文件单独debug打印的开关，置0可以禁止本文件内部打印
+// Each file has a separate debug print switch, setting 0 can prohibit internal printing of this file.
 #define DEBUG_PRINT_IN_THIS_FILE    1
 #if DEBUG_PRINT_IN_THIS_FILE
   #define PRINTF(...)    PRINT(__VA_ARGS__)
@@ -23,12 +23,12 @@
 #endif
 
 #if 1
-static lwns_addr_t dst_addr = {{0xa3, 0xdf, 0x38, 0xe4, 0xc2, 0x84}}; //目标节点地址，测试时，请根据电路板芯片MAC地址不同进行修改。修改为接收方的MAC地址，请勿使用自己的MAC地址
+static lwns_addr_t dst_addr = {{0xa3, 0xdf, 0x38, 0xe4, 0xc2, 0x84}}; // When testing, please modify the target node address according to the different MAC address of the circuit board chip.Modify it to the recipient's MAC address, please do not use your own MAC address
 #else
 static lwns_addr_t dst_addr = {{0xd9, 0x37, 0x3c, 0xe4, 0xc2, 0x84}};
 #endif
 
-static lwns_ruc_controller ruc; //声明可靠单播控制结构体
+static lwns_ruc_controller ruc; // Declare reliable unicast control structure
 
 static uint8_t TX_DATA[10] =
     {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
@@ -45,25 +45,24 @@ static void sent_ruc(lwns_controller_ptr ptr,
 static void timedout_ruc(lwns_controller_ptr ptr,
                          const lwns_addr_t  *to);
 
-/*********************************************************************
- * @fn      recv_ruc
- *
- * @brief   lwns ruc接收回调函数
- *
- * @param   ptr     -   本次接收到的数据所属的可靠单播控制结构体指针.
- * @param   sender  -   本次接收到的数据的发送者地址指针.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn recv_ruc
+*
+* @brief lwns ruc receive callback function
+*
+* @param ptr - The reliable unicast control structure pointer to which the data received this time belongs.
+* @param sender - The sender address pointer of the data received this time.
+*
+* @return None. */
 static void recv_ruc(lwns_controller_ptr ptr,
                      const lwns_addr_t  *sender)
 {
-    //ruc中接收到发送给自己的数据后，才会调用该回调
+    // The callback will be called after receiving the data sent to you in the ruc
     uint8_t len;
-    len = lwns_buffer_datalen(); //获取当前缓冲区接收到的数据长度
+    len = lwns_buffer_datalen(); // Get the data length received in the current buffer
     if(len == 10)
     {
-        lwns_buffer_save_data(RX_DATA); //接收数据到用户数据区域
+        lwns_buffer_save_data(RX_DATA); // Receive data to user data area
         PRINTF("ruc %d rec %02x %02x %02x %02x %02x %02x\r\n", get_lwns_object_port(ptr), sender->v8[0],
                sender->v8[1], sender->v8[2], sender->v8[3], sender->v8[4], sender->v8[5]);
         PRINTF("data:");
@@ -79,63 +78,59 @@ static void recv_ruc(lwns_controller_ptr ptr,
     }
 }
 
-/*********************************************************************
- * @fn      sent_ruc
- *
- * @brief   lwns ruc发送完成回调函数
- *
- * @param   ptr     -   本次发送完成的可靠单播控制结构体指针.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn sent_ruc
+*
+* @brief lwns ruc sends the completed callback function
+*
+* @param ptr - The reliable unicast control structure pointer completed by this sending.
+*
+* @return None. */
 static void sent_ruc(lwns_controller_ptr ptr,
                      const lwns_addr_t *to, uint8_t retransmissions)
 {
-    //ruc中发送成功，并且收到目标节点的ack回复后，才会调用该回调
+    // The callback will be called only after the sending in the ruc is successfully received and the ack reply from the target node is received.
     PRINTF("ruc %d sent %d\r\n", get_lwns_object_port(ptr), retransmissions);
     tmos_start_task(ruc_taskID, RUC_EXAMPLE_TX_PERIOD_EVT,
-                    MS1_TO_SYSTEM_TIME(1000)); //更新任务时间，发送并收到回复后，1秒钟后再发送
+                    MS1_TO_SYSTEM_TIME(1000)); // Update the task time, send and receive a reply, and send it in 1 second
 }
 
-/*********************************************************************
- * @fn      timedout_ruc
- *
- * @brief   lwns ruc发送超时回调函数
- *
- * @param   ptr     -   本次发送完成的ruc控制结构体指针.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn timedout_ruc
+*
+* @brief lwns ruc send timeout callback function
+*
+* @param ptr - The ruc control structure pointer completed by this sending.
+*
+* @return None. */
 static void timedout_ruc(lwns_controller_ptr ptr,
                          const lwns_addr_t  *to)
 {
-    //ruc中，再重发次数超过最大重发次数后，会调用该回调。
+    // In ruc, the callback will be called after the number of resents exceeds the maximum number of resents.
     PRINTF("ruc %d timedout\n", get_lwns_object_port(ptr));
     tmos_start_task(ruc_taskID, RUC_EXAMPLE_TX_PERIOD_EVT,
                     MS1_TO_SYSTEM_TIME(1000));
 }
 
-/**
- * lwns 可靠单播回调函数结构体，注册回调函数
- */
+/* *
+* lwns Reliable unicast callback function structure, register callback function */
 static const struct lwns_ruc_callbacks ruc_callbacks = {
-    recv_ruc, sent_ruc, timedout_ruc}; //声明可靠单播回调结构体
+    recv_ruc, sent_ruc, timedout_ruc}; // Declare a reliable unicast callback structure
 
-/*********************************************************************
- * @fn      lwns_ruc_process_init
- *
- * @brief   lwns ruc例程初始化.
- *
- * @param   None.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn lwns_ruc_process_init
+*
+* @brief lwns ruc routine initialization.
+*
+* @param None.
+*
+* @return None. */
 void lwns_ruc_process_init(void)
 {
     lwns_ruc_init(&ruc,
-                  144,               //打开一个端口号为144的可靠单播
-                  HTIMER_SECOND_NUM, //等待ack时间间隔，没收到就会重发
-                  &ruc_callbacks);   //返回0代表打开失败。返回1打开成功。
+                  144,               // Open a reliable unicast with port number 144
+                  HTIMER_SECOND_NUM, // Wait for the ack time interval, and if you don't receive it, you will send it again
+                  &ruc_callbacks);   // Returning 0 means opening failed.Return to 1 Open successfully.
     ruc_taskID = TMOS_ProcessEventRegister(lwns_ruc_ProcessEvent);
     tmos_start_task(ruc_taskID, RUC_EXAMPLE_TX_PERIOD_EVT,
                     MS1_TO_SYSTEM_TIME(1000));
@@ -162,14 +157,14 @@ uint16_t lwns_ruc_ProcessEvent(uint8_t task_id, uint16_t events)
         temp = TX_DATA[0];
         for(uint8_t i = 0; i < 9; i++)
         {
-            TX_DATA[i] = TX_DATA[i + 1]; //移位发送数据，以便观察效果
+            TX_DATA[i] = TX_DATA[i + 1]; // Shift the data to observe the effect
         }
         TX_DATA[9] = temp;
-        lwns_buffer_load_data(TX_DATA, sizeof(TX_DATA)); //载入需要发送的数据到缓冲区
+        lwns_buffer_load_data(TX_DATA, sizeof(TX_DATA)); // Load the data to be sent to the buffer
         lwns_ruc_send(&ruc,
-                      &dst_addr, //可靠单播目标地址
-                      4          //最大重发次数
-        );                       //可靠单播发送函数：发送参数，目标地址，最大重发次数，默认一秒钟重发一次
+                      &dst_addr, // Reliable unicast target address
+                      4          // Maximum number of resents
+        );                       // Reliable unicast sending function: send parameters, target address, maximum number of resents, default resent once in one second
         return events ^ RUC_EXAMPLE_TX_PERIOD_EVT;
     }
     if(events & SYS_EVENT_MSG)

@@ -1,19 +1,19 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2022/05/10
- * Description        : FreeRTOS例程，使用硬件压栈，中断嵌套可选，中断函数不再使用修饰
- *                      __attribute__((interrupt("WCH-Interrupt-fast")))，
- *                      中断函数直接按照普通函数定义，只使用HIGHCODE修饰即可。
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2022/05/10
+* Description: FreeRTOS routine, using hardware to press the stack, interrupt nesting is optional, interrupt function is no longer modified
+* __attribute__((interrupt("WCH-Interrupt-fast"))),
+* The interrupt function is directly defined according to the normal function, and only uses HIGHCODE to modify it.
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CH59x_common.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -24,7 +24,7 @@
  * GLOBAL TYPEDEFS
  */
 #define TASK1_TASK_PRIO     5
-#define TASK1_STK_SIZE      256     /* 因在任务中使用了APP_Printf所以栈空间必须要大于APP_Printf中的buf_str的大小+configMINIMAL_STACK_SIZE */
+#define TASK1_STK_SIZE      256     /* Because APP_Printf is used in the task, the stack space must be larger than the size of buf_str in APP_Printf +configMINIMAL_STACK_SIZE */
 #define TASK2_TASK_PRIO     5
 #define TASK2_STK_SIZE      256
 #define TASK3_TASK_PRIO     configMAX_PRIORITIES - 1
@@ -49,7 +49,7 @@ SemaphoreHandle_t xBinarySem;
 __HIGH_CODE
 void App_Printf(const char *fmt, ...)
 {
-    char  buf_str[128]; /* 需要注意在这里的内存空间是否足够打印 */
+    char  buf_str[128]; /* Pay attention to whether the memory space here is enough to print */
     va_list   v_args;
 
     va_start(v_args, fmt);
@@ -59,7 +59,7 @@ void App_Printf(const char *fmt, ...)
                                   v_args);
     va_end(v_args);
 
-    /* 互斥量操作，不可在中断中使用 */
+    /* Mutex operation, not used in interrupts */
     xSemaphoreTake(printMutex, portMAX_DELAY);
     printf("%s", buf_str);
     xSemaphoreGive(printMutex);
@@ -217,16 +217,16 @@ int main(void)
 __HIGH_CODE
 void GPIOA_IRQHandler(void)
 {
-    /* 本函数可以作为在本工程FreeRTOS中的中断函数写法示例 */
+    /* This function can be used as an example of interrupt function writing in FreeRTOS of this project */
     uint16_t flag;
     portBASE_TYPE xHigherPriorityTaskWoken;
     flag = GPIOA_ReadITFlagPort();
     if((flag & GPIO_Pin_12) != 0)
     {
         xSemaphoreGiveFromISR(xBinarySem, &xHigherPriorityTaskWoken);
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);   /* 根据需要发起切换请求 */
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);   /* Switch request as needed */
     }
-    GPIOA_ClearITFlagBit(flag); /* 清除中断标志 */
+    GPIOA_ClearITFlagBit(flag); /* Clear the interrupt flag */
 }
 
 /******************************** endfile @ main ******************************/

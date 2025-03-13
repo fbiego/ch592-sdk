@@ -21,18 +21,18 @@
  *
  * @return  偏差
  */
-signed short ADC_DataCalib_Rough(void) // 采样数据粗调,获取偏差值
+signed short ADC_DataCalib_Rough(void) // Sampling data roughly tuned to obtain deviation value
 {
     uint16_t i;
     uint32_t sum = 0;
     uint8_t  ch = 0;   // 备份通道
-    uint8_t  cfg = 0;   // 备份
+    uint8_t  cfg = 0;   // Backup
 
     ch = R8_ADC_CHANNEL;
     cfg = R8_ADC_CFG;
 
-    R8_ADC_CFG |= RB_ADC_OFS_TEST; // 进入测试模式
-    R8_ADC_CFG &= ~RB_ADC_DIFF_EN; // 关闭差分
+    R8_ADC_CFG |= RB_ADC_OFS_TEST; // Enter test mode
+    R8_ADC_CFG &= ~RB_ADC_DIFF_EN; // Close the difference
 
     R8_ADC_CONVERT |= RB_ADC_START;
     while(R8_ADC_CONVERT & RB_ADC_START);
@@ -44,22 +44,21 @@ signed short ADC_DataCalib_Rough(void) // 采样数据粗调,获取偏差值
     }
     sum = (sum + 8) >> 4;
 
-    R8_ADC_CFG = cfg;  // 恢复配置值
+    R8_ADC_CFG = cfg;  // Restore configuration values
     R8_ADC_CHANNEL = ch;
 
     return (2048 - sum);
 }
 
-/*********************************************************************
- * @fn      ADC_ExtSingleChSampInit
- *
- * @brief   外部信号单通道采样初始化
- *
- * @param   sp  - refer to ADC_SampClkTypeDef
- * @param   ga  - refer to ADC_SignalPGATypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_ExtSingleChSampInit
+*
+* @brief External signal single channel sampling initialization
+*
+* @param sp - refer to ADC_SampClkTypeDef
+* @param ga - refer to ADC_SignalPGATypeDef
+*
+* @return none */
 void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
@@ -74,16 +73,15 @@ void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
     }
 }
 
-/*********************************************************************
- * @fn      ADC_ExtDiffChSampInit
- *
- * @brief   外部信号差分通道采样初始化
- *
- * @param   sp  - refer to ADC_SampClkTypeDef
- * @param   ga  - refer to ADC_SignalPGATypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_ExtDiffChSampInit
+*
+* @brief External signal differential channel sampling initialization
+*
+* @param sp - refer to ADC_SampClkTypeDef
+* @param ga - refer to ADC_SignalPGATypeDef
+*
+* @return none */
 void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
@@ -98,15 +96,14 @@ void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
     }
 }
 
-/*********************************************************************
- * @fn      ADC_InterTSSampInit
- *
- * @brief   内置温度传感器采样初始化
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_InterTSSampInit
+*
+* @brief Built-in temperature sensor sampling initialization
+*
+* @param none
+*
+* @return none */
 void ADC_InterTSSampInit(void)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
@@ -116,32 +113,30 @@ void ADC_InterTSSampInit(void)
     R8_ADC_CONVERT &= ~RB_ADC_PGA_GAIN2;
 }
 
-/*********************************************************************
- * @fn      ADC_InterBATSampInit
- *
- * @brief   内置电池电压采样初始化
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_InterBATSampInit
+*
+* @brief Built-in battery voltage sampling initialization
+*
+* @param none
+*
+* @return none */
 void ADC_InterBATSampInit(void)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
     R8_ADC_CHANNEL = CH_INTE_VBAT;
-    R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (0 << 4); // 使用-12dB模式
+    R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (0 << 4); // Use -12dB mode
     R8_ADC_CONVERT &= ~RB_ADC_PGA_GAIN2;
 }
 
-/*********************************************************************
- * @fn      TouchKey_ChSampInit
- *
- * @brief   触摸按键通道采样初始化
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TouchKey_ChSampInit
+*
+* @brief Touch key channel sampling initialization
+*
+* @param none
+*
+* @return none */
 void TouchKey_ChSampInit(void)
 {
     R8_ADC_CFG = RB_ADC_POWER_ON | RB_ADC_BUF_EN | (ADC_PGA_0 << 4) | (SampleFreq_8 << 6);
@@ -166,16 +161,15 @@ uint16_t ADC_ExcutSingleConver(void)
     return (R16_ADC_DATA & RB_ADC_DATA);
 }
 
-/*********************************************************************
- * @fn      TouchKey_ExcutSingleConver
- *
- * @brief   TouchKey转换后数据
- *
- * @param   charg   - Touchkey充电时间,5bits有效, t=charg*Tadc
- * @param   disch   - Touchkey放电时间,3bits有效, t=disch*Tadc
- *
- * @return  当前TouchKey等效数据
- */
+/* ***************************************************************************
+* @fn TouchKey_ExcutSingleConver
+*
+* @brief TouchKey converted data
+*
+* @param charg - Touchkey charging time, 5bits valid, t=charg*Tadc
+* @param disch - Touchkey discharge time, 3bits valid, t=disch*Tadc
+*
+* @return Current TouchKey equivalent data */
 uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch)
 {
     R8_TKEY_COUNT = (disch << 5) | (charg & 0x1f);
@@ -184,32 +178,30 @@ uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch)
     return (R16_ADC_DATA & RB_ADC_DATA);
 }
 
-/*********************************************************************
- * @fn      ADC_AutoConverCycle
- *
- * @brief   设置连续 ADC的周期
- *
- * @param   cycle   - 采样周期计算方法为(256-cycle)*16*Tsys
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_AutoConverCycle
+*
+* @brief Sets the cycle of continuous ADC
+*
+* @param cycle - The sampling period calculation method is (256-cycle)*16*Tsys
+*
+* @return none */
 void ADC_AutoConverCycle(uint8_t cycle)
 {
     R8_ADC_AUTO_CYCLE = cycle;
 }
 
-/*********************************************************************
- * @fn      ADC_DMACfg
- *
- * @brief   配置DMA功能
- *
- * @param   s           - 是否打开DMA功能
- * @param   startAddr   - DMA 起始地址
- * @param   endAddr     - DMA 结束地址
- * @param   m           - 配置DMA模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_DMACfg
+*
+* @brief Configure DMA function
+*
+* @param s - Whether to turn on the DMA function
+* @param startAddr - DMA Start Address
+* @param endAddr - DMA end address
+* @param m - Configure DMA mode
+*
+* @return none */
 void ADC_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, ADC_DMAModeTypeDef m)
 {
     if(s == DISABLE)

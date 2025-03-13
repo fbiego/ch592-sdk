@@ -193,7 +193,7 @@ uint8_t USBFS_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod
 /*********************************************************************
  * @fn      USB_DevTransProcess
  *
- * @brief   USB 传输处理函数
+ * @brief   USB 
  *
  * @param   none
  *
@@ -208,10 +208,10 @@ void USB_DevTransProcess(void)
 
     if(intflag & RB_UIF_TRANSFER)
     {
-        if((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // 非空闲
+        if((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // 
         {
             switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))
-            // 分析操作令牌和端点号
+            // 
             {
                 /* end-point 0 data in interrupt */
                 case UIS_TOKEN_IN | DEF_UEP0:
@@ -219,12 +219,12 @@ void USB_DevTransProcess(void)
                     switch(USBFS_SetupReqCode)
                     {
                         case USB_GET_DESCRIPTOR:
-                            len = USBFS_SetupReqLen >= DEF_USBD_UEP0_SIZE ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen; // 本次传输长度
-                            pdf_memcpy(pEP0_DataBuf, pUSBFS_Descr, len);                          /* 加载上传数据 */
+                            len = USBFS_SetupReqLen >= DEF_USBD_UEP0_SIZE ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen; // 
+                            pdf_memcpy(pEP0_DataBuf, pUSBFS_Descr, len);                          /*  */
                             USBFS_SetupReqLen -= len;
                             pUSBFS_Descr += len;
                             R8_UEP0_T_LEN = len;
-                            R8_UEP0_CTRL ^= RB_UEP_T_TOG; // 翻转
+                            R8_UEP0_CTRL ^= RB_UEP_T_TOG; // 
                             break;
 
                         case USB_SET_ADDRESS:
@@ -233,7 +233,7 @@ void USB_DevTransProcess(void)
                             break;
 
                         default:
-                            R8_UEP0_T_LEN = 0; // 状态阶段完成中断或者是强制上传0长度数据包结束控制传输
+                            R8_UEP0_T_LEN = 0; // 0
                             R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
                             break;
                     }
@@ -253,7 +253,7 @@ void USB_DevTransProcess(void)
 
                 case UIS_TOKEN_OUT | DEF_UEP3:
                     if(R8_USB_INT_ST & RB_UIS_TOG_OK)
-                    { // 不同步的数据包将丢弃
+                    { // 
                         R8_UEP3_CTRL ^= RB_UEP_R_TOG;
                         len = R8_USB_RX_LEN;
                         R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_R_RES) | UEP_R_RES_NAK;
@@ -268,7 +268,7 @@ void USB_DevTransProcess(void)
             R8_USB_INT_FG = RB_UIF_TRANSFER;
         }
 
-        if(R8_USB_INT_ST & RB_UIS_SETUP_ACT) // Setup包处理
+        if(R8_USB_INT_ST & RB_UIS_SETUP_ACT) // Setup
         {
             R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
             /* Store All Setup Values */
@@ -307,10 +307,10 @@ void USB_DevTransProcess(void)
                 }
                 else
                 {
-                    errflag = 0xFF; /* 非标准请求 */
+                    errflag = 0xFF; /*  */
                 }
             }
-            else /* 标准请求 */
+            else /*  */
             {
                 switch(USBFS_SetupReqCode)
                 {
@@ -363,7 +363,7 @@ void USB_DevTransProcess(void)
                                         break;
 
                                     default:
-                                        errflag = 0xFF; // 不支持的字符串描述符
+                                        errflag = 0xFF; // 
                                         break;
                                 }
                             }
@@ -374,7 +374,7 @@ void USB_DevTransProcess(void)
                                 break;
                         }
                         if(USBFS_SetupReqLen > len)
-                            USBFS_SetupReqLen = len; //实际需上传总长度
+                            USBFS_SetupReqLen = len; //
                         len = (USBFS_SetupReqLen >= DEF_USBD_UEP0_SIZE) ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen;
                         pdf_memcpy(pEP0_DataBuf, pUSBFS_Descr, len);
                         pUSBFS_Descr += len;
@@ -398,7 +398,7 @@ void USB_DevTransProcess(void)
 
                     case USB_CLEAR_FEATURE:
                     {
-                        if((USBFS_SetupReqType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // 端点
+                        if((USBFS_SetupReqType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // 
                         {
                             switch(USBFS_SetupReqIndex & 0xff)
                             {
@@ -415,7 +415,7 @@ void USB_DevTransProcess(void)
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
                                 default:
-                                    errflag = 0xFF; // 不支持的端点
+                                    errflag = 0xFF; // 
                                     break;
                             }
                         }
@@ -443,24 +443,24 @@ void USB_DevTransProcess(void)
                 }
             }
 
-            if(errflag == 0xff) // 错误或不支持
+            if(errflag == 0xff) // 
             {
                 //                  SetupReqCode = 0xFF;
                 R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL; // STALL
             }
             else
             {
-                if(USBFS_SetupReqType & 0x80) // 上传
+                if(USBFS_SetupReqType & 0x80) // 
                 {
                     len = (USBFS_SetupReqLen > DEF_USBD_UEP0_SIZE) ? DEF_USBD_UEP0_SIZE : USBFS_SetupReqLen;
                     USBFS_SetupReqLen -= len;
                 }
                 else
                 {
-                    len = 0; // 下传
+                    len = 0; // 
                 }
                 R8_UEP0_T_LEN = len;
-                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK; // 默认数据包是DATA1
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK; // DATA1
             }
 
             R8_USB_INT_FG = RB_UIF_TRANSFER;
@@ -480,11 +480,11 @@ void USB_DevTransProcess(void)
         if(R8_USB_MIS_ST & RB_UMS_SUSPEND)
         {
             ;
-        } // 挂起
+        } // 
         else
         {
             ;
-        } // 唤醒
+        } // 
         R8_USB_INT_FG = RB_UIF_SUSPEND;
     }
     else
@@ -497,7 +497,7 @@ void USB_DevTransProcess(void)
 /*********************************************************************
  * @fn      USB_IRQHandler
  *
- * @brief   USB中断函数
+ * @brief   USB
  *
  * @param   none
  *
@@ -505,7 +505,7 @@ void USB_DevTransProcess(void)
  */
 __INTERRUPT
 __HIGH_CODE
-void USB_IRQHandler(void) /* USB中断服务程序,使用寄存器组1 */
+void USB_IRQHandler(void) /* USB,1 */
 {
     USB_DevTransProcess();
 }

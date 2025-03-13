@@ -1,27 +1,26 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2022/01/25
- * Description        : USB设备枚举
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : Main.c
+* Author             : WCH
+* Version            : V1.1
+* Date               : 2022/01/25
+* Description        : USB设备枚举
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 #include "CH59x_common.h"
 
 __attribute__((aligned(4))) uint8_t RxBuffer[MAX_PACKET_SIZE]; // IN, must even address
 __attribute__((aligned(4))) uint8_t TxBuffer[MAX_PACKET_SIZE]; // OUT, must even address
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main()
 {
     uint8_t i, s, k, len, endp;
@@ -29,7 +28,7 @@ int main()
 
     SetSysClock(CLK_SOURCE_PLL_60MHz);
     DelayMs(5);
-    /* 开启电压监控 */
+    /* Turn on voltage monitoring */
     PowerMonitor(ENABLE, HALevel_2V1);
 
     GPIOA_SetBits(GPIO_Pin_9);
@@ -46,7 +45,7 @@ int main()
     {
         s = ERR_SUCCESS;
         if(R8_USB_INT_FG & RB_UIF_DETECT)
-        { // 如果有USB主机检测中断则处理
+        { // If there is a USB host detection interrupt, it will be handled
             R8_USB_INT_FG = RB_UIF_DETECT;
             s = AnalyzeRootHub();
             if(s == ERR_USB_CONNECT)
@@ -54,42 +53,42 @@ int main()
         }
 
         if(FoundNewDev || s == ERR_USB_CONNECT)
-        { // 有新的USB设备插入
+        { // There is a new USB device plugged in
             FoundNewDev = 0;
-            mDelaymS(200);        // 由于USB设备刚插入尚未稳定,故等待USB设备数百毫秒,消除插拔抖动
-            s = InitRootDevice(); // 初始化USB设备
+            mDelaymS(200);        // Since the USB device has just been plugged in, it is not stable yet, so wait for the USB device to be hundreds of milliseconds to eliminate plug-in and unplug jitter
+            s = InitRootDevice(); // Initialize USB device
             if(s != ERR_SUCCESS)
             {
                 PRINT("EnumAllRootDev err = %02X\n", (uint16_t)s);
             }
         }
 
-        /* 如果下端连接的是HUB，则先枚举HUB */
-        s = EnumAllHubPort(); // 枚举所有ROOT-HUB端口下外部HUB后的二级USB设备
+        /* If the HUB is connected to the lower end, first enumerate the HUB */
+        s = EnumAllHubPort(); // Enumerate all secondary USB devices after external HUB under ROOT-HUB ports
         if(s != ERR_SUCCESS)
-        { // 可能是HUB断开了
+        { // Maybe HUB is disconnected
             PRINT("EnumAllHubPort err = %02X\n", (uint16_t)s);
         }
 
-        /* 如果设备是鼠标 */
-        loc = SearchTypeDevice(DEV_TYPE_MOUSE); // 在ROOT-HUB以及外部HUB各端口上搜索指定类型的设备所在的端口号
+        /* If the device is a mouse */
+        loc = SearchTypeDevice(DEV_TYPE_MOUSE); // Search the port number of the specified type of device on each port of ROOT-HUB and external HUB
         if(loc != 0xFFFF)
-        { // 找到了,如果有两个MOUSE如何处理?
+        { // Found, what if there are two MOUSEs?
             i = (uint8_t)(loc >> 8);
             len = (uint8_t)loc;
-            SelectHubPort(len);                                                // 选择操作指定的ROOT-HUB端口,设置当前USB速度以及被操作设备的USB地址
-            endp = len ? DevOnHubPort[len - 1].GpVar[0] : ThisUsbDev.GpVar[0]; // 中断端点的地址,位7用于同步标志位
+            SelectHubPort(len);                                                // Select the ROOT-HUB port specified in the operation, set the current USB speed and the USB address of the operating device
+            endp = len ? DevOnHubPort[len - 1].GpVar[0] : ThisUsbDev.GpVar[0]; // The address of the interrupt endpoint, bit 7 is used to synchronize the flag bit
             if(endp & USB_ENDP_ADDR_MASK)
-            {                                                                                                       // 端点有效
-                s = USBHostTransact(USB_PID_IN << 4 | endp & 0x7F, endp & 0x80 ? RB_UH_R_TOG | RB_UH_T_TOG : 0, 0); // 传输事务,获取数据,NAK不重试
+            {                                                                                                       // Endpoint valid
+                s = USBHostTransact(USB_PID_IN << 4 | endp & 0x7F, endp & 0x80 ? RB_UH_R_TOG | RB_UH_T_TOG : 0, 0); // Transfer transactions, get data, NAK does not try again
                 if(s == ERR_SUCCESS)
                 {
-                    endp ^= 0x80; // 同步标志翻转
+                    endp ^= 0x80; // Synchronous flag flip
                     if(len)
-                        DevOnHubPort[len - 1].GpVar[0] = endp; // 保存同步标志位
+                        DevOnHubPort[len - 1].GpVar[0] = endp; // Save the synchronization flag bit
                     else
                         ThisUsbDev.GpVar[0] = endp;
-                    len = R8_USB_RX_LEN; // 接收到的数据长度
+                    len = R8_USB_RX_LEN; // The length of data received
                     if(len)
                     {
                         PRINT("Mouse data: ");
@@ -102,35 +101,35 @@ int main()
                 }
                 else if(s != (USB_PID_NAK | ERR_USB_TRANSFER))
                 {
-                    PRINT("Mouse error %02x\n", (uint16_t)s); // 可能是断开了
+                    PRINT("Mouse error %02x\n", (uint16_t)s); // Maybe it's disconnected
                 }
             }
             else
             {
                 PRINT("Mouse no interrupt endpoint\n");
             }
-            SetUsbSpeed(1); // 默认为全速
+            SetUsbSpeed(1); // Default is full speed
         }
 
-        /* 如果设备是键盘 */
-        loc = SearchTypeDevice(DEV_TYPE_KEYBOARD); // 在ROOT-HUB以及外部HUB各端口上搜索指定类型的设备所在的端口号
+        /* If the device is a keyboard */
+        loc = SearchTypeDevice(DEV_TYPE_KEYBOARD); // Search the port number of the specified type of device on each port of ROOT-HUB and external HUB
         if(loc != 0xFFFF)
-        { // 找到了,如果有两个KeyBoard如何处理?
+        { // Found, what if there are two KeyBoards?
             i = (uint8_t)(loc >> 8);
             len = (uint8_t)loc;
-            SelectHubPort(len);                                                // 选择操作指定的ROOT-HUB端口,设置当前USB速度以及被操作设备的USB地址
-            endp = len ? DevOnHubPort[len - 1].GpVar[0] : ThisUsbDev.GpVar[0]; // 中断端点的地址,位7用于同步标志位
+            SelectHubPort(len);                                                // Select the ROOT-HUB port specified in the operation, set the current USB speed and the USB address of the operating device
+            endp = len ? DevOnHubPort[len - 1].GpVar[0] : ThisUsbDev.GpVar[0]; // The address of the interrupt endpoint, bit 7 is used to synchronize the flag bit
             if(endp & USB_ENDP_ADDR_MASK)
-            {                                                                                                       // 端点有效
-                s = USBHostTransact(USB_PID_IN << 4 | endp & 0x7F, endp & 0x80 ? RB_UH_R_TOG | RB_UH_T_TOG : 0, 0); // CH554传输事务,获取数据,NAK不重试
+            {                                                                                                       // Endpoint valid
+                s = USBHostTransact(USB_PID_IN << 4 | endp & 0x7F, endp & 0x80 ? RB_UH_R_TOG | RB_UH_T_TOG : 0, 0); // CH554 transmits transactions, obtains data, NAK does not try again
                 if(s == ERR_SUCCESS)
                 {
-                    endp ^= 0x80; // 同步标志翻转
+                    endp ^= 0x80; // Synchronous flag flip
                     if(len)
-                        DevOnHubPort[len - 1].GpVar[0] = endp; // 保存同步标志位
+                        DevOnHubPort[len - 1].GpVar[0] = endp; // Save the synchronization flag bit
                     else
                         ThisUsbDev.GpVar[0] = endp;
-                    len = R8_USB_RX_LEN; // 接收到的数据长度
+                    len = R8_USB_RX_LEN; // The length of data received
                     if(len)
                     {
                         SETorOFFNumLock(RxBuffer);
@@ -144,14 +143,14 @@ int main()
                 }
                 else if(s != (USB_PID_NAK | ERR_USB_TRANSFER))
                 {
-                    PRINT("keyboard error %02x\n", (uint16_t)s); // 可能是断开了
+                    PRINT("keyboard error %02x\n", (uint16_t)s); // Maybe it's disconnected
                 }
             }
             else
             {
                 PRINT("keyboard no interrupt endpoint\n");
             }
-            SetUsbSpeed(1); // 默认为全速
+            SetUsbSpeed(1); // Default is full speed
         }
     }
 }

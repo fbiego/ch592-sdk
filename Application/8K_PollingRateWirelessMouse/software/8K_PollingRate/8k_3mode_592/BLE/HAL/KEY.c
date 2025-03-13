@@ -11,14 +11,14 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 
 /**************************************************************************************************
  *                                        GLOBAL VARIABLES
  **************************************************************************************************/
 
-static uint8_t halKeySavedKeys; /* 保留按键最后的状态，用于查询是否有键值变化 */
+static uint8_t halKeySavedKeys; /* Keep the last state of the key press to check whether there are any changes in the key value. */
 
 /**************************************************************************************************
  *                                        FUNCTIONS - Local
@@ -76,19 +76,19 @@ uint8_t HalKeyRead(void)
     uint8_t keys = 0;
 
     if(HAL_PUSH_BUTTON1())
-    { //读按键1
+    { // Read button 1
         keys |= HAL_KEY_SW_1;
     }
     if(HAL_PUSH_BUTTON2())
-    { //读按键1
+    { // Read button 1
         keys |= HAL_KEY_SW_2;
     }
     if(HAL_PUSH_BUTTON3())
-    { //读按键1
+    { // Read button 1
         keys |= HAL_KEY_SW_3;
     }
     if(HAL_PUSH_BUTTON4())
-    { //读按键1
+    { // Read button 1
         keys |= HAL_KEY_SW_4;
     }
     return keys;

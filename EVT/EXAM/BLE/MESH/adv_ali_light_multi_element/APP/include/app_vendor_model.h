@@ -146,9 +146,9 @@ void send_led_color_indicate(struct indicate_param *param);
 void bt_mesh_indicate_reset(void);
 
 /**
- * @brief   阿里 厂家模型 初始化
+ * @brief     
  *
- * @param   model -  回调模型参数
+ * @param   model -  
  *
  * @return  always success
  */

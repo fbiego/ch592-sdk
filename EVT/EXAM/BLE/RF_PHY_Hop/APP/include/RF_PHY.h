@@ -23,7 +23,7 @@ extern "C" {
 #define SBP_RF_CHANNEL_HOP_TX_EVT    (1 << 3)
 #define SBP_RF_CHANNEL_HOP_RX_EVT    (1 << 4)
 
-#define LLE_MODE_ORIGINAL_RX         (0x80) //如果配置LLEMODE时加上此宏，则接收第一字节为原始数据（原来为RSSI）
+#define LLE_MODE_ORIGINAL_RX         (0x80) // If this macro is added when configuring LLEMODE, the first byte is received as the original data (originally RSSI)
 
 extern void RF_Init(void);
 

@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : hidkbd.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 蓝牙键盘应用程序，初始化广播连接参数，然后广播，直至连接主机后，定时上传键值
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : hiddenkbd.c
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Bluetooth keyboard application, initializes broadcast connection parameters, and then broadcasts until the host is connected, and the key value is uploaded regularly
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -149,7 +149,7 @@ uint16_t hidEmuConnHandle = GAP_CONNHANDLE_INIT;
 
 access_ble_idx_t con_work_mode = BLE_INDEX_IDEL;
 
-#define BLE_SEND_BUF_LEN      20   //  缓存5个包
+#define BLE_SEND_BUF_LEN      20   // Cache 5 packages
 
 typedef struct
 {
@@ -221,7 +221,7 @@ void HidEmu_Init()
         // Set the GAP Role Parameters
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
 
-        // 从flash回复设备名称
+        // Reply to device name from flash
         scanRspData[0] = nvs_flash_info.ble_name_len+1;
         scanRspData[1] = GAP_ADTYPE_LOCAL_NAME_COMPLETE;
         tmos_memcpy(&scanRspData[2], nvs_flash_info.ble_name_data, nvs_flash_info.ble_name_len);
@@ -350,7 +350,7 @@ uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
         {
             access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
             last_led_data = 0xFF;
-            // 清空buff
+            // Clear the buff
             BLE_buf_out_idx=0;
             BLE_buf_data_num=0;
             BLE_buf_resend_num=0;
@@ -412,7 +412,7 @@ uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
 //                            (temp2==(BLE_SEND_BUF_LEN-1))?(temp2=0):(temp2++);
 //                            temp1--;
 //                        }
-//                        // 清空buff
+// // Clear buff
 //                        BLE_buf_out_idx=0;
 //                        BLE_buf_data_num=0;
 //                        BLE_buf_resend_num=0;
@@ -476,7 +476,7 @@ uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
         GAPRole_GetParameter(GAPROLE_STATE, &ble_state);
         if(ble_state != GAPROLE_CONNECTED)
         {
-            // 清空buff
+            // Clear the buff
             BLE_buf_out_idx=0;
             BLE_buf_data_num=0;
             BLE_buf_resend_num=0;
@@ -503,13 +503,12 @@ static void hidEmu_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
             break;
     }
 }
-/*********************************************************************
- * @fn      hidEmu_disconnect
- *
- * @brief   强制断开连接
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_disconnect
+*
+* @brief Force disconnect
+*
+* @return none. */
 void hidEmu_disconnect()
 {
     GAPRole_TerminateLink(hidEmuConnHandle);
@@ -523,13 +522,12 @@ void hidEmu_disconnect()
     }
 }
 
-/*********************************************************************
- * @fn      hidEmu_delete_ble_bonded
- *
- * @brief   清楚当前模式的设备的绑定标志，存储相关绑定标志信息到flash
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_delete_ble_bonded
+*
+* @brief Clear the binding flag of the device in the current mode and store the relevant binding flag information to flash
+*
+* @return none. */
 void hidEmu_delete_ble_bonded()
 {
     switch(con_work_mode)
@@ -557,13 +555,12 @@ void hidEmu_delete_ble_bonded()
     nvs_flash_store();
 }
 
-/*********************************************************************
- * @fn      hidEmu_save_ble_bonded
- *
- * @brief   存储相关绑定标志信息到flash，自动调用此函数，调用前已经将绑定信息存到flash中
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_save_ble_bonded
+*
+* @brief stores the relevant binding flag information to flash, and automatically calls this function. The binding information has been stored in flash before calling.
+*
+* @return none. */
 void hidEmu_save_ble_bonded(uint8_t is_pairing)
 {
     switch(con_work_mode)
@@ -611,13 +608,12 @@ void hidEmu_save_ble_bonded(uint8_t is_pairing)
     nvs_flash_store();
 }
 
-/*********************************************************************
- * @fn      hidEmu_is_ble_mac_change
- *
- * @brief   判断mac地址是否需要+1
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_is_ble_mac_change
+*
+* @brief determines whether the mac address needs +1
+*
+* @return none. */
 uint8_t hidEmu_is_ble_mac_change( access_ble_idx_t ble_idx )
 {
     switch(ble_idx)
@@ -644,13 +640,12 @@ uint8_t hidEmu_is_ble_mac_change( access_ble_idx_t ble_idx )
     }
 }
 
-/*********************************************************************
- * @fn      hidEmu_is_ble_bonded
- *
- * @brief   判断是否绑定
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_is_ble_bonded
+*
+* @brief determines whether to bind
+*
+* @return none. */
 uint8_t hidEmu_is_ble_bonded( access_ble_idx_t ble_idx )
 {
     PRINT("ble_bond_flag %x T %x\n",nvs_flash_info.ble_bond_flag,ble_idx);
@@ -678,13 +673,12 @@ uint8_t hidEmu_is_ble_bonded( access_ble_idx_t ble_idx )
     }
 }
 
-/*********************************************************************
- * @fn      hidEmu_adv_enable
- *
- * @brief   打开广播，并根据是否绑定选择开始过滤的广播，更换广播名称.
- *
- * @return  none.
- */
+/* ***************************************************************************
+* @fn hiddenEmu_adv_enable
+*
+* @brief Open the broadcast and select the broadcast to start filtering based on whether it is bound, and change the broadcast name.
+*
+* @return none. */
 void hidEmu_adv_enable(uint8_t enable)
 {
     uint8_t i,need_update=0;
@@ -708,14 +702,14 @@ void hidEmu_adv_enable(uint8_t enable)
         GAPBondMgr_SetParameter( GAPBOND_AUTO_SYNC_RL, sizeof(uint8_t), &RL_enable );
 
         GAPRole_GetParameter(GAPROLE_BD_ADDR, ownAddr);
-        // 修改广播地址。
+        // Modify the broadcast address.
         tmos_snv_read(BLE_NVID_IRK,KEYLEN,IRK);
         PRINT("IRK %x %x %x %x %x %x\n",IRK[5],IRK[4],IRK[3],IRK[2],IRK[1],IRK[0]);
         GAPRole_SetParameter(GAPROLE_IRK, KEYLEN, IRK);
         ownAddr[4] += access_state.ble_idx;
         if( access_state.pairing_state )
         {
-            // 如果更换标志未置位，则更换
+            // If the replacement flag is not set, replace
             if(!hidEmu_is_ble_mac_change(access_state.ble_idx))
             {
                 ownAddr[3] += access_state.ble_idx;
@@ -723,7 +717,7 @@ void hidEmu_adv_enable(uint8_t enable)
         }
         else
         {
-            // 如果更换标志已置位，则更换
+            // If the change flag is set, change
             if(hidEmu_is_ble_mac_change(access_state.ble_idx))
             {
                 ownAddr[3] += access_state.ble_idx;
@@ -732,7 +726,7 @@ void hidEmu_adv_enable(uint8_t enable)
         PRINT("%x %x %x %x %x %x\n",ownAddr[5],ownAddr[4],ownAddr[3],ownAddr[2],ownAddr[1],ownAddr[0]);
         GAP_ConfigDeviceAddr(ADDRTYPE_STATIC, ownAddr);
 
-        // 有需求是不同通道蓝牙名字不一样比如通道1名称为“BT-1”，通道2名称为“BT-2”等，则MCU发送是“BT-$”,这个美元符号表示蓝牙不同通道显示不同的名称
+        // If you need it, the Bluetooth names of different channels are different. For example, the name of channel 1 is "BT-1", the name of channel 2 is "BT-2", etc., then the MCU sends it is "BT-$", and this dollar sign indicates that different Bluetooth channels display different names
         for(i=0; i<nvs_flash_info.ble_name_len; i++ )
         {
             if(nvs_flash_info.ble_name_data[i]=='$')
@@ -951,7 +945,7 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
             LL_SetDataRelatedAddressChanges( 1, 1 ) ;
             if(access_taskId != INVALID_TASK_ID)
             {
-                // 初始化完成后，检查是否需要直接切换到对应连接
+                // After the initialization is completed, check whether you need to switch to the corresponding connection directly.
                 if(nvs_flash_info.ble_idx != access_state.ble_idx)
                 {
                     access_ctl_process( nvs_flash_info.ble_idx + CTL_MODE_BLE_1 - BLE_INDEX_1);
@@ -965,11 +959,11 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
             if(pEvent->gap.opcode == GAP_MAKE_DISCOVERABLE_DONE_EVENT)
             {
                 adv_enable_process_flag = FALSE;
-                // 记下当前模式
+                // Note the current mode
                 if((access_state.ble_idx<BLE_INDEX_1) || (access_state.ble_idx>BLE_INDEX_5))
                 {
                     PRINT("ADV mode err.. %x\n",access_state.ble_idx);
-                    // 状态错误，关闭广播
+                    // Status error, turn off broadcast
                     hidEmu_adv_enable(DISABLE);
                 }
                 else
@@ -1001,7 +995,7 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                   PRINT("buf_num %d\n",BLE_buf_data_num);
                 }
                 else {
-                  // 清空buff
+                  // Clear the buff
                   BLE_buf_out_idx=0;
                   BLE_buf_data_num=0;
                   BLE_buf_resend_num=0;
@@ -1016,7 +1010,7 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
 //                        time -= 0xA8C00000;
 //                    }
 //                    RTC_SetTignTime(time);
-//                    // LOW POWER-sleep模式
+// // LOW POWER-sleep mode
 //                    if((!RTCTigFlag)&&(GPIOB_ReadPortPin(bRXD1_)))
 //                    {
 //                        LowPower_Sleep(RB_PWR_RAM2K | RB_PWR_RAM30K | RB_PWR_EXTEND);
@@ -1025,7 +1019,7 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
 //                        mDelaymS(1);
 //                        BLE_RegInit();
 //                        GPIOA_SetBits(bTXD0_);
-//                        HSECFG_Current(HSE_RCur_100); // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+// HSECFG_Current(HSE_RCur_100); // Reduced to rated current (HSE bias current is increased in the low power consumption function)
 //                    }
 //                }
 //                access_update_idel_sleep_timeout(0);
@@ -1042,9 +1036,9 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
         case GAPROLE_WAITING:
             if(pEvent->gap.opcode == GAP_END_DISCOVERABLE_DONE_EVENT)
             {
-                // 1、切换到其他模式，命令停止的广播，则判断模式，不开启新的广播
-                // 2、还是当前模式没变，只是limit广播自动停止，则继续广播(注意是否是OTA模式)
-                // 3、切换到另外的蓝牙模式，命令停止的广播，则修改mac地址，判断是否已经绑定过，是则开启广播，并开启过滤，否则不开启广播，等待配对命令。
+                // 1. Switch to other modes and command to stop broadcasting, then judge the mode and do not turn on new broadcasting.
+                // 2. Or is the current mode not changing, but the limit broadcast will stop automatically, and then the broadcast will continue (note whether it is OTA mode)
+                // 3. Switch to another Bluetooth mode. If the command stops broadcast, modify the mac address to determine whether it has been bound. Yes, enable broadcast and filtering. Otherwise, the broadcast will not be enabled and wait for the pairing command.
                 PRINT("con_mode %x\n",con_work_mode);
                 if((con_work_mode == access_state.ble_idx))
                 {
@@ -1069,18 +1063,18 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                         }
                         else
                         {
-                            // 进入新蓝牙模式的回连状态
+                            // Enter the new Bluetooth mode back-connection state
                             access_tran_report(REPORT_CMD_STATE, STATE_RE_CONNECTING);
                         }
                         hidEmu_adv_enable(ENABLE);
                     }
                     else {
-                        // 没绑定过，无法回连
+                        // Haven't been bound, can't connect back
                         con_work_mode = access_state.ble_idx;
                         access_tran_report(REPORT_CMD_STATE, STATE_RE_CONNECT_FAIL);
                     }
                 }
-//                // 记下当前模式 睡眠后模式改为idel，所以这里不能同步模式
+// // Note the current mode. After sleeping, the mode is changed to idel, so the mode cannot be synchronized here.
 //                con_work_mode = access_state.ble_idx;
                 PRINT("Waiting for advertising..\n");
             }
@@ -1090,15 +1084,15 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                 {
                     tmos_stop_task(hidEmuTaskId, WAIT_TERMINATE_EVT);
                 }
-//                // 上报蓝牙断开
-//                // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+// // Report Bluetooth disconnection
+// // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
 //                if( access_state.ble_idx != WORK_MODE_2_4G)
 //                {
 //                    access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
 //                }
-                // 1、切换到其他模式，命令停止的连接，则判断模式，不开启新的广播
-                // 2、还是当前模式没变，只是连接断开，则继续广播，并开启过滤,(注意是否是OTA模式)
-                // 3、切换到另外的蓝牙模式，命令停止的连接，则修改mac地址，判断是否已经绑定过，是则开启广播，并开启过滤，否则不开启广播，等待配对命令。
+                // 1. Switch to other modes and command to stop the connection, then determine the mode and do not turn on the new broadcast.
+                // 2. Or is the current mode not changing, but the connection is disconnected, continue broadcasting and filtering, (note whether it is OTA mode)
+                // 3. Switch to another Bluetooth mode. If the command stops the connection, modify the mac address to determine whether it has been bound. Yes, enable broadcast and filtering. Otherwise, the broadcast will not be enabled and wait for the pairing command.
                 if((con_work_mode == access_state.ble_idx) ||
                     ( (access_state.ble_idx>BLE_INDEX_IDEL) && (access_state.ble_idx<BLE_INDEX_MAX) && ( hidEmu_is_ble_bonded(access_state.ble_idx) ) ))
                 {
@@ -1106,8 +1100,8 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                     {
                         uint8_t initial_advertising_enable = ENABLE;
                         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
-                        // 上报蓝牙断开
-                        // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                        // Report Bluetooth disconnection
+                        // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                         if( access_state.ble_idx != BLE_INDEX_IDEL)
                         {
                             access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
@@ -1117,8 +1111,8 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                     {
                         if( access_state.pairing_state )
                         {
-                            // 上报蓝牙断开
-                            // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                            // Report Bluetooth disconnection
+                            // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                             if( access_state.ble_idx != BLE_INDEX_IDEL)
                             {
                                 access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
@@ -1133,8 +1127,8 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                                 if(access_state.deep_sleep_flag)
                                 {
                                     PRINT("send dis\n");
-                                    // 上报蓝牙断开
-                                    // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                                    // Report Bluetooth disconnection
+                                    // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                                     if( access_state.ble_idx != BLE_INDEX_IDEL)
                                     {
                                         access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
@@ -1142,8 +1136,8 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                                 }
                                 else
                                 {
-                                    //同通道超时断开，不广播，进入睡眠  改为广播5秒后睡眠
-                                    // 恢复没有发出去的包；
+                                    // The same channel is disconnected from timeout, does not broadcast, and enters sleep. Change to broadcast to sleep after 5 seconds.
+                                    // Recover unsented packets;
                                     PRINT("res_num %d\n",BLE_buf_resend_num);
                                     hidEmu_resend_BUF();
                                     hidEmu_adv_enable(ENABLE);
@@ -1159,13 +1153,13 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                             }
                             else
                             {
-                                // 上报蓝牙断开
-                                // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                                // Report Bluetooth disconnection
+                                // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                                 if( access_state.ble_idx != BLE_INDEX_IDEL)
                                 {
                                     access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
                                 }
-                                // 进入新蓝牙模式的回连状态
+                                // Enter the new Bluetooth mode back-connection state
                                 access_tran_report(REPORT_CMD_STATE, STATE_RE_CONNECTING);
                                 hidEmu_adv_enable(ENABLE);
                             }
@@ -1175,28 +1169,28 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                 else if((access_state.ble_idx>BLE_INDEX_IDEL) && (access_state.ble_idx<BLE_INDEX_MAX))
                 {
                     con_work_mode = access_state.ble_idx;
-                    // 上报蓝牙断开
-                    // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                    // Report Bluetooth disconnection
+                    // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                     if( access_state.ble_idx != BLE_INDEX_IDEL)
                     {
                         access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
                     }
-                    // 没绑定过，无法回连
+                    // Haven't been bound, can't connect back
                     access_tran_report(REPORT_CMD_STATE, STATE_RE_CONNECT_FAIL);
                 }
-                else //还有可能是IDEL模式
+                else // It may also be IDEL mode
                 {
                     con_work_mode = access_state.ble_idx;
-                    // 上报蓝牙断开
-                    // 如果当前已经是2.4G模式的话，说明已经发过的断开，不再发。
+                    // Report Bluetooth disconnection
+                    // If it is currently in 2.4G mode, it means that the sent ones have been disconnected and will not be sent again.
                     if( access_state.ble_idx != BLE_INDEX_IDEL)
                     {
                         access_tran_report(REPORT_CMD_STATE, STATE_CON_TERMINATE);
                     }
                 }
-//                // 记下当前模式  深度睡眠后模式改为idel，所以这里不能同步模式
+// // Note the current mode. After deep sleep, the mode is changed to idel, so the mode cannot be synchronized here.
 //                con_work_mode = access_state.ble_idx;
-                // 20230831修改 蓝牙模式串口没有上报蓝牙连接断开指令
+                // 20230831 Modification Bluetooth mode serial port does not report Bluetooth connection disconnect command
                 hidDevConnSecure = FALSE;
                 PRINT("Disconnected.. Reason:%x\n", pEvent->linkTerminate.reason);
             }
@@ -1244,7 +1238,7 @@ static uint8_t hidEmuRcvReport(uint8_t len, uint8_t *pData)
     // verify data length
     if(len == HID_LED_OUT_RPT_LEN)
     {
-        // 上报键盘状态灯
+        // Report the keyboard status light
         if(hidEmu_receive_cb)
         {
             uint8_t buf[2];

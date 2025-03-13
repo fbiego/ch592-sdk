@@ -75,7 +75,7 @@ extern "C" {
 /******************************************************************************/
 
 /**
- * @brief 发送数据的开始和结束回调函数定义
+ * @brief 
  */
 struct bt_adv_ind_send_cb
 {
@@ -84,7 +84,7 @@ struct bt_adv_ind_send_cb
 };
 
 /**
- * @brief 发送参数结构体
+ * @brief 
  */
 struct indicate_param
 {
@@ -99,7 +99,7 @@ struct indicate_param
 };
 
 /**
- * @brief indicate 发送缓存
+ * @brief indicate 
  */
 struct bt_mesh_indicate
 {
@@ -109,7 +109,7 @@ struct bt_mesh_indicate
 };
 
 /**
- * @brief 天猫精灵相关信息结构体
+ * @brief 
  */
 struct bt_als_cfg
 {
@@ -144,37 +144,37 @@ extern const struct bt_mesh_model_cb bt_mesh_als_vendor_model_cb;
 uint8_t als_avail_tid_get(void);
 
 /**
- * @brief   找一个空的indicate，并分配内存
+ * @brief   indicate
  *
- * @param   len - 需要分配的数据长度
+ * @param   len - 
  *
- * @return  indicate结构体指针
+ * @return  indicate
  */
 struct bt_mesh_indicate *bt_mesh_ind_alloc(uint16_t len);
 
 /**
- * @brief   启动发送通知的事件
+ * @brief   
  *
- * @param   ind - indicate结构体指针
+ * @param   ind - indicate
  */
 void bt_mesh_indicate_send(struct bt_mesh_indicate *ind);
 
 /**
- * @brief   发送当前LED状态，当有LED状态更新时都需要调用此函数
+ * @brief   LEDLED
  *
- * @param   param -  发送通知的发送参数
+ * @param   param -  
  */
 void send_led_indicate(struct indicate_param *param);
 
 /**
- * @brief   释放所有未发送的通知
+ * @brief   
  */
 void bt_mesh_indicate_reset(void);
 
 /**
- * @brief   阿里 厂家模型 初始化
+ * @brief     
  *
- * @param   model -  回调模型参数
+ * @param   model -  
  *
  * @return  always success
  */

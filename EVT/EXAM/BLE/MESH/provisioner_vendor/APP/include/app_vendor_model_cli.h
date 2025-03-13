@@ -35,7 +35,7 @@ extern "C" {
 #define VENDOR_MODEL_CLI_WRITE_EVT           (1 << 2)
 
 /**
- * @brief indicate 回调结构体
+ * @brief indicate 
  */
 struct bt_mesh_vendor_model_ind
 {
@@ -45,7 +45,7 @@ struct bt_mesh_vendor_model_ind
 };
 
 /**
- * @brief trans 回调结构体
+ * @brief trans 
  */
 struct bt_mesh_vendor_model_cli_trans
 {
@@ -84,7 +84,7 @@ typedef struct
 typedef void (*vendor_model_cli_rsp_handler_t)(const vendor_model_cli_status_t *val);
 
 /**
- * @brief 记录当前发送数据包的tid
+ * @brief tid
  */
 struct vendor_model_cli_tid
 {
@@ -111,24 +111,24 @@ extern const struct bt_mesh_model_op vnd_model_cli_op[];
 extern const struct bt_mesh_model_cb bt_mesh_vendor_model_cli_cb;
 
 /**
- * @brief   send_trans,透传数据通道
+ * @brief   send_trans,
  *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
+ * @param   param   - .
+ * @param   pData   - .
+ * @param   len     - ,(APP_MAX_TX_SIZE).
  *
- * @return  参考Global_Error_Code
+ * @return  Global_Error_Code
  */
 int vendor_message_cli_send_trans(struct send_param *param, uint8_t *pData, uint16_t len);
 
 /**
- * @brief   write,有应答传输数据通道
+ * @brief   write,
  *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
+ * @param   param   - .
+ * @param   pData   - .
+ * @param   len     - ,(APP_MAX_TX_SIZE).
  *
- * @return  参考Global_Error_Code
+ * @return  Global_Error_Code
  */
 int vendor_message_cli_write(struct send_param *param, uint8_t *pData, uint16_t len);
 
@@ -140,14 +140,14 @@ int vendor_message_cli_write(struct send_param *param, uint8_t *pData, uint16_t 
 uint8_t vendor_cli_tid_get(void);
 
 /**
- * @brief   复位厂商模型服务，取消所有正在发送的流程
+ * @brief   
  */
 void vendor_message_cli_trans_reset(void);
 
 /**
- * @brief   厂商模型初始化
+ * @brief   
  *
- * @param   model       - 指向厂商模型结构体
+ * @param   model       - 
  *
  * @return  always SUCCESS
  */

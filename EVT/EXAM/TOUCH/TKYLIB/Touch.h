@@ -4,7 +4,7 @@
 #include "CH59x_common.h"
 #include "TouchKey_CFG.h"
 #include "wchtouch.h"
-//是否开启触摸数据打印
+// Whether to enable touch data printing
 #define PRINT_EN 0
 
 #if (PRINT_EN)
@@ -14,14 +14,14 @@
 #endif
 
 /************************KEY_FIFO_DEFINE******************************/
-#define KEY_COUNT       	TKY_MAX_QUEUE_NUM               // 按键个数 
+#define KEY_COUNT       	TKY_MAX_QUEUE_NUM               // Number of keys
 
-#define TKY_SHIELD_PIN      GPIO_Pin_4                      //驱动屏蔽引脚
-/*是否启用TMOS*/
+#define TKY_SHIELD_PIN      GPIO_Pin_4                      // Drive shield pin
+/* Whether to enable TMOS */
 #ifndef TMOS_EN
 #define TMOS_EN     0
 #endif
-/*是否支持触摸休眠功能*/
+/* Whether the touch hibernation function is supported */
 #if TMOS_EN
 #define TKY_SLEEP_EN 1
 #else
@@ -46,21 +46,21 @@
 
 
 #if (TKY_FILTER_MODE == FILTER_MODE_7)
-#define TKY_MEMHEAP_SIZE    	(KEY_COUNT*TKY_BUFLEN*2)     //外部定义数据缓冲区长度
+#define TKY_MEMHEAP_SIZE    	(KEY_COUNT*TKY_BUFLEN*2)     // Externally define the data buffer length
 #else
-#define TKY_MEMHEAP_SIZE   		(KEY_COUNT*TKY_BUFLEN)     	 //外部定义数据缓冲区长度
+#define TKY_MEMHEAP_SIZE   		(KEY_COUNT*TKY_BUFLEN)     	 // Externally define the data buffer length
 #endif
 
 
 typedef struct
 {
-	  UINT32 PaBit;     //----记录A_IO对应PIN脚，输出赋值用----
-	  UINT32 PbBit;     //----记录B_IO对应PIN脚，输出赋值用----
+	  UINT32 PaBit;     // ---Record the PIN pin corresponding to A_IO, and use the output assignment to
+	  UINT32 PbBit;     // ---Record the PIN pin corresponding to B_IO, and use the output assignment
 	  UINT16 tkyQueueAll;
 	  UINT16 RFU;
 }TOUCH_S;
 
-/* 按键ID, 主要用于tky_GetKeyState()函数的入口参数 */
+/* Key ID, mainly used for the entry parameters of tky_GetKeyState() function */
 typedef enum
 {
     KID_K0 = 0,
@@ -77,104 +77,98 @@ typedef enum
     KID_K11
 }KEY_ID_E;
 
-/*
-    按键滤波时间50ms, 单位10ms。
-    只有连续检测到50ms状态不变才认为有效，包括弹起和按下两种事件
-    即使按键电路不做硬件滤波，该滤波机制也可以保证可靠地检测到按键事件
-*/
-#define NORMAL_KEY_MODE 0                //独立按键触发模式
-#define TOUCH_KEY_MODE  1                //触摸按键触发模式
+/* The button filtering time is 50ms, unit is 10ms.
+Only when the 50ms state remains unchanged can it be considered valid, including two events: bounce and press.
+Even if the key circuit does not perform hardware filtering, this filtering mechanism can ensure reliable detection of key events. */
+#define NORMAL_KEY_MODE 0                // Independent key trigger mode
+#define TOUCH_KEY_MODE  1                // Touch button trigger mode
 
-#define KEY_MODE    NORMAL_KEY_MODE      //按键模式设置
-#define KEY_FILTER_TIME   2              //按键滤波次数
-#define KEY_LONG_TIME     0              //单位：以tky_KeyScan()调用的间隔时间为准， 超出次数则认为长按事件
+#define KEY_MODE    NORMAL_KEY_MODE      // Key Mode Settings
+#define KEY_FILTER_TIME   2              // Number of key filtering times
+#define KEY_LONG_TIME     0              // Unit: The interval time of tky_KeyScan() calls shall prevail. If the number of times exceeds the number, the long press event is considered
 
 typedef uint8_t (*pIsKeyDownFunc)(void);
 
-/*
-    每个按键对应1个全局的结构体变量。
-*/
+/* Each key corresponds to 1 global structure variable. */
 typedef struct
 {
-    /* 下面是一个函数指针，指向判断按键手否按下的函数 */
-    /* 按键按下的判断函数,1表示按下 */
+    /* Below is a function pointer pointing to the function that determines whether the key presses */
+    /* ,1 */
     pIsKeyDownFunc IsKeyDownFunc;
-    uint8_t  Count;         //滤波器计数器
-    uint16_t LongCount;     //长按计数器
-    uint16_t LongTime;      //按键按下持续时间, 0表示不检测长按
-    uint8_t  State;         //按键当前状态（按下还是弹起）
-    uint8_t  RepeatSpeed;   //连续按键周期
-    uint8_t  RepeatCount;   //连续按键计数器
+    uint8_t  Count;         // Filter Counter
+    uint16_t LongCount;     // Press and hold the counter
+    uint16_t LongTime;      // The duration of pressing the button is 0 means that the long press is not detected
+    uint8_t  State;         // The current status of the button (press or pop up)
+    uint8_t  RepeatSpeed;   // Continuous key cycle
+    uint8_t  RepeatCount;   // Continuous key counter
 }KEY_T;
 
-/*
-    定义键值代码, 必须按如下次序定时每个键的按下、弹起和长按事件
+/* Define key-value codes, and press each key in the following order must be timed to press, pop up and long press events.
 
-    推荐使用enum, 不用#define，原因：
-    (1) 便于新增键值,方便调整顺序，使代码看起来舒服点
-    (2) 编译器可帮我们避免键值重复。
-*/
+It is recommended to use enum, not #define, reason:
+(1) Easy to add key values, easy to adjust the order, making the code look more comfortable
+(2) The compiler can help us avoid key-value duplication. */
 typedef enum
 {
-    KEY_NONE = 0,           //0 表示按键事件 */
+    KEY_NONE = 0,           // 0 indicates key event */
 
-    KEY_0_DOWN,             // 1键按下 
-    KEY_0_UP,               // 1键弹起 
-    KEY_0_LONG,             // 1键长按 
+    KEY_0_DOWN,             // Press 1 button
+    KEY_0_UP,               // 1 button to pop up
+    KEY_0_LONG,             // 1 minute
 
-    KEY_1_DOWN,             // 2键按下 
-    KEY_1_UP,               // 2键弹起 
-    KEY_1_LONG,             // 2键长按 
+    KEY_1_DOWN,             // Press 2 keys
+    KEY_1_UP,               // 2 buttons to pop up
+    KEY_1_LONG,             // 2-minute
 
-    KEY_2_DOWN,             // 3键按下 
-    KEY_2_UP,               // 3键弹起 
-    KEY_2_LONG,             // 3键长按 
+    KEY_2_DOWN,             // Press 3 keys
+    KEY_2_UP,               // 3 keys to play
+    KEY_2_LONG,             // 3-minute studs
 
-    KEY_3_DOWN,             // 4键按下 
-    KEY_3_UP,               // 4键弹起 
-    KEY_3_LONG,             // 4键长按 
+    KEY_3_DOWN,             // Press 4 keys
+    KEY_3_UP,               // 4 keys to pop up
+    KEY_3_LONG,             // 4-minute corner
 
-    KEY_4_DOWN,             // 5键按下 
-    KEY_4_UP,               // 5键弹起 
-    KEY_4_LONG,             // 5键长按 
+    KEY_4_DOWN,             // Press 5 keys
+    KEY_4_UP,               // 5 keys to pop up
+    KEY_4_LONG,             // 5-minute studs
 
-    KEY_5_DOWN,             // 6键按下 
-    KEY_5_UP,               // 6键弹起 
-    KEY_5_LONG,             // 6键长按 
+    KEY_5_DOWN,             // Press 6 keys
+    KEY_5_UP,               // 6 keys to pop up
+    KEY_5_LONG,             // 6 
 
-    KEY_6_DOWN,             // 7键按下 
-    KEY_6_UP,               // 7键弹起 
-    KEY_6_LONG,             // 7键长按 
+    KEY_6_DOWN,             // 7 
+    KEY_6_UP,               // 7 
+    KEY_6_LONG,             // 7 keys
 
-    KEY_7_DOWN,             // 8键按下 
-    KEY_7_UP,               // 8键弹起 
-    KEY_7_LONG,             // 8键长按 
+    KEY_7_DOWN,             // Press 8 keys
+    KEY_7_UP,               // 8 keys to play
+    KEY_7_LONG,             // 8 
 
-    KEY_8_DOWN,             // 9键按下 
-    KEY_8_UP,               // 9键弹起 
-    KEY_8_LONG,             // 9键长按 
+    KEY_8_DOWN,             // Press 9 keys
+    KEY_8_UP,               // 9 keys to pop up
+    KEY_8_LONG,             // 9 
 
-    KEY_9_DOWN,             // 0键按下 
-    KEY_9_UP,               // 0键弹起 
-    KEY_9_LONG,             // 0键长按 
+    KEY_9_DOWN,             // Press 0 key
+    KEY_9_UP,               // 0 buttons to pop up
+    KEY_9_LONG,             // 0 mins
 
-    KEY_10_DOWN,            // #键按下 
-    KEY_10_UP,              // #键弹起 
-    KEY_10_LONG,            // #键长按 
+    KEY_10_DOWN,            // # 
+    KEY_10_UP,              // #Keys
+    KEY_10_LONG,            // #Long
 
-    KEY_11_DOWN,            // *键按下 
-    KEY_11_UP,              // *键弹起 
-    KEY_11_LONG,            // *键长按 
+    KEY_11_DOWN,            // * Press the key
+    KEY_11_UP,              // * keys pop up
+    KEY_11_LONG,            // *Long-toned
 }KEY_ENUM;
 
-/* 按键FIFO用到变量 */
-#define KEY_FIFO_SIZE   64          //可根据使用环境和硬件需要进行修改*/
+/* Use variables for key FIFO */
+#define KEY_FIFO_SIZE   64          // Can be modified according to the usage environment and hardware requirements*/
 
 typedef struct
 {
-    uint8_t Buf[KEY_FIFO_SIZE];     // 键值缓冲区
-    uint8_t Read;                   // 缓冲区读指针
-    uint8_t Write;                  // 缓冲区写指针
+    uint8_t Buf[KEY_FIFO_SIZE];     // 
+    uint8_t Read;                   // Buffer read pointer
+    uint8_t Write;                  // Buffer write pointer
 }KEY_FIFO_T;
 
 /************************WHEEL_SLIDER_DEFINE****************************/
@@ -192,7 +186,7 @@ extern volatile TOUCH_S tkyPinAll;
 extern uint16_t keyData, scanData;
 extern uint8_t wakeUpCount, wakeupflag;
 
-/* 供外部调用的函数声明 */
+/* Function declaration for external calls */
 extern void touch_InitKey(void);
 extern void touch_ScanWakeUp(void);
 extern void touch_ScanEnterSleep(void);

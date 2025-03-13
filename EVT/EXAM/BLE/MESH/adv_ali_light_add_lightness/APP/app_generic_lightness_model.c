@@ -24,49 +24,46 @@
 
 #define ALI_DEF_TTL    (10)
 
-// 模拟亮度值
+// Analog brightness value
 uint16_t led_lightness = 100;
 
-/*********************************************************************
- * @fn      read_led_lightness
- *
- * @brief   获取当前灯亮度
- *
- * @param   led_pin     - LED引脚.
- *
- * @return  亮度
- */
+/* ***************************************************************************
+* @fn read_led_lightness
+*
+* @brief Get the current light brightness
+*
+* @param led_pin - LED pin.
+*
+* @return Brightness */
 uint16_t read_led_lightness(uint32_t led_pin)
 {
     APP_DBG("led_lightness: %d ", led_lightness);
     return led_lightness;
 }
 
-/*********************************************************************
- * @fn      set_led_lightness
- *
- * @brief   设置当前灯亮度
- *
- * @param   led_pin     - LED引脚.
- * @param   lightness   - 亮度.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn set_led_lightness
+*
+* @brief Set the current light brightness
+*
+* @param led_pin - LED pin.
+* @param lightness - brightness.
+*
+* @return none */
 void set_led_lightness(uint32_t led_pin, uint16_t lightness)
 {
     led_lightness = lightness;
 }
 
-/*********************************************************************
- * @fn      gen_lightness_status
- *
- * @brief   回复天猫精灵亮度
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_lightness_status
+*
+* @brief reply to Tmall Ghost Brightness
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+*
+* @return none */
 static void gen_lightness_status(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx)
 {
     NET_BUF_SIMPLE_DEFINE(msg, 32);
@@ -93,17 +90,16 @@ static void gen_lightness_status(struct bt_mesh_model *model, struct bt_mesh_msg
     }
 }
 
-/*********************************************************************
- * @fn      gen_onoff_get
- *
- * @brief   天猫精灵下发的获取亮度命令
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_onoff_get
+*
+* @brief The brightness command issued by Tmall Genie
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_lightness_get(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
     APP_DBG(" ");
@@ -111,17 +107,16 @@ static void gen_lightness_get(struct bt_mesh_model *model, struct bt_mesh_msg_ct
     gen_lightness_status(model, ctx);
 }
 
-/*********************************************************************
- * @fn      gen_lightness_set
- *
- * @brief   天猫精灵下发的设置亮度命令,如果与当前亮度不同,还需要发送ind给天猫
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_lightness_set
+*
+* @brief The setting brightness command issued by Tmall Elf. If the brightness is different from the current brightness, you still need to send an ind to Tmall
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_lightness_set(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
     struct indicate_param param = {
@@ -154,17 +149,16 @@ static void gen_lightness_set(struct bt_mesh_model *model, struct bt_mesh_msg_ct
     gen_lightness_status(model, ctx);
 }
 
-/*********************************************************************
- * @fn      gen_lightness_set_unack
- *
- * @brief   天猫精灵下发的设置亮度命令(无应答),如果与当前亮度不同,还需要发送ind给天猫
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_lightness_set_unack
+*
+* @brief The setting brightness command (no response) issued by Tmall Elf. If the brightness is different from the current brightness, you still need to send an ind to Tmall
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_lightness_set_unack(struct bt_mesh_model   *model,
                                     struct bt_mesh_msg_ctx *ctx,
                                     struct net_buf_simple  *buf)

@@ -1,29 +1,26 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Main.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2020/08/06
- * Description        : 系统睡眠模式并唤醒演示：GPIOA_5作为唤醒源，共4种睡眠等级
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: Main.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/06
+* Description: System sleep mode and wake up demonstration: GPIOA_5 is used as the wake-up source, with a total of 4 sleep levels
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
-/*
- 注意：切换到HSE时钟源，所需等待稳定时间和选择的外置晶体参数有关，选择一款新的晶体最好阅读厂家提供的晶体及其
- 负载电容参数值。通过配置R8_XT32M_TUNE寄存器，可以配置不同的负载电容和偏置电流，调整晶体稳定时间。
- */
+/* Note: Switch to the HSE clock source, the required waiting stability time is related to the selected external crystal parameters. It is best to choose a new crystal. The crystal provided by the manufacturer and its
+Load capacitance parameter value.By configuring the R8_XT32M_TUNE register, different load capacitances and bias currents can be configured to adjust the crystal stability time. */
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      DebugInit
- *
- * @brief   调试初始化
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn DebugInit
+*
+* @brief debug initialization
+*
+* @return none */
 void DebugInit(void)
 {
     GPIOA_SetBits(GPIO_Pin_9);
@@ -31,13 +28,12 @@ void DebugInit(void)
     UART1_DefInit();
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main()
 {
     SetSysClock(CLK_SOURCE_PLL_60MHz);
@@ -45,15 +41,15 @@ int main()
     GPIOA_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 
-    /* 配置串口调试 */
+    /* Configure serial debugging */
     DebugInit();
     PRINT("Start @ChipID=%02x\n", R8_CHIP_ID);
     DelayMs(200);
 
 #if 1
-    /* 配置唤醒源为 GPIO - PA5 */
+    /* Configure wakeup source as GPIO - PA5 */
     GPIOA_ModeCfg(GPIO_Pin_5, GPIO_ModeIN_PU);
-    GPIOA_ITModeCfg(GPIO_Pin_5, GPIO_ITMode_FallEdge); // 下降沿唤醒
+    GPIOA_ITModeCfg(GPIO_Pin_5, GPIO_ITMode_FallEdge); // Wake up on the falling edge
     PFIC_EnableIRQ(GPIO_A_IRQn);
     PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
 #endif
@@ -70,7 +66,7 @@ int main()
     PRINT("Halt mode sleep \n");
     DelayMs(2);
     LowPower_Halt();
-    HSECFG_Current(HSE_RCur_100); // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+    HSECFG_Current(HSE_RCur_100); // Reduced to rated current (HSE bias current is increased in low power consumption function)
     DelayMs(2);
     PRINT("wake.. \n");
     DelayMs(500);
@@ -79,9 +75,9 @@ int main()
 #if 1
     PRINT("sleep mode sleep \n");
     DelayMs(2);
-    // 注意当主频为80M时，Sleep睡眠唤醒中断不可调用flash内代码。
-    LowPower_Sleep(RB_PWR_RAM24K | RB_PWR_RAM2K | RB_XT_PRE_EN); //只保留24+2K SRAM 供电
-    HSECFG_Current(HSE_RCur_100);                 // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+    // Note that when the main frequency is 80M, the flash code cannot be called when the Sleep wake-up interrupt is interrupted.
+    LowPower_Sleep(RB_PWR_RAM24K | RB_PWR_RAM2K | RB_XT_PRE_EN); // Only 24+2K SRAM power supply is retained
+    HSECFG_Current(HSE_RCur_100);                 // Reduced to rated current (HSE bias current is increased in low power consumption function)
     PRINT("wake.. \n");
     DelayMs(500);
 #endif
@@ -89,12 +85,10 @@ int main()
 #if 1
     PRINT("shut down mode sleep \n");
     DelayMs(2);
-    LowPower_Shutdown(0); //全部断电，唤醒后复位
-    /*
-     此模式唤醒后会执行复位，所以下面代码不会运行，
-     注意要确保系统睡下去再唤醒才是唤醒复位，否则有可能变成IDLE等级唤醒
-     */
-    HSECFG_Current(HSE_RCur_100); // 降为额定电流(低功耗函数中提升了HSE偏置电流)
+    LowPower_Shutdown(0); // All power off, reset after wake-up
+    /* Reset will be performed after this mode wakes up, so the following code will not run.
+Be careful to make sure that the system sleeps and wakes up before wakes up, otherwise it may become IDLE level wake-up. */
+    HSECFG_Current(HSE_RCur_100); // Reduced to rated current (HSE bias current is increased in low power consumption function)
     PRINT("wake.. \n");
     DelayMs(500);
 #endif
@@ -103,13 +97,12 @@ int main()
         ;
 }
 
-/*********************************************************************
- * @fn      GPIOA_IRQHandler
- *
- * @brief   GPIOA中断函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOA_IRQHandler
+*
+* @brief GPIOA interrupt function
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void GPIOA_IRQHandler(void)

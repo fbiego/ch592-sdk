@@ -7,14 +7,14 @@
 **  KEIL423, gcc 8.20          **
 *****************************************
 */
-/* CHRV3 UÅÌÖ÷»úÎÄ¼şÏµÍ³½Ó¿Ú, Ö§³Ö: FAT12/FAT16/FAT32 */
+/* CHRV3 USB host file system interface, support: FAT12/FAT16/FAT32 */
 
-//#define DISK_BASE_BUF_LEN		512	/* Ä¬ÈÏµÄ´ÅÅÌÊı¾İ»º³åÇø´óĞ¡Îª512×Ö½Ú(¿ÉÒÔÑ¡ÔñÎª2048ÉõÖÁ4096ÒÔÖ§³ÖÄ³Ğ©´óÉÈÇøµÄUÅÌ),Îª0Ôò½ûÖ¹ÔÚ±¾ÎÄ¼şÖĞ¶¨Òå»º³åÇø²¢ÓÉÓ¦ÓÃ³ÌĞòÔÚpDISK_BASE_BUFÖĞÖ¸¶¨ */
-/* Èç¹ûĞèÒª¸´ÓÃ´ÅÅÌÊı¾İ»º³åÇøÒÔ½ÚÔ¼RAM,ÄÇÃ´¿É½«DISK_BASE_BUF_LEN¶¨ÒåÎª0ÒÔ½ûÖ¹ÔÚ±¾ÎÄ¼şÖĞ¶¨Òå»º³åÇø,¶øÓÉÓ¦ÓÃ³ÌĞòÔÚµ÷ÓÃCHRV3LibInitÖ®Ç°½«ÓëÆäËü³ÌĞòºÏÓÃµÄ»º³åÇøÆğÊ¼µØÖ·ÖÃÈëpDISK_BASE_BUF±äÁ¿ */
+// #define DISK_BASE_BUF_LEN 512 /* The default disk data buffer size is 512 bytes (can be selected as 2048 or even 4096 to support USB disks with large sectors). If 0 is prohibited from defining buffers in this file and specified by the application in pDISK_BASE_BUF */
+/* If you need to multiplex the disk data buffer to save RAM, then DISK_BASE_BUF_LEN can be defined as 0 to prohibit the definition of buffers in this file. The application will place the buffer start address used with other programs into the pDISK_BASE_BUF variable before calling CHRV3LibInit */
 
-#define NO_DEFAULT_ACCESS_SECTOR	1		/* ½ûÖ¹Ä¬ÈÏµÄ´ÅÅÌÉÈÇø¶ÁĞ´×Ó³ÌĞò,ÏÂÃæÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
-//#define NO_DEFAULT_DISK_CONNECT		1		/* ½ûÖ¹Ä¬ÈÏµÄ¼ì²é´ÅÅÌÁ¬½Ó×Ó³ÌĞò,ÏÂÃæÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
-//#define NO_DEFAULT_FILE_ENUMER		1		/* ½ûÖ¹Ä¬ÈÏµÄÎÄ¼şÃûÃ¶¾Ù»Øµ÷³ÌĞò,ÏÂÃæÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
+#define NO_DEFAULT_ACCESS_SECTOR	1		/* The default disk sector reading and writing subroutine is prohibited, and the following is a self-written program instead of it. */
+//#define NO_DEFAULT_DISK_CONNECT		1		/* , */
+// #define NO_DEFAULT_FILE_ENUMER 1 /* The default file name enumeration callback program is prohibited, and the following is a self-written program instead of it */
 
 /******************************************************************************/
 /* Header Files */
@@ -24,34 +24,34 @@
 #include "SW_UDISK.h"
 #include "pdfFile.h"
 
-UINT8 CtrlGetConfigDescrTB(void) // »ñÈ¡ÅäÖÃÃèÊö·û,·µ»ØÔÚTxBufferÖĞ
+UINT8 CtrlGetConfigDescrTB(void) // Get the configuration descriptor, return it in TxBuffer
 {
     return (CtrlGetConfigDescr());
 }
 
-CMD_PARAM_I mCmdParam; /* ÃüÁî²ÎÊı */
+CMD_PARAM_I mCmdParam; /* Command parameters */
 #if DISK_BASE_BUF_LEN > 0
-//UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((at(BA_RAM+SZ_RAM/2)));	/* Íâ²¿RAMµÄ´ÅÅÌÊı¾İ»º³åÇø,»º³åÇø³¤¶ÈÎªÒ»¸öÉÈÇøµÄ³¤¶È */
-UINT8 DISK_BASE_BUF[DISK_BASE_BUF_LEN] __attribute__((aligned(4))); /* Íâ²¿RAMµÄ´ÅÅÌÊı¾İ»º³åÇø,»º³åÇø³¤¶ÈÎªÒ»¸öÉÈÇøµÄ³¤¶È */
-UINT8	DISK_FAT_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* Íâ²¿RAMµÄ´ÅÅÌFATÊı¾İ»º³åÇø,»º³åÇø³¤¶ÈÎªÒ»¸öÉÈÇøµÄ³¤¶È */
+// UINT8 DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((at(BA_RAM+SZ_RAM/2))); /* The disk data buffer of external RAM, the buffer length is the length of one sector */
+UINT8 DISK_BASE_BUF[DISK_BASE_BUF_LEN] __attribute__((aligned(4))); /* The disk data buffer of external RAM, the buffer length is the length of a sector */
+UINT8	DISK_FAT_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* The disk FAT data buffer of external RAM, the buffer length is the length of a sector */
 #endif
 
-/* ÒÔÏÂ³ÌĞò¿ÉÒÔ¸ù¾İĞèÒªĞŞ¸Ä */
+/* The following programs can be modified as needed */
 
-#ifndef NO_DEFAULT_ACCESS_SECTOR /* ÔÚÓ¦ÓÃ³ÌĞòÖĞ¶¨ÒåNO_DEFAULT_ACCESS_SECTOR¿ÉÒÔ½ûÖ¹Ä¬ÈÏµÄ´ÅÅÌÉÈÇø¶ÁĞ´×Ó³ÌĞò,È»ºóÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
-//if ( use_external_interface ) {  // Ìæ»»UÅÌÉÈÇøµ×²ã¶ÁĞ´×Ó³ÌĞò
-//    CHRV3vSectorSize=512;  // ÉèÖÃÊµ¼ÊµÄÉÈÇø´óĞ¡,±ØĞëÊÇ512µÄ±¶Êı,¸ÃÖµÊÇ´ÅÅÌµÄÉÈÇø´óĞ¡
-//    CHRV3vSectorSizeB=9;   // ÉèÖÃÊµ¼ÊµÄÉÈÇø´óĞ¡µÄÎ»ÒÆÊı,512Ôò¶ÔÓ¦9,1024¶ÔÓ¦10,2048¶ÔÓ¦11
-//    CHRV3DiskStatus=DISK_MOUNTED;  // Ç¿ÖÆ¿éÉè±¸Á¬½Ó³É¹¦(Ö»²î·ÖÎöÎÄ¼şÏµÍ³)
+#ifndef NO_DEFAULT_ACCESS_SECTOR /* Defining NO_DEFAULT_ACCESS_SECTOR in the application can prohibit the default disk sector reading and writing subroutines and then replace it with a self-written program */
+// if ( use_external_interface ) { // Replace the underlying read and write subroutine of the USB disk sector
+// CHRV3vSectorSize=512; // Set the actual sector size, which must be a multiple of 512, and this value is the sector size of the disk
+// CHRV3vSectorSizeB=9; // Set the displacement number of the actual sector size, 512 corresponds to 9, 1024 corresponds to 10, 2048 corresponds to 11
+// CHRV3DiskStatus=DISK_MOUNTED; // Forced block device connection successfully (difference analysis file system only)
 //}
 
-UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* ´Ó´ÅÅÌ¶ÁÈ¡¶à¸öÉÈÇøµÄÊı¾İµ½»º³åÇøÖĞ */
+UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* Read data from multiple sectors into the buffer from disk */
 {
     UINT8 retry;
-    //	if ( use_external_interface ) return( extReadSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* Íâ²¿½Ó¿Ú */
+    // if ( use_external_interface ) return( extReadSector( CHRV3vLbaCurrent, SectCount, DataBuf ) ); /* External interface */
     for(retry = 0; retry < 3; retry++)
-    {                                                                /* ´íÎóÖØÊÔ */
-        pCBW->mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB; /* Êı¾İ´«Êä³¤¶È */
+    {                                                                /* Try again in error */
+        pCBW->mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB; /* Data transmission length */
         pCBW->mCBW_Flag = 0x80;
         pCBW->mCBW_LUN = CHRV3vCurrentLun;
         pCBW->mCBW_CB_Len = 10;
@@ -65,7 +65,7 @@ UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* ´Ó´ÅÅÌ¶ÁÈ¡¶à¸öÉÈÇøµÄÊı
         pCBW->mCBW_CB_Buf[7] = 0x00;
         pCBW->mCBW_CB_Buf[8] = SectCount;
         pCBW->mCBW_CB_Buf[9] = 0x00;
-        CHRV3BulkOnlyCmd(DataBuf); /* Ö´ĞĞ»ùÓÚBulkOnlyĞ­ÒéµÄÃüÁî */
+        CHRV3BulkOnlyCmd(DataBuf); /* BulkOnly */
         if(CHRV3IntStatus == ERR_SUCCESS)
         {
             return (ERR_SUCCESS);
@@ -76,17 +76,17 @@ UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* ´Ó´ÅÅÌ¶ÁÈ¡¶à¸öÉÈÇøµÄÊı
             return (CHRV3IntStatus);
         }
     }
-    return (CHRV3IntStatus = ERR_USB_DISK_ERR); /* ´ÅÅÌ²Ù×÷´íÎó */
+    return (CHRV3IntStatus = ERR_USB_DISK_ERR); /* Disk operation error */
 }
 
   #ifdef EN_DISK_WRITE
-UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* ½«»º³åÇøÖĞµÄ¶à¸öÉÈÇøµÄÊı¾İ¿éĞ´Èë´ÅÅÌ */
+UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* Write data blocks of multiple sectors in the buffer to disk */
 {
     UINT8 retry;
-    //	if ( use_external_interface ) return( extWriteSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* Íâ²¿½Ó¿Ú */
+    // if ( use_external_interface ) return( extWriteSector( CHRV3vLbaCurrent, SectCount, DataBuf ) ); /* External interface */
     for(retry = 0; retry < 3; retry++)
-    {                                                                /* ´íÎóÖØÊÔ */
-        pCBW->mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB; /* Êı¾İ´«Êä³¤¶È */
+    {                                                                /* Try again in error */
+        pCBW->mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB; /* Data transmission length */
         pCBW->mCBW_Flag = 0x00;
         pCBW->mCBW_LUN = CHRV3vCurrentLun;
         pCBW->mCBW_CB_Len = 10;
@@ -100,10 +100,10 @@ UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* ½«»º³åÇøÖĞµÄ¶à¸öÉÈÇøµ
         pCBW->mCBW_CB_Buf[7] = 0x00;
         pCBW->mCBW_CB_Buf[8] = SectCount;
         pCBW->mCBW_CB_Buf[9] = 0x00;
-        CHRV3BulkOnlyCmd(DataBuf); /* Ö´ĞĞ»ùÓÚBulkOnlyĞ­ÒéµÄÃüÁî */
+        CHRV3BulkOnlyCmd(DataBuf); /* Execute commands based on BulkOnly protocol */
         if(CHRV3IntStatus == ERR_SUCCESS)
         {
-            mDelayuS(200); /* Ğ´²Ù×÷ºóÑÓÊ± */
+            mDelayuS(200); /* Delay after write operation */
             return (ERR_SUCCESS);
         }
         CHRV3IntStatus = CHRV3AnalyzeError(retry);
@@ -112,21 +112,19 @@ UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* ½«»º³åÇøÖĞµÄ¶à¸öÉÈÇøµ
             return (CHRV3IntStatus);
         }
     }
-    return (CHRV3IntStatus = ERR_USB_DISK_ERR); /* ´ÅÅÌ²Ù×÷´íÎó */
+    return (CHRV3IntStatus = ERR_USB_DISK_ERR); /* Disk operation error */
 }
   #endif
 #endif // NO_DEFAULT_ACCESS_SECTOR
 
-#ifndef NO_DEFAULT_DISK_CONNECT /* ÔÚÓ¦ÓÃ³ÌĞòÖĞ¶¨ÒåNO_DEFAULT_DISK_CONNECT¿ÉÒÔ½ûÖ¹Ä¬ÈÏµÄ¼ì²é´ÅÅÌÁ¬½Ó×Ó³ÌĞò,È»ºóÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
+#ifndef NO_DEFAULT_DISK_CONNECT /* Defining NO_DEFAULT_DISK_CONNECT in the application can prohibit the default check of disk connection subroutines and replace it with a self-written program */
 
-/*
-Ô¼¶¨: USBÉè±¸µØÖ··ÖÅä¹æÔò(²Î¿¼USB_DEVICE_ADDR)
-µØÖ·Öµ  Éè±¸Î»ÖÃ
-0x02    ÄÚÖÃRoot-HUB0ÏÂµÄUSBÉè±¸»òÍâ²¿HUB
-0x03    ÄÚÖÃRoot-HUB1ÏÂµÄUSBÉè±¸»òÍâ²¿HUB
-0x1x    ÄÚÖÃRoot-HUB0ÏÂµÄÍâ²¿HUBµÄ¶Ë¿ÚxÏÂµÄUSBÉè±¸,xÎª1~n
-0x2x    ÄÚÖÃRoot-HUB1ÏÂµÄÍâ²¿HUBµÄ¶Ë¿ÚxÏÂµÄUSBÉè±¸,xÎª1~n
-*/
+/* Convention: USB device address allocation rules (refer to USB_DEVICE_ADDR)
+Address Value Device Location
+0x02 USB device or external HUB under built-in Root-HUB0
+0x03 USB device or external HUB under built-in Root-HUB1
+0x1x The USB device under port x of the external HUB under built-in Root-HUB0, x is 1~n
+0x2x The USB device under port x of the external HUB under built-in Root-HUB1, x is 1~n */
 
 //#define		UHUB_DEV_ADDR	( CHRV3vRootPort ? R8_USB1_DEV_AD : R8_USB0_DEV_AD )
 //#define		UHUB_MIS_STAT	( CHRV3vRootPort ? R8_USB1_MIS_ST : R8_USB0_MIS_ST )
@@ -139,7 +137,7 @@ UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* ½«»º³åÇøÖĞµÄ¶à¸öÉÈÇøµ
 #define bUMS_ATTACH       RB_UMS_DEV_ATTACH
 #define bUMS_SUSPEND      RB_UMS_SUSPEND
 
-/* ¼ì²é´ÅÅÌÊÇ·ñÁ¬½Ó */
+/* Check if the disk is connected */
 UINT8 CHRV3DiskConnect(void)
 {
     UINT8 ums, devaddr;
@@ -147,24 +145,24 @@ UINT8 CHRV3DiskConnect(void)
     ums = UHUB_MIS_STAT;
     devaddr = UHUB_DEV_ADDR;
     if(devaddr == USB_DEVICE_ADDR)
-    {   /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸ */
-        //		if ( UHUB_HOST_CTRL & RB_UH_PORT_EN ) {  /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚÇÒÎ´²å°Î */
+    {   /* USB devices built-in Root-HUB */
+        // if (UHUB_HOST_CTRL & RB_UH_PORT_EN ) { /* The USB device under built-in Root-HUB exists and is not plugged in */
         if(ums & bUMS_ATTACH)
-        {   /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚ */
-            //			if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) {  /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚÇÒÎ´²å°Î */
+        {   /* The USB device under built-in Root-HUB exists */
+            // if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) { /* The USB device under built-in Root-HUB exists and is not plugged in */
             if((ums & bUMS_SUSPEND) == 0)
-            {                         /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚÇÒÎ´²å°Î */
-                return (ERR_SUCCESS); /* USBÉè±¸ÒÑ¾­Á¬½ÓÇÒÎ´²å°Î */
+            {                         /* The USB device under the built-in Root-HUB exists and is not plugged in */
+                return (ERR_SUCCESS); /* The USB device is connected and not plugged in */
             }
             else
-            { /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚ */
+            { /* The USB device under built-in Root-HUB exists */
             mDiskConnect:
-                CHRV3DiskStatus = DISK_CONNECT; /* Ôø¾­¶Ï¿ª¹ı */
-                return (ERR_SUCCESS);           /* Íâ²¿HUB»òUSBÉè±¸ÒÑ¾­Á¬½Ó»òÕß¶Ï¿ªºóÖØĞÂÁ¬½Ó */
+                CHRV3DiskStatus = DISK_CONNECT; /* Have been disconnected */
+                return (ERR_SUCCESS);           /* The external HUB or USB device has been connected or disconnected and reconnected */
             }
         }
         else
-        { /* USBÉè±¸¶Ï¿ª */
+        { /* USB device disconnected */
         mDiskDisconn:
             CHRV3DiskStatus = DISK_DISCONNECT;
             return (ERR_USB_DISCON);
@@ -172,43 +170,43 @@ UINT8 CHRV3DiskConnect(void)
     }
   #ifndef FOR_ROOT_UDISK_ONLY
     else if(devaddr > 0x10 && devaddr <= 0x14)
-    {   /* Íâ²¿HUBµÄ¶Ë¿ÚÏÂµÄUSBÉè±¸ */
-        //		if ( UHUB_HOST_CTRL & RB_UH_PORT_EN ) {  /* ÄÚÖÃRoot-HUBÏÂµÄÍâ²¿HUB´æÔÚÇÒÎ´²å°Î */
+    {   /* USB devices under the port of external HUB */
+        // if (UHUB_HOST_CTRL & RB_UH_PORT_EN ) { /* The external HUB under the built-in Root-HUB exists and is not plugged and unplugged */
         if(ums & bUMS_ATTACH)
-        {   /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚ */
-            //			if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) {  /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚÇÒÎ´²å°Î */
+        {   /* The USB device under built-in Root-HUB exists */
+            // if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) { /* The USB device under built-in Root-HUB exists and is not plugged in */
             if((ums & bUMS_SUSPEND) == 0)
-            {                                                                            /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚÇÒÎ´²å°Î */
-                TxBuffer[MAX_PACKET_SIZE - 1] = devaddr;                                 /* ±¸·İ */
-                UHUB_DEV_ADDR = USB_DEVICE_ADDR - 1 + (UHUB_DEV_ADDR >> 4);              /* ÉèÖÃUSBÖ÷»ú¶ËµÄUSBµØÖ·Ö¸ÏòHUB */
-                CHRV3IntStatus = HubGetPortStatus(TxBuffer[MAX_PACKET_SIZE - 1] & 0x0F); /* ²éÑ¯HUB¶Ë¿Ú×´Ì¬,·µ»ØÔÚTxBufferÖĞ */
+            {                                                                            /* Root-HUBUSB */
+                TxBuffer[MAX_PACKET_SIZE - 1] = devaddr;                                 /* Backup */
+                UHUB_DEV_ADDR = USB_DEVICE_ADDR - 1 + (UHUB_DEV_ADDR >> 4);              /* Set the USB address of the USB host side to point to HUB */
+                CHRV3IntStatus = HubGetPortStatus(TxBuffer[MAX_PACKET_SIZE - 1] & 0x0F); /* Query the HUB port status and return it in TxBuffer */
                 if(CHRV3IntStatus == ERR_SUCCESS)
                 {
                     if(TxBuffer[2] & (1 << (HUB_C_PORT_CONNECTION - 0x10)))
-                    {                                                                                     /* ¼ì²âµ½HUB¶Ë¿ÚÉÏµÄ²å°ÎÊÂ¼ş */
-                        CHRV3DiskStatus = DISK_DISCONNECT;                                                /* ¼Ù¶¨ÎªHUB¶Ë¿ÚÉÏµÄUSBÉè±¸¶Ï¿ª */
-                        HubClearPortFeature(TxBuffer[MAX_PACKET_SIZE - 1] & 0x0F, HUB_C_PORT_CONNECTION); /* Çå³ıHUB¶Ë¿ÚÁ¬½ÓÊÂ¼ş×´Ì¬ */
+                    {                                                                                     /* Plug and unplug event detected on HUB port */
+                        CHRV3DiskStatus = DISK_DISCONNECT;                                                /* Assume that the USB device on the HUB port is disconnected */
+                        HubClearPortFeature(TxBuffer[MAX_PACKET_SIZE - 1] & 0x0F, HUB_C_PORT_CONNECTION); /* Clear the HUB port connection event status */
                     }
-                    UHUB_DEV_ADDR = TxBuffer[MAX_PACKET_SIZE - 1]; /* ÉèÖÃUSBÖ÷»ú¶ËµÄUSBµØÖ·Ö¸ÏòUSBÉè±¸ */
+                    UHUB_DEV_ADDR = TxBuffer[MAX_PACKET_SIZE - 1]; /* Set the USB address on the USB host side to point to the USB device */
                     if(TxBuffer[0] & (1 << HUB_PORT_CONNECTION))
-                    { /* Á¬½Ó×´Ì¬ */
+                    { /* Connection status */
                         if(CHRV3DiskStatus < DISK_CONNECT)
                         {
-                            CHRV3DiskStatus = DISK_CONNECT; /* Ôø¾­¶Ï¿ª¹ı */
+                            CHRV3DiskStatus = DISK_CONNECT; /* Have been disconnected */
                         }
-                        return (ERR_SUCCESS); /* USBÉè±¸ÒÑ¾­Á¬½Ó»òÕß¶Ï¿ªºóÖØĞÂÁ¬½Ó */
+                        return (ERR_SUCCESS); /* The USB device has been connected or disconnected and reconnected */
                     }
                     else
                     {
                         //						CHRV3DiskStatus = DISK_DISCONNECT;
                         //						return( ERR_USB_DISCON );
                         CHRV3DiskStatus = DISK_CONNECT;
-                        return (ERR_HUB_PORT_FREE); /* HUBÒÑ¾­Á¬½Óµ«ÊÇHUB¶Ë¿ÚÉĞÎ´Á¬½Ó´ÅÅÌ */
+                        return (ERR_HUB_PORT_FREE); /* HUB is already connected but the HUB port is not connected to the disk */
                     }
                 }
                 else
                 {
-                    UHUB_DEV_ADDR = TxBuffer[MAX_PACKET_SIZE - 1]; /* ÉèÖÃUSBÖ÷»ú¶ËµÄUSBµØÖ·Ö¸ÏòUSBÉè±¸ */
+                    UHUB_DEV_ADDR = TxBuffer[MAX_PACKET_SIZE - 1]; /* Set the USB address on the USB host side to point to the USB device */
                     if(CHRV3IntStatus == ERR_USB_DISCON)
                     {
                         //						CHRV3DiskStatus = DISK_DISCONNECT;
@@ -217,20 +215,20 @@ UINT8 CHRV3DiskConnect(void)
                     }
                     else
                     {
-                        CHRV3DiskStatus = DISK_CONNECT; /* HUB²Ù×÷Ê§°Ü */
+                        CHRV3DiskStatus = DISK_CONNECT; /* HUB operation failed */
                         return (CHRV3IntStatus);
                     }
                 }
             }
             else
-            {   /* ÄÚÖÃRoot-HUBÏÂµÄUSBÉè±¸´æÔÚ,Íâ²¿HUB»òUSBÉè±¸ÒÑ¾­Á¬½Ó»òÕß¶Ï¿ªºóÖØĞÂÁ¬½Ó */
-                //				CHRV3DiskStatus = DISK_CONNECT;  /* Ôø¾­¶Ï¿ª¹ı */
-                //				return( ERR_SUCCESS );  /* Íâ²¿HUB»òUSBÉè±¸ÒÑ¾­Á¬½Ó»òÕß¶Ï¿ªºóÖØĞÂÁ¬½Ó */
+            {   /* The USB device under the built-in Root-HUB exists, and the external HUB or USB device has been connected or disconnected and reconnected. */
+                // CHRV3DiskStatus = DISK_CONNECT; /* Once disconnected */
+                // return( ERR_SUCCESS ); /* The external HUB or USB device has been connected or disconnected and reconnected */
                 goto mDiskConnect;
             }
         }
         else
-        { /* Íâ²¿HUB¶Ï¿ª */
+        { /* External HUB disconnected */
             CHRV3DiskStatus = DISK_DISCONNECT;
         }
     }
@@ -244,59 +242,59 @@ UINT8 CHRV3DiskConnect(void)
 }
 #endif // NO_DEFAULT_DISK_CONNECT
 
-#ifndef NO_DEFAULT_FILE_ENUMER /* ÔÚÓ¦ÓÃ³ÌĞòÖĞ¶¨ÒåNO_DEFAULT_FILE_ENUMER¿ÉÒÔ½ûÖ¹Ä¬ÈÏµÄÎÄ¼şÃûÃ¶¾Ù»Øµ÷³ÌĞò,È»ºóÓÃ×ÔĞĞ±àĞ´µÄ³ÌĞò´úÌæËü */
-void xFileNameEnumer(void)     /* ÎÄ¼şÃûÃ¶¾Ù»Øµ÷×Ó³ÌĞò */
+#ifndef NO_DEFAULT_FILE_ENUMER /* Defining NO_DEFAULT_FILE_ENUMER in the application can prohibit the default filename enumeration callback program and then replace it with a self-written program */
+void xFileNameEnumer(void)     /* File name enumeration callback subroutine */
 {
-    /* Èç¹ûÖ¸¶¨Ã¶¾ÙĞòºÅCHRV3vFileSizeÎª0xFFFFFFFFºóµ÷ÓÃFileOpen£¬ÄÇÃ´Ã¿ËÑË÷µ½Ò»¸öÎÄ¼şFileOpen¶¼»áµ÷ÓÃ±¾»Øµ÷³ÌĞò£¬
-       »Øµ÷³ÌĞòxFileNameEnumer·µ»Øºó£¬FileOpenµİ¼õCHRV3vFileSize²¢¼ÌĞøÃ¶¾ÙÖ±µ½ËÑË÷²»µ½ÎÄ¼ş»òÕßÄ¿Â¼¡£½¨Òé×ö·¨ÊÇ£¬
-       ÔÚµ÷ÓÃFileOpenÖ®Ç°¶¨ÒåÒ»¸öÈ«¾Ö±äÁ¿Îª0£¬µ±FileOpen»Øµ÷±¾³ÌĞòºó£¬±¾³ÌĞòÓÉCHRV3vFdtOffsetµÃµ½½á¹¹FAT_DIR_INFO£¬
-       ·ÖÎö½á¹¹ÖĞµÄDIR_AttrÒÔ¼°DIR_NameÅĞ¶ÏÊÇ·ñÎªËùĞèÎÄ¼şÃû»òÕßÄ¿Â¼Ãû£¬¼ÇÂ¼Ïà¹ØĞÅÏ¢£¬²¢½«È«¾Ö±äÁ¿¼ÆÊıÔöÁ¿£¬
-       µ±FileOpen·µ»Øºó£¬ÅĞ¶Ï·µ»ØÖµÈç¹ûÊÇERR_MISS_FILE»òERR_FOUND_NAME¶¼ÊÓÎª²Ù×÷³É¹¦£¬È«¾Ö±äÁ¿ÎªËÑË÷µ½µÄÓĞĞ§ÎÄ¼şÊı¡£
-       Èç¹ûÔÚ±¾»Øµ÷³ÌĞòxFileNameEnumerÖĞ½«CHRV3vFileSizeÖÃÎª1£¬ÄÇÃ´¿ÉÒÔÍ¨ÖªFileOpenÌáÇ°½áÊøËÑË÷¡£ÒÔÏÂÊÇ»Øµ÷³ÌĞòÀı×Ó */
+    /* If you call FileOpen after specifying the enumeration number CHRV3vFileSize to 0xFFFFFFFF, then this callback will be called every time a file FileOpen is searched.
+After the callback xFileNameEnumer returns, FileOpen decrements CHRV3vFileSize and continues to enumerate until no file or directory is searched.The recommended approach is,
+Before calling FileOpen, define a global variable as 0. When FileOpen calls back to this program, this program obtains the structure FAT_DIR_INFO from CHRV3vFdtOffset.
+Analyze the DIR_Attr and DIR_Name in the structure to determine whether they are the required file name or directory name, record relevant information, and count the global variables into increments.
+When FileOpen returns, it is determined that if the return value is ERR_MISS_FILE or ERR_FOUND_NAME, it is considered that the operation is successful, and the global variable is the number of valid files found.
+If CHRV3vFileSize is set to 1 in this callback xFileNameEnumer, you can notify FileOpen to end the search in advance.The following is a callback example */
   #if 0
     UINT8           i;
     UINT16          FileCount;
     PX_FAT_DIR_INFO pFileDir;
     PUINT8          NameBuf;
-    pFileDir = (PX_FAT_DIR_INFO)(pDISK_BASE_BUF + CHRV3vFdtOffset); /* µ±Ç°FDTµÄÆğÊ¼µØÖ· */
-    FileCount = (UINT16)(0xFFFFFFFF - CHRV3vFileSize);              /* µ±Ç°ÎÄ¼şÃûµÄÃ¶¾ÙĞòºÅ,CHRV3vFileSize³õÖµÊÇ0xFFFFFFFF,ÕÒµ½ÎÄ¼şÃûºóµİ¼õ */
+    pFileDir = (PX_FAT_DIR_INFO)(pDISK_BASE_BUF + CHRV3vFdtOffset); /* The starting address of the current FDT */
+    FileCount = (UINT16)(0xFFFFFFFF - CHRV3vFileSize);              /* The enumeration number of the current file name, the initial value of CHRV3vFileSize is 0xFFFFFFFF. After finding the file name, it is reduced. */
     if(FileCount < sizeof(FILE_DATA_BUF) / 12)
-    {                                             /* ¼ì²é»º³åÇøÊÇ·ñ×ã¹»´æ·Å,¼Ù¶¨Ã¿¸öÎÄ¼şÃûĞèÕ¼ÓÃ12¸ö×Ö½Ú´æ·Å */
-        NameBuf = &FILE_DATA_BUF[FileCount * 12]; /* ¼ÆËã±£´æµ±Ç°ÎÄ¼şÃûµÄ»º³åÇøµØÖ· */
+    {                                             /* Check whether the buffer is sufficient to store, assuming that each file name needs to occupy 12 bytes to store */
+        NameBuf = &FILE_DATA_BUF[FileCount * 12]; /* Calculate the buffer address that saves the current file name */
         for(i = 0; i < 11; i++)
-            NameBuf[i] = pFileDir->DIR_Name[i]; /* ¸´ÖÆÎÄ¼şÃû,³¤¶ÈÎª11¸ö×Ö·û,Î´´¦Àí¿Õ¸ñ */
-                                                //		if ( pFileDir -> DIR_Attr & ATTR_DIRECTORY ) NameBuf[ i ] = 1;  /* ÅĞ¶ÏÊÇÄ¿Â¼Ãû */
-        NameBuf[i] = 0;                         /* ÎÄ¼şÃû½áÊø·û */
+            NameBuf[i] = pFileDir->DIR_Name[i]; /* Copy file name, length is 11 characters, no spaces processed */
+                                                // if ( pFileDir -> DIR_Attr & ATTR_DIRECTORY ) NameBuf[ i ] = 1; /* It is judged as directory name */
+        NameBuf[i] = 0;                         /* File name ending character */
     }
   #endif
 }
 #endif // NO_DEFAULT_FILE_ENUMER
 
-UINT8 CHRV3LibInit(void) /* ³õÊ¼»¯CHRV3³ÌĞò¿â,²Ù×÷³É¹¦·µ»Ø0 */
+UINT8 CHRV3LibInit(void) /* Initialize the CHRV3 program library, the operation returns 0 successfully */
 {
     if(CHRV3GetVer() < CHRV3_LIB_VER)
-        return (0xFF); /* »ñÈ¡µ±Ç°×Ó³ÌĞò¿âµÄ°æ±¾ºÅ,°æ±¾Ì«µÍÔò·µ»Ø´íÎó */
+        return (0xFF); /* Get the version number of the current subroutine library. If the version is too low, the error will be returned. */
 #if DISK_BASE_BUF_LEN > 0
-    pDISK_BASE_BUF = &DISK_BASE_BUF[0]; /* Ö¸ÏòÍâ²¿RAMµÄ´ÅÅÌÊı¾İ»º³åÇø */
-//    pDISK_FAT_BUF = &DISK_BASE_BUF[0];  /* Ö¸ÏòÍâ²¿RAMµÄ´ÅÅÌFATÊı¾İ»º³åÇø,¿ÉÒÔÓëpDISK_BASE_BUFºÏÓÃÒÔ½ÚÔ¼RAM */
-	pDISK_FAT_BUF = & DISK_FAT_BUF[0];  /* Ö¸ÏòÍâ²¿RAMµÄ´ÅÅÌFATÊı¾İ»º³åÇø,¶ÀÁ¢ÓÚpDISK_BASE_BUFÒÔÌá¸ßËÙ¶È */
-/* Èç¹ûÏ£ÍûÌá¸ßÎÄ¼ş´æÈ¡ËÙ¶È,ÄÇÃ´¿ÉÒÔÔÚÖ÷³ÌĞòÖĞµ÷ÓÃCHRV3LibInitÖ®ºó,½«pDISK_FAT_BUFÖØĞÂÖ¸ÏòÁíÒ»¸ö¶ÀÁ¢·ÖÅäµÄÓëpDISK_BASE_BUFÍ¬Ñù´óĞ¡µÄ»º³åÇø */
+    pDISK_BASE_BUF = &DISK_BASE_BUF[0]; /* Disk data buffer pointing to external RAM */
+// pDISK_FAT_BUF = &DISK_BASE_BUF[0]; /* The disk FAT data buffer pointing to external RAM can be used in conjunction with pDISK_BASE_BUF to save RAM */
+	pDISK_FAT_BUF = & DISK_FAT_BUF[0];  /* Disk FAT data buffer pointing to external RAM, independent of pDISK_BASE_BUF to increase speed */
+/* If you want to improve file access speed, you can repoint pDISK_FAT_BUF to another independently allocated buffer of the same size as pDISK_BASE_BUF after calling CHRV3LibInit in the main program. */
 #endif
-    CHRV3DiskStatus = DISK_UNKNOWN;          /* Î´Öª×´Ì¬ */
-    CHRV3vSectorSizeB = 9;                   /* Ä¬ÈÏµÄÎïÀí´ÅÅÌµÄÉÈÇøÊÇ512B */
-    CHRV3vSectorSize = 512;                  // Ä¬ÈÏµÄÎïÀí´ÅÅÌµÄÉÈÇøÊÇ512B,¸ÃÖµÊÇ´ÅÅÌµÄÉÈÇø´óĞ¡
-    CHRV3vStartLba = 0;                      /* Ä¬ÈÏÎª×Ô¶¯·ÖÎöFDDºÍHDD */
-    CHRV3vPacketSize = 64;                   /* USB´æ´¢ÀàÉè±¸µÄ×î´ó°ü³¤¶È:64@FS,512@HS/SS,ÓÉÓ¦ÓÃ³ÌĞò³õÊ¼»¯,Ã¶¾ÙUÅÌºóÈç¹ûÊÇ¸ßËÙ»òÕß³¬ËÙÄÇÃ´¼°Ê±¸üĞÂÎª512 */
-    pTX_DMA_A_REG = (PUINT32)&R16_UH_TX_DMA; /* Ö¸Ïò·¢ËÍDMAµØÖ·¼Ä´æÆ÷,ÓÉÓ¦ÓÃ³ÌĞò³õÊ¼»¯ */
-    pRX_DMA_A_REG = (PUINT32)&R16_UH_RX_DMA; /* Ö¸Ïò½ÓÊÕDMAµØÖ·¼Ä´æÆ÷,ÓÉÓ¦ÓÃ³ÌĞò³õÊ¼»¯ */
-    pTX_LEN_REG = (PUINT16)&R8_UH_TX_LEN;    /* Ö¸Ïò·¢ËÍ³¤¶È¼Ä´æÆ÷,ÓÉÓ¦ÓÃ³ÌĞò³õÊ¼»¯ */
-    pRX_LEN_REG = (PUINT16)&R8_USB_RX_LEN;   /* Ö¸Ïò½ÓÊÕ³¤¶È¼Ä´æÆ÷,ÓÉÓ¦ÓÃ³ÌĞò³õÊ¼»¯ */
+    CHRV3DiskStatus = DISK_UNKNOWN;          /* Unknown status */
+    CHRV3vSectorSizeB = 9;                   /* The default physical disk sector is 512B */
+    CHRV3vSectorSize = 512;                  // The default sector of the physical disk is 512B, which is the sector size of the disk
+    CHRV3vStartLba = 0;                      /* Default is to automatically analyze FDD and HDD */
+    CHRV3vPacketSize = 64;                   /* The maximum package length of USB storage device: 64@FS, 512@HS/SS, initialized by the application, enumerate the USB disk, if it is high-speed or overspeed, it will be updated to 512 in time. */
+    pTX_DMA_A_REG = (PUINT32)&R16_UH_TX_DMA; /* Point to the send DMA address register, initialized by the application */
+    pRX_DMA_A_REG = (PUINT32)&R16_UH_RX_DMA; /* Point to the receiving DMA address register, initialized by the application */
+    pTX_LEN_REG = (PUINT16)&R8_UH_TX_LEN;    /* Point to the send length register, initialized by the application */
+    pRX_LEN_REG = (PUINT16)&R8_USB_RX_LEN;   /* Point to the receive length register, initialized by the application */
 
-    //CHRV3vRootPort = 0;  /* USBÖ÷»úÑ¡Ôñ(ÀàËÆRoot-hub¸ù¼¯ÏßÆ÷Ñ¡¶Ë¿Ú) */
+    // CHRV3vRootPort = 0; /* USB host selection (similar to Root-hub root hub selection port) */
     return (ERR_SUCCESS);
 }
 
-UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* ´Ó´ÅÅÌ¶ÁÈ¡¶à¸öÉÈÇøµÄÊı¾İµ½»º³åÇøÖĞ */
+UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* Read data from multiple sectors into the buffer from disk */
 {
     int len;
     uint32_t addr = IFLASH_UDISK_START_ADDR + CHRV3vLbaCurrent * DEF_UDISK_SECTOR_SIZE;
@@ -308,7 +306,7 @@ UINT8 CHRV3ReadSector(UINT8 SectCount, PUINT8 DataBuf) /* ´Ó´ÅÅÌ¶ÁÈ¡¶à¸öÉÈÇøµÄÊı
     return ERR_SUCCESS;
 }
 
-UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /* ½«»º³åÇøÖĞµÄ¶à¸öÉÈÇøµÄÊı¾İ¿éĞ´Èë´ÅÅÌ */
+UINT8 CHRV3WriteSector(UINT8 SectCount, PUINT8 DataBuf) /*  */
 {
     int len;
     uint32_t addr = IFLASH_UDISK_START_ADDR + CHRV3vLbaCurrent * DEF_UDISK_SECTOR_SIZE;

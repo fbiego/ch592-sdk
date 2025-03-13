@@ -36,7 +36,7 @@ extern "C"
 #define USB_MESSAGE              		0xB0    // USB message
 
 
-extern pTaskEventHandlerFn tasksArr[];                             // 定义任务处理函数地址
+extern pTaskEventHandlerFn tasksArr[];                             // 
 extern const uint8_t TASK_CNT;
 /*********************************************************************
  * GLOBAL VARIABLES

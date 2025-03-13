@@ -1,11 +1,11 @@
-/********************************** (C) COPYRIGHT *******************************
-* File Name          : cyclingsensor.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2020/08/06
-* Description        : 骑行传感器应用程序，初始化广播连接参数，然后广播，直至连接主机后，定时上传速度和踏频
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : cyclingsensor.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/06
+* Description: Cycling sensor application, initialize broadcast connection parameters, and then broadcast until the host is connected, timely upload speed and claw frequency
 
-*******************************************************************************/
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

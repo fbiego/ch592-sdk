@@ -24,55 +24,52 @@
 
 #define ALI_DEF_TTL    (10)
 
-// 模拟色温值
+// Analog color temperature value
 uint16_t led_color = 20000;
 
-/*********************************************************************
- * @fn      read_led_color
- *
- * @brief   获取当前灯色温
- *
- * @param   led_pin     - LED引脚.
- *
- * @return  色温
- */
+/* ***************************************************************************
+* @fn read_led_color
+*
+* @brief Get the current light color temperature
+*
+* @param led_pin - LED pin.
+*
+* @return Color temperature */
 uint16_t read_led_color(uint32_t led_pin)
 {
     APP_DBG("led_color: %d ", led_color);
     return led_color;
 }
 
-/*********************************************************************
- * @fn      set_led_color
- *
- * @brief   设置当前灯色温
- *
- * @param   led_pin     - LED引脚.
- * @param   color   - 色温.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn set_led_color
+*
+* @brief Set the current light color temperature
+*
+* @param led_pin - LED pin.
+* @param color - Color temperature.
+*
+* @return none */
 void set_led_color(uint32_t led_pin, uint16_t color)
 {
     led_color = color;
 }
 
-/*********************************************************************
- * @fn      gen_color_status
- *
- * @brief   回复天猫精灵色温
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_color_status
+*
+* @brief reply to Tmall Elf color temperature
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+*
+* @return none */
 static void gen_color_status(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx)
 {
     NET_BUF_SIMPLE_DEFINE(msg, 32);
     int err;
 
-    bt_mesh_model_msg_init(&msg, BLE_MESH_MODEL_OP_LIGHT_CTL_STATUS );  //接收状态值
+    bt_mesh_model_msg_init(&msg, BLE_MESH_MODEL_OP_LIGHT_CTL_STATUS );  // Receive status value
     net_buf_simple_add_le16(&msg, read_led_color(MSG_PIN));
 
     APP_DBG("ttl: 0x%02x dst: 0x%04x", ctx->recv_ttl, ctx->recv_dst);
@@ -93,17 +90,16 @@ static void gen_color_status(struct bt_mesh_model *model, struct bt_mesh_msg_ctx
     }
 }
 
-/*********************************************************************
- * @fn      gen_onoff_get
- *
- * @brief   天猫精灵下发的获取色温命令
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_onoff_get
+*
+* @brief The color temperature command issued by Tmall Elf
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_color_get(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
     APP_DBG(" ");
@@ -111,17 +107,16 @@ static void gen_color_get(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *c
     gen_color_status(model, ctx);
 }
 
-/*********************************************************************
- * @fn      gen_color_set
- *
- * @brief   天猫精灵下发的设置色温命令,如果与当前色温不同,还需要发送ind给天猫
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_color_set
+*
+* @brief The color temperature setting command issued by Tmall Elf. If it is different from the current color temperature, it is also necessary to send an ind to Tmall
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_color_set(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
     u8 i;
@@ -159,17 +154,16 @@ static void gen_color_set(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *c
     gen_color_status(model, ctx);
 }
 
-/*********************************************************************
- * @fn      gen_color_set_unack
- *
- * @brief   天猫精灵下发的设置色温命令(无应答),如果与当前色温不同,还需要发送ind给天猫
- *
- * @param   model       - 模型参数
- * @param   ctx         - 数据参数
- * @param   buf         - 数据内容
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn gen_color_set_unack
+*
+* @brief The color temperature setting command issued by Tmall Elf (no response). If it is different from the current color temperature, you still need to send an ind to Tmall
+*
+* @param model - Model parameters
+* @param ctx - Data Parameters
+* @param buf - Data content
+*
+* @return none */
 static void gen_color_set_unack(struct bt_mesh_model   *model,
                                     struct bt_mesh_msg_ctx *ctx,
                                     struct net_buf_simple  *buf)

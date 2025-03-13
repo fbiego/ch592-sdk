@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : peripheral.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 外设从机多连接应用程序，初始化广播连接参数，然后广播，连接主机后，
- *                      请求更新连接参数，通过自定义服务传输数据
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : peripheral.C
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Peripheral slave multi-connection application, initialize broadcast connection parameters, and then broadcast, and after connecting to the host,
+* Request to update connection parameters and transfer data through custom services
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -697,40 +697,39 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
     }
 }
 
-/* OTA 升级标志 */
+/* OTA upgrade logo */
 #define IMAGE_OTA_FLAG       0x03
 
-/* 存放在DataFlash地址，不能占用蓝牙的位置 */
+/* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD    0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* flash的数据临时存储 */
+/* Flash's data temporary storage */
 __attribute__((aligned(8))) uint8_t block_buf[16];
 
-/*********************************************************************
- * @fn      Jump_OTA
- *
- * @brief   跳转OTA升级
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn Jump_OTA
+*
+* @brief Jump OTA Upgrade
+*
+* @return none */
 void Jump_OTA(void)
 {
     uint16_t i;
     uint32_t ver_flag;
 
-    /* 读取第一块 */
+    /* Read the first block */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* 擦除第一块 */
+    /* Erase the first piece */
     EEPROM_ERASE(OTA_DATAFLASH_ADD, EEPROM_PAGE_SIZE);
 
-    /* 更新Image信息 */
+    /* Image */
     block_buf[0] = IMAGE_OTA_FLAG;
 
-    /* 编程DataFlash */
+    /* Programming DataFlash */
     EEPROM_WRITE(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* 软复位 */
+    /* Soft reset */
     SYS_ResetExecute();
 }
 

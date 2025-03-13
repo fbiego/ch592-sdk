@@ -84,18 +84,18 @@ uint16_t health_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNA
 uint16_t gen_onoff_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};
 uint16_t gen_onoff_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSIGNED};
 
-uint16_t gen_lightness_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};             //添加处  定义亮度属性
+uint16_t gen_lightness_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};             //  
 uint16_t gen_lightness_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSIGNED};
 
-uint16_t gen_color_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};             //定义色温属性
+uint16_t gen_color_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};             //
 uint16_t gen_color_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSIGNED};
 
 static struct bt_mesh_model root_models[] = {
     BLE_MESH_MODEL_CFG_SRV(cfg_srv_keys, cfg_srv_groups, &cfg_srv),
     BLE_MESH_MODEL_HEALTH_SRV(health_srv_keys, health_srv_groups, &health_srv, &health_pub),
     BLE_MESH_MODEL(BLE_MESH_MODEL_ID_GEN_ONOFF_SRV, gen_onoff_op, NULL, gen_onoff_srv_keys, gen_onoff_srv_groups, NULL),
-    BLE_MESH_MODEL(BLE_MESH_MODEL_ID_LIGHT_LIGHTNESS_SRV, gen_lightness_op, NULL, gen_lightness_srv_keys, gen_lightness_srv_groups, NULL),      //添加root 亮度属性
-    BLE_MESH_MODEL(BLE_MESH_MODEL_ID_LIGHT_CTL_TEMP_SRV , gen_color_op, NULL, gen_color_srv_keys, gen_color_srv_groups, NULL),      //添加root 色温属性
+    BLE_MESH_MODEL(BLE_MESH_MODEL_ID_LIGHT_LIGHTNESS_SRV, gen_lightness_op, NULL, gen_lightness_srv_keys, gen_lightness_srv_groups, NULL),      //root 
+    BLE_MESH_MODEL(BLE_MESH_MODEL_ID_LIGHT_CTL_TEMP_SRV , gen_color_op, NULL, gen_color_srv_keys, gen_color_srv_groups, NULL),      //root 
 };
 
 static struct bt_mesh_elem elements[] = {
@@ -109,14 +109,14 @@ static struct bt_mesh_elem elements[] = {
     }
 };
 
-// elements 构成 Node Composition
+// elements  Node Composition
 const struct bt_mesh_comp app_comp = {
-    .cid = 0x07D7, // WCH 公司id
+    .cid = 0x07D7, // WCH id
     .elem = elements,
     .elem_count = ARRAY_SIZE(elements),
 };
 
-// 配网参数和回调
+// 
 static const struct bt_mesh_prov app_prov = {
     .uuid = tm_uuid,
     .static_val_len = ARRAY_SIZE(static_key),
@@ -134,9 +134,9 @@ static const struct bt_mesh_prov app_prov = {
 /*********************************************************************
  * @fn      silen_adv_set
  *
- * @brief   设置静默广播
+ * @brief   
  *
- * @param   flag   - 0（处于未配网广播状态），1（处于静默广播状态）.
+ * @param   flag   - 01.
  *
  * @return  none
  */
@@ -149,7 +149,7 @@ static void silen_adv_set(uint8_t flag)
 /*********************************************************************
  * @fn      prov_enable
  *
- * @brief   使能配网功能
+ * @brief   
  *
  * @return  none
  */
@@ -178,9 +178,9 @@ static void prov_enable(void)
 /*********************************************************************
  * @fn      link_open
  *
- * @brief   配网时后的link打开回调
+ * @brief   link
  *
- * @param   bearer  - 当前link是PB_ADV还是PB_GATT
+ * @param   bearer  - linkPB_ADVPB_GATT
  *
  * @return  none
  */
@@ -194,10 +194,10 @@ static void link_open(bt_mesh_prov_bearer_t bearer)
 /*********************************************************************
  * @fn      link_close
  *
- * @brief   配网后的link关闭回调
+ * @brief   link
  *
- * @param   bearer  - 当前link是PB_ADV还是PB_GATT
- * @param   reason  - link关闭原因
+ * @param   bearer  - linkPB_ADVPB_GATT
+ * @param   reason  - link
  *
  * @return  none
  */
@@ -211,10 +211,10 @@ static void link_close(bt_mesh_prov_bearer_t bearer, uint8_t reason)
     }
     else
     {
-        /*天猫精灵不会下发Config_model_app_bind和Config_Model_Subscrption_Add消息。
-         IOT设备需要自行给所有Element的所有model绑定下发的AppKey，并根据产品类型为各个
-         model订阅相应的组播地址（具体品类组播地址请参阅各产品软件规范）。蓝牙Mesh设备
-         完成配网后需要进行消息上报，上报消息包括该设备所有支持的可上报的属性。*/
+        /*Config_model_app_bindConfig_Model_Subscrption_Add
+         IOTElementmodelAppKey
+         modelMesh
+         */
 
         /* For Light Subscription group address */
         root_models[2].groups[0] = (uint16_t)0xC000;
@@ -224,7 +224,7 @@ static void link_close(bt_mesh_prov_bearer_t bearer, uint8_t reason)
         root_models[2].keys[0] = (uint16_t)0x0000;
         bt_mesh_store_mod_bind(&root_models[2]);
 
-        /* For Light Subscription group address */          //添加处  亮度属性
+        /* For Light Subscription group address */          //  
         root_models[3].groups[0] = (uint16_t)0xC000;
         root_models[3].groups[1] = (uint16_t)0xCFFF;
         bt_mesh_store_mod_sub(&root_models[3]);
@@ -232,7 +232,7 @@ static void link_close(bt_mesh_prov_bearer_t bearer, uint8_t reason)
         root_models[3].keys[0] = (uint16_t)0x0000;
         bt_mesh_store_mod_bind(&root_models[3]);
 
-        /* For Light Subscription group address */          //添加处  色温属性
+        /* For Light Subscription group address */          //  
         root_models[4].groups[0] = (uint16_t)0xC000;
         root_models[4].groups[1] = (uint16_t)0xCFFF;
         bt_mesh_store_mod_sub(&root_models[4]);
@@ -253,18 +253,18 @@ static void link_close(bt_mesh_prov_bearer_t bearer, uint8_t reason)
 /*********************************************************************
  * @fn      prov_complete
  *
- * @brief   配网完成回调，重新开始广播
+ * @brief   
  *
- * @param   net_idx     - 网络key的index
- * @param   addr        - 网络地址
- * @param   flags       - 是否处于key refresh状态
- * @param   iv_index    - 当前网络iv的index
+ * @param   net_idx     - keyindex
+ * @param   addr        - 
+ * @param   flags       - key refresh
+ * @param   iv_index    - ivindex
  *
  * @return  none
  */
 static void prov_complete(uint16_t net_idx, uint16_t addr, uint8_t flags, uint32_t iv_index)
 {
-    /* 设备上电后，如果已配网，也需要在1~10s随机间隔后上报所有支持的属性状态。 */
+    /* 1~10s */
     tmosTimer rand_timer;
     APP_DBG(" ");
 
@@ -275,7 +275,7 @@ static void prov_complete(uint16_t net_idx, uint16_t addr, uint8_t flags, uint32
 /*********************************************************************
  * @fn      prov_reset
  *
- * @brief   复位配网功能回调
+ * @brief   
  *
  * @param   none
  *
@@ -291,10 +291,10 @@ static void prov_reset(void)
 /*********************************************************************
  * @fn      ind_end_cb
  *
- * @brief   发送复位事件完成回调
+ * @brief   
  *
- * @param   err     - 错误码
- * @param   cb_data - 回调参数
+ * @param   err     - 
+ * @param   cb_data - 
  *
  * @return  none
  */
@@ -311,7 +311,7 @@ static const struct bt_adv_ind_send_cb reset_cb = {
 /*********************************************************************
  * @fn      send_support_attr
  *
- * @brief   发送所有支持的可上报的属性给天猫精灵,此消息决定天猫精灵判断设备支持那些功能
+ * @brief   ,
  *
  * @param   none
  *
@@ -345,7 +345,7 @@ void send_support_attr(void)
     /* Add tid field */
     net_buf_simple_add_u8(&(ind->buf->b), ind->param.tid);
 
-    // 添加开关属性
+    // 
     {
         /* Add generic onoff attrbute op */
         net_buf_simple_add_le16(&(ind->buf->b), ALI_GEN_ATTR_TYPE_POWER_STATE);
@@ -353,24 +353,24 @@ void send_support_attr(void)
         /* Add current generic onoff status */
         net_buf_simple_add_u8(&(ind->buf->b), read_led_state(MSG_PIN));
     }
-    //	// 可选根据阿里云设置的产品属性功能添加对应属性 ( BLE_MESH_MODEL_OP_LIGHT_LIGHTNESS_SET )
-    //	// 这里添加亮度属性留作参考,还需要添加对应的opcode处理函数,添加方式参考开关属性的 gen_onoff_op 结构
+    //	//  ( BLE_MESH_MODEL_OP_LIGHT_LIGHTNESS_SET )
+    //	// ,opcode, gen_onoff_op 
 
-    //添加亮度属性
+    //
     {
         /* Add brightness attrbute opcode */
         net_buf_simple_add_le16(&(ind->buf->b), ALI_GEN_ATTR_TYPE_BRIGHTNESS);
 
-    /* Add brightness status (655~65535对应天猫控制亮度1~100) */
+    /* Add brightness status (655~655351~100) */
         net_buf_simple_add_le16(&(ind->buf->b), 65535);
     }
 
-    //添加色温属性
+    //
     {
         /* Add brightness attrbute opcode */
         net_buf_simple_add_le16(&(ind->buf->b), ALI_GEN_ATTR_TYPE_COLOR);
 
-    /* Add brightness status (992~20000对应天猫控制色温1~100) */
+    /* Add brightness status (992~200001~100) */
         net_buf_simple_add_le16(&(ind->buf->b), 20000);
     }
 
@@ -380,7 +380,7 @@ void send_support_attr(void)
 /*********************************************************************
  * @fn      send_led_state
  *
- * @brief   发送当前灯的状态给天猫精灵
+ * @brief   
  *
  * @param   none
  *
@@ -396,7 +396,7 @@ void send_led_state(void)
         .tid = als_avail_tid_get(),
     };
 
-    //toggle_led_state(MSG_PIN);      //翻转灯的状态
+    //toggle_led_state(MSG_PIN);      //
     //set_led_lightness(MSG_PIN, led_lightness);
 
 
@@ -406,15 +406,15 @@ void send_led_state(void)
         return;
     }
 
-    send_led_indicate(&param);                  //发送灯的 开关 状态
-    send_lightness_indicate(&param);            //发送灯的 亮度 状态
-    send_color_indicate(&param);                //发送灯的 色温 状态
+    send_led_indicate(&param);                  //  
+    send_lightness_indicate(&param);            //  
+    send_color_indicate(&param);                //  
 }
 
 /*********************************************************************
  * @fn      send_reset_indicate
  *
- * @brief   发送复位事件给天猫精灵，发送完成后将清除配网状态，重置自身mesh网络
+ * @brief   mesh
  *
  * @param   none
  *
@@ -464,9 +464,9 @@ void send_reset_indicate(void)
 /*********************************************************************
  * @fn      keyPress
  *
- * @brief   按键回调
+ * @brief   
  *
- * @param   keys    - 按键类型
+ * @param   keys    - 
  *
  * @return  none
  */
@@ -488,7 +488,7 @@ void keyPress(uint8_t keys)
 /*********************************************************************
  * @fn      app_silent_adv
  *
- * @brief   超时后如果还未配网成功，则进入静默广播模式,若已配网，发送支持的属性给天猫精灵
+ * @brief   ,
  *
  * @param   none
  *
@@ -512,7 +512,7 @@ static void app_silent_adv(void)
 /*********************************************************************
  * @fn      blemesh_on_sync
  *
- * @brief   同步mesh参数，启用对应功能，不建议修改
+ * @brief   mesh
  *
  * @return  none
  */
@@ -564,7 +564,7 @@ void blemesh_on_sync(void)
 #endif /* PROXY || PB-GATT */
 
 #if(CONFIG_BLE_MESH_PROXY_CLI)
-    bt_mesh_proxy_client_init(cli); //待添加
+    bt_mesh_proxy_client_init(cli); //
 #endif                              /* PROXY_CLI */
 
     bt_mesh_prov_retransmit_init();
@@ -624,15 +624,15 @@ void blemesh_on_sync(void)
 /*********************************************************************
  * @fn      App_Init
  *
- * @brief   应用层初始化
+ * @brief   
  *
  * @return  none
  */
-#if 0       //调试时，调用查看unknow回调状态
+#if 0       //unknow
 void my_test1(uint32_t opcode, struct bt_mesh_model *model,
         struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf )
 {
-    PRINT("指令有效:%x\n", opcode);
+    PRINT(":%x\n", opcode);
 
 }
 #endif
@@ -649,13 +649,13 @@ void App_Init(void)
     HalKeyConfig(keyPress);
     set_led_state(MSG_PIN, 0);
 
-    //bt_mesh_model_reg_elem_unkonw_op_cb((elem_unkonw_op_cb_t)my_test1);  //初始化调用，查看天猫指令发送时 unknow回调状态
+    //bt_mesh_model_reg_elem_unkonw_op_cb((elem_unkonw_op_cb_t)my_test1);  // unknow
 }
 
 /*********************************************************************
  * @fn      App_ProcessEvent
  *
- * @brief   应用层事件处理函数
+ * @brief   
  *
  * @param   task_id  - The TMOS assigned task ID.
  * @param   events - events to process.  This is a bit map and can

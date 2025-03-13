@@ -69,9 +69,9 @@ const uint8_t  BPB_Media[] =
  *
  * @brief   Data copying
  *
- * @param   pDst - 目标地址
-            pSrc - 原地址
-            len - 要复制的字节数
+ * @param   pDst - 
+            pSrc - 
+            len - 
  *
  * @return  none
  */
@@ -145,7 +145,7 @@ void udisk_format( void )
  * @brief   Checking the operation status, displaying the error code and stopping if there is an error
  *          input : iError - Error code input
  *
- * @param   iError - 错误码
+ * @param   iError - 
  *
  * @return  none
  */
@@ -176,7 +176,7 @@ static void mStopIfError( uint8_t iError )
  * @brief   Try opening or enumerating files, and if the USB drive is not formatted, format the USB drive first.
  *          If the file is not found, create a new file in the root directory
  *
- * @param   filename - 文件名
+ * @param   filename - 
  *
  * @return  none
  */
@@ -216,7 +216,7 @@ void open_file( char *filename )
  *
  * @brief   Write data to file
  *
- * @param   pData - 文件缓冲区
+ * @param   pData - 
  *
  * @return  none
  */
@@ -275,12 +275,12 @@ void close_file( void )
  *
  * @brief   This function is used to process PDF data. The function takes a pointer to the data buffer and the length of the data as parameters
  *
- * @param   buf - PDF文件数据缓冲区
- *          length - 数据长度
+ * @param   buf - PDF
+ *          length - 
  *
- * @return  0 - 写入成功
- *          1 - 数据长度大于PDF_TMP_BUF_LEN_EXT
- *          2 - data_tollen与length相加后超过PDF_FILE_MAX_LEN
+ * @return  0 - 
+ *          1 - PDF_TMP_BUF_LEN_EXT
+ *          2 - data_tollenlengthPDF_FILE_MAX_LEN
  *
  */
 uint32_t pdf_data_proces( void *buf, uint32_t length )

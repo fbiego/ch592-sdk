@@ -1,16 +1,16 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : central.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2019/11/05
- * Description        : 主机例程，主动扫描周围设备，连接至给定的从机设备地址，
- *                      寻找自定义服务及特征，执行读写命令，需与从机例程配合使用,
- *                      并将从机设备地址修改为该例程目标地址，默认为(84:C2:E4:03:02:02)
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : central.c
+* Author: WCH
+* Version: V1.1
+* Date: 2019/11/05
+* Description: The host routine, actively scans surrounding devices, connects to the given slave device address,
+* Find custom services and features, execute read and write commands, and use them in conjunction with slave routines.
+* And modify the slave device address to the target address of the routine, the default is (84:C2:E4:03:02:02)
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

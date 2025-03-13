@@ -27,11 +27,11 @@
 /*********************************************************************
  * @fn      read_led2_state
  *
- * @brief   获取当前灯状态.
+ * @brief   .
  *
- * @param   led_pin - 引脚.
+ * @param   led_pin - .
  *
- * @return  灯状态
+ * @return  
  */
 BOOL read_led2_state(uint32_t led_pin)
 {
@@ -41,10 +41,10 @@ BOOL read_led2_state(uint32_t led_pin)
 /*********************************************************************
  * @fn      set_led2_state
  *
- * @brief   设置当前灯状态.
+ * @brief   .
  *
- * @param   led_pin - 引脚.
- * @param   on      - 状态.
+ * @param   led_pin - .
+ * @param   on      - .
  *
  * @return  none
  */
@@ -57,9 +57,9 @@ void set_led2_state(uint32_t led_pin, BOOL on)
 /*********************************************************************
  * @fn      toggle_led2_state
  *
- * @brief   翻转当前灯状态
+ * @brief   
  *
- * @param   led_pin - 引脚.
+ * @param   led_pin - .
  *
  * @return  none
  */
@@ -72,10 +72,10 @@ void toggle_led2_state(uint32_t led_pin)
 /*********************************************************************
  * @fn      gen_onoff2_status
  *
- * @brief   回复天猫精灵开关状态
+ * @brief   
  *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
+ * @param   model   - .
+ * @param   ctx     - .
  *
  * @return  none
  */
@@ -108,11 +108,11 @@ static void gen_onoff2_status(struct bt_mesh_model *model, struct bt_mesh_msg_ct
 /*********************************************************************
  * @fn      gen_onoff2_get
  *
- * @brief   天猫精灵下发的获取开关状态命令
+ * @brief   
  *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
+ * @param   model   - .
+ * @param   ctx     - .
+ * @param   buf     - .
  *
  * @return  none
  */
@@ -126,11 +126,11 @@ static void gen_onoff2_get(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *
 /*********************************************************************
  * @fn      gen_onoff2_set
  *
- * @brief   天猫精灵下发的设置开关状态命令，如果与当前状态不同,还需要发送ind给天猫
+ * @brief   ,ind
  *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
+ * @param   model   - .
+ * @param   ctx     - .
+ * @param   buf     - .
  *
  * @return  none
  */
@@ -168,11 +168,11 @@ static void gen_onoff2_set(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *
 /*********************************************************************
  * @fn      gen_onoff2_set_unack
  *
- * @brief   天猫精灵下发的设置开关状态命令(无应答)
+ * @brief   ()
  *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
+ * @param   model   - .
+ * @param   ctx     - .
+ * @param   buf     - .
  *
  * @return  none
  */

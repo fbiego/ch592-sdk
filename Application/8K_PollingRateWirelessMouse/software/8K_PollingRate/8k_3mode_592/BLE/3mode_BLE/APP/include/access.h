@@ -28,7 +28,7 @@
 #define DISCONNECT_WAIT_REPORT_END_TIMEOUT       16*3
 #define ADV_IDEL_SLEEP_EVT_TIMEOUT       1600*60*3
 #define IDEL_SLEEP_EVT_TIMEOUT       1600*60*3
-#define DISCONNECT_IDEL_SLEEP_EVT_TIMEOUT       1600*2  // 断开连接后多久停止广播睡眠
+#define DISCONNECT_IDEL_SLEEP_EVT_TIMEOUT       1600*2  // How long does it take to stop broadcasting sleep after disconnecting
 #define SLEEP_EVT_TIMEOUT       1600*60*30
 #define BATT_EVT_TIMEOUT        1600*5
 #define MODE_RECEIVE_EVT_TIMEOUT 2*1600

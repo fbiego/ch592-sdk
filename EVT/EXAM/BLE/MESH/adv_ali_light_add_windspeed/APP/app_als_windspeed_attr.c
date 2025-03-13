@@ -23,39 +23,39 @@
 
 #define ALI_DEF_TTL    (10)
 
-// 模拟windspeed值
+// Simulate windspeed value
 uint8_t device_windspeed = 1;
 
-/*******************************************************************************
- * Function Name  : read_windspeed
- * Description    : 获取当前windspeed
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: read_windspeed
+* Description: Get the current windspeed
+* Input: None
+* Return : None
+********************************************************************************************* */
 uint8_t read_windspeed(void)
 {
     APP_DBG("device_windspeed: %d ", device_windspeed);
     return device_windspeed;
 }
 
-/*******************************************************************************
- * Function Name  : set_windspeeds
- * Description    : 设置当前windspeed
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: set_windspeeds
+* Description: Set the current windspeed
+* Input: None
+* Return : None
+********************************************************************************************* */
 void set_windspeed(uint8_t windspeed)
 {
     device_windspeed = windspeed;
 }
 
-/*******************************************************************************
- * Function Name  : gen_windspeed_status
- * Description    : 回复天猫精灵windspeed
- * Input          : model: 模型参数
- *										ctx：数据参数
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_windspeed_status
+* Description: Reply to Tmall Elf Windspeed
+* Input: model: Model parameters
+* ctx: Data parameters
+* Return : None
+********************************************************************************************* */
 static void gen_windspeed_status(struct bt_mesh_model   *model,
                                  struct bt_mesh_msg_ctx *ctx)
 {
@@ -89,14 +89,14 @@ static void gen_windspeed_status(struct bt_mesh_model   *model,
     }
 }
 
-/*******************************************************************************
- * Function Name  : gen_windspeed_get
- * Description    : 天猫精灵下发的获取windspeed命令
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_windspeed_get
+* Description: The Windspeed command issued by Tmall elves
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_windspeed_get(struct bt_mesh_model   *model,
                        struct bt_mesh_msg_ctx *ctx,
                        struct net_buf_simple  *buf)
@@ -105,15 +105,15 @@ void gen_windspeed_get(struct bt_mesh_model   *model,
     gen_windspeed_status(model, ctx);
 }
 
-/*******************************************************************************
-* Function Name  : gen_windspeed_set
-* Description    : 天猫精灵下发的设置windspeed命令
-                                        如果与当前windspeed不同,还需要发送ind给天猫
-* Input          : model: 模型参数
-*										ctx：数据参数
-*										buf: 数据内容
-* Return         : None
-*******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_windspeed_set
+* Description: Setting windspeed command issued by Tmall elves
+If it is different from the current windspeed, you also need to send an ind to Tmall
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_windspeed_set(struct bt_mesh_model   *model,
                        struct bt_mesh_msg_ctx *ctx,
                        struct net_buf_simple  *buf)
@@ -130,14 +130,14 @@ void gen_windspeed_set(struct bt_mesh_model   *model,
 
     if((buf->data[1] | (buf->data[2] << 8)) < ALI_GEN_ATTR_TYPE_WORK_STATUS)
     {
-        // 命令为设定值
+        // The command is the set value
         set_windspeed(buf->data[3]);
     }
     else
     {
         switch(buf->data[1] | (buf->data[2] << 8))
         {
-            // 命令为设定变化量
+            // The command is to set the change amount
             case ALI_GEN_ATTR_TYPE_DELTA_VALUE:
             {
                 char delta = (char)buf->data[5];
@@ -164,14 +164,14 @@ void gen_windspeed_set(struct bt_mesh_model   *model,
     gen_windspeed_status(model, ctx);
 }
 
-/*******************************************************************************
- * Function Name  : gen_windspeed_set_unack
- * Description    : 天猫精灵下发的设置windspeed命令(无应答)
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_windspeed_set_unack
+* Description: Setting windspeed command issued by Tmall elves (no response)
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_windspeed_set_unack(struct bt_mesh_model   *model,
                              struct bt_mesh_msg_ctx *ctx,
                              struct net_buf_simple  *buf)
@@ -180,14 +180,14 @@ void gen_windspeed_set_unack(struct bt_mesh_model   *model,
 
     if((buf->data[1] | (buf->data[2] << 8)) < ALI_GEN_ATTR_TYPE_WORK_STATUS)
     {
-        // 命令为设定值
+        // The command is the set value
         set_windspeed(buf->data[3]);
     }
     else
     {
         switch(buf->data[1] | (buf->data[2] << 8))
         {
-            // 命令为设定变化量
+            // The command is to set the change amount
             case ALI_GEN_ATTR_TYPE_DELTA_VALUE:
             {
                 char delta = (char)buf->data[5];

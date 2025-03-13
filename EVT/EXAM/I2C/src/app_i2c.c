@@ -13,10 +13,9 @@
 #include "app_i2c.h"
 #include "CH59x_common.h"
 
-/**
- * Note: 主机与从机的DEBUG接口需要同时打开或关闭，
- * 否则会产生时序问题。
- */
+/* *
+* Note: The DEBUG interface between the host and the slave needs to be turned on or off at the same time.
+* Otherwise, timing problems will occur. */
 // #define CONFIG_I2C_DEBUG
 
 #ifdef CONFIG_I2C_DEBUG

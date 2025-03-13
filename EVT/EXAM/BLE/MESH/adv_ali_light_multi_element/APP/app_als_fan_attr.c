@@ -24,39 +24,39 @@
 
 #define ALI_DEF_TTL    (10)
 
-// 模拟led_mode值
+// Simulate LED_mode value
 uint8_t device_angle_auto_LR = 0;
 
-/*******************************************************************************
- * Function Name  : read_angle_auto_LR
- * Description    : 获取当前angle_auto_LR
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: read_angle_auto_LR
+* Description: Get the current angle_auto_LR
+* Input: None
+* Return : None
+********************************************************************************************* */
 uint8_t read_angle_auto_LR(void)
 {
     APP_DBG("device_led_mode: %d ", device_angle_auto_LR);
     return device_angle_auto_LR;
 }
 
-/*******************************************************************************
- * Function Name  : set_angle_auto_LR
- * Description    : 设置当前angle_auto_LR
- * Input          : None
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: set_angle_auto_LR
+* Description: Set the current angle_auto_LR
+* Input: None
+* Return : None
+********************************************************************************************* */
 void set_angle_auto_LR(uint8_t angle_auto_LR)
 {
     device_angle_auto_LR = angle_auto_LR;
 }
 
-/*******************************************************************************
- * Function Name  : gen_angle_auto_LR_status
- * Description    : 回复天猫精灵angle_auto_LR
- * Input          : model: 模型参数
- *										ctx：数据参数
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name : gen_angle_auto_LR_status
+* Description: Reply to Tmall Elf Angle_auto_LR
+* Input: model: Model parameters
+* ctx: Data parameters
+* Return : None
+********************************************************************************************* */
 static void gen_angle_auto_LR_status(struct bt_mesh_model   *model,
                                      struct bt_mesh_msg_ctx *ctx)
 {
@@ -90,14 +90,14 @@ static void gen_angle_auto_LR_status(struct bt_mesh_model   *model,
     }
 }
 
-/*******************************************************************************
- * Function Name  : gen_angle_auto_LR_get
- * Description    : 天猫精灵下发的获取angle_auto_LR命令
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_angle_auto_LR_get
+* Description: The angle_auto_LR command issued by Tmall elves
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_angle_auto_LR_get(struct bt_mesh_model   *model,
                            struct bt_mesh_msg_ctx *ctx,
                            struct net_buf_simple  *buf)
@@ -106,15 +106,15 @@ void gen_angle_auto_LR_get(struct bt_mesh_model   *model,
     gen_angle_auto_LR_status(model, ctx);
 }
 
-/*******************************************************************************
-* Function Name  : gen_fan_set
-* Description    : 天猫精灵下发的设置fan命令
-                    需要发送ind给天猫
-* Input          : model: 模型参数
-*										ctx：数据参数
-*										buf: 数据内容
-* Return         : None
-*******************************************************************************/
+/* *********************************************************************************************
+* Function Name : gen_fan_set
+* Description: Setting fan command issued by Tmall elves
+Need to send an ind to Tmall
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_fan_set(struct bt_mesh_model   *model,
                  struct bt_mesh_msg_ctx *ctx,
                  struct net_buf_simple  *buf)
@@ -144,7 +144,7 @@ void gen_fan_set(struct bt_mesh_model   *model,
 
     if((buf->data[1] | (buf->data[2] << 8)) == ALI_GEN_ATTR_TYPE_ANGLEAUTO_LR_ONOFF)
     {
-        // 命令为设定值
+        // The command is the set value
         set_angle_auto_LR(buf->data[3]);
 
         send_angle_auto_LR_indicate(&param);
@@ -156,14 +156,14 @@ void gen_fan_set(struct bt_mesh_model   *model,
     }
 }
 
-/*******************************************************************************
- * Function Name  : gen_fan_set_unack
- * Description    : 天猫精灵下发的设置fan命令(无应答)
- * Input          : model: 模型参数
- *										ctx：数据参数
- *										buf: 数据内容
- * Return         : None
- *******************************************************************************/
+/* *********************************************************************************************
+* Function Name: gen_fan_set_unack
+* Description: Setting fan command issued by Tmall elves (no response)
+* Input: model: Model parameters
+* ctx: Data parameters
+* buf: Data content
+* Return : None
+********************************************************************************************* */
 void gen_fan_set_unack(struct bt_mesh_model   *model,
                        struct bt_mesh_msg_ctx *ctx,
                        struct net_buf_simple  *buf)
@@ -172,7 +172,7 @@ void gen_fan_set_unack(struct bt_mesh_model   *model,
 
     if((buf->data[1] | (buf->data[2] << 8)) == ALI_GEN_ATTR_TYPE_ANGLEAUTO_LR_ONOFF)
     {
-        // 命令为设定值
+        // The command is the set value
         set_angle_auto_LR(buf->data[3]);
     }
 }

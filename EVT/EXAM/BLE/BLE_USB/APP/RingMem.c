@@ -27,7 +27,7 @@ RingMemProtection_t RingMemProtection;
 /*********************************************************************
  * @fn      RingMemInit
  *
- * @brief   初始化
+ * @brief   
  *
  * @param   none
  *
@@ -48,7 +48,7 @@ void RingMemInit( RingMemParm_t *Parm, uint8_t *StartAddr, uint32_t MaxLen, Ring
 /*********************************************************************
  * @fn      RingMemWrite
  *
- * @brief   往里写
+ * @brief   
  *
  * @param   none
  *
@@ -102,7 +102,7 @@ uint8_t RingMemWrite( RingMemParm_t *Parm, uint8_t *pData, uint32_t len )
 /*********************************************************************
  * @fn      RingMemRead
  *
- * @brief   往外读
+ * @brief   
  *
  * @param   none
  *
@@ -254,7 +254,7 @@ uint8_t RingMemDelete( RingMemParm_t *Parm, uint32_t len )
 /*********************************************************************
  * @fn      RingAddInStart
  *
- * @brief   向缓冲区开始处添加数据
+ * @brief   
  *
  * @param   none
  *

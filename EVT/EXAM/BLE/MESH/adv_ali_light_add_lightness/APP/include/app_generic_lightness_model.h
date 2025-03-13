@@ -19,26 +19,23 @@ extern "C" {
 
 #include "MESH_LIB.h"
 
-/**
- * @brief   存储收到的命令码所对应处理函数的结构体数组
- */
+/* *
+* @brief The structure array of processing functions stored in the received command code */
 extern const struct bt_mesh_model_op gen_lightness_op[];
 
-/**
- * @brief   获取当前灯亮度
- *
- * @param   led_pin     - LED引脚.
- *
- * @return  亮度
- */
+/* *
+* @brief Get the current light brightness
+*
+* @param led_pin - LED pin.
+*
+* @return Brightness */
 uint16_t read_led_lightness(uint32_t led_pin);
 
-/**
- * @brief   设置当前灯亮度
- *
- * @param   led_pin     - LED引脚.
- * @param   lightness   - 亮度.
- */
+/* *
+* @brief Set the current light brightness
+*
+* @param led_pin - LED pin.
+* @param lightness - brightness. */
 void set_led_lightness(uint32_t led_pin, uint16_t lightness);
 
 #ifdef __cplusplus

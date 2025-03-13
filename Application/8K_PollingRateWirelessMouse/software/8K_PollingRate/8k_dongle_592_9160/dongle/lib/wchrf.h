@@ -87,15 +87,15 @@ typedef struct tag_ble_config
 /* TMOS clock config struct */
 typedef struct tag_ble_clock_config
 {
-    pfnGetSysClock getClockValue;  // TMOS系统时间
+    pfnGetSysClock getClockValue;  // TMOS
     uint32_t ClockMaxCount;         // The maximum count value
     uint16_t ClockFrequency;        // The timing clock frequency(Hz)
     uint16_t ClockAccuracy;         // The timing clock accuracy(ppm)
 
-    uint32_t Clock1Frequency;   // 时钟频率 kHz
-    pfnGetSysClock getClock1Value; // RF通信管理时间 （精度要求更高）
-    pfnSetSysClockIRQ SetPendingIRQ;  // RF通信管理相关中断
-    pfnSetSysClockTign SetTign;  // RF通信管理 定时器触发值校准
+    uint32_t Clock1Frequency;   //  kHz
+    pfnGetSysClock getClock1Value; // RF 
+    pfnSetSysClockIRQ SetPendingIRQ;  // RF
+    pfnSetSysClockTign SetTign;  // RF 
 }tmosTimeConfig_t;
 
 /* pa control config struct */
@@ -193,7 +193,7 @@ extern const uint8_t VER_LIB[];  // LIB version
 #define ABS(n)     (((n) < 0) ? -(n) : (n))
 #endif
 
-/* TxPower define(Accuracy:±2dBm) */
+/* TxPower define(Accuracy:2dBm) */
 #define LL_TX_POWEER_MINUS_20_DBM       0x01
 #define LL_TX_POWEER_MINUS_15_DBM       0x03
 #define LL_TX_POWEER_MINUS_10_DBM       0x05

@@ -18,12 +18,12 @@
 /*********************************************************************
  * GLOBAL TYPEDEFS
  */
-// 应用层最大发送长度，不分包最大为CONFIG_MESH_UNSEG_LENGTH_DEF，分包最大为CONFIG_MESH_TX_SEG_DEF*BLE_MESH_APP_SEG_SDU_MAX-8（依据RAM使用情况决定）
+// The maximum sending length of the application layer is CONFIG_MESH_UNSEG_LENGTH_DEF without subcontracting, and the maximum subcontracting is CONFIG_MESH_TX_SEG_DEF*BLE_MESH_APP_SEG_SDU_MAX-8 (decided based on RAM usage)
 #define APP_MAX_TX_SIZE    MAX(CONFIG_MESH_UNSEG_LENGTH_DEF, CONFIG_MESH_TX_SEG_DEF *BLE_MESH_APP_SEG_SDU_MAX - 8)
 
 static uint8_t vendor_model_srv_TaskID = 0; // Task ID for internal task/event processing
 static uint8_t srv_send_tid = 128;
-static int32_t srv_msg_timeout = K_SECONDS(2); //有应答的数据传输超时时间，默认2秒
+static int32_t srv_msg_timeout = K_SECONDS(2); // Responsive data transmission timeout time, default 2 seconds
 
 static struct net_buf          ind_buf;
 static struct bt_mesh_indicate indicate = {
@@ -43,45 +43,42 @@ static uint16_t vendor_model_srv_ProcessEvent(uint8_t task_id, uint16_t events);
 static void     ind_reset(struct bt_mesh_indicate *ind, int err);
 static void     adv_srv_trans_send(void);
 
-/*********************************************************************
- * @fn      read_led_state
- *
- * @brief   读取led状态
- *
- * @param   led_pin - 引脚
- *
- * @return  led状态
- */
+/* ***************************************************************************
+* @fn read_led_state
+*
+* @brief reads the LED status
+*
+* @param led_pin - pin
+*
+* @return led status */
 BOOL read_led_state(uint32_t led_pin)
 {
     return (GPIOB_ReadPortPin(led_pin) > 0) ? 0 : 1;
 }
 
-/*********************************************************************
- * @fn      set_led_state
- *
- * @brief   设置led状态
- *
- * @param   led_pin - 引脚
- * @param   on      - 状态
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn set_led_state
+*
+* @brief Setting the LED status
+*
+* @param led_pin - pin
+* @param on - Status
+*
+* @return none */
 void set_led_state(uint32_t led_pin, BOOL on)
 {
     GPIOB_ModeCfg(led_pin, GPIO_ModeOut_PP_5mA);
     on ? GPIOB_ResetBits(led_pin) : GPIOB_SetBits(led_pin);
 }
 
-/*********************************************************************
- * @fn      toggle_led_state
- *
- * @brief   翻转led状态
- *
- * @param   led_pin - 引脚
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn toggle_led_state
+*
+* @brief flipped LED status
+*
+* @param led_pin - pin
+*
+* @return none */
 void toggle_led_state(uint32_t led_pin)
 {
     GPIOB_ModeCfg(led_pin, GPIO_ModeOut_PP_5mA);
@@ -103,13 +100,12 @@ uint8_t vendor_srv_tid_get(void)
     return srv_send_tid;
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_reset
- *
- * @brief   复位厂商模型服务，取消所有正在发送的流程
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_model_srv_reset
+*
+* @brief Reset the vendor model service and cancel all sending processes
+*
+* @return none */
 static void vendor_model_srv_reset(void)
 {
     APP_DBG("");
@@ -129,16 +125,15 @@ static void vendor_model_srv_reset(void)
     tmos_stop_task(vendor_model_srv_TaskID, VENDOR_MODEL_SRV_INDICATE_EVT);
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_rsp_recv
- *
- * @brief   调用应用层传入的回调
- *
- * @param   val     - 回调参数，包括消息类型、数据内容、长度、来源地址
- * @param   statu   - 状态
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_model_srv_rsp_recv
+*
+* @brief calls the callback passed in the application layer
+*
+* @param val - Callback parameters, including message type, data content, length, source address
+* @param status - Status
+*
+* @return none */
 static void vendor_model_srv_rsp_recv(vendor_model_srv_status_t *val,
                                       uint8_t                    status)
 {
@@ -158,13 +153,12 @@ static void vendor_model_srv_rsp_recv(vendor_model_srv_status_t *val,
     }
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_wait
- *
- * @brief   默认两秒超时后通知应用层
- *
- * @return  参考BLE_LIB err code
- */
+/* ***************************************************************************
+* @fn vendor_model_srv_wait
+*
+* @brief The default notification application layer after two seconds is timed out
+*
+* @return Reference BLE_LIB err code */
 static int vendor_model_srv_wait(void)
 {
     int err;
@@ -175,16 +169,15 @@ static int vendor_model_srv_wait(void)
     return err;
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_prepare
- *
- * @brief   预发送，记录当前消息类型
- *
- * @param   op_req  - 发出去的消息类型
- * @param   op      - 期待收到的消息类型
- *
- * @return  错误码
- */
+/* ***************************************************************************
+* @fn vendor_model_srv_prepare
+*
+* @brief Pre-send, record the current message type
+*
+* @param op_req - type of message sent
+* @param op - The type of message you are looking forward to receiving
+*
+* @return Error code */
 static int vendor_model_srv_prepare(uint32_t op_req, uint32_t op)
 {
     if(!vendor_model_srv)
@@ -205,13 +198,12 @@ static int vendor_model_srv_prepare(uint32_t op_req, uint32_t op)
     return 0;
 }
 
-/*********************************************************************
- * @fn      vendor_srv_sync_handler
- *
- * @brief   通知应用层当前op_code超时了
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_srv_sync_handler
+*
+* @brief Notify the application layer that the current op_code timeout has expired
+*
+* @return none */
 static void vendor_srv_sync_handler(void)
 {
     vendor_model_srv_status_t vendor_model_srv_status;
@@ -224,18 +216,17 @@ static void vendor_srv_sync_handler(void)
     vendor_model_srv_rsp_recv(&vendor_model_srv_status, 0xFF);
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_confirm
- *
- * @brief   发送vendor_message_srv_confirm - 该消息用于Vendor Model Server回复给Vendor Model Client，
- *          用于表示已收到Vendor Model Client发出的 Write
- *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_confirm
+*
+* @brief Send vendor_message_srv_confirm - This message is used to reply to Vendor Model Server to Vendor Model Client,
+* Used to indicate that the Write has been received from the Vendor Model Client
+*
+* @param model - Model parameters.
+* @param ctx - Data parameters.
+* @param buf - Data content.
+*
+* @return none */
 static void vendor_message_srv_confirm(struct bt_mesh_model   *model,
                                        struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
@@ -260,17 +251,16 @@ static void vendor_message_srv_confirm(struct bt_mesh_model   *model,
     }
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_trans
- *
- * @brief   收到透传数据
- *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_trans
+*
+* @brief received transparent data
+*
+* @param model - Model parameters.
+* @param ctx - Data parameters.
+* @param buf - Data content.
+*
+* @return none */
 static void vendor_message_srv_trans(struct bt_mesh_model   *model,
                                      struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
@@ -283,7 +273,7 @@ static void vendor_message_srv_trans(struct bt_mesh_model   *model,
     {
         vendor_model_srv->srv_tid.trans_tid = pData[0];
         vendor_model_srv->srv_tid.trans_addr = ctx->addr;
-        // 开头为tid
+        // Start with tid
         pData++;
         len--;
         vendor_model_srv_status.vendor_model_srv_Hdr.opcode =
@@ -299,17 +289,16 @@ static void vendor_message_srv_trans(struct bt_mesh_model   *model,
     }
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_write
- *
- * @brief   收到write 数据，随后应答vendor_message_srv_confirm
- *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_write
+*
+* @brief Receive write data and then answer vendor_message_srv_confirm
+*
+* @param model - Model parameters.
+* @param ctx - Data parameters.
+* @param buf - Data content.
+*
+* @return none */
 static void vendor_message_srv_write(struct bt_mesh_model   *model,
                                      struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
@@ -322,7 +311,7 @@ static void vendor_message_srv_write(struct bt_mesh_model   *model,
     {
         vendor_model_srv->srv_tid.write_tid = pData[0];
         vendor_model_srv->srv_tid.write_addr = ctx->addr;
-        // 开头为tid
+        // Start with tid
         pData++;
         len--;
         vendor_model_srv_status.vendor_model_srv_Hdr.opcode =
@@ -339,18 +328,17 @@ static void vendor_message_srv_write(struct bt_mesh_model   *model,
     vendor_message_srv_confirm(model, ctx, buf);
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_ack
- *
- * @brief   收到vendor_message_srv_ack - 该消息用于Vendor Model Client回复给Vendor Model Server，
- *          用于表示已收到Vendor Model Server发出的Indication
- *
- * @param   model   - 模型参数.
- * @param   ctx     - 数据参数.
- * @param   buf     - 数据内容.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_ack
+*
+* @brief Received vendor_message_srv_ack - This message is used to reply to Vendor Model Client to Vendor Model Server,
+* Used to indicate that the indication has been received from the Vendor Model Server
+*
+* @param model - Model parameters.
+* @param ctx - Data parameters.
+* @param buf - Data content.
+*
+* @return none */
 static void vendor_message_srv_ack(struct bt_mesh_model   *model,
                                    struct bt_mesh_msg_ctx *ctx, struct net_buf_simple *buf)
 {
@@ -369,7 +357,7 @@ static void vendor_message_srv_ack(struct bt_mesh_model   *model,
     }
 }
 
-// opcode 对应的处理函数
+// Opcode corresponding processing function
 const struct bt_mesh_model_op vnd_model_srv_op[] = {
     {OP_VENDOR_MESSAGE_TRANSPARENT_MSG, 0, vendor_message_srv_trans},
     {OP_VENDOR_MESSAGE_TRANSPARENT_WRT, 0, vendor_message_srv_write},
@@ -377,17 +365,16 @@ const struct bt_mesh_model_op vnd_model_srv_op[] = {
     BLE_MESH_MODEL_OP_END,
 };
 
-/*********************************************************************
- * @fn      vendor_message_srv_indicate
- *
- * @brief   indicate,有应答传输数据通道
- *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
- *
- * @return  参考Global_Error_Code
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_indicate
+*
+* @brief indication, there is a reply transmission data channel
+*
+* @param param - Send parameters.
+* @param pData - Data pointer.
+* @param len - Data length, maximum is (APP_MAX_TX_SIZE).
+*
+* @return Reference Global_Error_Code */
 int vendor_message_srv_indicate(struct send_param *param, uint8_t *pData,
                                 uint16_t len)
 {
@@ -426,17 +413,16 @@ int vendor_message_srv_indicate(struct send_param *param, uint8_t *pData,
     return 0;
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_send_trans
- *
- * @brief   send_trans,透传数据通道
- *
- * @param   param   - 发送参数.
- * @param   pData   - 数据指针.
- * @param   len     - 数据长度,最大为(APP_MAX_TX_SIZE).
- *
- * @return  参考Global_Error_Code
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_send_trans
+*
+* @brief send_trans,transparent data channel
+*
+* @param param - Send parameters.
+* @param pData - Data pointer.
+* @param len - Data length, maximum is (APP_MAX_TX_SIZE).
+*
+* @return Reference Global_Error_Code */
 int vendor_message_srv_send_trans(struct send_param *param, uint8_t *pData,
                                   uint16_t len)
 {
@@ -467,25 +453,24 @@ int vendor_message_srv_send_trans(struct send_param *param, uint8_t *pData,
 
     if(param->rand)
     {
-        // 延迟发送
+        // Delayed send
         tmos_start_task(vendor_model_srv_TaskID, VENDOR_MODEL_SRV_TRANS_EVT,
                         param->rand);
     }
     else
     {
-        // 直接发送
+        // Send directly
         adv_srv_trans_send();
     }
     return 0;
 }
 
-/*********************************************************************
- * @fn      vendor_message_srv_trans_reset
- *
- * @brief   取消发送trans数据的任务，释放缓存
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn vendor_message_srv_trans_reset
+*
+* @brief Cancel the task of sending trans data and release the cache
+*
+* @return none */
 void vendor_message_srv_trans_reset(void)
 {
     tmos_msg_deallocate(srv_trans.buf->__buf);
@@ -493,16 +478,15 @@ void vendor_message_srv_trans_reset(void)
     tmos_stop_task(vendor_model_srv_TaskID, VENDOR_MODEL_SRV_TRANS_EVT);
 }
 
-/*********************************************************************
- * @fn      ind_reset
- *
- * @brief   调用indicate发送完成回调，释放缓存
- *
- * @param   ind     - 需要释放的indicate.
- * @param   err     - 错误状态.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ind_reset
+*
+* @brief Call index to send complete callback, freeing cache
+*
+* @param ind - Indicate that needs to be released.
+* @param err - Error status.
+*
+* @return none */
 static void ind_reset(struct bt_mesh_indicate *ind, int err)
 {
     if(ind->param.cb && ind->param.cb->end)
@@ -514,17 +498,16 @@ static void ind_reset(struct bt_mesh_indicate *ind, int err)
     ind->buf->__buf = NULL;
 }
 
-/*********************************************************************
- * @fn      ind_start
- *
- * @brief   发送 indicate 开始回调
- *
- * @param   duration    - 此次发送持续的时长（ms）.
- * @param   err         - 错误状态.
- * @param   cb_data     - 错误状态发送时填写的回调参数.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ind_start
+*
+* @brief send indication start callback
+*
+* @param duration - The duration of this sending (ms).
+* @param err - Error status.
+* @param cb_data - Callback parameters filled in when the error status is sent.
+*
+* @return none */
 static void ind_start(uint16_t duration, int err, void *cb_data)
 {
     struct bt_mesh_indicate *ind = cb_data;
@@ -543,16 +526,15 @@ static void ind_start(uint16_t duration, int err, void *cb_data)
     }
 }
 
-/*********************************************************************
- * @fn      ind_end
- *
- * @brief   发送 indicate 结束回调
- *
- * @param   err         - 错误状态.
- * @param   cb_data     - 错误状态发送时填写的回调参数.
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ind_end
+*
+* @brief send indication end callback
+*
+* @param err - Error status.
+* @param cb_data - Callback parameters filled in when the error status is sent.
+*
+* @return none */
 static void ind_end(int err, void *cb_data)
 {
     struct bt_mesh_indicate *ind = cb_data;
@@ -566,19 +548,18 @@ static void ind_end(int err, void *cb_data)
                     ind->param.period);
 }
 
-// 发送 indicate 回调结构体
+// Send indicated callback structure
 const struct bt_mesh_send_cb ind_cb = {
     .start = ind_start,
     .end = ind_end,
 };
 
-/*********************************************************************
- * @fn      adv_ind_send
- *
- * @brief   发送 indicate
- *
- * @return  none
- */
+/* ********************************************************************
+* @fn      adv_ind_send
+*
+* @brief    indicate
+*
+* @return  none */
 static void adv_ind_send(void)
 {
     int err;
@@ -620,13 +601,12 @@ static void adv_ind_send(void)
     }
 }
 
-/*********************************************************************
- * @fn      adv_srv_trans_send
- *
- * @brief   发送 透传 srv_trans
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn adv_srv_trans_send
+*
+* @brief send Transmission srv_trans
+*
+* @return none */
 static void adv_srv_trans_send(void)
 {
     int err;
@@ -674,20 +654,19 @@ static void adv_srv_trans_send(void)
         srv_trans.buf->__buf = NULL;
         return;
     }
-    // 重传
+    // Retransmit
     tmos_start_task(vendor_model_srv_TaskID, VENDOR_MODEL_SRV_TRANS_EVT,
                     srv_trans.param.period);
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_init
- *
- * @brief   厂商模型初始化
- *
- * @param   model       - 指向厂商模型结构体
- *
- * @return  always SUCCESS
- */
+/* ***************************************************************************
+* @fn vendor_model_srv_init
+*
+* @brief vendor model initialization
+*
+* @param model - Point to the manufacturer model structure
+*
+* @return always SUCCESS */
 int vendor_model_srv_init(struct bt_mesh_model *model)
 {
     vendor_model_srv = model->user_data;
@@ -698,17 +677,16 @@ int vendor_model_srv_init(struct bt_mesh_model *model)
     return 0;
 }
 
-/*********************************************************************
- * @fn      vendor_model_srv_ProcessEvent
- *
- * @brief   厂商模型事件处理函数
- *
- * @param   task_id  - The TMOS assigned task ID.
- * @param   events - events to process.  This is a bit map and can
- *                   contain more than one event.
- *
- * @return  events not processed
- */
+/* ********************************************************************
+* @fn      vendor_model_srv_ProcessEvent
+*
+* @brief   
+*
+* @param   task_id  - The TMOS assigned task ID.
+* @param   events - events to process.  This is a bit map and can
+*                   contain more than one event.
+*
+* @return  events not processed */
 static uint16_t vendor_model_srv_ProcessEvent(uint8_t task_id, uint16_t events)
 {
     if(events & VENDOR_MODEL_SRV_INDICATE_EVT)

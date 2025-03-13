@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include <rf.h>
 #include "rf_device.h"
 #include "CH59x_common.h"
@@ -24,8 +24,8 @@
  */
 uint8_t tran_taskID;
 
-#define TRANS_SEND_BUF_NUM      10   //  缓存多少个包
-#define TRANS_MAX_BUF_LEN      40   //  单包最长
+#define TRANS_SEND_BUF_NUM      10   // How many packages are cached
+#define TRANS_MAX_BUF_LEN      40   // The longest package
 
 typedef struct
 {
@@ -103,7 +103,7 @@ uint8_t trans_send_data( uint8_t *pData, uint8_t len )
     {
         if(RF_check_con_status(RF_CON_CONNECTED))
         {
-            // 判断是否空余两个数据包，需要预留一个给其他通道数据使用
+            // Determine whether two data packets are free, and one is required to reserve for other channels of data to use.
             if( !(((RF_DMADESCTypeDef *)pDMATxGet->NextDescAddr)->Status & STA_DMA_ENABLE) )
             {
                 if(rf_send_data( pData, len))
@@ -126,16 +126,15 @@ uint8_t trans_send_data( uint8_t *pData, uint8_t len )
     return 0;
 
 }
-/*********************************************************************
- * @fn      trans_process_event
- *
- * @brief   trans 事件处理
- *
- * @param   task_id - 任务ID
- * @param   events  - 事件标志
- *
- * @return  未完成事件
- */
+/* ***************************************************************************
+* @fn trans_process_event
+*
+* @brief trans event handling
+*
+* @param task_id - Task ID
+* @param events - Event flags
+*
+* @return Unfinished Event */
 __HIGH_CODE
 uint16_t trans_process_event(uint8_t task_id, uint16_t events)
 {
@@ -198,27 +197,27 @@ uint16_t trans_process_event(uint8_t task_id, uint16_t events)
         idel_sleep_flag = 1;
         PWR_PeriphWakeUpCfg( DISABLE, RB_SLP_RTC_WAKE, Long_Delay );
 
-        R8_UDEV_CTRL &= ~RB_UD_PORT_EN;                   // 允许USB端口
+        R8_UDEV_CTRL &= ~RB_UD_PORT_EN;                   // Allow USB ports
         PRINT("%x %x\n",GPIOB_ReadPortPin((1<<10)),GPIOB_ReadPortPin((1<<10)));
         GPIOB_ModeCfg((1<<10) ,GPIO_ModeIN_PU);
         GPIOB_ModeCfg((1<<11) ,GPIO_ModeIN_PU);
         if(GPIOB_ReadPortPin((1<<10)))
-            GPIOB_ITModeCfg( (1<<10), GPIO_ITMode_LowLevel ); // 下降沿唤醒
+            GPIOB_ITModeCfg( (1<<10), GPIO_ITMode_LowLevel ); // Wake up on the falling edge
         else {
             GPIOB_ITModeCfg( (1<<10), GPIO_ITMode_HighLevel ); //
         }
         if(GPIOB_ReadPortPin((1<<11)))
-            GPIOB_ITModeCfg( (1<<11), GPIO_ITMode_LowLevel ); // 下降沿唤醒
+            GPIOB_ITModeCfg( (1<<11), GPIO_ITMode_LowLevel ); // Wake up on the falling edge
         else {
             GPIOB_ITModeCfg( (1<<11), GPIO_ITMode_HighLevel ); //
         }
         PWR_PeriphWakeUpCfg( ENABLE, RB_SLP_USB_WAKE|RB_SLP_GPIO_WAKE, Long_Delay );
         PFIC_EnableIRQ( GPIO_B_IRQn );
-//        LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND | RB_XT_PRE_EN ); //只保留30+2K SRAM 供电
+// LowPower_Sleep( RB_PWR_RAM24K | RB_PWR_RAM2K | RB_PWR_EXTEND | RB_XT_PRE_EN ); //Only 30+2K SRAM power supply is retained
 //        LowPower_Shutdown(RB_PWR_RAM2K);
 //        SYS_ResetExecute();
 //        RFIP_WakeUpRegInit();
-        R8_UDEV_CTRL |= RB_UD_PORT_EN;                   // 允许USB端口
+        R8_UDEV_CTRL |= RB_UD_PORT_EN;                   // Allow USB ports
         PWR_PeriphWakeUpCfg( ENABLE, RB_SLP_RTC_WAKE, Long_Delay );
         PFIC_DisableIRQ( GPIO_B_IRQn );
         if( (USB_SleepStatus & HOST_SET_FEATURE) && (USB_SleepStatus & HOST_SET_SUSPEND) )
@@ -248,7 +247,7 @@ uint16_t trans_process_event(uint8_t task_id, uint16_t events)
 ///*********************************************************************
 // * @fn      GPIOB_IRQHandler
 // *
-// * @brief   GPIOB中断函数,说明被唤醒了
+// * @brief GPIOB interrupt function, indicating that it has been awakened
 // *
 // * @return  none
 // */
@@ -258,7 +257,7 @@ uint16_t trans_process_event(uint8_t task_id, uint16_t events)
 //{
 ////    PRINT("Q %x\n",R16_PA_INT_IF);
 //    GPIOB_ClearITFlagBit( 0xFFFF );
-//    // 停止睡眠
+// // Stop sleeping
 //    R16_PB_INT_EN = 0;
 //}
 

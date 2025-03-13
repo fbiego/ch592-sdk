@@ -1,10 +1,10 @@
-/********************************** (C) COPYRIGHT *******************************
-* File Name          : MCU.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2018/11/12
-* Description        : 硬件任务处理函数及BLE和硬件初始化
-*******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: MCU.c
+* Author: WCH
+* Version: V1.0
+* Date: 2018/11/12
+* Description: Hardware task processing functions and BLE and hardware initialization
+********************************************************************************************* */
 
 
 

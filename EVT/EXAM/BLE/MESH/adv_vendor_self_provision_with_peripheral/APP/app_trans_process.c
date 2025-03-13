@@ -38,11 +38,11 @@
 /*********************************************************************
  * @fn      read_led_state
  *
- * @brief   获取当前灯状态.
+ * @brief   .
  *
- * @param   led_pin - 引脚.
+ * @param   led_pin - .
  *
- * @return  灯状态
+ * @return  
  */
 BOOL read_led_state(uint32_t led_pin)
 {
@@ -52,10 +52,10 @@ BOOL read_led_state(uint32_t led_pin)
 /*********************************************************************
  * @fn      set_led_state
  *
- * @brief   设置当前灯状态.
+ * @brief   .
  *
- * @param   led_pin - 引脚.
- * @param   on      - 状态.
+ * @param   led_pin - .
+ * @param   on      - .
  *
  * @return  none
  */
@@ -68,9 +68,9 @@ void set_led_state(uint32_t led_pin, BOOL on)
 /*********************************************************************
  * @fn      toggle_led_state
  *
- * @brief   翻转当前灯状态
+ * @brief   
  *
- * @param   led_pin - 引脚.
+ * @param   led_pin - .
  *
  * @return  none
  */
@@ -83,12 +83,12 @@ void toggle_led_state(uint32_t led_pin)
 /*********************************************************************
  * @fn      app_trans_process
  *
- * @brief   处理收到的trans数据
+ * @brief   trans
  *
- * @param   pValue      - 数据指针.
- *          len         - 数据长度.
- *          src_Addr    - 数据来源地址.
- *          dst_Addr    - 数据目的地址.
+ * @param   pValue      - .
+ *          len         - .
+ *          src_Addr    - .
+ *          dst_Addr    - .
  *
  * @return  none
  */

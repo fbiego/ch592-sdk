@@ -1,10 +1,10 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : app_tmos.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2023/8/5
- * Description        : 触摸按键例程
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: app_tmos.C
+* Author: WCH
+* Version: V1.0
+* Date: 2023/8/5
+* Description: Touch key routine
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -28,13 +28,12 @@ static void TKY_PeripheralInit(void);
  *   GLOBAL FUNCTIONS
  **********************/
 
-/*********************************************************************
- * @fn      touch_dataProcess
- *
- * @brief   触摸数据处理函数（裸跑），打印获取到的按键触发情况
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn touch_dataProcess
+*
+* @brief Touch the data processing function (naked running), print the retrieved key triggering situation
+*
+* @return none */
 void touch_dataProcess(void)
 {
     uint8_t key_val = 0;
@@ -69,21 +68,20 @@ void touch_dataProcess(void)
 }
 
 
-/*********************************************************************
- * @fn      touch_init
- *
- * @brief   触摸初始化函数（不使用tmos，需要设备开启定时器）
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn touch_init
+*
+* @brief Touch initialization function (not using tmos, the device needs to turn on the timer)
+*
+* @return none */
 void touch_init(void)
 {
-	TKY_PeripheralInit();       /* 初始外设，例如背光和蜂鸣器等 */
+	TKY_PeripheralInit();       /* Initial peripherals such as backlights and buzzers, etc. */
 	touch_InitKey();
 
     TKY_SetSleepStatusValue( ~tkyPinAll.tkyQueueAll );
 
-    TMR0_TimerInit(FREQ_SYS/1000);               //定时周期为1ms
+    TMR0_TimerInit(FREQ_SYS/1000);               // The timing period is 1ms
     TMR0_ITCfg(ENABLE, TMR0_3_IT_CYC_END);
     PFIC_EnableIRQ( TMR0_IRQn );
 
@@ -95,25 +93,23 @@ void touch_init(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/*********************************************************************
- * @fn      TKY_PeripheralInit
- *
- * @brief   触摸相关外设初始化函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TKY_PeripheralInit
+*
+* @brief Touch related peripheral initialization function
+*
+* @return none */
 static void TKY_PeripheralInit(void)
 {
     /*You code here*/
 }
 
-/*********************************************************************
- * @fn      TMR0_IRQHandler
- *
- * @brief   定时器0中断服务函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR0_IRQHandler
+*
+* @brief timer 0 interrupt service function
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void TMR0_IRQHandler( void )

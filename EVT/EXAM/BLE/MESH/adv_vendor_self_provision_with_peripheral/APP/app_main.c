@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "MESH_LIB.h"
 #include "HAL.h"
@@ -26,13 +26,12 @@ __attribute__((aligned(4))) uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #endif
 
-/*********************************************************************
- * @fn      Main_Circulation
- *
- * @brief   主循环
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn Main_Circulation
+*
+* @brief main loop
+*
+* @return none */
 __HIGH_CODE
 __attribute__((noinline))
 void Main_Circulation()
@@ -43,13 +42,12 @@ void Main_Circulation()
     }
 }
 
-/*********************************************************************
- * @fn      bt_mesh_lib_init
- *
- * @brief   mesh 库初始化
- *
- * @return  state
- */
+/* ***************************************************************************
+* @fn bt_mesh_lib_init
+*
+* @brief mesh library initialization
+*
+* @return state */
 uint8_t bt_mesh_lib_init(void)
 {
     uint8_t ret;
@@ -83,13 +81,12 @@ uint8_t bt_mesh_lib_init(void)
     return ret;
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
     SetSysClock(CLK_SOURCE_PLL_60MHz);

@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : peripheral.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/18
- * Description        : 外设从机多连接应用程序，初始化广播连接参数，然后广播，连接主机后，
- *                      请求更新连接参数，通过自定义服务传输数据
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : peripheral.C
+* Author: WCH
+* Version: V1.0
+* Date: 2022/03/18
+* Description: Peripheral slave multi-connection application, initialize broadcast connection parameters, and then broadcast, and after connecting to the host,
+* Request to update connection parameters and transfer data through custom services
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -347,17 +347,17 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
         return (events ^ SBP_START_DEVICE_EVT);
     }
 
-    // 连接0的任务处理
+    // Task processing for connection 0
     if(task_id == peripheralConnList[CONNECT0_ITEM].taskID)
     {
         return connect0_ProcessEvent(task_id, events);
     }
-    // 连接1的任务处理
+    // 1
     else if(task_id == peripheralConnList[CONNECT1_ITEM].taskID)
     {
         return connect1_ProcessEvent(task_id, events);
     }
-    // 连接2的任务处理
+    // Task processing for connection 2
     else if(task_id == peripheralConnList[CONNECT2_ITEM].taskID)
     {
         return connect2_ProcessEvent(task_id, events);
@@ -620,7 +620,7 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
     gapEstLinkReqEvent_t *event = (gapEstLinkReqEvent_t *)pEvent;
     // See if already connected
     uint8_t connItem;
-    // 查询是否有空余连接条目
+    // Query if there are any free connection entries
     for(connItem = 0; connItem < PERIPHERAL_MAX_CONNECTION; connItem++)
     {
         if(peripheralConnList[connItem].connHandle == GAP_CONNHANDLE_INIT)
@@ -654,7 +654,7 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
 
         PRINT("Conn %x - Int %x \n", event->connectionHandle, event->connInterval);
 
-        // 查询是否有空余连接条目
+        // Query if there are any free connection entries
         for(connItem = 0; connItem < PERIPHERAL_MAX_CONNECTION; connItem++)
         {
             PRINT("connItem check: %#x\n", connItem);
@@ -697,7 +697,7 @@ static void Peripheral_LinkTerminated(gapRoleEvent_t *pEvent)
     }
     if(connItem == PERIPHERAL_MAX_CONNECTION)
     {
-        //不会执行到此处
+        // Will not execute here
     }
     peripheralConnList[connItem].connHandle = GAP_CONNHANDLE_INIT;
     peripheralConnList[connItem].connInterval = 0;

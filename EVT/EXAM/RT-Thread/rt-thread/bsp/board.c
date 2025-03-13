@@ -62,8 +62,8 @@ void rt_hw_board_init()
     /* Set system clock */
     SetSysClock(CLK_SOURCE_PLL_60MHz);
 
-    SetVTFIRQ((uint32_t)SW_Handler, SWI_IRQn, 0, ENABLE);                   /* 提升任务切换速度，不从统一入口执行，在处理期间不可中断嵌套 */
-    SetVTFIRQ((uint32_t)SysTick_Handler, SysTick_IRQn, 1, ENABLE);          /* 提升systick中断速度，不从统一入口执行，在处理期间不可中断嵌套 */
+    SetVTFIRQ((uint32_t)SW_Handler, SWI_IRQn, 0, ENABLE);                   /*  */
+    SetVTFIRQ((uint32_t)SysTick_Handler, SysTick_IRQn, 1, ENABLE);          /* systick */
 
     /* System Tick Configuration */
     _SysTick_Config(GetSysClock() / RT_TICK_PER_SECOND);

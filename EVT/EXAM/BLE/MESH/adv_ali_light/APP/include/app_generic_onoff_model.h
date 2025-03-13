@@ -23,28 +23,25 @@ extern "C" {
 
 extern const struct bt_mesh_model_op gen_onoff_op[];
 
-/**
- * @brief   获取当前灯状态.
- *
- * @param   led_pin - 引脚.
- *
- * @return  灯状态
- */
+/* *
+* @brief Get the current light status.
+*
+* @param led_pin - pin.
+*
+* @return Light status */
 BOOL read_led_state(uint32_t led_pin);
 
-/**
- * @brief   设置当前灯状态.
- *
- * @param   led_pin - 引脚.
- * @param   on      - 状态.
- */
+/* *
+* @brief Sets the current light status.
+*
+* @param led_pin - pin.
+* @param on - Status. */
 void set_led_state(uint32_t led_pin, BOOL on);
 
-/**
- * @brief   翻转当前灯状态
- *
- * @param   led_pin - 引脚.
- */
+/* *
+* @brief Flip the current light status
+*
+* @param led_pin - pin. */
 void toggle_led_state(uint32_t led_pin);
 
 #ifdef __cplusplus

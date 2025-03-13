@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2024/02/27
- * Description        : 外设从机应用主函数及任务系统初始化
- * Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2024/02/27
+* Description: Peripheral slave application master function and task system initialization
+* Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "Touch.h"
 #include "app.h"
 
@@ -17,16 +17,15 @@
  * GLOBAL TYPEDEFS
  */
 
-/*********************************************************************
- * @fn      DebugInit
- *
- * @brief   串口打印初始化
- *
- * @return  none
- *
- * @note	Uart1的默认映射引脚可能与触摸通道冲突，
- * 			在触摸应用中应选用其他UART或将引脚重映射
- */
+/* ***************************************************************************
+* @fn DebugInit
+*
+* @brief serial port printing initialization
+*
+* @return none
+*
+* @note Uart1's default mapping pin may conflict with the touch channel,
+* In touch applications, other UARTs should be selected or pin remapping */
 void DebugInit(void)
 {
 #ifdef  DEBUG
@@ -53,13 +52,12 @@ void DebugInit(void)
 #endif
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
 	SetSysClock(CLK_SOURCE_PLL_60MHz);

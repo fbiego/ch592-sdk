@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : peripheral.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 外设从机多连接应用程序，初始化广播连接参数，然后广播，连接主机后，
- *                      请求更新连接参数，通过自定义服务传输数据
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : peripheral.C
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Peripheral slave multi-connection application, initialize broadcast connection parameters, and then broadcast, and after connecting to the host,
+* Request to update connection parameters and transfer data through custom services
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -26,8 +26,8 @@
 /*********************************************************************
  * MACROS
  */
-extern uint16_t led_color;      //范围 992——20000
-extern uint16_t led_lightness;  //范围 655——65535
+extern uint16_t led_color;      // Range 992-20000
+extern uint16_t led_lightness;  // Range 655-65535
 /*********************************************************************
  * CONSTANTS
  */
@@ -636,37 +636,37 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
         {
             uint8_t newValue[SIMPLEPROFILE_CHAR1_LEN];
             tmos_memcpy(newValue, pValue, len);
-            // 收到CHAR1数据，翻转灯状态
-            PRINT("键值：%d\n", newValue[0]);
+            // CHAR1 data received, flip the light status
+            PRINT("%d\n", newValue[0]);
 
             switch(newValue[0])
             {
-                case 0x00:      //开关按键触发
+                case 0x00:      // Switch button trigger
                 {
-                    toggle_led_state(MSG_PIN);      //翻转开关
+                    toggle_led_state(MSG_PIN);      // Flip switch
                     break;
                 }
 
-                case 0x01:      //亮度按键触发
+                case 0x01:      // Brightness button trigger
                 {
                     if(read_led_state(MSG_PIN))
                     {
                         if(led_lightness <= 64886) led_lightness += 649;
                         else led_lightness = 655;
 
-                        set_led_lightness(MSG_PIN, led_lightness);      //设置亮度
+                        set_led_lightness(MSG_PIN, led_lightness);      // Set brightness
                     }
                     break;
                 }
 
-                case 0x02:      //色温按键触发
+                case 0x02:      // Color temperature button trigger
                 {
                     if(read_led_state(MSG_PIN))
                     {
                         if(led_color >= 1178) led_color -= 190;
                         else led_color = 19616;
 
-                        set_led_color(MSG_PIN, led_color);      //设置色温
+                        set_led_color(MSG_PIN, led_color);      // Set color temperature
                     }
                     break;
 
@@ -675,11 +675,11 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
                     break;
             }
 
-            send_led_state();           //发送灯的所有状态到天猫精灵
+            send_led_state();           // Send all states of the light to Tmall Elf
 
             PRINT("profile ChangeCB CHAR1.. \n");
-            PRINT("亮度Change : %d\t", led_lightness);
-            PRINT("色温Change: %d\n", led_color);
+            PRINT("Change : %d\t", led_lightness);
+            PRINT("Change: %d\n", led_color);
             break;
         }
 
@@ -687,7 +687,7 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
         {
             uint8_t newValue[SIMPLEPROFILE_CHAR3_LEN];
             tmos_memcpy(newValue, pValue, len);
-            // 收到CHAR3数据，重置mesh网络
+            // Receive CHAR3 data, reset mesh network
             send_reset_indicate();
             PRINT("profile ChangeCB CHAR3..\n");
             break;

@@ -1,18 +1,18 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : rf_test.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/15
- * Description        : rf收发测试例程，单向发送
- *                      PB15低电平为发送模式，默认为接收模式
- *
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : rf_test.c
+* Author: WCH
+* Version: V1.0
+* Date: 2022/03/15
+* Description: rf send and receive test routine, one-way send
+* PB15 low level is the sending mode, default is the receiving mode
+*
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "ch9160.h"
 #include <rf.h>
 #include "CH59x_common.h"
@@ -55,13 +55,13 @@ void process_main( void )
   }
 }
 
-/*******************************************************************************
+/* ******************************************************************************
 * Function Name  : main
 * Description    : 主函数
 * Input          : None
 * Output         : None
 * Return         : None
-*******************************************************************************/
+****************************************************************************** */
 int main( void ) 
 {
   SetSysClock( CLK_SOURCE_PLL_60MHz );

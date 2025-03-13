@@ -1,13 +1,13 @@
-/********************************** (C) COPYRIGHT *******************************
-* File Name          : multiCentral.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2018/11/12
-* Description        : 主机多连接例程，主动扫描周围设备，连接至给定的三个从机设备地址，
-*                      寻找自定义服务及特征，执行读写命令，需与从机例程配合使用,
-                       并将从机设备地址修改为该例程目标地址，三个从机设备地址默认为
-                       (84:C2:E4:03:02:02)、(84:C2:E4:03:02:03)、(84:C2:E4:03:02:04)
-*******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : multiCentral.c
+* Author: WCH
+* Version: V1.0
+* Date: 2018/11/12
+* Description: Main machine multi-connection routine, actively scans surrounding devices, connects to the given three slave device addresses,
+* Find custom services and features, execute read and write commands, and use them in conjunction with slave routines.
+And modify the slave device address to the target address of the routine, and the default address of the three slave device is
+(84:C2:E4:03:02:02), (84:C2:E4:03:02:03), (84:C2:E4:03:02:04)
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -266,7 +266,7 @@ static void centralInitConnItem(uint8_t task_id, centralConnItem_t *centralConnL
     uint8_t connItem;
     for(connItem = 0; connItem < CENTRAL_MAX_CONNECTION; connItem++)
     {
-        // 每个连接的任务通过taskID区分
+        // Each connected task is distinguished by taskID
         centralConnList[connItem].taskID = TMOS_ProcessEventRegister(Central_ProcessEvent);
         centralConnList[connItem].connHandle = GAP_CONNHANDLE_INIT;
         centralConnList[connItem].state = BLE_STATE_IDLE;
@@ -321,16 +321,16 @@ uint16_t Central_ProcessEvent(uint8_t task_id, uint16_t events)
         return (events ^ ESTABLISH_LINK_TIMEOUT_EVT);
     }
 
-    // 连接0的任务处理
+    // Task processing for connection 0
     if(task_id == centralConnList[CONNECT0_ITEM].taskID)
     {
         return connect0_ProcessEvent(task_id, events);
     }
-    // 连接1的任务处理
+    // Task processing for connection 1
     else if(task_id == centralConnList[CONNECT1_ITEM].taskID)
     {
     }
-    // 连接2的任务处理
+    // Task processing for connection 2
     else if(task_id == centralConnList[CONNECT2_ITEM].taskID)
     {
     }
@@ -667,7 +667,7 @@ static void centralEventCB(gapRoleEvent_t *pEvent)
             if(pEvent->gap.hdr.status == SUCCESS)
             {
                 uint8_t connItem;
-                // 查询是否有空余连接条目
+                // Query if there are any free connection entries
                 for(connItem = 0; connItem < CENTRAL_MAX_CONNECTION; connItem++)
                 {
                     if(centralConnList[connItem].connHandle == GAP_CONNHANDLE_INIT)
@@ -685,7 +685,7 @@ static void centralEventCB(gapRoleEvent_t *pEvent)
 
                     PRINT("Conn %x - Int %x \n", pEvent->linkCmpl.connectionHandle, pEvent->linkCmpl.connInterval);
 
-                    //  连接0
+                    // Connect 0
                     if(connItem == CONNECT0_ITEM)
                     {
                         centralConnList[connItem].procedureInProgress = TRUE;
@@ -700,12 +700,12 @@ static void centralEventCB(gapRoleEvent_t *pEvent)
                         tmos_start_task(centralConnList[connItem].taskID, START_READ_RSSI_EVT, DEFAULT_RSSI_PERIOD);
                     }
 
-                    //  连接1
+                    // Connect 1
                     else if(connItem == CONNECT1_ITEM)
                     {
                     }
 
-                    //  连接2
+                    // Connect 2
                     else if(connItem == CONNECT2_ITEM)
                     {
                     }
@@ -882,7 +882,7 @@ static void centralConnIistStartDiscovery_0(void)
 static void centralGATTDiscoveryEvent(uint8_t connItem, gattMsgEvent_t *pMsg)
 {
     attReadByTypeReq_t req;
-    //  连接0的枚举
+    // Connection 0 enumeration
     if(connItem == CONNECT0_ITEM)
     {
         if(centralConnList[connItem].discState == BLE_DISC_STATE_SVC)
@@ -969,11 +969,11 @@ static void centralGATTDiscoveryEvent(uint8_t connItem, gattMsgEvent_t *pMsg)
             centralConnList[connItem].discState = BLE_DISC_STATE_IDLE;
         }
     }
-    //  连接1的枚举
+    // Connect 1 enumeration
     else if(connItem == CONNECT1_ITEM)
     {
     }
-    //  连接2的枚举
+    // Enumeration of 2 connections
     else if(connItem == CONNECT2_ITEM)
     {
     }

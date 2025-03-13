@@ -396,8 +396,8 @@ static void _uart_putc(char* data, uint16_t size)
   int i;
   for(i=0; i<size; i++)
   {
-    while( R8_UART2_TFC == UART_FIFO_SIZE );                        /* 等待数据发送 */
-    R8_UART2_THR = *data++;                                         /* 发送数据 */
+    while( R8_UART2_TFC == UART_FIFO_SIZE );                        /*  */
+    R8_UART2_THR = *data++;                                         /*  */
   }
 }
 __attribute__((section(".highcode")))

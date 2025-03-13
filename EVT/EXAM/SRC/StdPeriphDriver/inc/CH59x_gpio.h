@@ -51,11 +51,11 @@ extern "C" {
  */
 typedef enum
 {
-    GPIO_ModeIN_Floating, //浮空输入
-    GPIO_ModeIN_PU,       //上拉输入
-    GPIO_ModeIN_PD,       //下拉输入
-    GPIO_ModeOut_PP_5mA,  //推挽输出最大5mA
-    GPIO_ModeOut_PP_20mA, //推挽输出最大20mA
+    GPIO_ModeIN_Floating, //
+    GPIO_ModeIN_PU,       //
+    GPIO_ModeIN_PD,       //
+    GPIO_ModeOut_PP_5mA,  //5mA
+    GPIO_ModeOut_PP_20mA, //20mA
 
 } GPIOModeTypeDef;
 
@@ -64,169 +64,169 @@ typedef enum
  */
 typedef enum
 {
-    GPIO_ITMode_LowLevel,  //低电平触发
-    GPIO_ITMode_HighLevel, //高电平触发
-    GPIO_ITMode_FallEdge,  //下降沿触发
-    GPIO_ITMode_RiseEdge,  //上升沿触发
+    GPIO_ITMode_LowLevel,  //
+    GPIO_ITMode_HighLevel, //
+    GPIO_ITMode_FallEdge,  //
+    GPIO_ITMode_RiseEdge,  //
 
 } GPIOITModeTpDef;
 
 /**
- * @brief   GPIOA端口引脚模式配置
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
- * @param   mode    - 输入输出类型
+ * @param   mode    - 
  */
 void GPIOA_ModeCfg(uint32_t pin, GPIOModeTypeDef mode);
 
 /**
- * @brief   GPIOB端口引脚模式配置
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
- * @param   mode    - 输入输出类型
+ * @param   mode    - 
  */
 void GPIOB_ModeCfg(uint32_t pin, GPIOModeTypeDef mode);
 
 /**
- * @brief   GPIOA端口引脚输出置低
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
  */
 #define GPIOA_ResetBits(pin)      (R32_PA_CLR |= pin)
 
 /**
- * @brief   GPIOA端口引脚输出置高
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
  */
 #define GPIOA_SetBits(pin)        (R32_PA_OUT |= pin)
 
 /**
- * @brief   GPIOB端口引脚输出置低
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
  */
 #define GPIOB_ResetBits(pin)      (R32_PB_CLR |= pin)
 
 /**
- * @brief   GPIOB端口引脚输出置高
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
  */
 #define GPIOB_SetBits(pin)        (R32_PB_OUT |= pin)
 
 /**
- * @brief   GPIOA端口引脚输出电平翻转
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
  */
 #define GPIOA_InverseBits(pin)    (R32_PA_OUT ^= pin)
 
 /**
- * @brief   GPIOB端口引脚输出电平翻转
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
  */
 #define GPIOB_InverseBits(pin)    (R32_PB_OUT ^= pin)
 
 /**
- * @brief   GPIOA端口32位数据返回，低16位有效
+ * @brief   GPIOA3216
  *
- * @return  GPIOA端口32位数据
+ * @return  GPIOA32
  */
 #define GPIOA_ReadPort()          (R32_PA_PIN)
 
 /**
- * @brief   GPIOB端口32位数据返回，低24位有效
+ * @brief   GPIOB3224
  *
- * @return  GPIOB端口32位数据
+ * @return  GPIOB32
  */
 #define GPIOB_ReadPort()          (R32_PB_PIN)
 
 /**
- * @brief   GPIOA端口引脚状态，0-引脚低电平，(!0)-引脚高电平
+ * @brief   GPIOA0-(!0)-
  *
  * @param   pin     - PA0-PA15
  *
- * @return  GPIOA端口引脚状态
+ * @return  GPIOA
  */
 #define GPIOA_ReadPortPin(pin)    (R32_PA_PIN & (pin))
 
 /**
- * @brief   GPIOB端口引脚状态，0-引脚低电平，(!0)-引脚高电平
+ * @brief   GPIOB0-(!0)-
  *
  * @param   pin     - PB0-PB23
  *
- * @return  GPIOB端口引脚状态
+ * @return  GPIOB
  */
 #define GPIOB_ReadPortPin(pin)    (R32_PB_PIN & (pin))
 
 /**
- * @brief   GPIOA引脚中断模式配置
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
- * @param   mode    - 触发类型
+ * @param   mode    - 
  */
 void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode);
 
 /**
- * @brief   GPIOB引脚中断模式配置
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
- * @param   mode    - 触发类型
+ * @param   mode    - 
  */
 void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode);
 
 /**
- * @brief   读取GPIOA端口中断标志状态
+ * @brief   GPIOA
  *
- * @return  GPIOA端口中断标志状态
+ * @return  GPIOA
  */
 #define GPIOA_ReadITFlagPort()       (R16_PA_INT_IF)
 
 /**
- * @brief   读取GPIOB端口中断标志状态
+ * @brief   GPIOB
  *
- * @return  GPIOB端口中断标志状态
+ * @return  GPIOB
  */
 #define GPIOB_ReadITFlagPort()       ((R16_PB_INT_IF & (~((GPIO_Pin_22 | GPIO_Pin_23) >> 14))) | ((R16_PB_INT_IF << 14) & (GPIO_Pin_22 | GPIO_Pin_23)))
 
 /**
- * @brief   读取GPIOA端口引脚中断标志状态
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
  *
- * @return  GPIOA端口引脚中断标志状态
+ * @return  GPIOA
  */
 #define GPIOA_ReadITFlagBit(pin)     (R16_PA_INT_IF & (pin))
 
 /**
- * @brief   读取GPIOB端口引脚中断标志状态
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
  *
- * @return  GPIOB端口引脚中断标志状态
+ * @return  GPIOB
  */
 #define GPIOB_ReadITFlagBit(pin)     (R16_PB_INT_IF & ((pin) | (((pin) & (GPIO_Pin_22 | GPIO_Pin_23)) >> 14)))
 
 /**
- * @brief   清除GPIOA端口引脚中断标志状态
+ * @brief   GPIOA
  *
  * @param   pin     - PA0-PA15
  */
 #define GPIOA_ClearITFlagBit(pin)    (R16_PA_INT_IF = pin)
 
 /**
- * @brief   清除GPIOB端口引脚中断标志状态
+ * @brief   GPIOB
  *
  * @param   pin     - PB0-PB23
  */
 #define GPIOB_ClearITFlagBit(pin)    (R16_PB_INT_IF = ((pin) | (((pin) & (GPIO_Pin_22 | GPIO_Pin_23)) >> 14)))
 
 /**
- * @brief   外设功能引脚映射
+ * @brief   
  *
- * @param   s       - 是否使能映射
+ * @param   s       - 
  * @param   perph   - RB_RF_ANT_SW_EN -  RF antenna switch control output on PB16/PB17/PB18/PB19/PB20/PB21
  *                    RB_PIN_U0_INV -  RXD0/RXD0_/TXD0/TXD0_ invert input/output
  *                    RB_PIN_INTX   -  INTX: INT24/INT25 PB8/PB9 -> INT24_/INT25_ PB22/PB23
@@ -246,11 +246,11 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode);
 void GPIOPinRemap(FunctionalState s, uint16_t perph);
 
 /**
- * @brief   模拟外设GPIO引脚功能控制
+ * @brief   GPIO
  *
- * @param   s       - 是否启用模拟外设功能
- * @param   perph   - RB_PIN_USB_DP_PU  - USB UD+引脚内部上拉电阻
- *                    RB_PIN_USB_IE     - USB 引脚
+ * @param   s       - 
+ * @param   perph   - RB_PIN_USB_DP_PU  - USB UD+
+ *                    RB_PIN_USB_IE     - USB 
  */
 void GPIOAGPPCfg(FunctionalState s, uint16_t perph);
 

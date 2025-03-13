@@ -73,7 +73,7 @@ tmosEvents test_dtm_processevent(tmosTaskID task_id, tmosEvents events)
     uint8_t     *msgPtr;
 
     if(events & SYS_EVENT_MSG)
-    { // 处理HAL层消息，调用tmos_msg_receive读取消息，处理完成后删除消息。
+    { // HALtmos_msg_receive
         msgPtr = tmos_msg_receive(task_id);
         if(msgPtr)
         {

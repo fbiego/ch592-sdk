@@ -25,13 +25,13 @@ extern "C" {
  * CONSTANTS
  */
 
-// OTA Profile通道Index定义
+// OTA Profile Channel Index Definition
 #define OTAPROFILE_CHAR         0
 
-// OTA 服务的UUID定义
+// UUID definition of OTA service
 #define OTAPROFILE_SERV_UUID    0xFEE0
 
-// OTA 通讯通道UUID定义
+// OTA communication channel UUID definition
 #define OTAPROFILE_CHAR_UUID    0xFEE1
 
 // Simple Keys Profile Services bit fields
@@ -49,7 +49,7 @@ extern "C" {
  * Profile Callbacks
  */
 
-// 读写操作函数回调
+// Read and write operation function callback
 typedef void (*OTAProfileRead_t)(unsigned char paramID);
 typedef void (*OTAProfileWrite_t)(unsigned char paramID, unsigned char *p_data, unsigned char w_len);
 
@@ -63,33 +63,30 @@ typedef struct
  * API FUNCTIONS
  */
 
-/**
- * @brief   OTA Profile初始化
- *
- * @param   services    - 服务控制字
- *
- * @return  初始化的状态
- */
+/* *
+* @brief OTA Profile Initialization
+*
+* @param services - Service control word
+*
+* @return Initialized state */
 bStatus_t OTAProfile_AddService(uint32_t services);
 
-/**
- * @brief   OTA Profile读写回调函数注册
- *
- * @param   appCallbacks    - 函数结构体指针
- *
- * @return  函数执行状态
- */
+/* *
+* @brief OTA Profile read and write callback function registration
+*
+* @param appCallbacks - Function structure pointer
+*
+* @return function execution status */
 bStatus_t OTAProfile_RegisterAppCBs(OTAProfileCBs_t *appCallbacks);
 
-/**
- * @brief   OTA Profile通道发送数据
- *
- * @param   paramID     - OTA通道选择
- * @param   p_data      - 数据指针
- * @param   send_len    - 发送数据长度
- *
- * @return  函数执行状态
- */
+/* *
+* @brief OTA Profile channel sends data
+*
+* @param paramID - OTA channel selection
+* @param p_data - Data pointer
+* @param send_len - Send data length
+*
+* @return function execution status */
 bStatus_t OTAProfile_SendData(unsigned char paramID, unsigned char *p_data, unsigned char send_len);
 
 /*********************************************************************

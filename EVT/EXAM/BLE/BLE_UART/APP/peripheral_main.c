@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2020/08/06
- * Description        : 外设从机应用主函数及任务系统初始化
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2020/08/06
+* Description: Peripheral slave application master function and task system initialization
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "gattprofile.h"
@@ -29,13 +29,13 @@ const uint8_t  MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 extern void app_uart_process(void);
 extern void app_uart_init(void);
 
-/*******************************************************************************
- * Function Name  : Main_Circulation
- * Description    : 主循环
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
+/* ******************************************************************************
+* Function Name  : Main_Circulation
+* Description    : 
+* Input          : None
+* Output         : None
+* Return         : None
+****************************************************************************** */
 __HIGH_CODE
 __attribute__((noinline))
 void Main_Circulation()
@@ -47,13 +47,13 @@ void Main_Circulation()
     }
 }
 
-/*******************************************************************************
- * Function Name  : main
- * Description    : 主函数
- * Input          : None
- * Output         : None
- * Return         : None
- *******************************************************************************/
+/* ******************************************************************************
+* Function Name  : main
+* Description    : 
+* Input          : None
+* Output         : None
+* Return         : None
+****************************************************************************** */
 int main(void)
 {
     SetSysClock(CLK_SOURCE_PLL_60MHz);

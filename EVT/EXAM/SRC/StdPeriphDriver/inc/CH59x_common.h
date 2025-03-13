@@ -46,7 +46,7 @@
 #endif
 
 /**
- * @brief  系统主频时钟（Hz）
+ * @brief  Hz
  */
 #ifndef	 FREQ_SYS
 #define  FREQ_SYS		60000000
@@ -57,7 +57,7 @@
 #endif
 
 /**
- * @brief  32K时钟（Hz）
+ * @brief  32KHz
  */
 #ifdef CLK_OSC32K
 #if ( CLK_OSC32K == 1 )

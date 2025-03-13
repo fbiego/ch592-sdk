@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : hiddev.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : HID 设备任务处理程序
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : hiddev.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2018/12/10
+* Description        : HID 设备任务处理程序
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 /*********************************************************************
  * INCLUDES
@@ -320,7 +320,7 @@ uint8_t HidDev_Report(uint8_t id, uint8_t type, uint8_t len, uint8_t *pData)
             return hidDevSendReport(id, type, len, pData);
         }
     }
-    // else if not already advertising 不开广播！
+    // else if not already advertising No broadcasting!
 //    else if(hidDevGapState != GAPROLE_ADVERTISING)
 //    {
 //        // if bonded
@@ -773,7 +773,7 @@ static void hidDevDisconnected(void)
     hidDevHandleConnStatusCB(gapConnHandle, LINKDB_STATUS_UPDATE_REMOVED);
 
     // Reset state variables
-    // 2023 8 31 修改，改为在应用层断开回调中恢复默认值
+    // 2023 8 31 Modified, and restored the default value in the application layer disconnect callback instead
 //    hidDevConnSecure = FALSE;
     hidProtocolMode = HID_PROTOCOL_MODE_REPORT;
 
@@ -895,7 +895,7 @@ static void hidDevPairStateCB(uint16_t connHandle, uint8_t state, uint8_t status
     {
         if(status == SUCCESS)
         {
-            // 配对连接成功
+            // The pairing connection is successful
             if( tmos_get_task_timer( hidEmuTaskId, SEND_DISCONNECT_EVT ) || (tmos_get_event(hidEmuTaskId)&SEND_DISCONNECT_EVT) )
             {
                 tmos_stop_task(hidEmuTaskId, SEND_DISCONNECT_EVT);
@@ -915,7 +915,7 @@ static void hidDevPairStateCB(uint16_t connHandle, uint8_t state, uint8_t status
     }
     else if(state == GAPBOND_PAIRING_STATE_BOND_SAVED)
     {
-        // 配对连接成功
+        // The pairing connection is successful
         if( tmos_get_task_timer( hidEmuTaskId, SEND_DISCONNECT_EVT ) || (tmos_get_event(hidEmuTaskId)&SEND_DISCONNECT_EVT) )
         {
             tmos_stop_task(hidEmuTaskId, SEND_DISCONNECT_EVT);
@@ -1116,7 +1116,7 @@ static uint8_t hidDevSendReport(uint8_t id, uint8_t type, uint8_t len, uint8_t *
         // if notifications are enabled
         if((pAttr = GATT_FindHandle(pRpt->cccdHandle, &retHandle)) != NULL)
         {
-            // 不够存了，直接开启
+            // Not enough to save, just turn on
 //            uint16_t value;
 //
 //            value = GATTServApp_ReadCharCfg(gapConnHandle, (gattCharCfg_t *)pAttr->pValue);

@@ -41,8 +41,8 @@ static uint8_t App_TaskID = 0; // Task ID for internal task/event processing
 
 static uint16_t App_ProcessEvent(uint8_t task_id, uint16_t events);
 
-static uint8_t dev_uuid[16] = {0}; // 此设备的UUID
-uint8_t        MACAddr[6];         // 此设备的mac
+static uint8_t dev_uuid[16] = {0}; // UUID
+uint8_t        MACAddr[6];         // mac
 
 static const uint8_t self_prov_net_key[16] = {
     0x00, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
@@ -59,12 +59,12 @@ static const uint8_t self_prov_app_key[16] = {
     0x00, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
 };
 
-const uint16_t self_prov_net_idx = 0x0000;      // 自配网所用的net key
-const uint16_t self_prov_app_idx = 0x0001;      // 自配网所用的app key
-const uint32_t self_prov_iv_index = 0x00000000; // 自配网的iv_index
-const uint16_t self_prov_addr = 0x0001;         // 自配网的自身主元素地址
-const uint8_t  self_prov_flags = 0x00;          // 是否处于key更新状态，默认为否
-const uint16_t vendor_sub_addr = 0xC001;        // 配置自定义模型的订阅group地址
+const uint16_t self_prov_net_idx = 0x0000;      // net key
+const uint16_t self_prov_app_idx = 0x0001;      // app key
+const uint32_t self_prov_iv_index = 0x00000000; // iv_index
+const uint16_t self_prov_addr = 0x0001;         // 
+const uint8_t  self_prov_flags = 0x00;          // key
+const uint16_t vendor_sub_addr = 0xC001;        // group
 
 uint16_t delete_node_info_address=0;
 
@@ -94,11 +94,11 @@ static struct bt_mesh_cfg_srv cfg_srv = {
 #if(CONFIG_BLE_MESH_PROXY)
     .gatt_proxy = BLE_MESH_GATT_PROXY_ENABLED,
 #endif
-    /* 默认TTL为3 */
+    /* TTL3 */
     .default_ttl = 3,
-    /* 底层发送数据重试7次，每次间隔10ms（不含内部随机数） */
+    /* 710ms */
     .net_transmit = BLE_MESH_TRANSMIT(7, 10),
-    /* 底层转发数据重试7次，每次间隔10ms（不含内部随机数） */
+    /* 710ms */
     .relay_retransmit = BLE_MESH_TRANSMIT(7, 10),
     .handler = cfg_srv_rsp_handler,
 };
@@ -139,7 +139,7 @@ uint16_t cfg_cli_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSI
 uint16_t health_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};
 uint16_t health_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSIGNED};
 
-// root模型加载
+// root
 static struct bt_mesh_model root_models[] = {
     BLE_MESH_MODEL_CFG_SRV(cfg_srv_keys, cfg_srv_groups, &cfg_srv),
     BLE_MESH_MODEL_CFG_CLI(cfg_cli_keys, cfg_cli_groups, &cfg_cli),
@@ -154,13 +154,13 @@ struct bt_mesh_vendor_model_srv vendor_model_srv = {
 uint16_t vnd_model_srv_keys[CONFIG_MESH_MOD_KEY_COUNT_DEF] = {BLE_MESH_KEY_UNUSED};
 uint16_t vnd_model_srv_groups[CONFIG_MESH_MOD_GROUP_COUNT_DEF] = {BLE_MESH_ADDR_UNASSIGNED};
 
-// 自定义模型加载
+// 
 struct bt_mesh_model vnd_models[] = {
     BLE_MESH_MODEL_VND_CB(CID_WCH, BLE_MESH_MODEL_ID_WCH_SRV, vnd_model_srv_op, NULL, vnd_model_srv_keys,
                           vnd_model_srv_groups, &vendor_model_srv, NULL),
 };
 
-// 模型组成 elements
+//  elements
 static struct bt_mesh_elem elements[] = {
     {
         /* Location Descriptor (GATT Bluetooth Namespace Descriptors) */
@@ -172,14 +172,14 @@ static struct bt_mesh_elem elements[] = {
     }
 };
 
-// elements 构成 Node Composition
+// elements  Node Composition
 const struct bt_mesh_comp app_comp = {
-    .cid = 0x07D7, // WCH 公司id
+    .cid = 0x07D7, // WCH id
     .elem = elements,
     .elem_count = ARRAY_SIZE(elements),
 };
 
-// 配网参数和回调
+// 
 static const struct bt_mesh_prov app_prov = {
     .uuid = dev_uuid,
     .link_open = link_open,
@@ -188,7 +188,7 @@ static const struct bt_mesh_prov app_prov = {
     .reset = prov_reset,
 };
 
-// 配网者管理的节点，第0个为自己，第1，2依次为配网顺序的节点
+// 012
 node_t app_nodes[1] = {0};
 
 app_mesh_manage_t app_mesh_manage;
@@ -199,7 +199,7 @@ app_mesh_manage_t app_mesh_manage;
 /*********************************************************************
  * @fn      prov_enable
  *
- * @brief   使能配网功能
+ * @brief   
  *
  * @return  none
  */
@@ -224,9 +224,9 @@ static void prov_enable(void)
 /*********************************************************************
  * @fn      link_open
  *
- * @brief   配网时后的link打开回调
+ * @brief   link
  *
- * @param   bearer  - 当前link是PB_ADV还是PB_GATT
+ * @param   bearer  - linkPB_ADVPB_GATT
  *
  * @return  none
  */
@@ -238,10 +238,10 @@ static void link_open(bt_mesh_prov_bearer_t bearer)
 /*********************************************************************
  * @fn      link_close
  *
- * @brief   配网后的link关闭回调
+ * @brief   link
  *
- * @param   bearer  - 当前link是PB_ADV还是PB_GATT
- * @param   reason  - link关闭原因
+ * @param   bearer  - linkPB_ADVPB_GATT
+ * @param   reason  - link
  *
  * @return  none
  */
@@ -254,12 +254,12 @@ static void link_close(bt_mesh_prov_bearer_t bearer, uint8_t reason)
 /*********************************************************************
  * @fn      node_cfg_process
  *
- * @brief   找一个空闲的节点，执行配置流程
+ * @brief   
  *
- * @param   node        - 空节点指针
- * @param   net_idx     - 网络key编号
- * @param   addr        - 网络地址
- * @param   num_elem    - 元素数量
+ * @param   node        - 
+ * @param   net_idx     - key
+ * @param   addr        - 
+ * @param   num_elem    - 
  *
  * @return  node_t / NULL
  */
@@ -275,12 +275,12 @@ static node_t *node_cfg_process(node_t *node, uint16_t net_idx, uint16_t addr, u
 /*********************************************************************
  * @fn      prov_complete
  *
- * @brief   配网完成回调
+ * @brief   
  *
- * @param   net_idx     - 网络key的index
- * @param   addr        - link关闭原因网络地址
- * @param   flags       - 是否处于key refresh状态
- * @param   iv_index    - 当前网络iv的index
+ * @param   net_idx     - keyindex
+ * @param   addr        - link
+ * @param   flags       - key refresh
+ * @param   iv_index    - ivindex
  *
  * @return  none
  */
@@ -298,7 +298,7 @@ static void prov_complete(uint16_t net_idx, uint16_t addr, uint8_t flags, uint32
         return;
     }
 
-    // 如果未配置过网络信息，则退出回调后，执行配置本地网络信息流程
+    // 
     if( vnd_models[0].keys[0] == BLE_MESH_KEY_UNUSED )
     {
         tmos_start_task(App_TaskID, APP_NODE_EVT, 160);
@@ -308,7 +308,7 @@ static void prov_complete(uint16_t net_idx, uint16_t addr, uint8_t flags, uint32
 /*********************************************************************
  * @fn      prov_reset
  *
- * @brief   复位配网功能回调
+ * @brief   
  *
  * @param   none
  *
@@ -324,7 +324,7 @@ static void prov_reset(void)
 /*********************************************************************
  * @fn      cfg_local_net_info
  *
- * @brief   配置本地网络信息，由于是自配网，所以直接设置自身的密钥和订阅地址
+ * @brief   
  *
  * @param   none
  *
@@ -334,18 +334,18 @@ static void cfg_local_net_info(void)
 {
     uint8_t status;
 
-    // 本地直接添加应用密钥
+    // 
     status = bt_mesh_app_key_set(app_nodes->net_idx, self_prov_app_idx, self_prov_app_key, FALSE);
     if( status )
     {
         APP_DBG("Unable set app key");
     }
     APP_DBG("lcoal app key added");
-    // 绑定应用密钥到沁恒自定义模型
+    // 
     vnd_models[0].keys[0] = (uint16_t)self_prov_app_idx;
     bt_mesh_store_mod_bind(&vnd_models[0]);
     APP_DBG("lcoal app key binded");
-    // 本地添加订阅地址
+    // 
     vnd_models[0].groups[0] = (uint16_t)vendor_sub_addr;
     bt_mesh_store_mod_sub(&vnd_models[0]);
     APP_DBG("lcoal sub addr added");
@@ -354,9 +354,9 @@ static void cfg_local_net_info(void)
 /*********************************************************************
  * @fn      cfg_srv_rsp_handler
  *
- * @brief   config 模型服务回调
+ * @brief   config 
  *
- * @param   val     - 回调参数，包括命令类型、配置命令执行状态
+ * @param   val     - 
  *
  * @return  none
  */
@@ -364,7 +364,7 @@ static void cfg_srv_rsp_handler( const cfg_srv_status_t *val )
 {
     if(val->cfgHdr.status)
     {
-        // 配置命令执行不成功
+        // 
         APP_DBG("warning opcode 0x%02x", val->cfgHdr.opcode);
         return;
     }
@@ -389,9 +389,9 @@ static void cfg_srv_rsp_handler( const cfg_srv_status_t *val )
 /*********************************************************************
  * @fn      cfg_cli_rsp_handler
  *
- * @brief   收到cfg命令的应答回调
+ * @brief   cfg
  *
- * @param   val     - 回调参数，包含命令类型和返回数据
+ * @param   val     - 
  *
  * @return  none
  */
@@ -408,9 +408,9 @@ static void cfg_cli_rsp_handler(const cfg_cli_status_t *val)
 /*********************************************************************
  * @fn      vendor_model_srv_rsp_handler
  *
- * @brief   自定义模型服务回调
+ * @brief   
  *
- * @param   val     - 回调参数，包括消息类型、数据内容、长度、来源地址
+ * @param   val     - 
  *
  * @return  none
  */
@@ -418,20 +418,20 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
 {
     if(val->vendor_model_srv_Hdr.status)
     {
-        // 有应答数据传输 超时未收到应答
+        //  
         APP_DBG("Timeout opcode 0x%02x", val->vendor_model_srv_Hdr.opcode);
         return;
     }
     if(val->vendor_model_srv_Hdr.opcode == OP_VENDOR_MESSAGE_TRANSPARENT_MSG)
     {
-        // 收到透传数据
+        // 
         APP_DBG("len %d, data 0x%02x from 0x%04x", val->vendor_model_srv_Event.trans.len,
                 val->vendor_model_srv_Event.trans.pdata[0],
                 val->vendor_model_srv_Event.trans.addr);
         tmos_memcpy(&app_mesh_manage, val->vendor_model_srv_Event.trans.pdata, val->vendor_model_srv_Event.trans.len);
         switch(app_mesh_manage.data.buf[0])
         {
-            // 判断是否为删除命令
+            // 
             case CMD_DELETE_NODE:
             {
                 if(val->vendor_model_srv_Event.trans.len != DELETE_NODE_DATA_LEN)
@@ -448,7 +448,7 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
                 {
                     APP_DBG("send ack failed %d", status);
                 }
-                // 即将删除自身，先发送CMD_DELETE_NODE_INFO命令
+                // CMD_DELETE_NODE_INFO
                 APP_DBG("send to all node to let them delete stored info ");
                 app_mesh_manage.delete_node_info.cmd = CMD_DELETE_NODE_INFO;
                 status = vendor_model_srv_send(BLE_MESH_ADDR_ALL_NODES,
@@ -461,7 +461,7 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
                 break;
             }
 
-            // 判断是否为应用层自定义删除命令应答
+            // 
             case CMD_DELETE_NODE_ACK:
             {
                 if(val->vendor_model_srv_Event.trans.len != DELETE_NODE_ACK_DATA_LEN)
@@ -474,7 +474,7 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
                 break;
             }
 
-            // 判断是否为有节点被删除，需要删除存储的节点信息
+            // 
             case CMD_DELETE_NODE_INFO:
             {
                 if(val->vendor_model_srv_Event.trans.len != DELETE_NODE_INFO_DATA_LEN)
@@ -490,14 +490,14 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
     }
     else if(val->vendor_model_srv_Hdr.opcode == OP_VENDOR_MESSAGE_TRANSPARENT_WRT)
     {
-        // 收到write数据
+        // write
         APP_DBG("len %d, data 0x%02x from 0x%04x", val->vendor_model_srv_Event.write.len,
                 val->vendor_model_srv_Event.write.pdata[0],
                 val->vendor_model_srv_Event.write.addr);
     }
     else if(val->vendor_model_srv_Hdr.opcode == OP_VENDOR_MESSAGE_TRANSPARENT_IND)
     {
-        // 发送的indicate已收到应答
+        // indicate
     }
     else
     {
@@ -508,35 +508,35 @@ static void vendor_model_srv_rsp_handler(const vendor_model_srv_status_t *val)
 /*********************************************************************
  * @fn      vendor_model_srv_send
  *
- * @brief   通过厂商自定义模型发送数据
+ * @brief   
  *
- * @param   addr    - 需要发送的目的地址
- *          pData   - 需要发送的数据指针
- *          len     - 需要发送的数据长度
+ * @param   addr    - 
+ *          pData   - 
+ *          len     - 
  *
- * @return  参考Global_Error_Code
+ * @return  Global_Error_Code
  */
 static int vendor_model_srv_send(uint16_t addr, uint8_t *pData, uint16_t len)
 {
     struct send_param param = {
-        .app_idx = vnd_models[0].keys[0], // 此消息使用的app key，如无特定则使用第0个key
-        .addr = addr,          // 此消息发往的目的地地址，例程为发往订阅地址，包括自己
-        .trans_cnt = 0x01,                // 此消息的用户层发送次数
-        .period = K_MSEC(400),            // 此消息重传的间隔，建议不小于(200+50*TTL)ms，若数据较大则建议加长
-        .rand = (0),                      // 此消息发送的随机延迟
-        .tid = vendor_srv_tid_get(),      // tid，每个独立消息递增循环，srv使用128~191
-        .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl，无特定则使用默认值
+        .app_idx = vnd_models[0].keys[0], // app key0key
+        .addr = addr,          // 
+        .trans_cnt = 0x01,                // 
+        .period = K_MSEC(400),            // (200+50*TTL)ms
+        .rand = (0),                      // 
+        .tid = vendor_srv_tid_get(),      // tidsrv128~191
+        .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl
     };
-//    return vendor_message_srv_indicate(&param, pData, len);  // 调用自定义模型服务的有应答指示函数发送数据，默认超时2s
-    return vendor_message_srv_send_trans(&param, pData, len); // 或者调用自定义模型服务的透传函数发送数据，只发送，无应答机制
+//    return vendor_message_srv_indicate(&param, pData, len);  // 2s
+    return vendor_message_srv_send_trans(&param, pData, len); // 
 }
 
 /*********************************************************************
  * @fn      keyPress
  *
- * @brief   按键回调
+ * @brief   
  *
- * @param   keys    - 按键类型
+ * @param   keys    - 
  *
  * @return  none
  */
@@ -548,7 +548,7 @@ void keyPress(uint8_t keys)
     {
         default:
         {
-            // 向订阅地址发送数据
+            // 
             if(1)
             {
                 int status;
@@ -559,7 +559,7 @@ void keyPress(uint8_t keys)
                     APP_DBG("send failed %d", status);
                 }
             }
-            // 发送删除节点命令,通过应用层自定协议删除，这里假设删除地址为0x0002的节点
+            // ,0x0002
             if(0)
             {
                 int status;
@@ -575,7 +575,7 @@ void keyPress(uint8_t keys)
                 }
                 else
                 {
-                    // 定时三秒，未收到应答就超时
+                    // 
                     tmos_start_task(App_TaskID, APP_DELETE_NODE_TIMEOUT_EVT, 4800);
                 }
             }
@@ -587,7 +587,7 @@ void keyPress(uint8_t keys)
 /*********************************************************************
  * @fn      blemesh_on_sync
  *
- * @brief   同步mesh参数，启用对应功能，不建议修改
+ * @brief   mesh
  *
  * @return  none
  */
@@ -640,7 +640,7 @@ void blemesh_on_sync(void)
 #endif /* PROXY || PB-GATT */
 
 #if(CONFIG_BLE_MESH_PROXY_CLI)
-    bt_mesh_proxy_client_init(cli); //待添加
+    bt_mesh_proxy_client_init(cli); //
 #endif                              /* PROXY_CLI */
 
     bt_mesh_prov_retransmit_init();
@@ -706,7 +706,7 @@ void blemesh_on_sync(void)
 /*********************************************************************
  * @fn      App_Init
  *
- * @brief   应用层初始化
+ * @brief   
  *
  * @return  none
  */
@@ -723,7 +723,7 @@ void App_Init()
 /*********************************************************************
  * @fn      App_ProcessEvent
  *
- * @brief   应用层事件处理函数
+ * @brief   
  *
  * @param   task_id  - The TMOS assigned task ID.
  * @param   events - events to process.  This is a bit map and can
@@ -733,7 +733,7 @@ void App_Init()
  */
 static uint16_t App_ProcessEvent(uint8_t task_id, uint16_t events)
 {
-    // 节点配置任务事件处理
+    // 
     if(events & APP_NODE_EVT)
     {
         cfg_local_net_info();
@@ -742,23 +742,23 @@ static uint16_t App_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & APP_DELETE_NODE_TIMEOUT_EVT)
     {
-        // 通过应用层自定协议删除超时，可添加其他流程
+        // 
         APP_DBG("Delete node failed ");
         return (events ^ APP_DELETE_NODE_TIMEOUT_EVT);
     }
 
     if(events & APP_DELETE_LOCAL_NODE_EVT)
     {
-        // 收到删除命令，删除自身网络信息
+        // 
         APP_DBG("Delete local node");
-        // 复位自身网络状态
+        // 
         bt_mesh_reset();
         return (events ^ APP_DELETE_LOCAL_NODE_EVT);
     }
 
     if(events & APP_DELETE_NODE_INFO_EVT)
     {
-        // 删除已存储的被删除节点的信息
+        // 
         bt_mesh_delete_node_info(delete_node_info_address,app_comp.elem_count);
         APP_DBG("Delete stored node info complete");
         return (events ^ APP_DELETE_NODE_INFO_EVT);

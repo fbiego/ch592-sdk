@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : peripheral.C
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2018/12/10
- * Description        : 外设从机多连接应用程序，初始化广播连接参数，然后广播，连接主机后，
- *                      请求更新连接参数，通过自定义服务传输数据
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : peripheral.C
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: Peripheral slave multi-connection application, initialize broadcast connection parameters, and then broadcast, and after connecting to the host,
+* Request to update connection parameters and transfer data through custom services
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -638,15 +638,15 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
             {
                 uint8_t           status;
                 struct send_param param = {
-                    .app_idx = self_prov_app_idx,     // 此消息使用的app key
-                    .addr = app_nodes[1].node_addr,   // 此消息发往的目的地地址，此处为第一个配网的节点
-                    .trans_cnt = 0x03,                // 此消息的重传次数
-                    .period = K_MSEC(400),            // 此消息重传的间隔，建议不小于(200+50*TTL)ms，若数据较大则建议加长
-                    .rand = (0),                      // 此消息发送的随机延迟
-                    .tid = vendor_cli_tid_get(),      // tid，每个独立消息递增循环，cli使用0~127
-                    .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl，无特定则使用默认值
+                    .app_idx = self_prov_app_idx,     // app key
+                    .addr = app_nodes[1].node_addr,   // The destination address of this message is sent to, here is the first node to allocate the network
+                    .trans_cnt = 0x03,                // Number of retransmissions of this message
+                    .period = K_MSEC(400),            // The interval for retransmission of this message is recommended to be no less than (200+50*TTL)ms. If the data is large, it is recommended to lengthen it.
+                    .rand = (0),                      // Random delay of this message sending
+                    .tid = vendor_cli_tid_get(),      // tid, each independent message increment loop, cli uses 0~127
+                    .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl, if there is no specific, use the default value
                 };
-                status = vendor_message_cli_write(&param, newValue, len); // 调用自定义模型客户端的有应答写函数发送数据
+                status = vendor_message_cli_write(&param, newValue, len); // Call the reply write function of the custom model client to send data
                 if(status)
                     APP_DBG("write failed %d", status);
             }
@@ -663,15 +663,15 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
             {
                 uint8_t           status;
                 struct send_param param = {
-                    .app_idx = self_prov_app_idx,     // 此消息使用的app key
-                    .addr = app_nodes[2].node_addr,   // 此消息发往的目的地地址，此处为第二个配网的节点
-                    .trans_cnt = 0x03,                // 此消息的重传次数
-                    .period = K_MSEC(400),            // 此消息重传的间隔，建议不小于(200+50*TTL)ms，若数据较大则建议加长
-                    .rand = (0),                      // 此消息发送的随机延迟
-                    .tid = vendor_cli_tid_get(),      // tid，每个独立消息递增循环，cli使用0~127
-                    .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl，无特定则使用默认值
+                    .app_idx = self_prov_app_idx,     // The app key used by this message
+                    .addr = app_nodes[2].node_addr,   // The destination address of this message is sent to, here is the node of the second distribution network
+                    .trans_cnt = 0x03,                // Number of retransmissions of this message
+                    .period = K_MSEC(400),            // The interval for retransmission of this message is recommended to be no less than (200+50*TTL)ms. If the data is large, it is recommended to lengthen it.
+                    .rand = (0),                      // Random delay of this message sending
+                    .tid = vendor_cli_tid_get(),      // tid, each independent message increment loop, cli uses 0~127
+                    .send_ttl = BLE_MESH_TTL_DEFAULT, // ttl, if there is no specific, use the default value
                 };
-                status = vendor_message_cli_write(&param, newValue, len); // 调用自定义模型客户端的有应答写函数发送数据
+                status = vendor_message_cli_write(&param, newValue, len); // Call the reply write function of the custom model client to send data
                 if(status)
                     APP_DBG("write failed %d", status);
             }

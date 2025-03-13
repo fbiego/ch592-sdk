@@ -39,11 +39,11 @@ void FLASH_Port_Init( void )
     GPIOA_ModeCfg(GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
     GPIOA_ModeCfg(GPIO_Pin_15, GPIO_ModeIN_Floating);
 
-    R8_SPI0_CLOCK_DIV = 5; // 主频时钟5分频,12M
+    R8_SPI0_CLOCK_DIV = 5; // 5,12M
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
     R8_SPI0_CTRL_MOD = RB_SPI_MOSI_OE | RB_SPI_SCK_OE|RB_SPI_MST_SCK_MOD; //Mode3
-    R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // 访问BUFFER/FIFO自动清除IF_BYTE_END标志
-    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // 不启动DMA方式
+    R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // BUFFER/FIFOIF_BYTE_END
+    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // DMA
 }
 
 /*********************************************************************
@@ -220,8 +220,8 @@ void FLASH_RD_Block_Start( uint32_t address )
  *
  * @brief   FLASH read block
  *
- * @param   pbuf - 数据缓冲区
- *          len - 数据长度
+ * @param   pbuf - 
+ *          len - 
  *
  * @return  none
  */
@@ -253,9 +253,9 @@ void FLASH_RD_Block_End( void )
  *
  * @brief   Flash page program
  *
- * @param   pbuf - 数据缓冲区
- *          address - 地址
- *          len - 数据长度
+ * @param   pbuf - 
+ *          address - 
+ *          len - 
  *
  * @return  none
  */
@@ -289,9 +289,9 @@ void W25XXX_WR_Page( uint8_t *pbuf, uint32_t address, uint32_t len )
  *
  * @brief   W25XXX block write
  *
- * @param   pbuf - 数据缓冲区
- *          address - 地址
- *          len - 数据长度
+ * @param   pbuf - 
+ *          address - 
+ *          len - 
  *
  * @return  none
  */

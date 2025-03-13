@@ -1,15 +1,15 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2024/02/27
- * Description        : 隔空触摸例程
- * Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2024/02/27
+* Description: Air-to-air touch routine
+* Copyright (c) 2024 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "Touch.h"
 #include "app.h"
 
@@ -18,16 +18,15 @@
  */
 
 
-/*********************************************************************
- * @fn      DebugInit
- *
- * @brief   调试信息输出函数
- *
- * @return  none
- *
- * @note	Uart1的默认映射引脚可能与触摸通道冲突，
- * 			在触摸应用中应选用其他UART或将引脚重映射
- */
+/* ***************************************************************************
+* @fn DebugInit
+*
+* @brief debug information output function
+*
+* @return none
+*
+* @note Uart1's default mapping pin may conflict with the touch channel,
+* In touch applications, other UARTs should be selected or pin remapping */
 void DebugInit(void)
 {
 #ifdef  DEBUG
@@ -57,7 +56,7 @@ void DebugInit(void)
 /*********************************************************************
  * @fn      main
  *
- * @brief   主函数
+ * @brief   
  *
  * @return  none
  */

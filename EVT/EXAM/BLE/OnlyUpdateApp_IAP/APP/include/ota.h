@@ -1,14 +1,14 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : ota.h
- * Author             : WCH
- * Version            : V1.10
- * Date               : 2018/12/14
- * Description        : oad相关配置定义
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : ota.h
+* Author             : WCH
+* Version            : V1.10
+* Date               : 2018/12/14
+* Description        : oad相关配置定义
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 /******************************************************************************/
 #ifndef __OTA_H
@@ -19,18 +19,18 @@
  * ------------------------------------------------------------------------------------------------
  */
 
-/* 整个用户code区分成四块，依次为4K，44K，16K，128K 后三块分别叫做imageA（APP），imageB（IAP），LIB */
+/* The entire user code is divided into four pieces, namely 4K, 44K, 16K, and 128K. The last three pieces are called imageA (APP), imageB (IAP), and LIB respectively. */
 
-/* FLASH定义 */
+/* FLASH definition */
 
 #define FLASH_BLOCK_SIZE     EEPROM_BLOCK_SIZE
 
-/* imageA定义 */
+/* imageA definition */
 #define IMAGE_A_FLAG         0x01
 #define IMAGE_A_START_ADD    0x1000
 #define IMAGE_A_SIZE         44 * 1024
 
-/* imageB定义 */
+/* imageB definition */
 #define IMAGE_B_FLAG         0x02
 #define IMAGE_B_START_ADD    (IMAGE_A_START_ADD + IMAGE_A_SIZE)
 #define IMAGE_B_SIZE         16 * 1024
@@ -39,72 +39,72 @@
 
 #define jumpApp              ((void (*)(void))((uint32_t *)IMAGE_A_START_ADD))
 
-/* IAP定义 */
-/* 以下为IAP下载命令定义 */
-#define CMD_IAP_PROM         0x80               // IAP编程命令
-#define CMD_IAP_ERASE        0x81               // IAP擦除命令
-#define CMD_IAP_VERIFY       0x82               // IAP校验命令
-#define CMD_IAP_END          0x83               // IAP结束标志
-#define CMD_IAP_INFO         0x84               // IAP获取设备信息
+/* IAP definition */
+/* The following is the IAP download command definition */
+#define CMD_IAP_PROM         0x80               // IAP programming commands
+#define CMD_IAP_ERASE        0x81               // IAP erase command
+#define CMD_IAP_VERIFY       0x82               // IAP verification command
+#define CMD_IAP_END          0x83               // IAP End Flag
+#define CMD_IAP_INFO         0x84               // IAP obtains device information
 
-/* 数据帧长度定义 */
+/* Data frame length definition */
 #define IAP_LEN              247
 
-/* 存放在DataFlash地址，不能占用蓝牙的位置 */
+/* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD    0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* 存放在DataFlash里的OTA信息 */
+/* OTA information stored in DataFlash */
 typedef struct
 {
-    unsigned char ImageFlag; //记录的当前的image标志
+    unsigned char ImageFlag; // The current image flag of the record
     unsigned char Revd[3];
 } OTADataFlashInfo_t;
 
-/* OTA IAP通讯协议定义 */
-/* 地址使用4倍偏移 */
+/* OTA IAP Communication Protocol Definition */
+/* Addresses use 4x offset */
 typedef union
 {
     struct
     {
-        unsigned char cmd;          /* 命令码 0x81 */
-        unsigned char len;          /* 后续数据长度 */
-        unsigned char addr[2];      /* 擦除地址 */
-        unsigned char block_num[2]; /* 擦除块数 */
+        unsigned char cmd;          /* Command code 0x81 */
+        unsigned char len;          /* Subsequent data length */
+        unsigned char addr[2];      /* Erase address */
+        unsigned char block_num[2]; /* Number of erased blocks */
 
-    } erase; /* 擦除命令 */
+    } erase; /* Erase command */
     struct
     {
-        unsigned char cmd;       /* 命令码 0x83 */
-        unsigned char len;       /* 后续数据长度 */
-        unsigned char status[2]; /* 两字节状态，保留 */
-    } end;                       /* 结束命令 */
+        unsigned char cmd;       /* Command code 0x83 */
+        unsigned char len;       /* Subsequent data length */
+        unsigned char status[2]; /* Two byte state, reserved */
+    } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x82 */
-        unsigned char len;              /* 后续数据长度 */
-        unsigned char addr[2];          /* 校验地址 */
-        unsigned char buf[IAP_LEN - 4]; /* 校验数据 */
-    } verify;                           /* 校验命令 */
+        unsigned char cmd;              /* Command code 0x82 */
+        unsigned char len;              /* Subsequent data length */
+        unsigned char addr[2];          /* Verification address */
+        unsigned char buf[IAP_LEN - 4]; /* Verify data */
+    } verify;                           /* Verification command */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x80 */
-        unsigned char len;              /* 后续数据长度 */
-        unsigned char addr[2];          /* 地址 */
-        unsigned char buf[IAP_LEN - 4]; /* 后续数据 */
-    } program;                          /* 编程命令 */
+        unsigned char cmd;              /* Command code 0x80 */
+        unsigned char len;              /* Subsequent data length */
+        unsigned char addr[2];          /* address */
+        unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
+    } program;                          /* Programming commands */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x84 */
-        unsigned char len;              /* 后续数据长度 */
-        unsigned char buf[IAP_LEN - 2]; /* 后续数据 */
-    } info;                             /* 编程命令 */
+        unsigned char cmd;              /* Command code 0x84 */
+        unsigned char len;              /* Subsequent data length */
+        unsigned char buf[IAP_LEN - 2]; /* Follow-up data */
+    } info;                             /* Programming commands */
     struct
     {
-        unsigned char buf[IAP_LEN]; /* 接收数据包*/
+        unsigned char buf[IAP_LEN]; /* Receive packets */
     } other;
 } OTA_IAP_CMD_t;
 
-/* 记录当前的Image */
+/* Record the current Image */
 extern unsigned char CurrImageFlag;
 
 #endif

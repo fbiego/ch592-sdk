@@ -55,4 +55,5 @@ dkms.conf
 makefile
 *.lst
 *.xml
-translate.py
+*.py
+
