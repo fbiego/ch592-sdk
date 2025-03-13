@@ -50,7 +50,7 @@ typedef enum
 typedef enum
 {
     CH_DIFF_0_2 = 0, // ADC Differential Channel #0-#2
-    CH_DIFF_1_3,     // ADC 差分通道 #1-#3
+    CH_DIFF_1_3,     // ADC Differential Channel #1-#3
 
 } ADC_DiffChannelTypeDef;
 
