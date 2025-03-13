@@ -21,9 +21,9 @@ const uint8_t MyCfgDescr[] = {
     0x09,0x04,0x00,0x00,0x02,0x03,0x00,0x00,0x05,               // Interface descriptor
     0x09,0x21,0x00,0x01,0x00,0x01,0x22,0x22,0x00,               // HID class descriptor
     0x07,0x05,0x81,0x03,0x40,0x00,0x01,              // Endpoint descriptor
-    0x07,0x05,0x01,0x03,0x40,0x00,0x01               //端点描述符
+    0x07,0x05,0x01,0x03,0x40,0x00,0x01               // Endpoint descriptor
 };
-/*字符串描述符略*/
+/* String descriptor skip */
 /* HID report descriptor */
 const uint8_t HIDDescr[] = {  0x06, 0x00,0xff,
                               0x09, 0x01,
@@ -49,12 +49,12 @@ uint16_t       SetupReqLen;
 const uint8_t *pDescr;
 uint8_t        Report_Value = 0x00;
 uint8_t        Idle_Value = 0x00;
-uint8_t        USB_SleepStatus = 0x00; /* USB睡眠状态 */
+uint8_t        USB_SleepStatus = 0x00; /* USB sleep state */
 
-//HID设备中断传输中上传给主机4字节的数据
+// HID device interrupts 4 bytes of data uploaded to the host during transmission
 uint8_t HID_Buf[] = {0,0,0,0};
 
-/******** 用户自定义分配端点RAM ****************************************/
+/* ********** User-defined allocation endpoint RAM ********************************* */
 __attribute__((aligned(4))) uint8_t EP0_Databuf[64 + 64 + 64]; //ep0(64)+ep4_out(64)+ep4_in(64)
 __attribute__((aligned(4))) uint8_t EP1_Databuf[64 + 64];      //ep1_out(64)+ep1_in(64)
 __attribute__((aligned(4))) uint8_t EP2_Databuf[64 + 64];      //ep2_out(64)+ep2_in(64)
@@ -77,30 +77,30 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
     {
         if((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // Non-idle //Judge 5:4 bits in the interrupt status register and view the PID ID of the token.If these two digits are not 11 (meaning idle), enter the if statement
         {
-            switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))    //取得令牌的PID标识和设备模式下的3:0位的端点号。主机模式下3:0位是应答PID标识位
-            // 分析操作令牌和端点号
+            switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))    // Get the PID ID of the token and the endpoint number of the 3:0 bit in device mode.In host mode, 3:0 bit is the answer PID identification bit
+            // Analyze operation tokens and endpoint numbers
             {                           // Endpoint 0 is used to control transmission.The following IN and OUT tokens of endpoint 0 correspond to the corresponding program, corresponding to the data stage and status stage of the control transmission.
                 case UIS_TOKEN_IN:      // The PID of the token package is IN, and the 5:4 bit is 10. The endpoint number of the 3:0 bit is 0.IN token: The device sends data to the host._UIS_: USB interrupt status
-                {                       //端点0为双向端点，用作控制传输。 “|0”运算省略了
-                    switch(SetupReqCode)//这个值会在收到SETUP包时赋值。在后面会有SETUP包处理程序，对应控制传输的设置阶段。
+                {                       // Endpoint 0 is a bidirectional endpoint, used as control transmission."|0" operation is omitted
+                    switch(SetupReqCode)// This value will be assigned when the SETUP packet is received.There will be a SETUP packet handler later, corresponding to the setting stage of control transmission.
                     {
                         case USB_GET_DESCRIPTOR:    // USB standard command, the host obtains description from the USB device
                             len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen; // The packet transmission length is.The maximum length is 64 bytes, and more than 64 bytes are processed in multiple times, and the first few times will be full.
-                            memcpy(pEP0_DataBuf, pDescr, len);//memcpy:内存拷贝函数，从(二号位)地址拷贝(三号位)字符串长度到(一号位)地址中
-                            //DMA直接与内存相连，会检测到内存的改写，而后不用单片机控制就可以将内存中的数据发送出去。如果只是两个数组互相赋值，不涉及与DMA匹配的物理内存，就无法触发DMA。
+                            memcpy(pEP0_DataBuf, pDescr, len);// memcpy: Memory copy function, copy (number 2) string length from (number 2) address to (number 1) address to (number 1) address
+                            // DMA is directly connected to memory and will detect memory rewriting, and then the data in memory can be sent out without the control of the microcontroller.If only two arrays are assigned to each other and do not involve physical memory matching DMA, DMA cannot be triggered.
                             SetupReqLen -= len;     // Record the remaining length of data to be sent
                             pDescr += len;          // Update the starting address of the data to be sent next, and use the copy function to
-                            R8_UEP0_T_LEN = len;    //端点0发送长度寄存器中写入本次包传输长度
-                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // 同步切换。IN方向（对于单片机就是T方向）的PID中的DATA0和DATA1切换
-                            break;                  //赋值完端点控制寄存器的握手包响应（ACK、NAK、STALL），由硬件打包成符合规范的包，DMA自动发送
+                            R8_UEP0_T_LEN = len;    // Endpoint 0 send length register writes the packet transmission length
+                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // Synchronous switch.Switch DATA0 and DATA1 in PID of IN direction (for microcontrollers, the T direction)
+                            break;                  // The handshake packet response (ACK, NAK, STALL) of the endpoint control register is packaged into a package that complies with the specifications by the hardware, and DMA will automatically send it.
                         case USB_SET_ADDRESS:       // USB standard command, the host sets a unique address for the device, the range 0 to 127, and 0 is the default address
                             R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
-                                    //7位地址+最高位的用户自定义地址（默认为1），或上“包传输长度”（这里的“包传输长度”在后面赋值成了地址位）
+                                    // 7-bit address + the user-defined address of the highest bit (default is 1), or the "packet transmission length" on the top (the "packet transmission length" here is assigned as the address bit later)
                             R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-                                    //R响应OUT事务ACK，T响应IN事务NAK。这个CASE分支里是IN方向，当DMA相应内存中，单片机没有数据更新时，回NAK握手包。
-                            break;                                                  //一般程序里的OUT事务，设备会回包给主机，不响应NAK。
+                                    // R responds to OUT transaction ACK, T responds to IN transaction NAK.This CASE branch is in the IN direction. When the DMA corresponding memory is in the microcontroller, it returns to the NAK handshake package.
+                            break;                                                  // Generally, the device will return the OUT transaction in the program to the host and will not respond to NAK.
 
-                        case USB_SET_FEATURE:       //USB标准命令，主机要求启动一个在设备、接口或端点上的特征
+                        case USB_SET_FEATURE:       // USB standard command, the host requires a feature on the device, interface, or endpoint
                             break;
 
                         default:
@@ -114,7 +114,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                 }
                 break;
 
-                case UIS_TOKEN_OUT:     //令牌包的PID为OUT，5:4位为00。3:0位的端点号为0。OUT令牌：主机给设备发数据。
+                case UIS_TOKEN_OUT:     // The PID of the token package is OUT, and the 5:4 bit is 00. The endpoint number of the 3:0 bit is 0.OUT token: The host sends data to the device.
                 {                       // Endpoint 0 is a bidirectional endpoint, used as control transmission."|0" operation is omitted
                     len = R8_USB_RX_LEN;    // Read the number of received data bytes stored in the current USB receiving length register //The receiving length register is shared by each endpoint, and the sending length register has its own
                 }
@@ -125,8 +125,8 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                     if(R8_USB_INT_ST & RB_UIS_TOG_OK)   // The hardware will determine whether the synchronization switches packets are correct. If the synchronization switch is correct, this bit will automatically be set.
                     { // Out-of-sync packets will be discarded
                         R8_UEP1_CTRL ^= RB_UEP_R_TOG;   // DATA synchronization switching of OUT transactions.Set an expected value.
-                        len = R8_USB_RX_LEN;        //读取接收数据的字节数
-                        DevEP1_OUT_Deal(len);       //发送长度为len的字节，自动回ACK握手包。自定义的程序。
+                        len = R8_USB_RX_LEN;        // Read the number of bytes received data
+                        DevEP1_OUT_Deal(len);       // Send bytes of length len and automatically return to the ACK handshake packet.Customized program.
                     }
                 }
                 break;
@@ -160,15 +160,15 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                 {
                     /* Manufacturer request */
                 }
-                else if(pSetupReqPak->bRequestType & 0x20)  //取得命令中的某一位，判断是否为0，不为零进if语句
-                {   //判断为HID类请求
+                else if(pSetupReqPak->bRequestType & 0x20)  // Get a certain one of the commands and determine whether it is 0, and enter the if statement without zero
+                {   // Determined as HID class request
                     switch(SetupReqCode)    // Determine the sequence number of the command
                     {
                         case DEF_USB_SET_IDLE: /* 0x0A: SET_IDLE */         // The host wants to set the idle time interval for the specific input report of the HID device
                             Idle_Value = EP0_Databuf[3];
                             break; // This must have
 
-                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     //主机想设置HID设备的报表描述符
+                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     // The host wants to set the report descriptor for the HID device
                             break;
 
                         case DEF_USB_SET_PROTOCOL: /* 0x0B: SET_PROTOCOL */ // The host wants to set the protocol currently used by the HID device
@@ -192,32 +192,32 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
             }
             else    // Determined as a standard request
             {
-                switch(SetupReqCode)    //判断命令的序号
+                switch(SetupReqCode)    // Determine the sequence number of the command
                 {
                     case USB_GET_DESCRIPTOR:    // The host wants to obtain the standard descriptor
                     {
-                        switch(((pSetupReqPak->wValue) >> 8))   //右移8位，看原来的高8位是否为0，为1表示方向为IN方向，则进s-case语句
+                        switch(((pSetupReqPak->wValue) >> 8))   // Move the right 8 bits to see if the original high 8 bits are 0. If it is 1, it means that the direction is IN. Then enter the s-case statement
                         {
-                            case USB_DESCR_TYP_DEVICE:  //不同的值代表不同的命令。主机想获得设备描述符
+                            case USB_DESCR_TYP_DEVICE:  // Different values ​​represent different commands.The host wants to obtain the device descriptor
                             {
                                 pDescr = MyDevDescr;    // Put the device descriptor string in the pDescr address, and the end of the case "Get standard descriptor" will be sent with a copy function.
-                                len = MyDevDescr[0];    //协议规定设备描述符的首字节存放字节数长度。拷贝函数会用到len参数
+                                len = MyDevDescr[0];    // The protocol specifies the length of the first byte of the device descriptor.The copy function will use the len parameter
                             }
                             break;
 
-                            case USB_DESCR_TYP_CONFIG:  //主机想获得配置描述符
+                            case USB_DESCR_TYP_CONFIG:  // The host wants to obtain the configuration descriptor
                             {
                                 pDescr = MyCfgDescr;    // Place the configuration descriptor string in the pDescr address and will be sent later
                                 len = MyCfgDescr[2];    // The protocol specifies the total length of the configuration information stored in the third byte of the configuration descriptor.
                             }
                             break;
 
-                            case USB_DESCR_TYP_HID:     //主机想获得人机接口类描述符。此处结构体中的wIndex与配置描述符不同，意为接口号。
-                                switch((pSetupReqPak->wIndex) & 0xff)       //取低八位，高八位抹去
+                            case USB_DESCR_TYP_HID:     // The host wants to obtain the human-computer interface class descriptor.The wIndex in the structure here is different from the configuration descriptor, meaning the interface number.
+                                switch((pSetupReqPak->wIndex) & 0xff)       // Take the lower eight digits and wipe off the higher eight digits
                                 {
                                     /* Select an interface */
                                     case 0:
-                                        pDescr = (uint8_t *)(&MyCfgDescr[18]);  //接口1的类描述符存放位置，待发送
+                                        pDescr = (uint8_t *)(&MyCfgDescr[18]);  // The class descriptor storage location of interface 1, to be sent
                                         len = 9;
                                         break;
 
@@ -228,7 +228,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                 }
                                 break;
 
-                            case USB_DESCR_TYP_REPORT:  //主机想获得设备报表描述符
+                            case USB_DESCR_TYP_REPORT:  // The host wants to obtain the device report descriptor
                             {
                                 if(((pSetupReqPak->wIndex) & 0xff) == 0) // Interface 0 report descriptor
                                 {
@@ -236,13 +236,13 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                     len = sizeof(HIDDescr);
                                 }
                                 else
-                                    len = 0xff; //本程序只有2个接口，这句话正常不可能执行
+                                    len = 0xff; // This program has only 2 interfaces, so this sentence is not possible to be executed normally
                             }
                             break;
 
                             case USB_DESCR_TYP_STRING:  // The host wants to obtain the device string descriptor
                             {
-                                switch((pSetupReqPak->wValue) & 0xff)   //根据wValue的值传递字符串信息
+                                switch((pSetupReqPak->wValue) & 0xff)   // Pass string information according to the value of wValue
                                 {
                                     default:
                                         errflag = 0xFF; // Unsupported string descriptors
@@ -265,15 +265,15 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
 
                     case USB_SET_ADDRESS:       // The host wants to set the device address
                         SetupReqLen = (pSetupReqPak->wValue) & 0xff;    // The bit device address distributed by the host is temporarily stored in SetupReqLen
-                        break;                                          //控制阶段会赋值给设备地址参数
+                        break;                                          // The control phase will be assigned to the device address parameters
 
                     case USB_GET_CONFIGURATION: // The host wants to obtain the current configuration of the device
                         pEP0_DataBuf[0] = DevConfig;    // Put device configuration into RAM
                         if(SetupReqLen > 1)
-                            SetupReqLen = 1;    //将数据阶段的字节数置1。因为DevConfig只有一个字节
+                            SetupReqLen = 1;    // Set the number of bytes in the data stage by 1.Because DevConfig has only one byte
                         break;
 
-                    case USB_SET_CONFIGURATION: //主机想设置设备当前配置
+                    case USB_SET_CONFIGURATION: // The host wants to set the current configuration of the device
                         DevConfig = (pSetupReqPak->wValue) & 0xff;  // Take the lower eight digits and wipe off the higher eight digits
                         break;
 
@@ -281,9 +281,9 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                     {
                         if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // Determine whether it is an endpoint feature (clear the state where the endpoint stops working)
                         {
-                            switch((pSetupReqPak->wIndex) & 0xff)   //取低八位，高八位抹去。判断索引
+                            switch((pSetupReqPak->wIndex) & 0xff)   // Take the lower eight digits and erase the higher eight digits.Judge index
                             {       // The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
-                                case 0x81:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                                case 0x81:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
                                 case 0x01:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
@@ -326,11 +326,11 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                     break;
                             }
                         }
-                        else if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE)  //判断是不是设备特征（使设备休眠）
+                        else if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE)  // Determine whether it is a device feature (make the device sleepy)
                         {
                             if(pSetupReqPak->wValue == 1)
                             {
-                                USB_SleepStatus |= 0x01;    //设置睡眠
+                                USB_SleepStatus |= 0x01;    // Setting up sleep
                             }
                         }
                         else
@@ -349,9 +349,9 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                         break;
 
                     case USB_GET_STATUS:        // The host wants to obtain the status of the device, interface, or endpoint
-                        if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) //判断是否为端点状态
+                        if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // Determine whether it is endpoint status
                         {
-                            /* 端点 */
+                            /* Endpoint */
                             pEP0_DataBuf[0] = 0x00;
                             switch(pSetupReqPak->wIndex)
                             {       // The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
@@ -382,7 +382,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                 pEP0_DataBuf[0] = 0x00;
                             }
                         }
-                        pEP0_DataBuf[1] = 0;    //返回状态信息的格式为16位数，高八位保留为0
+                        pEP0_DataBuf[1] = 0;    // The format of the return status information is 16 digits, and the high eight digits are reserved as 0
                         if(SetupReqLen >= 2)
                         {
                             SetupReqLen = 2;    // Set the number of bytes in the data stage by 2.Because there are only 2 bytes of data to be transferred
@@ -480,13 +480,12 @@ void DevWakeup(void)
     R16_PIN_ANALOG_IE |= RB_PIN_USB_DP_PU;
 }
 
-/*********************************************************************
- * @fn      DebugInit
- *
- * @brief   调试初始化
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn DebugInit
+*
+* @brief debug initialization
+*
+* @return none */
 void DebugInit(void)
 {
     GPIOA_SetBits(GPIO_Pin_9);
@@ -495,13 +494,12 @@ void DebugInit(void)
     UART1_DefInit();
 }
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main()
 {
     uint8_t s;
@@ -519,7 +517,7 @@ int main()
     mDelaymS(100);
 
     while(1)
-    {//模拟传输4个字节的数据，实际传输根据用户需要自行修改
+    {// Simulate the transmission of 4 bytes of data, and the actual transmission is modified by itself according to user needs.
         if(Ready)
         {
             Ready = 0;

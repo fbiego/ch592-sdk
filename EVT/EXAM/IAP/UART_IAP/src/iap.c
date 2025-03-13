@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : iap.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/15
- * Description        : UART IAP例程
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : iap.c
+* Author             : WCH
+* Version            : V1.0
+* Date               : 2022/03/15
+* Description        : UART IAP例程
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 #include "iap.h"
 
-/* 更新权限，必须先擦除后，且擦除地址需要和APP对应地址一致才可赋予更新权限 */
+/* Update permissions must be erased first, and the erase address must be consistent with the corresponding address of the APP before the update permission can be granted */
 uint8_t g_update_permition = 0;
 
 uint8_t iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1, all_data_rec_cnt = 0, part_rec_cnt = 0, uart_rec_sign = 0;
@@ -30,58 +30,55 @@ uint32_t g_addr;
 
 __attribute__((aligned(4)))   uint8_t iap_rsp_data[6] = {IAP_DATA_SOP1, IAP_DATA_SOP2, 0, 0, IAP_DATA_EOP1, IAP_DATA_EOP2};
 
-/*********************************************************************
- * @fn      Main_Circulation
- *
- * @brief   IAP主循环,程序放ram中运行，提升速度.
- *
- * @param   None.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn Main_Circulation
+*
+* @brief The main loop of IAP, the program is put into ram to improve the speed.
+*
+* @param None.
+*
+* @return None. */
 __attribute__((section(".highcode")))
 void Main_Circulation()
 {
     while (1)
     {
-        /* 采用查询模式，不使用中断，减少代码占用flash */
+        /* Adopt query mode without using interrupts to reduce code occupancy of flash */
         if (R8_UART1_RFC)
         {
-            /* 串口有数据，置位串口处于接收过程标志位 */
+            /* There is data on the serial port, and the serial port is in the receiving process flag bit */
             uart_rec_sign = 1;
-            /* 串口有数据，清空超时时间 */
+            /* There is data on the serial port, clear the timeout time */
             g_tcnt = 0;
-            /* 接收计数加一，存储到buf中 */
+            /* Receive count plus one, store it in buf */
             all_data_rec_cnt++;
-            /* buf不可越界 */
+            /* buf cannot cross the line */
             if (all_data_rec_cnt >= sizeof(iap_rec_data))
             {
                 all_data_rec_cnt = 0;
             }
-            /* 读取串口寄存器数据，直接赋值到buf中，后续判断无需继续赋值，可以节约程序flash占用 */
+            /* Read serial port register data and directly assign value to buf. There is no need to continue to assign values ​​in the future, which can save program flash occupation */
             iap_rec_data.other.buf[all_data_rec_cnt] = R8_UART1_RBR;
-            /*
-             * 这里为了节约代码占用空间和代码运行速度，做了相应的代码裁剪，
-             * 否则应该根据命令码，将校验值和包尾信息存到相应的结构体的checksum和eop成员变量中。
-             * 本程序的处理方法为直接按顺序存储到buf中，
-             * 所以在数据长度不为满包数据长度时，通过结构体访问成员checksum和eop变量会不正确。
-             * 用户自行修改时需注意。
-             * 相比于每次都根据包长判断来说，每次都节约了对命令的判断时间、代码flash空间。
-             */
-            switch (iap_rec_data_state) /* 根据接收状态进行数据的读取判断和存储 */
+            /* * In order to save the code footprint and code running speed, corresponding code cutting has been done here.
+* Otherwise, the check value and packet tail information should be stored in the checksum and eop member variables of the corresponding structure according to the command code.
+* The processing method of this program is to store it directly in buf in order.
+* Therefore, when the data length is not full packet data length, it will be incorrect to access the member checksum and eop variables through the structure.
+* Users need to pay attention to when modifying by themselves.
+* Compared to the judgment of the package header every time, the judgment time and code flash space of the command are saved every time. */
+            switch (iap_rec_data_state) /* Reading and storing data according to the received state */
             {
-            /* 状态处于等待包头1时，判断接收的字节是否为IAP_DATA_SOP1 */
+            /* When the status is waiting for packet header 1, determine whether the received byte is IAP_DATA_SOP1 */
             case IAP_DATA_REC_STATE_WAIT_SOP1:
                 if (iap_rec_data.other.buf[all_data_rec_cnt] == IAP_DATA_SOP1)
                 {
-                    /* 只有第一个字节时，不一定存储到buf正确的位置，重新存储 */
+                    /* When there is only the first byte, it is not necessarily stored in the correct location of the buf, and it is restored. */
                     iap_rec_data.other.buf[0] = iap_rec_data.other.buf[all_data_rec_cnt];
-                    /* 接收计数初始化 */
+                    /* Receive count initialization */
                     all_data_rec_cnt = 0;
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP2;
                 }
                 break;
-            /* 状态处于等待包头2时，判断接收的字节是否为IAP_DATA_SOP2 */
+            /* When the status is waiting for packet header 2, determine whether the received byte is IAP_DATA_SOP2 */
             case IAP_DATA_REC_STATE_WAIT_SOP2:
                 if (iap_rec_data.other.buf[all_data_rec_cnt] == IAP_DATA_SOP2)
                 {
@@ -92,11 +89,11 @@ void Main_Circulation()
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
                 }
                 break;
-            /* 状态处于等待命令码时，判断接收的字节是否为合法的cmd */
+            /* When the status is waiting for the command code, determine whether the received byte is legal cmd */
             case IAP_DATA_REC_STATE_WAIT_CMD:
                 if ((iap_rec_data.other.buf[all_data_rec_cnt] < CMD_IAP_PROM) || (iap_rec_data.other.buf[all_data_rec_cnt] > CMD_IAP_END))
                 {
-                    /* error 没有这个cmd */
+                    /* error does not have this cmd */
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
                 }
                 else
@@ -104,11 +101,11 @@ void Main_Circulation()
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_LEN;
                 }
                 break;
-            /* 状态处于等待数据长度时，判断接收的字节是否为合法的长度 */
+            /* When the state is waiting for data length, determine whether the received byte is the legal length. */
             case IAP_DATA_REC_STATE_WAIT_LEN:
                 if (iap_rec_data.other.buf[all_data_rec_cnt] <= IAP_LEN)
                 {
-                    /* 清空部分结构体变量接收字节数计数 */
+                    /* Clear some structure variables receive byte count */
                     part_rec_cnt = 0;
                     if ((iap_rec_data.other.buf[2] == CMD_IAP_ERASE) || (iap_rec_data.other.buf[2] == CMD_IAP_VERIFY))
                     {
@@ -116,7 +113,7 @@ void Main_Circulation()
                     }
                     else
                     {
-                        /* 判断数据长度是否为0，为0则直接接收校验和*/
+                        /* Determine whether the data length is 0. If it is 0, the checksum will be received directly. */
                         if (iap_rec_data.other.buf[3] > 0)
                         {
                             iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_DATA;
@@ -132,13 +129,13 @@ void Main_Circulation()
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
                 }
                 break;
-            /* 状态处于等待地址时 */
+            /* When the status is waiting for the address */
             case IAP_DATA_REC_STATE_WAIT_ADDR:
                 part_rec_cnt++;
-                /* 地址为4字节，接收到4个后跳转接收下一个状态 */
+                /* The address is 4 bytes. After receiving 4, it will jump to receive the next state. */
                 if (part_rec_cnt >= 4)
                 {
-                    /* 部分结构体变量接收字节数计数 */
+                    /* Some structure variables receive byte count */
                     part_rec_cnt = 0;
                     if (iap_rec_data.other.buf[3] > 0)
                     {
@@ -150,27 +147,27 @@ void Main_Circulation()
                     }
                 }
                 break;
-            /* 状态处于等待数据时 */
+            /* When the status is waiting for data */
             case IAP_DATA_REC_STATE_WAIT_DATA:
                 part_rec_cnt++;
                 if (part_rec_cnt >= iap_rec_data.other.buf[3])
                 {
-                    /* 判断数据是否接收完成*/
+                    /* Determine whether the data is received and completed */
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_CHECKNUM;
-                    /* 部分结构体变量接收字节数计数 */
+                    /* Some structure variables receive byte count */
                     part_rec_cnt = 0;
                 }
                 break;
-            /* 状态处于等待校验时 */
+            /* When the status is waiting for verification */
             case IAP_DATA_REC_STATE_WAIT_CHECKNUM:
                 part_rec_cnt++;
                 if (part_rec_cnt >= 2)
                 {
-                    /* 判断校验是否接收完成，校验为2字节和校验*/
+                    /* Determine whether the verification is received and the verification is 2 bytes and */
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_EOP1;
                 }
                 break;
-            /* 状态处于等待包尾1时，判断接收的字节是否为IAP_DATA_EOP1 */
+            /* When the status is waiting for packet tail 1, determine whether the received byte is IAP_DATA_EOP1 */
             case IAP_DATA_REC_STATE_WAIT_EOP1:
                 if (iap_rec_data.other.buf[all_data_rec_cnt] == IAP_DATA_EOP1)
                 {
@@ -181,7 +178,7 @@ void Main_Circulation()
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
                 }
                 break;
-            /* 状态处于等待包尾2时，判断接收的字节是否为IAP_DATA_EOP2 */
+            /* When the status is waiting for packet tail 2, determine whether the received byte is IAP_DATA_EOP2 */
             case IAP_DATA_REC_STATE_WAIT_EOP2:
                 if (iap_rec_data.other.buf[all_data_rec_cnt] == IAP_DATA_EOP2)
                 {
@@ -193,44 +190,44 @@ void Main_Circulation()
                 }
                 break;
             default:
-                /* 一般不可能出现这种情况 */
+                /* This is generally impossible */
                 break;
             }
 
             if (iap_rec_data_state == IAP_DATA_REC_STATE_OK)
             {
-                /* 计算校验和 */
+                /* Calculate the checksum */
                 uint16_t   check_num = 0, check_num_rec;
-                /* 校验和计算所用 */
+                /* Used for checksum calculation */
                 uint16_t   check_num_i;
-                /* 上报错误码清为默认无错误状态 */
+                /* The reported error code is cleared as the default error-free state */
                 iap_rsp_data[2] = 0x00;
                 iap_rsp_data[3] = 0x00;
-                /* 恢复默认的状态 */
+                /* Restore the default state */
                 iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
-                /* 解析到一个完整的数据包，释放空闲计时 */
+                /* parsed to a complete packet, freeing idle timer */
                 uart_rec_sign = 0;
                 g_tcnt = 0;
-                /* 计算校验和验算 */
+                /* Calculate the checksum verification */
                 for (check_num_i = 2; check_num_i < all_data_rec_cnt - 3; check_num_i++)
                 {
                     check_num += iap_rec_data.other.buf[check_num_i];
                 }
                 check_num_rec = iap_rec_data.other.buf[check_num_i] | (iap_rec_data.other.buf[check_num_i + 1] << 8);
-                /* 数据包校验和通过 */
+                /* Packet checksum passes */
                 if (check_num_rec == check_num)
                 {
-                    /* 判断命令 */
+                    /* Judgment command */
                     switch (iap_rec_data.other.buf[2])
                     {
-                    /* 写入命令 */
+                    /* Write command */
                     case CMD_IAP_PROM:
-                        /* 判断是否先擦除过芯片 */
+                        /* Determine whether the chip has been erased first */
                         if (g_update_permition == 1)
                         {
                             if (iap_rec_data.program.len == 0)
                             {
-                                /* 最后一次为空包，宣布为最后一个包 */
+                                /* The last time is an empty package, declared as the last package */
                                 if (g_buf_write_ptr != 0)
                                 {
                                     if (FLASH_ROM_WRITE(g_flash_write_ptr, (PUINT32)g_write_buf, g_buf_write_ptr))
@@ -247,16 +244,16 @@ void Main_Circulation()
                                 g_buf_write_ptr += iap_rec_data.program.len;
                                 if (g_buf_write_ptr >= 256)
                                 {
-                                    /* 满256字节写一次 */
+                                    /* Write once for 256 bytes */
                                     if (FLASH_ROM_WRITE(g_flash_write_ptr, (PUINT32)g_write_buf, 256))
                                     {
                                         iap_rsp_data[2] = 0xfe;
                                         iap_rsp_data[3] = IAP_ERR_WRITE_FAIL;
                                         break;
                                     }
-                                    /* 移动指针 */
+                                    /* Move the pointer */
                                     g_flash_write_ptr += 256;
-                                    /* 重新计算超出的长度，将超出的数据拷贝到数组首部 */
+                                    /* Recalculate the exceeded length and copy the exceeded data to the first part of the array */
                                     g_buf_write_ptr = g_buf_write_ptr - 256;
                                     my_memcpy(g_write_buf, g_write_buf + 256, g_buf_write_ptr);
                                 }
@@ -264,100 +261,100 @@ void Main_Circulation()
                         }
                         else
                         {
-                            /* 没有擦除步骤，不可更新，报错 */
+                            /* There is no erase step, cannot be updated, and an error is reported */
                             iap_rsp_data[2] = 0xfe;
                             iap_rsp_data[3] = IAP_ERR_PROG_NO_ERASE;
                         }
                         break;
-                    /* 擦除命令 */
+                    /* Erase command */
                     case CMD_IAP_ERASE:
                         if (iap_rec_data.erase.addr == APP_CODE_START_ADDR)
                         {
-                            /* 如果有特殊需求，可以修改擦除的长度，将特殊需求的那一部分flash排除在外 */
+                            /* If there are special needs, you can modify the erase length and exclude the flash part of the special needs. */
                             if (FLASH_ROM_ERASE(APP_CODE_START_ADDR, APP_CODE_END_ADDR - APP_CODE_START_ADDR) == 0)
                             {
-                                /* 起始地址正确，赋予更新权限，否则认为失败 */
+                                /* The starting address is correct, and the update permission is granted, otherwise it will be considered to be failed. */
                                 g_update_permition = 1;
-                                /* 计数清零，flash写指针重置 */
+                                /* Count clear, flash write pointer reset */
                                 g_buf_write_ptr = 0;
                                 g_flash_write_ptr = APP_CODE_START_ADDR;
                             }
                             else
                             {
-                                /* 擦除失败 */
+                                /* Erase failed */
                                 iap_rsp_data[2] = 0xfe;
                                 iap_rsp_data[3] = IAP_ERR_ERASE_FAIL;
                             }
                         }
                         else
                         {
-                            /* 擦除地址错误 */
+                            /* Erase address error */
                             iap_rsp_data[2] = 0xfe;
                             iap_rsp_data[3] = IAP_ERR_ADDR;
                         }
                         break;
-                    /* 校验命令 */
+                    /* Verification command */
                     case CMD_IAP_VERIFY:
                         if (((iap_rec_data.verify.addr % 4) == 0) && (iap_rec_data.verify.addr >= APP_CODE_START_ADDR) && (iap_rec_data.verify.addr < APP_CODE_END_ADDR))
                         {
                             my_memcpy(g_write_buf, iap_rec_data.verify.data, iap_rec_data.verify.len);
                             if (FLASH_ROM_VERIFY(iap_rec_data.verify.addr, g_write_buf, iap_rec_data.verify.len))
                             {
-                                /* 校验失败，报错 */
+                                /* Check failed, error reported */
                                 iap_rsp_data[2] = 0xfe;
                                 iap_rsp_data[3] = IAP_ERR_VERIFY;
                             }
                         }
                         else
                         {
-                            /* 校验地址不对 */
+                            /* The verification address is incorrect */
                             iap_rsp_data[2] = 0xfe;
                             iap_rsp_data[3] = IAP_ERR_ADDR;
                         }
                         break;
-                    /* 结束跳转命令 */
+                    /* End jump command */
                     case CMD_IAP_END:
                         jumpApp();
                         break;
                     default:
-                        /* 接收时已判断命令不可能为其他值，所以不会出现该情况 */
+                        /* It was judged that the command could not be another value during reception, so this situation will not occur. */
                         iap_rsp_data[2] = 0xfe;
                         iap_rsp_data[3] = IAP_ERR_UNKNOWN;
                         break;
                     }
                     if (iap_rsp_data[2] != 0)
                     {
-                        /* 校验和通过，由于其他错误出错后，清空更新权限，想要更新，按步骤重新开始 */
+                        /* After the checksum is passed, clear the update permission after other errors. If you want to update, follow the steps to start again. */
                         g_update_permition = 0;
                     }
                 }
                 else
                 {
-                    /* 数据包校验和失败，主机可以选择重发数据包，无影响 */
+                    /* The packet checksum fails, and the host can choose to resend the packet without any impact. */
                     iap_rsp_data[2] = 0xfe;
                     iap_rsp_data[3] = IAP_ERR_CHECK;
                 }
-                /* 每次数据包处理完，清空缓存其他的数据，防止有些串口模块偶然会多发出一两个字符信号，保持一包一回复 */
+                /* Each time the data packet is processed, clear the cache of other data to prevent some serial port modules from occasionally sending one or two characters signals, keeping one packet and one reply */
                 while (R8_UART1_RFC)
                 {
                     iap_rec_data.other.buf[all_data_rec_cnt] = R8_UART1_RBR;
                 }
-                /* 回复数据 */
+                /* Reply to data */
                 UART1_SendString(iap_rsp_data, sizeof(iap_rsp_data));
             }
         }
         else
         {
-            /* 延迟115200波特率下大概四分之一个字节的时间，降低读取寄存器频率和时间，方便超时计数，如果修改波特率，也必须更改这里相关的时间参数 */
+            /* Delay the time of about one quarter byte at 115200 baud rate, reduce the frequency and time of the read register, and facilitate timeout counting. If the baud rate is modified, the relevant time parameters must also be changed. */
             DelayUs(20);
             g_tcnt++;
             if (uart_rec_sign)
             {
                 if (g_tcnt >= 43)
                 {
-                    /* 超过10个字节空闲时间没有新字节到来，且没有一个完整的数据包，就超时报错，根据波特率修改 */
-                    /* 目前波特率为115200,一个字节时间为1s/11520 = 87us, 87us*10 / 20us = 43.5 */
-                    /* 主机可以选择重发数据包，无影响 */
+                    /* If there are more than 10 bytes, no new bytes will arrive, and there is no complete data packet, the timeout will be reported and the baud rate will be modified. */
+                    /* Currently the baud rate is 115200, and one byte time is 1s/11520 = 87us, 87us*10 / 20us = 43.5 */
+                    /* The host can choose to resend the packet without any impact */
                     iap_rec_data_state = IAP_DATA_REC_STATE_WAIT_SOP1;
                     uart_rec_sign = 0;
                     iap_rsp_data[2] = 0xfe;
@@ -369,7 +366,7 @@ void Main_Circulation()
             {
                 if (g_tcnt > 6000000)
                 {
-                    /* 120秒没有数据，认为超时，跳到app，根据情况自行修改 */
+                    /* There is no data in 120 seconds. If you think it is timed out, jump to the app and modify it yourself according to the situation. */
                     jumpApp();
                 }
             }
@@ -378,15 +375,14 @@ void Main_Circulation()
 }
 
 
-/*********************************************************************
- * @fn      my_memcpy
- *
- * @brief   数据拷贝函数,程序放ram中运行，提升速度
- *
- * @param   None.
- *
- * @return  None.
- */
+/* ***************************************************************************
+* @fn my_memcpy
+*
+* @brief data copy function, program is put into ram to improve speed
+*
+* @param None.
+*
+* @return None. */
 __attribute__((section(".highcode")))
 void my_memcpy(void *dst, const void *src, uint32_t l)
 {

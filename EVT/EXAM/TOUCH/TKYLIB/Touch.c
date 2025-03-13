@@ -1,10 +1,10 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : Touch.C
- * Author             : WCH
- * Version            : V1.6
- * Date               : 2021/12/1
- * Description        : 触摸按键例程
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: Touch.C
+* Author: WCH
+* Version: V1.6
+* Date: 2021/12/1
+* Description: Touch key routine
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES
@@ -33,14 +33,14 @@ static const uint32_t TKY_Pin[14][2] = {
   {0x00, 0x00002000},//PA13
   {0x00, 0x00004000},//PA14
   {0x00, 0x00008000},//PA15
-  {0x00, 0x00000000},//AIN6不存在，在此占位
-  {0x00, 0x00000000},//AIN7不存在，在此占位
+  {0x00, 0x00000000},// AIN6 does not exist, it occupies a place here
+  {0x00, 0x00000000},// AIN7 does not exist, it occupies a place here
 
-  {0x20, 0x00000001},//PB0,AIN8仅592X型号有
-  {0x20, 0x00000040},//PB6,AIN9仅592X型号有
+  {0x20, 0x00000001},// PB0, AIN8 only has 592X models
+  {0x20, 0x00000040},// PB6, AIN9 only has 592X models
 
-  {0x00, 0x00000040},//PA6,AIN10仅592X型号有
-  {0x00, 0x00000080},//PA7,AIN11仅592X型号有
+  {0x00, 0x00000040},// PA6, AIN10 only has 592X models
+  {0x00, 0x00000080},// PA7, AIN11 only has 592X models
   {0x00, 0x00000100},//PA8,AIN12
   {0x00, 0x00000200} //PA9,AIN13
 };
@@ -48,7 +48,7 @@ static const uint32_t TKY_Pin[14][2] = {
  *  STATIC PROTOTYPES
  **********************/
 static KEY_T s_tBtn[KEY_COUNT];
-static KEY_FIFO_T s_tKey;       /* 按键FIFO变量,结构体 */
+static KEY_FIFO_T s_tKey;       /* Key FIFO variable, structure */
 static void touch_InitKeyHard(void);
 static void touch_InitKeyVar(void);
 static void touch_DetectKey(uint8_t i);
@@ -86,25 +86,23 @@ pIsKeyDownFunc KeyDownFunc[14] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-/********************************************************************************************************
- * @fn      touch_InitKey
- * 
- * @brief   初始化按键. 该函数被 tky_Init() 调用。
- *
- * @return  none
- */
+/* *******************************************************************************************************
+* @fn touch_InitKey
+*
+* @brief Initialize the key. This function is called by tky_Init().
+*
+* @return none */
 void touch_InitKey(void)
 {
-    touch_InitKeyHard();          /* 初始化按键硬件 */
-    touch_InitKeyVar();           /* 初始化按键变量 */
+    touch_InitKeyHard();          /* Initialize key hardware */
+    touch_InitKeyVar();           /* Initialize key variables */
 }
 
-/********************************************************************************************************
- * @fn      touch_PutKey
- * @brief   将1个键值压入按键FIFO缓冲区。可用于模拟一个按键。
- * @param   _KeyCode - 按键代码
- * @return  none
- */
+/* *******************************************************************************************************
+* @fn touch_PutKey
+* @brief Press 1 key value into the key FIFO buffer.Can be used to simulate a key.
+* @param _KeyCode - key code
+* @return none */
 void touch_PutKey(uint8_t _KeyCode)
 {
     s_tKey.Buf[s_tKey.Write] = _KeyCode;
@@ -115,12 +113,11 @@ void touch_PutKey(uint8_t _KeyCode)
     }
 }
 
-/********************************************************************************************************
- * @fn      touch_GetKey
- * @brief   从按键FIFO缓冲区读取一个键值。
- * @param   无
- * @return  按键代码
- */
+/* *******************************************************************************************************
+* @fn touch_GetKey
+* @brief Read a key value from the key FIFO buffer.
+* @param None
+* @return key code */
 uint8_t touch_GetKey(void)
 {
     uint8_t ret;
@@ -141,95 +138,89 @@ uint8_t touch_GetKey(void)
     }
 }
 
-/********************************************************************************************************
- * @fn      touch_GetKeyState
- * @brief   读取按键的状态
- * @param   _ucKeyID - 按键ID，从0开始
- * @return  1 - 按下
- *          0 - 未按下
-*********************************************************************************************************
-*/
+/* *******************************************************************************************************
+* @fn touch_GetKeyState
+* @brief The state of the key is read
+* @param _ucKeyID - key ID, starting from 0
+* @return 1 - Press
+* 0 - Not pressed
+********************************************************************************************************* */
 uint8_t touch_GetKeyState(KEY_ID_E _ucKeyID)
 {
     return s_tBtn[_ucKeyID].State;
 }
 
-/********************************************************************************************************
- * @fn      touch_SetKeyParam
- * @brief   设置按键参数
- * @param   _ucKeyID     - 按键ID，从0开始
- *          _LongTime    - 长按事件时间
- *          _RepeatSpeed - 连发速度
- * @return  none
- */
+/* *******************************************************************************************************
+* @fn touch_SetKeyParam
+* @brief Set key parameters
+* @param _ucKeyID - key ID, starting from 0
+* _LongTime - Long press event time
+* _RepeatSpeed ​​- continuous sending speed
+* @return none */
 void touch_SetKeyParam(uint8_t _ucKeyID, uint16_t _LongTime, uint8_t  _RepeatSpeed)
 {
-    s_tBtn[_ucKeyID].LongTime = _LongTime;          /* 长按时间 0 表示不检测长按键事件 */
-    s_tBtn[_ucKeyID].RepeatSpeed = _RepeatSpeed;            /* 按键连发的速度，0表示不支持连发 */
-    s_tBtn[_ucKeyID].RepeatCount = 0;                       /* 连发计数器 */
+    s_tBtn[_ucKeyID].LongTime = _LongTime;          /* Long press time 0 means that long press event is not detected */
+    s_tBtn[_ucKeyID].RepeatSpeed = _RepeatSpeed;            /* The speed of continuous sending by pressing the button, 0 means that continuous sending is not supported. */
+    s_tBtn[_ucKeyID].RepeatCount = 0;                       /* Continuous send counter */
 }
 
 
-/********************************************************************************************************
- * @fn      touch_ClearKey
- * @brief   清空按键FIFO缓冲区
- * @param   无
- * @return  按键代码
- */
+/* *******************************************************************************************************
+* @fn touch_ClearKey
+* @brief Clear key FIFO buffer
+* @param None
+* @return key code */
 void touch_ClearKey(void)
 {
     s_tKey.Read = s_tKey.Write;
 }
 
-/********************************************************************************************************
- * @fn      touch_ScanWakeUp
- * @brief   触摸扫描唤醒函数
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_ScanWakeUp
+* @brief Touch Scan Wake-up Function
+* @param None
+* @return None */
 void touch_ScanWakeUp(void)
 {
-    wakeUpCount = WAKEUPTIME; //---唤醒时间---
-    wakeupflag = 1;           //置成唤醒状态
+    wakeUpCount = WAKEUPTIME; // ---Wake-up time---
+    wakeupflag = 1;           // Set to wake up
 
-    TKY_SetSleepStatusValue( ~tkyPinAll.tkyQueueAll ); //---设置0~11通道为非休眠状态,为接下来数秒时间内连续扫描做准备---
+    TKY_SetSleepStatusValue( ~tkyPinAll.tkyQueueAll ); // ---Set channels 0~11 to non-sleep state to prepare for continuous scanning in the next few seconds---
     dg_log("wake up for a while\n");
-    TKY_SaveAndStop();    //---对相关寄存器进行保存---
+    TKY_SaveAndStop();    // ---Save the relevant registers---
     touch_GPIOSleep();
 }
 
-/********************************************************************************************************
- * @fn      touch_ScanEnterSleep
- * @brief   触摸扫描休眠函数
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_ScanEnterSleep
+* @brief Touch Scan Hibernation Function
+* @param None
+* @return None */
 void touch_ScanEnterSleep(void)
 {
-    TKY_SaveAndStop();    //---对相关寄存器进行保存---
+    TKY_SaveAndStop();    // ---Save the relevant registers---
     touch_GPIOSleep();
-    wakeupflag = 0;       //置成睡眠状态:0,唤醒态:1
+    wakeupflag = 0;       // Set to sleep state: 0, wake up state: 1
     TKY_SetSleepStatusValue( tkyPinAll.tkyQueueAll );
     dg_log("Ready to sleep\n");
 }
 
-/********************************************************************************************************
- * @fn      touch_KeyScan
- * @brief   扫描所有按键。非阻塞，被systick中断周期性的调用
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_KeyScan
+* @brief Scan all keys.Non-blocking, periodic calls are interrupted by systick
+* @param None
+* @return None */
 void touch_KeyScan(void)
 {
     uint8_t i;
-    TKY_LoadAndRun( );                     //---载入休眠前保存的部分设置---
+    TKY_LoadAndRun( );                     // ---Separate settings saved before loading hibernation---
 
     keyData = TKY_PollForFilter( );
 
 #if TKY_SLEEP_EN
     if (keyData)
     {
-        wakeUpCount = WAKEUPTIME; //---唤醒时间---
+        wakeUpCount = WAKEUPTIME; // ---Wake-up time---
     }
 #endif
 
@@ -237,15 +228,14 @@ void touch_KeyScan(void)
     {
         touch_DetectKey(i);
     }
-    TKY_SaveAndStop();    //---对相关寄存器进行保存---
+    TKY_SaveAndStop();    // ---Save the relevant registers---
 }
 
-/********************************************************************************************************
- * @fn      touch_GPIOModeCfg
- * @brief   触摸按键模式配置
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_GPIOModeCfg
+* @brief Touch button mode configuration
+* @param None
+* @return None */
 void touch_GPIOModeCfg(GPIOModeTypeDef mode)
 {
     uint32_t pina = tkyPinAll.PaBit;
@@ -286,12 +276,11 @@ void touch_SingleChDischarge(uint8_t ch){
 	(*((PUINT32V)(0x400010AC+TKY_Pin[ch][0]))) = TKY_Pin[ch][1];
 }
 
-/********************************************************************************************************
- * @fn      touch_GPIOSleep
- * @brief   配置触摸按键为休眠状态
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_GPIOSleep
+* @brief Configure the touch button to sleep
+* @param None
+* @return None */
 void touch_GPIOSleep(void)
 {
     uint32_t pina = tkyPinAll.PaBit;
@@ -312,12 +301,11 @@ void touch_GPIOSleep(void)
  *   STATIC FUNCTIONS
  **********************/
 
-/********************************************************************************************************
- * @fn      touch_InitKeyHard
- * @brief   初始化触摸按键
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_InitKeyHard
+* @brief Initialize the touch button
+* @param None
+* @return None */
 static void touch_InitKeyHard(void)
 {
     touch_Baseinit( );
@@ -325,45 +313,43 @@ static void touch_InitKeyHard(void)
 }
 
 
-/********************************************************************************************************
- * @fn      touch_InitKeyVar
- * @brief   初始化触摸按键变量
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_InitKeyVar
+* @brief Initialize the touch button variable
+* @param None
+* @return None */
 static void touch_InitKeyVar(void)
 {
     uint8_t i;
 
-    /* 对按键FIFO读写指针清零 */
+    /* Clear the key FIFO read and write pointer */
     s_tKey.Read = 0;
     s_tKey.Write = 0;
 
-    /* 给每个按键结构体成员变量赋一组缺省值 */
+    /* Assign a set of default values ​​to each key structure member variable */
     for (i = 0; i < KEY_COUNT; i++)
     {
-        s_tBtn[i].LongTime = KEY_LONG_TIME;             /* 长按时间 0 表示不检测长按键事件 */
-        s_tBtn[i].Count = KEY_FILTER_TIME / 2;          /* 计数器设置为滤波时间的一半 */
-        s_tBtn[i].State = 0;                            /* 按键缺省状态，0为未按下 */
-        s_tBtn[i].RepeatSpeed = 0;                      /* 按键连发的速度，0表示不支持连发 */
-        s_tBtn[i].RepeatCount = 0;                      /* 连发计数器 */
-        s_tBtn[i].IsKeyDownFunc = KeyDownFunc[i];       /* 判断按键按下的函数 */
+        s_tBtn[i].LongTime = KEY_LONG_TIME;             /* Long press time 0 means that long press event is not detected */
+        s_tBtn[i].Count = KEY_FILTER_TIME / 2;          /* The counter is set to half of the filtering time */
+        s_tBtn[i].State = 0;                            /* The default state of the button is 0. */
+        s_tBtn[i].RepeatSpeed = 0;                      /* The speed of continuous sending by pressing the button, 0 means that continuous sending is not supported. */
+        s_tBtn[i].RepeatCount = 0;                      /* Continuous send counter */
+        s_tBtn[i].IsKeyDownFunc = KeyDownFunc[i];       /* Determine the function of the button press */
     }
 
-    /* 如果需要单独更改某个按键的参数，可以在此单独重新赋值 */
-    /* 比如，我们希望按键1按下超过1秒后，自动重发相同键值 */
+    /* If you need to change the parameters of a key separately, you can reassign the value separately here */
+    /* For example, we hope that the same key value will be automatically resented after pressing key 1 for more than 1 second. */
 //    s_tBtn[KID_K1].LongTime = 100;
-//    s_tBtn[KID_K1].RepeatSpeed = 5; /* 每隔50ms自动发送键值 */
+// s_tBtn[KID_K1].RepeatSpeed ​​= 5; /* Automatically send key values ​​every 50ms */
 
 }
 
-/********************************************************************************************************
- * @fn      IsKeyDownX
- * @brief   判断按键是否按下,用户可自行重新实现该函数功能
- * @param   无
- * @return  1 - 按下
- *          0 - 未按下
- */
+/* *******************************************************************************************************
+* @fn IsKeyDownX
+* @brief To determine whether the button is pressed, the user can re-implement the function function by himself
+* @param None
+* @return 1 - Press
+* 0 - Not pressed */
 static uint8_t IsKeyDown1(void)
 {
     if (keyData & 0x0001)   return 1;
@@ -438,12 +424,11 @@ static uint8_t IsKeyDown12(void)
 }
 
 
-/********************************************************************************************************
- * @fn      touch_InfoDebug
- * @brief   触摸数据打印函数
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_InfoDebug
+* @brief Touch data printing function
+* @param None
+* @return None */
  
 void touch_InfoDebug(void)
 {
@@ -505,17 +490,16 @@ void touch_InfoDebug(void)
 
 }
 
-/********************************************************************************************************
- * @fn      touch_DetectKey
- * @brief   检测一个按键。非阻塞状态，必须被周期性的调用。
- * @param   i - 按键结构变量指针
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_DetectKey
+* @brief Detect a key.The non-blocking state must be called periodically.
+* @param i - key structure variable pointer
+* @return None */
 static void touch_DetectKey(uint8_t i)
 {
     KEY_T *pBtn;
 
-/*按键按下*/
+/* Press the button */
     pBtn = &s_tBtn[i];
     if (pBtn->IsKeyDownFunc()==1)
     {
@@ -523,23 +507,23 @@ static void touch_DetectKey(uint8_t i)
             {
                 pBtn->State = 1;
 #if !KEY_MODE
-                /* 发送按钮按下的消息 */
+                /* Send a message pressed by a button */
                 touch_PutKey((uint8_t)(3 * i + 1));
 #endif
             }
 
-            /*处理长按键*/
+            /* Process long press */
             if (pBtn->LongTime > 0)
             {
                 if (pBtn->LongCount < pBtn->LongTime)
                 {
-                    /* 发送按钮长按下的消息 */
+                    /* Send a message with long pressing of buttons */
                     if (++pBtn->LongCount == pBtn->LongTime)
                     {
 #if !KEY_MODE
                         pBtn->State = 2;
 
-                        /* 键值放入按键FIFO */
+                        /* Put the key value into the FIFO key */
                         touch_PutKey((uint8_t)(3 * i + 3));
 #endif
                     }
@@ -552,7 +536,7 @@ static void touch_DetectKey(uint8_t i)
                         {
                             pBtn->RepeatCount = 0;
 #if !KEY_MODE
-                            /* 长按键后，每隔pBtn->RepeatSpeed*10ms发送1个按键 */
+                            /* After long pressing the key, send 1 key every pBtn->RepeatSpeed*10ms */
                             touch_PutKey((uint8_t)(3 * i + 1));
 #endif
                         }
@@ -566,13 +550,13 @@ static void touch_DetectKey(uint8_t i)
             {
 #if KEY_MODE
                 if(pBtn->State == 1)
-                /* 发送按钮按下的消息 */
+                /* Send a message pressed by a button */
                 touch_PutKey((uint8_t)(3 * i + 1));
 #endif
                 pBtn->State = 0;
 
 #if !KEY_MODE
-                /* 松开按键KEY_FILTER_TIME后 发送按钮弹起的消息 */
+                /* After releasing the key KEY_FILTER_TIME, send the message that the button pops up */
                 touch_PutKey((uint8_t)(3 * i + 2));
 #endif
             }
@@ -582,16 +566,15 @@ static void touch_DetectKey(uint8_t i)
     }
 }
 
-/********************************************************************************************************
- * @fn      touch_Baseinit
- * @brief   触摸基础库初始化
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_Baseinit
+* @brief Touch basic library initialization
+* @param None
+* @return None */
 static void touch_Baseinit(void)
 {
     TKY_BaseInitTypeDef TKY_BaseInitStructure = {0};
-    for(uint8_t i = 0; i < TKY_MAX_QUEUE_NUM; i++)  //初始化tkyPinAll、tkyQueueAll变量
+    for(uint8_t i = 0; i < TKY_MAX_QUEUE_NUM; i++)  // Initialize tkyPinAll and tkyQueueAll variables
     {
     	if(TKY_Pin[my_tky_ch_init[i].channelNum][0] == 0x00)
     	{
@@ -609,13 +592,13 @@ static void touch_Baseinit(void)
     tkyPinAll.PaBit |= TKY_SHIELD_PIN;
 #endif
 
-    touch_GPIOSleep();  //拉低所有触摸pin脚
+    touch_GPIOSleep();  // Pull down all touch pin feet
 
 #if (TKY_SHIELD_EN)&&((TKY_FILTER_MODE != FILTER_MODE_9))
     tkyPinAll.PaBit &= ~TKY_SHIELD_PIN;
     GPIOA_ModeCfg(TKY_SHIELD_PIN, GPIO_ModeIN_Floating);//Shield Pin， only for CH58x series
 #endif
-    //----------触摸按键基础设置初始化--------
+    // ------------------------------------
     TKY_BaseInitStructure.filterMode = TKY_FILTER_MODE;
 #if (TKY_FILTER_MODE != FILTER_MODE_9)
     TKY_BaseInitStructure.shieldEn = TKY_SHIELD_EN;
@@ -626,7 +609,7 @@ static void touch_Baseinit(void)
     TKY_BaseInitStructure.filterGrade = TKY_FILTER_GRADE;
     TKY_BaseInitStructure.maxQueueNum = TKY_MAX_QUEUE_NUM;
     TKY_BaseInitStructure.baseRefreshOnPress = TKY_BASE_REFRESH_ON_PRESS;
-    //---基线更新速度，baseRefreshSampleNum和filterGrade，与基线更新速度成反比，基线更新速度还与代码结构相关，可通过函数GetCurQueueBaseLine来观察---
+    // ---Baseline update speed, baseRefreshSampleNum and filterGrade, are inversely proportional to the baseline update speed. The baseline update speed is also related to the code structure. You can observe it through the function GetCurQueueBaseLine--
     TKY_BaseInitStructure.baseRefreshSampleNum = TKY_BASE_REFRESH_SAMPLE_NUM;
     TKY_BaseInitStructure.baseUpRefreshDouble = TKY_BASE_UP_REFRESH_DOUBLE;
     TKY_BaseInitStructure.baseDownRefreshSlow = TKY_BASE_DOWN_REFRESH_SLOW;
@@ -634,12 +617,11 @@ static void touch_Baseinit(void)
     TKY_BaseInit( TKY_BaseInitStructure );
 }
 
-/********************************************************************************************************
- * @fn      touch_Channelinit
- * @brief   触摸通道初始化
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_Channelinit
+* @brief Touch channel initialization
+* @param None
+* @return None */
 static void touch_Channelinit(void)
 {
 
@@ -669,27 +651,27 @@ static void touch_Channelinit(void)
     	dg_log("queue : %d ch : %d , mean : %d\n",i,my_tky_ch_init[i].channelNum,chx_mean);
 
     }
-    //充放电基线值异常，重新校准基线值
+    // The charge and discharge baseline value is abnormal, recalibrate the baseline value
     if(error_flag != 0)
     {
-    	touch_GPIOSleep();  //拉低所有触摸pin脚
+    	touch_GPIOSleep();  // Pull down all touch pin feet
         dg_log("\n\nCharging parameters error, preparing for recalibration ...\n\n");
         uint8_t charge_time;
-        for (uint8_t i = 0; i < TKY_MAX_QUEUE_NUM; i++) {       //按最大序列数进行ADC通道转换
+        for (uint8_t i = 0; i < TKY_MAX_QUEUE_NUM; i++) {       // ADC channel conversion by maximum number of sequences
           charge_time = 0,chx_mean = 0;
           touch_IOSetAdcState(my_tky_ch_init[i].channelNum);
           while (1)
           {
               chx_mean = TKY_GetCurChannelMean(my_tky_ch_init[i].channelNum, charge_time,3, 1000);
 
-//              dg_log("testing .... chg : %d, baseline : %d\n",charge_time,chx_mean);//打印基线值
+// dg_log("testing... chg : %d, baseline : %d\n",charge_time,chx_mean);//Print baseline value
 
-              if ((charge_time == 0) && ((chx_mean > 3800))) {//低于最小充电参数
+              if ((charge_time == 0) && ((chx_mean > 3800))) {// Below the minimum charging parameter
                   dg_log("Error, %u KEY%u Too small Cap,Please check the hardware !\r\n",chx_mean,i);
                   break;
               }
               else {
-                  if ((chx_mean > 3200) &&(chx_mean < 3800)) {//充电参数正常
+                  if ((chx_mean > 3200) &&(chx_mean < 3800)) {// Charging parameters are normal
                       TKY_SetCurQueueBaseLine(i, chx_mean);
                       TKY_SetCurQueueChargeTime(i,charge_time,3);
                       dg_log("channel:%u, chargetime:%u,BaseLine:%u\r\n",
@@ -704,7 +686,7 @@ static void touch_Channelinit(void)
                 	  break;
                   }
                   charge_time++;
-                  if (charge_time > 0x1f) {    //超出最大充电参数
+                  if (charge_time > 0x1f) {    // Maximum charging parameters exceeded
                       dg_log("Error, Chargetime Max,KEY%u Too large Cap,Please check the hardware !\r\n",i);
                       break;
                   }
@@ -718,16 +700,16 @@ static void touch_Channelinit(void)
 #if (TKY_FILTER_MODE == FILTER_MODE_9) ||(TKY_FILTER_MODE == FILTER_MODE_7)
 #if TKY_SHIELD_EN
     TKY_ChannelInitTypeDef TKY_ChannelInitStructure = {0};
-	//--------对触摸通道0进行初始化，并列为检测队列中第13位----------
+	// --------Initialize touch channel 0 and is ranked as the 13th position in the detection queue-----------
 	TKY_ChannelInitStructure.queueNum = 12;
 	TKY_ChannelInitStructure.channelNum = 0;
-	TKY_ChannelInitStructure.threshold = 40; //---门槛阈值和PCB板相关，请根据实际情况调整---
+	TKY_ChannelInitStructure.threshold = 40; // ---The threshold threshold is related to PCB board, please adjust according to actual situation---
 	TKY_ChannelInitStructure.threshold2 = 30;
 	TKY_ChannelInitStructure.sleepStatus = 1;
 	TKY_ChannelInitStructure.baseLine = 600;
 	TKY_CHInit( TKY_ChannelInitStructure );
 #endif
-    //滤波器9模式下需要使用单独函数校准基线值
+    // In Filter 9 mode, you need to use a separate function to calibrate the baseline value
     TKY_CaliCrowedModBaseLine(0, 1000);
     for (uint8_t i = 0; i < TKY_MAX_QUEUE_NUM; i++)
     {
@@ -743,12 +725,11 @@ static void touch_Channelinit(void)
     TKY_SaveAndStop();
 }
 
-/********************************************************************************************************
- * @fn      touch_DetectWheelSlider
- * @brief   触摸滑轮数据处理
- * @param   无
- * @return  无
- */
+/* *******************************************************************************************************
+* @fn touch_DetectWheelSlider
+* @brief Touch pulley data processing
+* @param None
+* @return None */
 uint16_t touch_DetectWheelSlider(void)
 {
 	uint8_t  loop;
