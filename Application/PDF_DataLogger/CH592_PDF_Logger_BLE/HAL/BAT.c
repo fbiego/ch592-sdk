@@ -7,7 +7,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼þ°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "HAL.h"
 
 //#define CONFIG_BAT_DEBUG
@@ -21,7 +21,7 @@
  *                                        GLOBAL VARIABLES
  **************************************************************************************************/
 static signed short RoughCalib_Value = 0;    // ADC coarse adjustment deviation value
-//uint8 BatVolStartFlg = 0; //µç³ØµçÑ¹»ñÈ¡¿ªÊ¼
+//uint8 BatVolStartFlg = 0; //ç”µæ± ç”µåŽ‹èŽ·å–å¼€å§‹
 
 /**************************************************************************************************
  *                                          FUNCTIONS
@@ -87,7 +87,7 @@ uint8_t HAL_BatLowVolCheck(void)
 {
     uint16_t adc;
 
-    adc = ADC_GetAverage(8); //ADC²É¼¯8´Î
+    adc = ADC_GetAverage(8); //ADCé‡‡é›†8æ¬¡
 //    LOG_INFO("BAT_ADC = %d\n", adc);
 
     if(adc > BATT_ADC_LEVEL_2V3)

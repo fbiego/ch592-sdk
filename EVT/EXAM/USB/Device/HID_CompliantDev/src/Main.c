@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.1
 * Date               : 2022/01/25
-* Description        : Ä£Äâ¼æÈİHIDÉè±¸
+* Description        : æ¨¡æ‹Ÿå…¼å®¹HIDè®¾å¤‡
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -21,9 +21,9 @@ const uint8_t MyCfgDescr[] = {
     0x09,0x04,0x00,0x00,0x02,0x03,0x00,0x00,0x05,               // Interface descriptor
     0x09,0x21,0x00,0x01,0x00,0x01,0x22,0x22,0x00,               // HID class descriptor
     0x07,0x05,0x81,0x03,0x40,0x00,0x01,              // Endpoint descriptor
-    0x07,0x05,0x01,0x03,0x40,0x00,0x01               //¶ËµãÃèÊö·û
+    0x07,0x05,0x01,0x03,0x40,0x00,0x01               //ç«¯ç‚¹æè¿°ç¬¦
 };
-/*×Ö·û´®ÃèÊö·ûÂÔ*/
+/*å­—ç¬¦ä¸²æè¿°ç¬¦ç•¥*/
 /* HID report descriptor */
 const uint8_t HIDDescr[] = {  0x06, 0x00,0xff,
                               0x09, 0x01,
@@ -49,12 +49,12 @@ uint16_t       SetupReqLen;
 const uint8_t *pDescr;
 uint8_t        Report_Value = 0x00;
 uint8_t        Idle_Value = 0x00;
-uint8_t        USB_SleepStatus = 0x00; /* USBË¯Ãß×´Ì¬ */
+uint8_t        USB_SleepStatus = 0x00; /* USBç¡çœ çŠ¶æ€ */
 
-//HIDÉè±¸ÖĞ¶Ï´«ÊäÖĞÉÏ´«¸øÖ÷»ú4×Ö½ÚµÄÊı¾İ
+//HIDè®¾å¤‡ä¸­æ–­ä¼ è¾“ä¸­ä¸Šä¼ ç»™ä¸»æœº4å­—èŠ‚çš„æ•°æ®
 uint8_t HID_Buf[] = {0,0,0,0};
 
-/******** ÓÃ»§×Ô¶¨Òå·ÖÅä¶ËµãRAM ****************************************/
+/******** ç”¨æˆ·è‡ªå®šä¹‰åˆ†é…ç«¯ç‚¹RAM ****************************************/
 __attribute__((aligned(4))) uint8_t EP0_Databuf[64 + 64 + 64]; //ep0(64)+ep4_out(64)+ep4_in(64)
 __attribute__((aligned(4))) uint8_t EP1_Databuf[64 + 64];      //ep1_out(64)+ep1_in(64)
 __attribute__((aligned(4))) uint8_t EP2_Databuf[64 + 64];      //ep2_out(64)+ep2_in(64)
@@ -77,30 +77,30 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
     {
         if((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // Non-idle //Judge 5:4 bits in the interrupt status register and view the PID ID of the token.If these two digits are not 11 (meaning idle), enter the if statement
         {
-            switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))    //È¡µÃÁîÅÆµÄPID±êÊ¶ºÍÉè±¸Ä£Ê½ÏÂµÄ3:0Î»µÄ¶ËµãºÅ¡£Ö÷»úÄ£Ê½ÏÂ3:0Î»ÊÇÓ¦´ğPID±êÊ¶Î»
-            // ·ÖÎö²Ù×÷ÁîÅÆºÍ¶ËµãºÅ
+            switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))    //å–å¾—ä»¤ç‰Œçš„PIDæ ‡è¯†å’Œè®¾å¤‡æ¨¡å¼ä¸‹çš„3:0ä½çš„ç«¯ç‚¹å·ã€‚ä¸»æœºæ¨¡å¼ä¸‹3:0ä½æ˜¯åº”ç­”PIDæ ‡è¯†ä½
+            // åˆ†ææ“ä½œä»¤ç‰Œå’Œç«¯ç‚¹å·
             {                           // Endpoint 0 is used to control transmission.The following IN and OUT tokens of endpoint 0 correspond to the corresponding program, corresponding to the data stage and status stage of the control transmission.
                 case UIS_TOKEN_IN:      // The PID of the token package is IN, and the 5:4 bit is 10. The endpoint number of the 3:0 bit is 0.IN token: The device sends data to the host._UIS_: USB interrupt status
-                {                       //¶Ëµã0ÎªË«Ïò¶Ëµã£¬ÓÃ×÷¿ØÖÆ´«Êä¡£ ¡°|0¡±ÔËËãÊ¡ÂÔÁË
-                    switch(SetupReqCode)//Õâ¸öÖµ»áÔÚÊÕµ½SETUP°üÊ±¸³Öµ¡£ÔÚºóÃæ»áÓĞSETUP°ü´¦Àí³ÌĞò£¬¶ÔÓ¦¿ØÖÆ´«ÊäµÄÉèÖÃ½×¶Î¡£
+                {                       //ç«¯ç‚¹0ä¸ºåŒå‘ç«¯ç‚¹ï¼Œç”¨ä½œæ§åˆ¶ä¼ è¾“ã€‚ â€œ|0â€è¿ç®—çœç•¥äº†
+                    switch(SetupReqCode)//è¿™ä¸ªå€¼ä¼šåœ¨æ”¶åˆ°SETUPåŒ…æ—¶èµ‹å€¼ã€‚åœ¨åé¢ä¼šæœ‰SETUPåŒ…å¤„ç†ç¨‹åºï¼Œå¯¹åº”æ§åˆ¶ä¼ è¾“çš„è®¾ç½®é˜¶æ®µã€‚
                     {
                         case USB_GET_DESCRIPTOR:    // USB standard command, the host obtains description from the USB device
                             len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen; // The packet transmission length is.The maximum length is 64 bytes, and more than 64 bytes are processed in multiple times, and the first few times will be full.
-                            memcpy(pEP0_DataBuf, pDescr, len);//memcpy:ÄÚ´æ¿½±´º¯Êı£¬´Ó(¶şºÅÎ»)µØÖ·¿½±´(ÈıºÅÎ»)×Ö·û´®³¤¶Èµ½(Ò»ºÅÎ»)µØÖ·ÖĞ
-                            //DMAÖ±½ÓÓëÄÚ´æÏàÁ¬£¬»á¼ì²âµ½ÄÚ´æµÄ¸ÄĞ´£¬¶øºó²»ÓÃµ¥Æ¬»ú¿ØÖÆ¾Í¿ÉÒÔ½«ÄÚ´æÖĞµÄÊı¾İ·¢ËÍ³öÈ¥¡£Èç¹ûÖ»ÊÇÁ½¸öÊı×é»¥Ïà¸³Öµ£¬²»Éæ¼°ÓëDMAÆ¥ÅäµÄÎïÀíÄÚ´æ£¬¾ÍÎŞ·¨´¥·¢DMA¡£
+                            memcpy(pEP0_DataBuf, pDescr, len);//memcpy:å†…å­˜æ‹·è´å‡½æ•°ï¼Œä»(äºŒå·ä½)åœ°å€æ‹·è´(ä¸‰å·ä½)å­—ç¬¦ä¸²é•¿åº¦åˆ°(ä¸€å·ä½)åœ°å€ä¸­
+                            //DMAç›´æ¥ä¸å†…å­˜ç›¸è¿ï¼Œä¼šæ£€æµ‹åˆ°å†…å­˜çš„æ”¹å†™ï¼Œè€Œåä¸ç”¨å•ç‰‡æœºæ§åˆ¶å°±å¯ä»¥å°†å†…å­˜ä¸­çš„æ•°æ®å‘é€å‡ºå»ã€‚å¦‚æœåªæ˜¯ä¸¤ä¸ªæ•°ç»„äº’ç›¸èµ‹å€¼ï¼Œä¸æ¶‰åŠä¸DMAåŒ¹é…çš„ç‰©ç†å†…å­˜ï¼Œå°±æ— æ³•è§¦å‘DMAã€‚
                             SetupReqLen -= len;     // Record the remaining length of data to be sent
                             pDescr += len;          // Update the starting address of the data to be sent next, and use the copy function to
-                            R8_UEP0_T_LEN = len;    //¶Ëµã0·¢ËÍ³¤¶È¼Ä´æÆ÷ÖĞĞ´Èë±¾´Î°ü´«Êä³¤¶È
-                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // Í¬²½ÇĞ»»¡£IN·½Ïò£¨¶ÔÓÚµ¥Æ¬»ú¾ÍÊÇT·½Ïò£©µÄPIDÖĞµÄDATA0ºÍDATA1ÇĞ»»
-                            break;                  //¸³ÖµÍê¶Ëµã¿ØÖÆ¼Ä´æÆ÷µÄÎÕÊÖ°üÏìÓ¦£¨ACK¡¢NAK¡¢STALL£©£¬ÓÉÓ²¼ş´ò°ü³É·ûºÏ¹æ·¶µÄ°ü£¬DMA×Ô¶¯·¢ËÍ
+                            R8_UEP0_T_LEN = len;    //ç«¯ç‚¹0å‘é€é•¿åº¦å¯„å­˜å™¨ä¸­å†™å…¥æœ¬æ¬¡åŒ…ä¼ è¾“é•¿åº¦
+                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // åŒæ­¥åˆ‡æ¢ã€‚INæ–¹å‘ï¼ˆå¯¹äºå•ç‰‡æœºå°±æ˜¯Tæ–¹å‘ï¼‰çš„PIDä¸­çš„DATA0å’ŒDATA1åˆ‡æ¢
+                            break;                  //èµ‹å€¼å®Œç«¯ç‚¹æ§åˆ¶å¯„å­˜å™¨çš„æ¡æ‰‹åŒ…å“åº”ï¼ˆACKã€NAKã€STALLï¼‰ï¼Œç”±ç¡¬ä»¶æ‰“åŒ…æˆç¬¦åˆè§„èŒƒçš„åŒ…ï¼ŒDMAè‡ªåŠ¨å‘é€
                         case USB_SET_ADDRESS:       // USB standard command, the host sets a unique address for the device, the range 0 to 127, and 0 is the default address
                             R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
-                                    //7Î»µØÖ·+×î¸ßÎ»µÄÓÃ»§×Ô¶¨ÒåµØÖ·£¨Ä¬ÈÏÎª1£©£¬»òÉÏ¡°°ü´«Êä³¤¶È¡±£¨ÕâÀïµÄ¡°°ü´«Êä³¤¶È¡±ÔÚºóÃæ¸³Öµ³ÉÁËµØÖ·Î»£©
+                                    //7ä½åœ°å€+æœ€é«˜ä½çš„ç”¨æˆ·è‡ªå®šä¹‰åœ°å€ï¼ˆé»˜è®¤ä¸º1ï¼‰ï¼Œæˆ–ä¸Šâ€œåŒ…ä¼ è¾“é•¿åº¦â€ï¼ˆè¿™é‡Œçš„â€œåŒ…ä¼ è¾“é•¿åº¦â€åœ¨åé¢èµ‹å€¼æˆäº†åœ°å€ä½ï¼‰
                             R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-                                    //RÏìÓ¦OUTÊÂÎñACK£¬TÏìÓ¦INÊÂÎñNAK¡£Õâ¸öCASE·ÖÖ§ÀïÊÇIN·½Ïò£¬µ±DMAÏàÓ¦ÄÚ´æÖĞ£¬µ¥Æ¬»úÃ»ÓĞÊı¾İ¸üĞÂÊ±£¬»ØNAKÎÕÊÖ°ü¡£
-                            break;                                                  //Ò»°ã³ÌĞòÀïµÄOUTÊÂÎñ£¬Éè±¸»á»Ø°ü¸øÖ÷»ú£¬²»ÏìÓ¦NAK¡£
+                                    //Rå“åº”OUTäº‹åŠ¡ACKï¼ŒTå“åº”INäº‹åŠ¡NAKã€‚è¿™ä¸ªCASEåˆ†æ”¯é‡Œæ˜¯INæ–¹å‘ï¼Œå½“DMAç›¸åº”å†…å­˜ä¸­ï¼Œå•ç‰‡æœºæ²¡æœ‰æ•°æ®æ›´æ–°æ—¶ï¼Œå›NAKæ¡æ‰‹åŒ…ã€‚
+                            break;                                                  //ä¸€èˆ¬ç¨‹åºé‡Œçš„OUTäº‹åŠ¡ï¼Œè®¾å¤‡ä¼šå›åŒ…ç»™ä¸»æœºï¼Œä¸å“åº”NAKã€‚
 
-                        case USB_SET_FEATURE:       //USB±ê×¼ÃüÁî£¬Ö÷»úÒªÇóÆô¶¯Ò»¸öÔÚÉè±¸¡¢½Ó¿Ú»ò¶ËµãÉÏµÄÌØÕ÷
+                        case USB_SET_FEATURE:       //USBæ ‡å‡†å‘½ä»¤ï¼Œä¸»æœºè¦æ±‚å¯åŠ¨ä¸€ä¸ªåœ¨è®¾å¤‡ã€æ¥å£æˆ–ç«¯ç‚¹ä¸Šçš„ç‰¹å¾
                             break;
 
                         default:
@@ -114,7 +114,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                 }
                 break;
 
-                case UIS_TOKEN_OUT:     //ÁîÅÆ°üµÄPIDÎªOUT£¬5:4Î»Îª00¡£3:0Î»µÄ¶ËµãºÅÎª0¡£OUTÁîÅÆ£ºÖ÷»ú¸øÉè±¸·¢Êı¾İ¡£
+                case UIS_TOKEN_OUT:     //ä»¤ç‰ŒåŒ…çš„PIDä¸ºOUTï¼Œ5:4ä½ä¸º00ã€‚3:0ä½çš„ç«¯ç‚¹å·ä¸º0ã€‚OUTä»¤ç‰Œï¼šä¸»æœºç»™è®¾å¤‡å‘æ•°æ®ã€‚
                 {                       // Endpoint 0 is a bidirectional endpoint, used as control transmission."|0" operation is omitted
                     len = R8_USB_RX_LEN;    // Read the number of received data bytes stored in the current USB receiving length register //The receiving length register is shared by each endpoint, and the sending length register has its own
                 }
@@ -125,8 +125,8 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                     if(R8_USB_INT_ST & RB_UIS_TOG_OK)   // The hardware will determine whether the synchronization switches packets are correct. If the synchronization switch is correct, this bit will automatically be set.
                     { // Out-of-sync packets will be discarded
                         R8_UEP1_CTRL ^= RB_UEP_R_TOG;   // DATA synchronization switching of OUT transactions.Set an expected value.
-                        len = R8_USB_RX_LEN;        //¶ÁÈ¡½ÓÊÕÊı¾İµÄ×Ö½ÚÊı
-                        DevEP1_OUT_Deal(len);       //·¢ËÍ³¤¶ÈÎªlenµÄ×Ö½Ú£¬×Ô¶¯»ØACKÎÕÊÖ°ü¡£×Ô¶¨ÒåµÄ³ÌĞò¡£
+                        len = R8_USB_RX_LEN;        //è¯»å–æ¥æ”¶æ•°æ®çš„å­—èŠ‚æ•°
+                        DevEP1_OUT_Deal(len);       //å‘é€é•¿åº¦ä¸ºlençš„å­—èŠ‚ï¼Œè‡ªåŠ¨å›ACKæ¡æ‰‹åŒ…ã€‚è‡ªå®šä¹‰çš„ç¨‹åºã€‚
                     }
                 }
                 break;
@@ -160,15 +160,15 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                 {
                     /* Manufacturer request */
                 }
-                else if(pSetupReqPak->bRequestType & 0x20)  //È¡µÃÃüÁîÖĞµÄÄ³Ò»Î»£¬ÅĞ¶ÏÊÇ·ñÎª0£¬²»ÎªÁã½øifÓï¾ä
-                {   //ÅĞ¶ÏÎªHIDÀàÇëÇó
+                else if(pSetupReqPak->bRequestType & 0x20)  //å–å¾—å‘½ä»¤ä¸­çš„æŸä¸€ä½ï¼Œåˆ¤æ–­æ˜¯å¦ä¸º0ï¼Œä¸ä¸ºé›¶è¿›ifè¯­å¥
+                {   //åˆ¤æ–­ä¸ºHIDç±»è¯·æ±‚
                     switch(SetupReqCode)    // Determine the sequence number of the command
                     {
                         case DEF_USB_SET_IDLE: /* 0x0A: SET_IDLE */         // The host wants to set the idle time interval for the specific input report of the HID device
                             Idle_Value = EP0_Databuf[3];
                             break; // This must have
 
-                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     //Ö÷»úÏëÉèÖÃHIDÉè±¸µÄ±¨±íÃèÊö·û
+                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     //ä¸»æœºæƒ³è®¾ç½®HIDè®¾å¤‡çš„æŠ¥è¡¨æè¿°ç¬¦
                             break;
 
                         case DEF_USB_SET_PROTOCOL: /* 0x0B: SET_PROTOCOL */ // The host wants to set the protocol currently used by the HID device
@@ -192,32 +192,32 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
             }
             else    // Determined as a standard request
             {
-                switch(SetupReqCode)    //ÅĞ¶ÏÃüÁîµÄĞòºÅ
+                switch(SetupReqCode)    //åˆ¤æ–­å‘½ä»¤çš„åºå·
                 {
                     case USB_GET_DESCRIPTOR:    // The host wants to obtain the standard descriptor
                     {
-                        switch(((pSetupReqPak->wValue) >> 8))   //ÓÒÒÆ8Î»£¬¿´Ô­À´µÄ¸ß8Î»ÊÇ·ñÎª0£¬Îª1±íÊ¾·½ÏòÎªIN·½Ïò£¬Ôò½øs-caseÓï¾ä
+                        switch(((pSetupReqPak->wValue) >> 8))   //å³ç§»8ä½ï¼Œçœ‹åŸæ¥çš„é«˜8ä½æ˜¯å¦ä¸º0ï¼Œä¸º1è¡¨ç¤ºæ–¹å‘ä¸ºINæ–¹å‘ï¼Œåˆ™è¿›s-caseè¯­å¥
                         {
-                            case USB_DESCR_TYP_DEVICE:  //²»Í¬µÄÖµ´ú±í²»Í¬µÄÃüÁî¡£Ö÷»úÏë»ñµÃÉè±¸ÃèÊö·û
+                            case USB_DESCR_TYP_DEVICE:  //ä¸åŒçš„å€¼ä»£è¡¨ä¸åŒçš„å‘½ä»¤ã€‚ä¸»æœºæƒ³è·å¾—è®¾å¤‡æè¿°ç¬¦
                             {
                                 pDescr = MyDevDescr;    // Put the device descriptor string in the pDescr address, and the end of the case "Get standard descriptor" will be sent with a copy function.
-                                len = MyDevDescr[0];    //Ğ­Òé¹æ¶¨Éè±¸ÃèÊö·ûµÄÊ××Ö½Ú´æ·Å×Ö½ÚÊı³¤¶È¡£¿½±´º¯Êı»áÓÃµ½len²ÎÊı
+                                len = MyDevDescr[0];    //åè®®è§„å®šè®¾å¤‡æè¿°ç¬¦çš„é¦–å­—èŠ‚å­˜æ”¾å­—èŠ‚æ•°é•¿åº¦ã€‚æ‹·è´å‡½æ•°ä¼šç”¨åˆ°lenå‚æ•°
                             }
                             break;
 
-                            case USB_DESCR_TYP_CONFIG:  //Ö÷»úÏë»ñµÃÅäÖÃÃèÊö·û
+                            case USB_DESCR_TYP_CONFIG:  //ä¸»æœºæƒ³è·å¾—é…ç½®æè¿°ç¬¦
                             {
                                 pDescr = MyCfgDescr;    // Place the configuration descriptor string in the pDescr address and will be sent later
                                 len = MyCfgDescr[2];    // The protocol specifies the total length of the configuration information stored in the third byte of the configuration descriptor.
                             }
                             break;
 
-                            case USB_DESCR_TYP_HID:     //Ö÷»úÏë»ñµÃÈË»ú½Ó¿ÚÀàÃèÊö·û¡£´Ë´¦½á¹¹ÌåÖĞµÄwIndexÓëÅäÖÃÃèÊö·û²»Í¬£¬ÒâÎª½Ó¿ÚºÅ¡£
-                                switch((pSetupReqPak->wIndex) & 0xff)       //È¡µÍ°ËÎ»£¬¸ß°ËÎ»Ä¨È¥
+                            case USB_DESCR_TYP_HID:     //ä¸»æœºæƒ³è·å¾—äººæœºæ¥å£ç±»æè¿°ç¬¦ã€‚æ­¤å¤„ç»“æ„ä½“ä¸­çš„wIndexä¸é…ç½®æè¿°ç¬¦ä¸åŒï¼Œæ„ä¸ºæ¥å£å·ã€‚
+                                switch((pSetupReqPak->wIndex) & 0xff)       //å–ä½å…«ä½ï¼Œé«˜å…«ä½æŠ¹å»
                                 {
                                     /* Select an interface */
                                     case 0:
-                                        pDescr = (uint8_t *)(&MyCfgDescr[18]);  //½Ó¿Ú1µÄÀàÃèÊö·û´æ·ÅÎ»ÖÃ£¬´ı·¢ËÍ
+                                        pDescr = (uint8_t *)(&MyCfgDescr[18]);  //æ¥å£1çš„ç±»æè¿°ç¬¦å­˜æ”¾ä½ç½®ï¼Œå¾…å‘é€
                                         len = 9;
                                         break;
 
@@ -228,7 +228,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                 }
                                 break;
 
-                            case USB_DESCR_TYP_REPORT:  //Ö÷»úÏë»ñµÃÉè±¸±¨±íÃèÊö·û
+                            case USB_DESCR_TYP_REPORT:  //ä¸»æœºæƒ³è·å¾—è®¾å¤‡æŠ¥è¡¨æè¿°ç¬¦
                             {
                                 if(((pSetupReqPak->wIndex) & 0xff) == 0) // Interface 0 report descriptor
                                 {
@@ -236,13 +236,13 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                     len = sizeof(HIDDescr);
                                 }
                                 else
-                                    len = 0xff; //±¾³ÌĞòÖ»ÓĞ2¸ö½Ó¿Ú£¬Õâ¾ä»°Õı³£²»¿ÉÄÜÖ´ĞĞ
+                                    len = 0xff; //æœ¬ç¨‹åºåªæœ‰2ä¸ªæ¥å£ï¼Œè¿™å¥è¯æ­£å¸¸ä¸å¯èƒ½æ‰§è¡Œ
                             }
                             break;
 
                             case USB_DESCR_TYP_STRING:  // The host wants to obtain the device string descriptor
                             {
-                                switch((pSetupReqPak->wValue) & 0xff)   //¸ù¾İwValueµÄÖµ´«µİ×Ö·û´®ĞÅÏ¢
+                                switch((pSetupReqPak->wValue) & 0xff)   //æ ¹æ®wValueçš„å€¼ä¼ é€’å­—ç¬¦ä¸²ä¿¡æ¯
                                 {
                                     default:
                                         errflag = 0xFF; // Unsupported string descriptors
@@ -265,15 +265,15 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
 
                     case USB_SET_ADDRESS:       // The host wants to set the device address
                         SetupReqLen = (pSetupReqPak->wValue) & 0xff;    // The bit device address distributed by the host is temporarily stored in SetupReqLen
-                        break;                                          //¿ØÖÆ½×¶Î»á¸³Öµ¸øÉè±¸µØÖ·²ÎÊı
+                        break;                                          //æ§åˆ¶é˜¶æ®µä¼šèµ‹å€¼ç»™è®¾å¤‡åœ°å€å‚æ•°
 
                     case USB_GET_CONFIGURATION: // The host wants to obtain the current configuration of the device
                         pEP0_DataBuf[0] = DevConfig;    // Put device configuration into RAM
                         if(SetupReqLen > 1)
-                            SetupReqLen = 1;    //½«Êı¾İ½×¶ÎµÄ×Ö½ÚÊıÖÃ1¡£ÒòÎªDevConfigÖ»ÓĞÒ»¸ö×Ö½Ú
+                            SetupReqLen = 1;    //å°†æ•°æ®é˜¶æ®µçš„å­—èŠ‚æ•°ç½®1ã€‚å› ä¸ºDevConfigåªæœ‰ä¸€ä¸ªå­—èŠ‚
                         break;
 
-                    case USB_SET_CONFIGURATION: //Ö÷»úÏëÉèÖÃÉè±¸µ±Ç°ÅäÖÃ
+                    case USB_SET_CONFIGURATION: //ä¸»æœºæƒ³è®¾ç½®è®¾å¤‡å½“å‰é…ç½®
                         DevConfig = (pSetupReqPak->wValue) & 0xff;  // Take the lower eight digits and wipe off the higher eight digits
                         break;
 
@@ -281,9 +281,9 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                     {
                         if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // Determine whether it is an endpoint feature (clear the state where the endpoint stops working)
                         {
-                            switch((pSetupReqPak->wIndex) & 0xff)   //È¡µÍ°ËÎ»£¬¸ß°ËÎ»Ä¨È¥¡£ÅĞ¶ÏË÷Òı
+                            switch((pSetupReqPak->wIndex) & 0xff)   //å–ä½å…«ä½ï¼Œé«˜å…«ä½æŠ¹å»ã€‚åˆ¤æ–­ç´¢å¼•
                             {       // The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
-                                case 0x81:      //ÇåÁã_TOGºÍ_T_RESÕâÈıÎ»£¬²¢½«ºóÕßĞ´³É_NAK£¬ÏìÓ¦INÊÂÎñNAK±íÊ¾ÎŞÊı¾İ·µ»Ø
+                                case 0x81:      //æ¸…é›¶_TOGå’Œ_T_RESè¿™ä¸‰ä½ï¼Œå¹¶å°†åè€…å†™æˆ_NAKï¼Œå“åº”INäº‹åŠ¡NAKè¡¨ç¤ºæ— æ•°æ®è¿”å›
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
                                 case 0x01:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
@@ -326,11 +326,11 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                     break;
                             }
                         }
-                        else if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE)  //ÅĞ¶ÏÊÇ²»ÊÇÉè±¸ÌØÕ÷£¨Ê¹Éè±¸ĞİÃß£©
+                        else if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE)  //åˆ¤æ–­æ˜¯ä¸æ˜¯è®¾å¤‡ç‰¹å¾ï¼ˆä½¿è®¾å¤‡ä¼‘çœ ï¼‰
                         {
                             if(pSetupReqPak->wValue == 1)
                             {
-                                USB_SleepStatus |= 0x01;    //ÉèÖÃË¯Ãß
+                                USB_SleepStatus |= 0x01;    //è®¾ç½®ç¡çœ 
                             }
                         }
                         else
@@ -349,9 +349,9 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                         break;
 
                     case USB_GET_STATUS:        // The host wants to obtain the status of the device, interface, or endpoint
-                        if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) //ÅĞ¶ÏÊÇ·ñÎª¶Ëµã×´Ì¬
+                        if((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) //åˆ¤æ–­æ˜¯å¦ä¸ºç«¯ç‚¹çŠ¶æ€
                         {
-                            /* ¶Ëµã */
+                            /* ç«¯ç‚¹ */
                             pEP0_DataBuf[0] = 0x00;
                             switch(pSetupReqPak->wIndex)
                             {       // The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
@@ -382,7 +382,7 @@ void USB_DevTransProcess(void)  // USB device transmission interrupt processing
                                 pEP0_DataBuf[0] = 0x00;
                             }
                         }
-                        pEP0_DataBuf[1] = 0;    //·µ»Ø×´Ì¬ĞÅÏ¢µÄ¸ñÊ½Îª16Î»Êı£¬¸ß°ËÎ»±£ÁôÎª0
+                        pEP0_DataBuf[1] = 0;    //è¿”å›çŠ¶æ€ä¿¡æ¯çš„æ ¼å¼ä¸º16ä½æ•°ï¼Œé«˜å…«ä½ä¿ç•™ä¸º0
                         if(SetupReqLen >= 2)
                         {
                             SetupReqLen = 2;    // Set the number of bytes in the data stage by 2.Because there are only 2 bytes of data to be transferred
@@ -483,7 +483,7 @@ void DevWakeup(void)
 /*********************************************************************
  * @fn      DebugInit
  *
- * @brief   µ÷ÊÔ³õÊ¼»¯
+ * @brief   è°ƒè¯•åˆå§‹åŒ–
  *
  * @return  none
  */
@@ -498,7 +498,7 @@ void DebugInit(void)
 /*********************************************************************
  * @fn      main
  *
- * @brief   Ö÷º¯Êı
+ * @brief   ä¸»å‡½æ•°
  *
  * @return  none
  */
@@ -519,7 +519,7 @@ int main()
     mDelaymS(100);
 
     while(1)
-    {//Ä£Äâ´«Êä4¸ö×Ö½ÚµÄÊı¾İ£¬Êµ¼Ê´«Êä¸ù¾İÓÃ»§ĞèÒª×ÔĞĞĞŞ¸Ä
+    {//æ¨¡æ‹Ÿä¼ è¾“4ä¸ªå­—èŠ‚çš„æ•°æ®ï¼Œå®é™…ä¼ è¾“æ ¹æ®ç”¨æˆ·éœ€è¦è‡ªè¡Œä¿®æ”¹
         if(Ready)
         {
             Ready = 0;

@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.10
 * Date               : 2018/12/14
-* Description        : oad相关配置定义
+* Description        : oad鐩稿叧閰嶇疆瀹氫箟
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

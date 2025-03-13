@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.10
 * Date               : 2018/12/14
-* Description        : oadÏà¹ØÅäÖÃ¶¨Òå
+* Description        : oadç›¸å…³é…ç½®å®šä¹‰
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -49,18 +49,18 @@
 #define IMAGE_IAP_SIZE         12 * 1024
 
 #define IAP_STATE_SUCCESS      0x00               // IAP Success
-#define IAP_STATE_RETRAN       0xFE               // IAPÖØ´«
-#define IAP_STATE_FAILURE      0xFF               // IAPÊ§°Ü
+#define IAP_STATE_RETRAN       0xFE               // IAPé‡ä¼ 
+#define IAP_STATE_FAILURE      0xFF               // IAPå¤±è´¥
 
 /* IAP definition */
 /* The following is the IAP download command definition */
 #define CMD_HAND_SHAKE         0x5A               // Handshake command
 #define CMD_HAND_SHAKE_ACK     0xA5               // Handshake ACK
 
-#define CMD_IAP_PROM           0x80               // IAP±à³ÌÃüÁî
+#define CMD_IAP_PROM           0x80               // IAPç¼–ç¨‹å‘½ä»¤
 #define CMD_IAP_ERASE          0x81               // IAP erase command
 #define CMD_IAP_VERIFY         0x82               // IAP verification command
-#define CMD_IAP_END            0x83               // IAP½áÊø±êÖ¾
+#define CMD_IAP_END            0x83               // IAPç»“æŸæ ‡å¿—
 #define CMD_IAP_INFO           0x84               // IAP selects firmware to obtain device information
 #define CMD_IAP_INFO_ACK       0x04               // IAP Select Firmware ACK
 #define CMD_SINGLE_CHANNEL     0xC0               // Single carrier command
@@ -82,7 +82,7 @@
 /* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD      0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* ´æ·ÅÔÚDataFlashÀïµÄOTAĞÅÏ¢ */
+/* å­˜æ”¾åœ¨DataFlashé‡Œçš„OTAä¿¡æ¯ */
 typedef struct
 {
     unsigned char ImageFlag; // The current image flag of the record
@@ -90,15 +90,15 @@ typedef struct
 } OTADataFlashInfo_t;
 
 /* OTA IAP Communication Protocol Definition */
-/* µØÖ·Ê¹ÓÃ4±¶Æ«ÒÆ */
+/* åœ°å€ä½¿ç”¨4å€åç§» */
 typedef union
 {
     struct
     {
-        unsigned char cmd;          /* ÃüÁîÂë 0x5A */
+        unsigned char cmd;          /* å‘½ä»¤ç  0x5A */
         unsigned char len;          /* Subsequent data length */
         unsigned char string[7];    /* WCH@IAP */
-    } handshake; /* ÎÕÊÖÃüÁî */
+    } handshake; /* æ¡æ‰‹å‘½ä»¤ */
     struct
     {
         unsigned char cmd;          /* Command code 0x81 */
@@ -109,13 +109,13 @@ typedef union
     } erase; /* Erase command */
     struct
     {
-        unsigned char cmd;       /* ÃüÁîÂë 0x83 */
+        unsigned char cmd;       /* å‘½ä»¤ç  0x83 */
         unsigned char len;       /* Subsequent data length */
         unsigned char status[2]; /* Two byte state, reserved */
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* ÃüÁîÂë 0x82 */
+        unsigned char cmd;              /* å‘½ä»¤ç  0x82 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */

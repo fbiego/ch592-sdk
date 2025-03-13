@@ -33,7 +33,7 @@ extern "C" {
 #define ERR_USB_BUF_OVER       0x17  /* The data transmitted by USB is incorrect or there is too much data and the buffer overflows */
 #define ERR_USB_DISK_ERR       0x1F  /* The USB memory operation failed. During initialization, the USB memory may not be supported. During read and write operations, the disk may be damaged or disconnected. */
 #define ERR_USB_TRANSFER       0x20  /* NAK/STALL and more error codes are in 0x20~0x2F */
-#define ERR_USB_UNSUPPORT      0xFB  /* ²»Ö§³ÖµÄUSBÉè±¸*/
+#define ERR_USB_UNSUPPORT      0xFB  /* ä¸æ”¯æŒçš„USBè®¾å¤‡*/
 #define ERR_USB_UNKNOWN        0xFE  /* Equipment operation error */
 #define ERR_AOA_PROTOCOL       0x41  /* There was an error in the protocol version */
 
@@ -59,7 +59,7 @@ typedef struct
     uint8_t  DeviceStatus;  // Device status, 0-No device, 1-There is a device but has not been initialized yet, 2-There is a device but the initialization enumeration failed, 3-There is a device and the initialization enumeration is successful
     uint8_t  DeviceAddress; // The USB address assigned by the device
     uint8_t  DeviceSpeed;   // 0 is low speed, non-0 is full speed
-    uint8_t  DeviceType;    // Éè±¸ÀàĞÍ
+    uint8_t  DeviceType;    // è®¾å¤‡ç±»å‹
     uint16_t DeviceVID;
     uint16_t DevicePID;
     uint8_t  GpVar[4];     // Common variables, storing endpoints
@@ -71,14 +71,14 @@ typedef struct
     UINT8  DeviceStatus;  // Device status, 0-No device, 1-There is a device but has not been initialized yet, 2-There is a device but the initialization enumeration failed, 3-There is a device and the initialization enumeration is successful
     UINT8  DeviceAddress; // The USB address assigned by the device
     UINT8  DeviceSpeed;   // 0 is low speed, non-0 is full speed
-    UINT8  DeviceType;    // Éè±¸ÀàĞÍ
+    UINT8  DeviceType;    // è®¾å¤‡ç±»å‹
     UINT16 DeviceVID;
     UINT16 DevicePID;
     UINT8  GpVar[4]; // General variables
 } _DevOnHubPort;     // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
 
 extern _RootHubDev   ThisUsbDev;
-extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // ¼Ù¶¨:²»³¬¹ı1¸öÍâ²¿HUB,Ã¿¸öÍâ²¿HUB²»³¬¹ıHUB_MAX_PORTS¸ö¶Ë¿Ú(¶àÁË²»¹Ü)
+extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // å‡å®š:ä¸è¶…è¿‡1ä¸ªå¤–éƒ¨HUB,æ¯ä¸ªå¤–éƒ¨HUBä¸è¶…è¿‡HUB_MAX_PORTSä¸ªç«¯å£(å¤šäº†ä¸ç®¡)
 extern uint8_t       UsbDevEndp0Size;             // Maximum package size for endpoint 0 of USB device */
 extern uint8_t       FoundNewDev;
 
@@ -86,8 +86,8 @@ extern uint8_t *pHOST_RX_RAM_Addr;
 extern uint8_t *pHOST_TX_RAM_Addr;
 
 extern _RootHubDev   ThisUsb2Dev;
-extern _DevOnHubPort DevOnU2HubPort[HUB_MAX_PORTS]; // ¼Ù¶¨:²»³¬¹ı1¸öÍâ²¿HUB,Ã¿¸öÍâ²¿HUB²»³¬¹ıHUB_MAX_PORTS¸ö¶Ë¿Ú(¶àÁË²»¹Ü)
-extern uint8_t       Usb2DevEndp0Size;              // USBÉè±¸µÄ¶Ëµã0µÄ×î´ó°ü³ß´ç */
+extern _DevOnHubPort DevOnU2HubPort[HUB_MAX_PORTS]; // å‡å®š:ä¸è¶…è¿‡1ä¸ªå¤–éƒ¨HUB,æ¯ä¸ªå¤–éƒ¨HUBä¸è¶…è¿‡HUB_MAX_PORTSä¸ªç«¯å£(å¤šäº†ä¸ç®¡)
+extern uint8_t       Usb2DevEndp0Size;              // USBè®¾å¤‡çš„ç«¯ç‚¹0çš„æœ€å¤§åŒ…å°ºå¯¸ */
 extern uint8_t       FoundNewU2Dev;
 
 extern uint8_t *pU2HOST_RX_RAM_Addr;
@@ -102,19 +102,19 @@ extern uint8_t U2Com_Buffer[];
 extern const uint8_t SetupGetDevDescr[];     // Get device descriptor*/
 extern const uint8_t SetupGetCfgDescr[];     // Get the configuration descriptor*/
 extern const uint8_t SetupSetUsbAddr[];      // Set USB address*/
-extern const uint8_t SetupSetUsbConfig[];    // ÉèÖÃUSBÅäÖÃ*/
+extern const uint8_t SetupSetUsbConfig[];    // è®¾ç½®USBé…ç½®*/
 extern const uint8_t SetupSetUsbInterface[]; // Set USB interface configuration*/
 extern const uint8_t SetupClrEndpStall[];    // Clear endpoint STALL*/
 
-extern const uint8_t SetupGetU2DevDescr[];    // »ñÈ¡Éè±¸ÃèÊö·û*/
+extern const uint8_t SetupGetU2DevDescr[];    // è·å–è®¾å¤‡æè¿°ç¬¦*/
 extern const uint8_t SetupGetU2CfgDescr[];    // Get the configuration descriptor*/
 extern const uint8_t SetupSetUsb2Addr[];      // Set USB address*/
-extern const uint8_t SetupSetUsb2Config[];    // ÉèÖÃUSBÅäÖÃ*/
+extern const uint8_t SetupSetUsb2Config[];    // è®¾ç½®USBé…ç½®*/
 extern const uint8_t SetupSetUsb2Interface[]; // Set USB interface configuration*/
 extern const uint8_t SetupClrU2EndpStall[];   // Clear endpoint STALL*/
 
 /**
- * @brief   ¹Ø±ÕROOT-HUB¶Ë¿Ú,Êµ¼ÊÉÏÓ²¼şÒÑ¾­×Ô¶¯¹Ø±Õ,´Ë´¦Ö»ÊÇÇå³ıÒ»Ğ©½á¹¹×´Ì¬
+ * @brief   å…³é—­ROOT-HUBç«¯å£,å®é™…ä¸Šç¡¬ä»¶å·²ç»è‡ªåŠ¨å…³é—­,æ­¤å¤„åªæ˜¯æ¸…é™¤ä¸€äº›ç»“æ„çŠ¶æ€
  */
 void DisableRootHubPort(void);
 
@@ -132,9 +132,9 @@ uint8_t AnalyzeRootHub(void);
 void SetHostUsbAddr(uint8_t addr);
 
 /**
- * @brief   ÉèÖÃµ±Ç°USBËÙ¶È
+ * @brief   è®¾ç½®å½“å‰USBé€Ÿåº¦
  *
- * @param   FullSpeed   - USBËÙ¶È
+ * @param   FullSpeed   - USBé€Ÿåº¦
  */
 void SetUsbSpeed(uint8_t FullSpeed);
 
@@ -169,13 +169,13 @@ uint8_t WaitUSB_Interrupt(void);
 uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout);
 
 /**
- * @brief   Ö´ĞĞ¿ØÖÆ´«Êä,8×Ö½ÚÇëÇóÂëÔÚpSetupReqÖĞ,DataBufÎª¿ÉÑ¡µÄÊÕ·¢»º³åÇø
+ * @brief   æ‰§è¡Œæ§åˆ¶ä¼ è¾“,8å­—èŠ‚è¯·æ±‚ç åœ¨pSetupReqä¸­,DataBufä¸ºå¯é€‰çš„æ”¶å‘ç¼“å†²åŒº
  *
- * @param   DataBuf     - Èç¹ûĞèÒª½ÓÊÕºÍ·¢ËÍÊı¾İ,ÄÇÃ´DataBufĞèÖ¸ÏòÓĞĞ§»º³åÇøÓÃÓÚ´æ·ÅºóĞøÊı¾İ
- * @param   RetLen      - Êµ¼Ê³É¹¦ÊÕ·¢µÄ×Ü³¤¶È±£´æÔÚRetLenÖ¸ÏòµÄ×Ö½Ú±äÁ¿ÖĞ
+ * @param   DataBuf     - å¦‚æœéœ€è¦æ¥æ”¶å’Œå‘é€æ•°æ®,é‚£ä¹ˆDataBuféœ€æŒ‡å‘æœ‰æ•ˆç¼“å†²åŒºç”¨äºå­˜æ”¾åç»­æ•°æ®
+ * @param   RetLen      - å®é™…æˆåŠŸæ”¶å‘çš„æ€»é•¿åº¦ä¿å­˜åœ¨RetLenæŒ‡å‘çš„å­—èŠ‚å˜é‡ä¸­
  *
- * @return  ERR_USB_BUF_OVER    IN×´Ì¬½×¶Î³ö´í
- *          ERR_SUCCESS         Êı¾İ½»»»³É¹¦
+ * @return  ERR_USB_BUF_OVER    INçŠ¶æ€é˜¶æ®µå‡ºé”™
+ *          ERR_SUCCESS         æ•°æ®äº¤æ¢æˆåŠŸ
  */
 uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen);
 
@@ -242,16 +242,16 @@ uint8_t SETorOFFNumLock(uint8_t *buf); // NumLock's lighting judgment
 /*************************************************************/
 
 /**
- * @brief   ³õÊ¼»¯Ö¸¶¨ROOT-HUB¶Ë¿ÚµÄUSBÉè±¸
+ * @brief   åˆå§‹åŒ–æŒ‡å®šROOT-HUBç«¯å£çš„USBè®¾å¤‡
  *
- * @return  ´íÎóÂë
+ * @return  é”™è¯¯ç 
  */
 uint8_t InitRootDevice(void);
 
 /**
- * @brief   »ñÈ¡HIDÉè±¸±¨±íÃèÊö·û,·µ»ØÔÚTxBufferÖĞ
+ * @brief   è·å–HIDè®¾å¤‡æŠ¥è¡¨æè¿°ç¬¦,è¿”å›åœ¨TxBufferä¸­
  *
- * @return  ´íÎóÂë
+ * @return  é”™è¯¯ç 
  */
 uint8_t CtrlGetHIDDeviceReport(uint8_t infc);
 

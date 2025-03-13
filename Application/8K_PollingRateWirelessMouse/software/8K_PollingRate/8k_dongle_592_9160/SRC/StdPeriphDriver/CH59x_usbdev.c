@@ -32,7 +32,7 @@ void USB_DeviceInit(void)
     R8_USB_CTRL = 0x00; // Set the mode first, cancel RB_UC_CLR_ALL
 
     R8_UEP4_1_MOD = RB_UEP4_RX_EN | RB_UEP4_TX_EN | RB_UEP1_RX_EN | RB_UEP1_TX_EN; // Endpoint 4 OUT+IN, Endpoint 1 OUT+IN
-    R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP2_TX_EN | RB_UEP3_RX_EN | RB_UEP3_TX_EN; // �˵�2 OUT+IN,�˵�3 OUT+IN
+    R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP2_TX_EN | RB_UEP3_RX_EN | RB_UEP3_TX_EN; // ¶Ëµã2 OUT+IN,¶Ëµã3 OUT+IN
     R8_UEP567_MOD = RB_UEP5_TX_EN | RB_UEP5_RX_EN | RB_UEP6_TX_EN | RB_UEP6_RX_EN;
 
     R16_UEP0_DMA = (uint16_t)(uint32_t)pEP0_RAM_Addr;

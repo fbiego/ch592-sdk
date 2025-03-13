@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2021/06/20
- * Description        : single-hop multicast£¬×é²¥´«ÊäÀý×Ó
+ * Description        : single-hop multicastÂ£Â¬Ã—Ã©Â²Â¥Â´Â«ÃŠÃ¤Ã€Ã½Ã—Ã“
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 

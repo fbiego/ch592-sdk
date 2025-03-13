@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2018/12/10
-* Description        : HID 设备任务处理程序
+* Description        : HID 璁惧浠诲姟澶勭悊绋嬪簭
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

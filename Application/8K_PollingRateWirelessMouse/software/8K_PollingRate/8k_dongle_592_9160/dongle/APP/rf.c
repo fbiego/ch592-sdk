@@ -3,15 +3,15 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2022/03/15
- * Description        : rfÊÕ·¢²âÊÔÀı³Ì£¬µ¥Ïò·¢ËÍ
- *                      PB15µÍµçÆ½Îª·¢ËÍÄ£Ê½£¬Ä¬ÈÏÎª½ÓÊÕÄ£Ê½
+ * Description        : rfæ”¶å‘æµ‹è¯•ä¾‹ç¨‹ï¼Œå•å‘å‘é€
+ *                      PB15ä½ç”µå¹³ä¸ºå‘é€æ¨¡å¼ï¼Œé»˜è®¤ä¸ºæ¥æ”¶æ¨¡å¼
  *
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "ch9160.h"
 #include <rf.h>
 #include "CH59x_common.h"
@@ -62,7 +62,7 @@ uint8_t self_mac[6] = {0};
 /*******************************************************************************
  * @fn      rfRoleBoundProcess
  *
- * @brief   RF ÊÕ·¢DMA³õÊ¼»¯
+ * @brief   RF æ”¶å‘DMAåˆå§‹åŒ–
  *
  * @param   None.
  *
@@ -96,7 +96,7 @@ void rfDMADescInit( void )
 /*******************************************************************************
  * @fn      rf_get_data
  *
- * @brief   »ñÈ¡Ò»°üRF½ÓÊÕDMAÖĞµÄÊı¾İ
+ * @brief   è·å–ä¸€åŒ…RFæ¥æ”¶DMAä¸­çš„æ•°æ®
  *
  * @param   None.
  *
@@ -118,7 +118,7 @@ uint8_t *rf_get_data( uint8_t *pLen)
 /*******************************************************************************
  * @fn      rf_delete_data
  *
- * @brief   É¾³ıÒ»°üRF½ÓÊÕDMAÖĞµÄÊı¾İ
+ * @brief   åˆ é™¤ä¸€åŒ…RFæ¥æ”¶DMAä¸­çš„æ•°æ®
  *
  * @param   None.
  *
@@ -134,7 +134,7 @@ void rf_delete_data()
 /*******************************************************************************
  * @fn      rf_send_data
  *
- * @brief   ÏòRF·¢ËÍDMAÖĞÌí¼ÓÒ»°üÊı¾İ
+ * @brief   å‘RFå‘é€DMAä¸­æ·»åŠ ä¸€åŒ…æ•°æ®
  *
  * @param   None.
  *
@@ -163,7 +163,7 @@ uint8_t rf_send_data( uint8_t *pData, uint8_t len)
 /*******************************************************************************
  * @fn      RF_ProcessCallBack
  *
- * @brief   RF ×´Ì¬»Øµ÷£¬×¢Òâ´Ëº¯ÊıÎªÖĞ¶ÏÖĞµ÷ÓÃ
+ * @brief   RF çŠ¶æ€å›è°ƒï¼Œæ³¨æ„æ­¤å‡½æ•°ä¸ºä¸­æ–­ä¸­è°ƒç”¨
  *
  * @param   None.
  *
@@ -172,12 +172,12 @@ uint8_t rf_send_data( uint8_t *pData, uint8_t len)
 __HIGH_CODE
 void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
 {
-    // ÊÕµ½Êı¾İ»Øµ÷
+    // æ”¶åˆ°æ•°æ®å›è°ƒ
     if( sta & RF_STATE_RX )
     {
 //        rssi = RFIP_ReadRssi();
     }
-    // ½ÓÊÕDMAÂú
+    // æ¥æ”¶DMAæ»¡
     if( sta & RF_STATE_RBU )
     {
 //        PRINT( "!\n" );
@@ -193,7 +193,7 @@ void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
 /*******************************************************************************
  * @fn      rfRoleBoundProcess
  *
- * @brief   Á¬½Ó°ó¶¨×´Ì¬»Øµ÷
+ * @brief   è¿æ¥ç»‘å®šçŠ¶æ€å›è°ƒ
  *
  * @param   None.
  *
@@ -211,13 +211,13 @@ void rfRoleBoundProcess( staBound_t *pSta )
     if( !pSta->status )
     {
         gDeviceId = pSta->devId;
-        // ÅĞ¶Ïµ±Ç°RF½ÇÉ«
+        // åˆ¤æ–­å½“å‰RFè§’è‰²
         if( !(pSta->role&1) )
         {
-            // µ±Ç°Îª½ÓÊÕ¶Ë£¨dongle£©
-            // ÅäÖÃµ±Ç°Á¬½Ó²ÎÊı£¬ÓÉÓÚÖ»ÓĞÒ»¸öÉè±¸£¬ËùÒÔËùÓĞ¼ä¸ô¶¼ÉèÖÃÎªÍ¬Ò»¸öÉè±¸
+            // å½“å‰ä¸ºæ¥æ”¶ç«¯ï¼ˆdongleï¼‰
+            // é…ç½®å½“å‰è¿æ¥å‚æ•°ï¼Œç”±äºåªæœ‰ä¸€ä¸ªè®¾å¤‡ï¼Œæ‰€ä»¥æ‰€æœ‰é—´éš”éƒ½è®¾ç½®ä¸ºåŒä¸€ä¸ªè®¾å¤‡
             SpeedList[0].deviceId = pSta->devId;
-            SpeedList[0].rssi = 0; // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞrssiÉè±¸£¬ÆäËûÖµ±íÊ¾Ö»¿ÉÒÔÁ¬½ÓRSSI´óÓÚ¸ÃÖµµÄÉè±¸
+            SpeedList[0].rssi = 0; // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰rssiè®¾å¤‡ï¼Œå…¶ä»–å€¼è¡¨ç¤ºåªå¯ä»¥è¿æ¥RSSIå¤§äºè¯¥å€¼çš„è®¾å¤‡
             tmos_memcpy(SpeedList[0].peerInfo, pSta->PeerInfo, 6);
             gSpeedList_t.number = ROLE_SPEED_LIST_NUM;
             gSpeedList_t.pList = SpeedList;
@@ -231,26 +231,26 @@ void rfRoleBoundProcess( staBound_t *pSta )
         }
         else
         {
-            // µ±Ç°Îª·¢ËÍ¶Ë£¨Êó±ê£©
+            // å½“å‰ä¸ºå‘é€ç«¯ï¼ˆé¼ æ ‡ï¼‰
         }
     }
     else
     {
         if( !(pSta->role&1) )
         {
-            // µ±Ç°Îª½ÓÊÕ¶Ë£¨dongle£©
+            // å½“å‰ä¸ºæ¥æ”¶ç«¯ï¼ˆdongleï¼‰
         }
         else
         {
-            // µ±Ç°Îª·¢ËÍ¶Ë£¨Êó±ê£©
+            // å½“å‰ä¸ºå‘é€ç«¯ï¼ˆé¼ æ ‡ï¼‰
         }
-        // RF×Ô¶¯»ØÁ¬³¬Ê±Ê§°Ü
+        // RFè‡ªåŠ¨å›è¿è¶…æ—¶å¤±è´¥
         if( pSta->status == FAILURE )
         {
             RFRole_ClearRxData(gDeviceId);
             tmos_set_event( rfTaskID, RF_START_PEER_BOUND_EVENT );
         }
-        // RFµ±Ç°Á¬½Ó¶Ï¿ª£¬×Ô¶¯ÆôÓÃ»ØÁ¬
+        // RFå½“å‰è¿æ¥æ–­å¼€ï¼Œè‡ªåŠ¨å¯ç”¨å›è¿
         else if( pSta->status == bleTimeout )
         {
             PRINT( "connect timeout.\n" );
@@ -275,7 +275,7 @@ void BB_IRQHandler( void )
 /*******************************************************************************
  * @fn      RF_ProcessEvent
  *
- * @brief   RF²ãÏµÍ³ÈÎÎñ´¦Àí
+ * @brief   RFå±‚ç³»ç»Ÿä»»åŠ¡å¤„ç†
  *
  * @param   None.
  *
@@ -301,10 +301,10 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         rfBoundHost_t bound;
         tmos_memset( &bound, 0, sizeof(rfBoundHost_t) );
 
-        // µÚÒ»´ÎÆô¶¯£¬¿ÉÒÔÁ¬½ÓÈÎÒâµÄÉè±¸
+        // ç¬¬ä¸€æ¬¡å¯åŠ¨ï¼Œå¯ä»¥è¿æ¥ä»»æ„çš„è®¾å¤‡
         SpeedList[0].deviceId = RF_ROLE_BOUND_ID;
-        SpeedList[0].rssi = -70; // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞrssiÉè±¸£¬ÆäËûÖµ±íÊ¾Ö»¿ÉÒÔÁ¬½ÓRSSI´óÓÚ¸ÃÖµµÄÉè±¸
-        SpeedList[0].devType = 0; // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞÉè±¸ÀàĞÍ£¬Ò²¿ÉÒÔÖ¸¶¨¿ÉÒÔÁ¬½ÓµÄÉè±¸µÄÀàĞÍ
+        SpeedList[0].rssi = -70; // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰rssiè®¾å¤‡ï¼Œå…¶ä»–å€¼è¡¨ç¤ºåªå¯ä»¥è¿æ¥RSSIå¤§äºè¯¥å€¼çš„è®¾å¤‡
+        SpeedList[0].devType = 0; // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰è®¾å¤‡ç±»å‹ï¼Œä¹Ÿå¯ä»¥æŒ‡å®šå¯ä»¥è¿æ¥çš„è®¾å¤‡çš„ç±»å‹
         tmos_memset(SpeedList[0].peerInfo, 0, 6);
         gSpeedList_t.number = ROLE_SPEED_LIST_NUM;
         gSpeedList_t.pList = SpeedList;
@@ -314,7 +314,7 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         bound.periTime = 8;
         bound.hop = RF_HOP_MANUF_MODE;
         bound.timeout = 100;
-        bound.devType = 0;  // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞÉè±¸ÀàĞÍ£¬Ò²¿ÉÒÔÖ¸¶¨¿ÉÒÔÁ¬½ÓµÄÉè±¸µÄÀàĞÍ
+        bound.devType = 0;  // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰è®¾å¤‡ç±»å‹ï¼Œä¹Ÿå¯ä»¥æŒ‡å®šå¯ä»¥è¿æ¥çš„è®¾å¤‡çš„ç±»å‹
         tmos_memcpy(bound.OwnInfo, self_mac, 6);
         bound.rfBoundCB = rfRoleBoundProcess;
         RFBound_StartHost( &bound );
@@ -326,10 +326,10 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         rfBoundHost_t bound;
         tmos_memset( &bound, 0, sizeof(rfBoundHost_t) );
 
-        // µÚ¶ş´ÎÆô¶¯£¬Ö»¿ÉÒÔÁ¬Åä¶ÔµÄÉè±¸
+        // ç¬¬äºŒæ¬¡å¯åŠ¨ï¼Œåªå¯ä»¥è¿é…å¯¹çš„è®¾å¤‡
         SpeedList[0].deviceId = RF_ROLE_BOUND_ID;
-        SpeedList[0].rssi = 0; // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞrssiÉè±¸£¬ÆäËûÖµ±íÊ¾Ö»¿ÉÒÔÁ¬½ÓRSSI´óÓÚ¸ÃÖµµÄÉè±¸
-        SpeedList[0].devType = 0; // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞÉè±¸ÀàĞÍ£¬Ò²¿ÉÒÔÖ¸¶¨¿ÉÒÔÁ¬½ÓµÄÉè±¸µÄÀàĞÍ
+        SpeedList[0].rssi = 0; // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰rssiè®¾å¤‡ï¼Œå…¶ä»–å€¼è¡¨ç¤ºåªå¯ä»¥è¿æ¥RSSIå¤§äºè¯¥å€¼çš„è®¾å¤‡
+        SpeedList[0].devType = 0; // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰è®¾å¤‡ç±»å‹ï¼Œä¹Ÿå¯ä»¥æŒ‡å®šå¯ä»¥è¿æ¥çš„è®¾å¤‡çš„ç±»å‹
         tmos_memset(SpeedList[0].peerInfo, 0, 6);
         if(!tmos_isbufset(nvs_flash_info.peer_mac, 0, 6))
         {
@@ -343,7 +343,7 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         bound.periTime = 8;
         bound.hop = RF_HOP_MANUF_MODE;
         bound.timeout = 100;
-        bound.devType = 0;  // 0-±íÊ¾¿ÉÒÔÁ¬½ÓËùÓĞÉè±¸ÀàĞÍ£¬Ò²¿ÉÒÔÖ¸¶¨¿ÉÒÔÁ¬½ÓµÄÉè±¸µÄÀàĞÍ
+        bound.devType = 0;  // 0-è¡¨ç¤ºå¯ä»¥è¿æ¥æ‰€æœ‰è®¾å¤‡ç±»å‹ï¼Œä¹Ÿå¯ä»¥æŒ‡å®šå¯ä»¥è¿æ¥çš„è®¾å¤‡çš„ç±»å‹
         tmos_memcpy(bound.OwnInfo, self_mac, 6);
 
         bound.rfBoundCB = rfRoleBoundProcess;
@@ -363,7 +363,7 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 /*******************************************************************************
  * @fn      RF_Init
  *
- * @brief   RFÓ¦ÓÃ²ã³õÊ¼»¯
+ * @brief   RFåº”ç”¨å±‚åˆå§‹åŒ–
  *
  * @param   None.
  *

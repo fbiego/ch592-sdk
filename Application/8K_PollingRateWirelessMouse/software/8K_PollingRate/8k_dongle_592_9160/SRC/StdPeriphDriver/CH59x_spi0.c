@@ -26,7 +26,7 @@ void SPI0_MasterDefInit(void)
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
     R8_SPI0_CTRL_MOD = RB_SPI_MOSI_OE | RB_SPI_SCK_OE;
     R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // Access BUFFER/FIFO to automatically clear the IF_BYTE_END flag
-    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // ²»Æô¶¯DMA·½Ê½
+    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // ä¸å¯åŠ¨DMAæ–¹å¼
 }
 
 /* ***************************************************************************
@@ -86,9 +86,9 @@ void SPI0_DataMode(ModeBitOrderTypeDef m)
 /*********************************************************************
  * @fn      SPI0_MasterSendByte
  *
- * @brief   ·¢ËÍµ¥×Ö½Ú (buffer)
+ * @brief   å‘é€å•å­—èŠ‚ (buffer)
  *
- * @param   d       - ·¢ËÍ×Ö½Ú
+ * @param   d       - å‘é€å­—èŠ‚
  *
  * @return  none
  */
@@ -141,7 +141,7 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len)
             sendlen--;
         }
     }
-    while(R8_SPI0_FIFO_COUNT != 0); // µÈ´ıFIFOÖĞµÄÊı¾İÈ«²¿·¢ËÍÍê³É
+    while(R8_SPI0_FIFO_COUNT != 0); // ç­‰å¾…FIFOä¸­çš„æ•°æ®å…¨éƒ¨å‘é€å®Œæˆ
 }
 
 /* ***************************************************************************
@@ -217,7 +217,7 @@ void SPI0_MasterDMARecv(uint8_t *pbuf, uint16_t len)
 /*********************************************************************
  * @fn      SPI0_SlaveInit
  *
- * @brief   Éè±¸Ä£Ê½Ä¬ÈÏ³õÊ¼»¯£¬½¨ÒéÉèÖÃMISOµÄGPIO¶ÔÓ¦ÎªÊäÈëÄ£Ê½
+ * @brief   è®¾å¤‡æ¨¡å¼é»˜è®¤åˆå§‹åŒ–ï¼Œå»ºè®®è®¾ç½®MISOçš„GPIOå¯¹åº”ä¸ºè¾“å…¥æ¨¡å¼
  *
  * @return  none
  */
@@ -259,10 +259,10 @@ void SPI0_SlaveSendByte(uint8_t d)
 /*********************************************************************
  * @fn      SPI0_SlaveRecv
  *
- * @brief   ´Ó»úÄ£Ê½£¬½ÓÊÕ¶à×Ö½ÚÊı¾İ
+ * @brief   ä»æœºæ¨¡å¼ï¼Œæ¥æ”¶å¤šå­—èŠ‚æ•°æ®
  *
- * @param   pbuf    - ½ÓÊÕÊÕÊı¾İ´æ·ÅÆğÊ¼µØÖ·
- * @param   len     - ÇëÇó½ÓÊÕÊı¾İ³¤¶È
+ * @param   pbuf    - æ¥æ”¶æ”¶æ•°æ®å­˜æ”¾èµ·å§‹åœ°å€
+ * @param   len     - è¯·æ±‚æ¥æ”¶æ•°æ®é•¿åº¦
  *
  * @return  none
  */

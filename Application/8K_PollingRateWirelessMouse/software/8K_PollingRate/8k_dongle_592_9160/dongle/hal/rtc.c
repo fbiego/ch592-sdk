@@ -10,7 +10,7 @@
 
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "HAL.h"
 
 
@@ -43,7 +43,7 @@ void RTC_SetTignTime(uint32_t time)
 /* ******************************************************************************
 * @fn          RTC_IRQHandler
 *
-* @brief       RTCÖĞ¶Ï´¦Àí
+* @brief       RTCä¸­æ–­å¤„ç†
 *
 * input parameters
 *
@@ -142,7 +142,7 @@ void HAL_TimeInit( void )
   conf.ClockMaxCount = RTC_MAX_COUNT;
   conf.getClockValue = SYS_GetClockValue;
 
-  // rfÍ¨ĞÅÊ±¼äÏà¹ØÅäÖÃ
+  // rfé€šä¿¡æ—¶é—´ç›¸å…³é…ç½®
   conf.Clock1Frequency = GetSysClock( )/1000;  //kHz
   conf.getClock1Value = SYS_GetClock1Value;
   conf.SetPendingIRQ = SYS_SetPendingIRQ;

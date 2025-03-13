@@ -86,9 +86,9 @@ void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
 /*********************************************************************
  * @fn      PWR_PeriphClkCfg
  *
- * @brief   ÍâÉèÊ±ÖÓ¿ØÖÆÎ»
+ * @brief   å¤–è®¾æ—¶é’Ÿæ§åˆ¶ä½
  *
- * @param   s       - ÊÇ·ñ´ò¿ª¶ÔÓ¦ÍâÉèÊ±ÖÓ
+ * @param   s       - æ˜¯å¦æ‰“å¼€å¯¹åº”å¤–è®¾æ—¶é’Ÿ
  * @param   perph   - please refer to Peripher CLK control bit define
  *
  * @return  none
@@ -114,14 +114,14 @@ void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
 /*********************************************************************
  * @fn      PWR_PeriphWakeUpCfg
  *
- * @brief   Ë¯Ãß»½ĞÑÔ´ÅäÖÃ
+ * @brief   ç¡çœ å”¤é†’æºé…ç½®
  *
- * @param   s       - ÊÇ·ñ´ò¿ª´ËÍâÉèË¯Ãß»½ĞÑ¹¦ÄÜ
- * @param   perph   - ĞèÒªÉèÖÃµÄ»½ĞÑÔ´
- *                    RB_SLP_USB_WAKE   -  USB Îª»½ĞÑÔ´
- *                    RB_SLP_RTC_WAKE   -  RTC Îª»½ĞÑÔ´
- *                    RB_SLP_GPIO_WAKE  -  GPIO Îª»½ĞÑÔ´
- *                    RB_SLP_BAT_WAKE   -  BAT Îª»½ĞÑÔ´
+ * @param   s       - æ˜¯å¦æ‰“å¼€æ­¤å¤–è®¾ç¡çœ å”¤é†’åŠŸèƒ½
+ * @param   perph   - éœ€è¦è®¾ç½®çš„å”¤é†’æº
+ *                    RB_SLP_USB_WAKE   -  USB ä¸ºå”¤é†’æº
+ *                    RB_SLP_RTC_WAKE   -  RTC ä¸ºå”¤é†’æº
+ *                    RB_SLP_GPIO_WAKE  -  GPIO ä¸ºå”¤é†’æº
+ *                    RB_SLP_BAT_WAKE   -  BAT ä¸ºå”¤é†’æº
  * @param   mode    - refer to WakeUP_ModeypeDef
  *
  * @return  none
@@ -244,7 +244,7 @@ void LowPower_Halt(void)
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
-    R8_FLASH_CTRL = 0x04; //flash¹Ø±Õ
+    R8_FLASH_CTRL = 0x04; //flashå…³é—­
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
@@ -254,7 +254,7 @@ void LowPower_Halt(void)
     }
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // ¹Ø±ÕµçÑ¹¼à¿Ø
+    R8_BAT_DET_CTRL = 0; // å…³é—­ç”µå‹ç›‘æ§
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;

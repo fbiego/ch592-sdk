@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.2
 * Date               : 2022/01/18
-* Description        : RTCÅäÖÃ¼°Æä³õÊ¼»¯
+* Description        : RTCé…ç½®åŠå…¶åˆå§‹åŒ–
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

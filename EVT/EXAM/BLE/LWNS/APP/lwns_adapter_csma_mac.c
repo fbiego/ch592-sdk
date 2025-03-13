@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2021/06/20
-* Description        : lwns适配器，模拟csma的mac协议
+* Description        : lwns閫傞厤鍣紝妯℃嫙csma鐨刴ac鍗忚
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

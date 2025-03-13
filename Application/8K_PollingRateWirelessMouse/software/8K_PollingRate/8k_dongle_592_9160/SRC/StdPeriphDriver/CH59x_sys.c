@@ -81,11 +81,11 @@ uint32_t GetSysClock(void)
 
     rev = R32_CLK_SYS_CFG & 0xff;
     if((rev & 0x40) == (0 << 6))
-    { // 32M½øÐÐ·ÖÆµ
+    { // 32Mè¿›è¡Œåˆ†é¢‘
         return (32000000 / (rev & 0x1f));
     }
     else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL½øÐÐ·ÖÆµ
+    { // PLLè¿›è¡Œåˆ†é¢‘
         return (480000000 / (rev & 0x1f));
     }
     else
@@ -150,9 +150,9 @@ void SYS_DisableAllIrq(uint32_t *pirqv)
 /*********************************************************************
  * @fn      SYS_RecoverIrq
  *
- * @brief   »Ö¸´Ö®Ç°¹Ø±ÕµÄÖÐ¶ÏÖµ
+ * @brief   æ¢å¤ä¹‹å‰å…³é—­çš„ä¸­æ–­å€¼
  *
- * @param   irq_status  - µ±Ç°±£ÁôÖÐ¶ÏÖµ
+ * @param   irq_status  - å½“å‰ä¿ç•™ä¸­æ–­å€¼
  *
  * @return  none
  */
@@ -166,11 +166,11 @@ void SYS_RecoverIrq(uint32_t irq_status)
 /*********************************************************************
  * @fn      SYS_GetSysTickCnt
  *
- * @brief   »ñÈ¡µ±Ç°ÏµÍ³(SYSTICK)¼ÆÊýÖµ
+ * @brief   èŽ·å–å½“å‰ç³»ç»Ÿ(SYSTICK)è®¡æ•°å€¼
  *
  * @param   none
  *
- * @return  µ±Ç°¼ÆÊýÖµ
+ * @return  å½“å‰è®¡æ•°å€¼
  */
 uint32_t SYS_GetSysTickCnt(void)
 {
@@ -321,9 +321,9 @@ void mDelayuS(uint16_t t)
 /*********************************************************************
  * @fn      mDelaymS
  *
- * @brief   mS ÑÓÊ±
+ * @brief   mS å»¶æ—¶
  *
- * @param   t       - Ê±¼ä²ÎÊý
+ * @param   t       - æ—¶é—´å‚æ•°
  *
  * @return  none
  */

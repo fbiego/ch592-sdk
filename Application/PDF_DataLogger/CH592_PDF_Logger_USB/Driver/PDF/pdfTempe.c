@@ -1,5 +1,5 @@
 /*
-*Éú³ÉpdfÄ£°å´úÂë:
+*ç”Ÿæˆpdfæ¨¡æ¿ä»£ç :
 *Created on: 2023-07-26
 *Author: WCH
 */
@@ -17,7 +17,7 @@
 #define LOG_INFO(...)
 #endif
 
-// Ê×Ìõ¼ÇÂ¼Ê±¼ä
+// é¦–æ¡è®°å½•æ—¶é—´
 uint8_t timeStart[6] = { 23,  7,  27,  12,  12,  12};
 #define   YEAR_OFFSET          0
 #define   MONTH_OFFSET         1
@@ -26,7 +26,7 @@ uint8_t timeStart[6] = { 23,  7,  27,  12,  12,  12};
 #define   MINUTE_OFFSET        4
 #define   SECOND_OFFSET        5
 
-const char centigrade[3] ={ 0xA1, 0xE6,'\0' };  // ¡æ, temperature unit
+const char centigrade[3] ={ 0xA1, 0xE6,'\0' };  // â„ƒ, temperature unit
 
 const char *device_info[] = {
     "Device Information",

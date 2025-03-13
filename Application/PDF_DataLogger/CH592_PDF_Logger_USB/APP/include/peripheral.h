@@ -58,8 +58,8 @@ typedef struct
     uint8_t pdf_data_buf[PDF_TMP_BUF_LEN_MAX+PDF_TMP_BUF_LEN_EXT];
     uint8_t UDisk_Down_Buffer[DEF_FLASH_SECTOR_SIZE];
     uint8_t UDisk_Pack_Buffer[DEF_UDISK_PACK_64];
-    uint8_t DISK_BASE_BUF[DISK_BASE_BUF_LEN]; /* Íâ²¿RAMµÄ´ÅÅÌÊý¾Ý»º³åÇø,»º³åÇø³¤¶ÈÎªÒ»¸öÉÈÇøµÄ³¤¶È */
-    uint8_t DISK_FAT_BUF[ DISK_BASE_BUF_LEN ]; /* Íâ²¿RAMµÄ´ÅÅÌFATÊý¾Ý»º³åÇø,»º³åÇø³¤¶ÈÎªÒ»¸öÉÈÇøµÄ³¤¶È */
+    uint8_t DISK_BASE_BUF[DISK_BASE_BUF_LEN]; /* å¤–éƒ¨RAMçš„ç£ç›˜æ•°æ®ç¼“å†²åŒº,ç¼“å†²åŒºé•¿åº¦ä¸ºä¸€ä¸ªæ‰‡åŒºçš„é•¿åº¦ */
+    uint8_t DISK_FAT_BUF[ DISK_BASE_BUF_LEN ]; /* å¤–éƒ¨RAMçš„ç£ç›˜FATæ•°æ®ç¼“å†²åŒº,ç¼“å†²åŒºé•¿åº¦ä¸ºä¸€ä¸ªæ‰‡åŒºçš„é•¿åº¦ */
 }PDF_BUFFER_t;
 
 

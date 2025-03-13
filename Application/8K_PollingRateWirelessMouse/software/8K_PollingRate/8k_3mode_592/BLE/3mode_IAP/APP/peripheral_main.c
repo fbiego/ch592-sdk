@@ -46,7 +46,7 @@ void SwitchImageFlag(uint8_t new_flag)
     uint16_t i;
     uint32_t ver_flag;
 
-    /* 读取第一块 */
+    /* 露脕脠隆碌脷脪禄驴茅 */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
     /* Erase the first piece */
@@ -137,7 +137,7 @@ void ReadImageFlag(void)
     EEPROM_READ(OTA_DATAFLASH_ADD, &p_image_flash, 4);
     CurrImageFlag = p_image_flash.ImageFlag;
 
-    /* 程序第一次执行，或者没有更新过，以后更新后在擦除DataFlash */
+    /* 鲁脤脨貌碌脷脪禄麓脦脰麓脨脨拢卢禄貌脮脽脙禄脫脨赂眉脨脗鹿媒拢卢脪脭潞贸赂眉脨脗潞贸脭脷虏脕鲁媒DataFlash */
     if((CurrImageFlag != IMAGE_A_FLAG) && (CurrImageFlag != IMAGE_B_FLAG) && (CurrImageFlag != IMAGE_IAP_FLAG))
     {
         CurrImageFlag = IMAGE_A_FLAG;

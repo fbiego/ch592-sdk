@@ -185,9 +185,9 @@ void write_file( uint8_t *pData )
 #if FUN_FILE_CREATE
     uint8_t s;
 
-    mCmdParam.Write.mSectorCount = 1;       //写入所有扇区的数据
-    mCmdParam.Write.mDataBuffer = pData;    //指向文件数据缓冲区的起始地址
-    s = CHRV3FileWrite( );                  //向文件写入数据
+    mCmdParam.Write.mSectorCount = 1;       //
+    mCmdParam.Write.mDataBuffer = pData;    //
+    s = CHRV3FileWrite( );                  //
     mStopIfError( s );
 #endif
 }

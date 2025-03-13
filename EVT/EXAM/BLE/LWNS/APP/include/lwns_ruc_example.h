@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2021/06/30
-* Description        : reliable unicast£¬¿É¿¿µ¥²¥´«ÊäÀı×Ó
+* Description        : reliable unicastï¼Œå¯é å•æ’­ä¼ è¾“ä¾‹å­
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

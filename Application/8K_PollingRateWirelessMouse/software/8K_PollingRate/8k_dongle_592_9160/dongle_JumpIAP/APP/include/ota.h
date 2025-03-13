@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.10
 * Date               : 2018/12/14
-* Description        : oadÏà¹ØÅäÖÃ¶¨Òå
+* Description        : oadç›¸å…³é…ç½®å®šä¹‰
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -35,13 +35,13 @@
 #define IMAGE_B_START_ADD      (IMAGE_A_START_ADD + IMAGE_SIZE)
 #define IMAGE_B_SIZE           IMAGE_SIZE
 
-/* imageIAP¶¨Òå */
+/* imageIAPå®šä¹‰ */
 #define IMAGE_IAP_FLAG         0x03
 #define IMAGE_IAP_START_ADD    (IMAGE_B_START_ADD + IMAGE_SIZE)
 #define IMAGE_IAP_SIZE         12 * 1024
 
-/* IAP¶¨Òå */
-/* ÒÔÏÂÎªIAPÏÂÔØÃüÁî¶¨Òå */
+/* IAPå®šä¹‰ */
+/* ä»¥ä¸‹ä¸ºIAPä¸‹è½½å‘½ä»¤å®šä¹‰ */
 #define CMD_IAP_PROM           0x80               // IAP programming commands
 #define CMD_IAP_ERASE          0x81               // IAP erase command
 #define CMD_IAP_VERIFY         0x82               // IAP verification command
@@ -54,14 +54,14 @@
 /* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD      0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* ´æ·ÅÔÚDataFlashÀïµÄOTAĞÅÏ¢ */
+/* å­˜æ”¾åœ¨DataFlashé‡Œçš„OTAä¿¡æ¯ */
 typedef struct
 {
-    unsigned char ImageFlag; //¼ÇÂ¼µÄµ±Ç°µÄimage±êÖ¾
+    unsigned char ImageFlag; //è®°å½•çš„å½“å‰çš„imageæ ‡å¿—
     unsigned char Revd[3];
 } OTADataFlashInfo_t;
 
-/* OTA IAPÍ¨Ñ¶Ğ­Òé¶¨Òå */
+/* OTA IAPé€šè®¯åè®®å®šä¹‰ */
 /* Addresses use 4x offset */
 typedef union
 {
@@ -76,28 +76,28 @@ typedef union
     struct
     {
         unsigned char cmd;       /* Command code 0x83 */
-        unsigned char len;       /* ºóĞøÊı¾İ³¤¶È */
-        unsigned char status[2]; /* Á½×Ö½Ú×´Ì¬£¬±£Áô */
+        unsigned char len;       /* åç»­æ•°æ®é•¿åº¦ */
+        unsigned char status[2]; /* ä¸¤å­—èŠ‚çŠ¶æ€ï¼Œä¿ç•™ */
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* ÃüÁîÂë 0x82 */
+        unsigned char cmd;              /* å‘½ä»¤ç  0x82 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */
-    } verify;                           /* Ğ£ÑéÃüÁî */
+    } verify;                           /* æ ¡éªŒå‘½ä»¤ */
     struct
     {
         unsigned char cmd;              /* Command code 0x80 */
-        unsigned char len;              /* ºóĞøÊı¾İ³¤¶È */
+        unsigned char len;              /* åç»­æ•°æ®é•¿åº¦ */
         unsigned char addr[2];          /* address */
         unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
     } program;                          /* Programming commands */
     struct
     {
-        unsigned char cmd;              /* ÃüÁîÂë 0x84 */
-        unsigned char len;              /* ºóĞøÊı¾İ³¤¶È */
-        unsigned char buf[IAP_LEN - 2]; /* ºóĞøÊı¾İ */
+        unsigned char cmd;              /* å‘½ä»¤ç  0x84 */
+        unsigned char len;              /* åç»­æ•°æ®é•¿åº¦ */
+        unsigned char buf[IAP_LEN - 2]; /* åç»­æ•°æ® */
     } info;                             /* Programming commands */
     struct
     {
@@ -105,7 +105,7 @@ typedef union
     } other;
 } OTA_IAP_CMD_t;
 
-/* ¼ÇÂ¼µ±Ç°µÄImage */
+/* è®°å½•å½“å‰çš„Image */
 extern unsigned char CurrImageFlag;
 
 #endif

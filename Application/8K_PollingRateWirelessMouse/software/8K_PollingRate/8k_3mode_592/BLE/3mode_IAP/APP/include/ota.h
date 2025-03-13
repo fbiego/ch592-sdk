@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.10
 * Date               : 2018/12/14
-* Description        : oadÏà¹ØÅäÖÃ¶¨Òå
+* Description        : oadç›¸å…³é…ç½®å®šä¹‰
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -33,7 +33,7 @@
 /* FLASH definition */
 #define FLASH_BLOCK_SIZE       EEPROM_BLOCK_SIZE
 
-/* imageA¶¨Òå */
+/* imageAå®šä¹‰ */
 #define IMAGE_A_FLAG           0x01
 #define IMAGE_A_2_4G_START_ADD      (4 * 1024)
 #define IMAGE_A_2_4G_SIZE           (56 * 1024)
@@ -52,7 +52,7 @@
 #define IMAGE_IAP_SIZE         (12 * 1024)
 
 /* IAP definition */
-#define IAP_STATE_SUCCESS      0x00               // IAP³É¹¦
+#define IAP_STATE_SUCCESS      0x00               // IAPæˆåŠŸ
 #define IAP_STATE_RETRAN       0x01               // IAP retransmission
 #define IAP_STATE_FAILURE      0xFF               // IAP failed
 
@@ -106,7 +106,7 @@ typedef union
     } erase; /* Erase command */
     struct
     {
-        unsigned char cmd;       /* ÃüÁîÂë 0x83 */
+        unsigned char cmd;       /* å‘½ä»¤ç  0x83 */
         unsigned char len;       /* Subsequent data length */
         unsigned char status[2]; /* Two byte state, reserved */
     } end;                       /* End command */
@@ -116,20 +116,20 @@ typedef union
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */
-    } verify;                           /* Ğ£ÑéÃüÁî */
+    } verify;                           /* æ ¡éªŒå‘½ä»¤ */
     struct
     {
         unsigned char cmd;              /* Command code 0x80 */
-        unsigned char len;              /* ºóĞøÊı¾İ³¤¶È */
+        unsigned char len;              /* åç»­æ•°æ®é•¿åº¦ */
         unsigned char addr[2];          /* address */
         unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
-    } program;                          /* ±à³ÌÃüÁî */
+    } program;                          /* ç¼–ç¨‹å‘½ä»¤ */
     struct
     {
         unsigned char cmd;              /* Command code 0x84 */
         unsigned char len;              /* Subsequent data length */
         unsigned char buf[IAP_LEN - 2]; /* Follow-up data */
-    } info;                             /* ±à³ÌÃüÁî */
+    } info;                             /* ç¼–ç¨‹å‘½ä»¤ */
     struct
     {
         unsigned char buf[IAP_LEN]; /* Receive packets */

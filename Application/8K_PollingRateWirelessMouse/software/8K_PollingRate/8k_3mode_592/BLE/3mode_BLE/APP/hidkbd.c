@@ -1049,7 +1049,7 @@ static void hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent)
                     }
                     else
                     {
-                        // limit广播自动停止，重新打开即可
+                        // limit
                         hidEmu_adv_enable(ENABLE);
                     }
                 }

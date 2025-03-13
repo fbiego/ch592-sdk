@@ -44,7 +44,7 @@ void TMR2_EXTSingleCounterInit(CapModeTypeDef cap)
 /* ********************************************************************
 * @fn      TMR2_PWMInit
 *
-* @brief   PWM Êä³ö³õÊ¼»¯
+* @brief   PWM ÃŠÃ¤Â³Ã¶Â³ÃµÃŠÂ¼Â»Â¯
 *
 * @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
 * @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef

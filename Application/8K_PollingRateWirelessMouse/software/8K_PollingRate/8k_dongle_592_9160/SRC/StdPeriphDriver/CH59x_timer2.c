@@ -44,7 +44,7 @@ void TMR2_EXTSingleCounterInit(CapModeTypeDef cap)
 /* ********************************************************************
 * @fn      TMR2_PWMInit
 *
-* @brief   PWM Êä³ö³õÊ¼»¯
+* @brief   PWM è¾“å‡ºåˆå§‹åŒ–
 *
 * @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
 * @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef
@@ -59,7 +59,7 @@ void TMR2_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts)
 /*********************************************************************
  * @fn      TMR2_CapInit
  *
- * @brief   Íâ²¿ĞÅºÅ²¶×½¹¦ÄÜ³õÊ¼»¯
+ * @brief   å¤–éƒ¨ä¿¡å·æ•æ‰åŠŸèƒ½åˆå§‹åŒ–
  *
  * @param   cap     - select capture mode, refer to CapModeTypeDef
  *
@@ -74,12 +74,12 @@ void TMR2_CapInit(CapModeTypeDef cap)
 /*********************************************************************
  * @fn      TMR2_DMACfg
  *
- * @brief   ÅäÖÃDMA¹¦ÄÜ
+ * @brief   é…ç½®DMAåŠŸèƒ½
  *
- * @param   s           - ÊÇ·ñ´ò¿ªDMA¹¦ÄÜ
- * @param   startAddr   - DMA ÆğÊ¼µØÖ·
- * @param   endAddr     - DMA ½áÊøµØÖ·
- * @param   m           - ÅäÖÃDMAÄ£Ê½
+ * @param   s           - æ˜¯å¦æ‰“å¼€DMAåŠŸèƒ½
+ * @param   startAddr   - DMA èµ·å§‹åœ°å€
+ * @param   endAddr     - DMA ç»“æŸåœ°å€
+ * @param   m           - é…ç½®DMAæ¨¡å¼
  *
  * @return  none
  */

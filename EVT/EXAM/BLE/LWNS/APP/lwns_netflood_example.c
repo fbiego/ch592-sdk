@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2021/07/12
-* Description        : netflood£¬ÍøÂç·ººé´«ÊäÀı×Ó
+* Description        : netfloodï¼Œç½‘ç»œæ³›æ´ªä¼ è¾“ä¾‹å­
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -45,7 +45,7 @@ static lwns_netflood_controller netflood; // Network flood control structure
 /* ***************************************************************************
 * @fn      netflood_recv
 *
-* @brief   lwns netflood½ÓÊÕ»Øµ÷º¯Êı
+* @brief   lwns netfloodæ¥æ”¶å›è°ƒå‡½æ•°
 *
 * @param ptr - The netflood control structure pointer to which the data received this time belongs.
 * @param from - The address pointer of the previous jump forwarder of the data received this time.

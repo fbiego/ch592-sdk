@@ -40,16 +40,16 @@ void SwitchImageFlag(uint8_t new_flag)
     uint16_t i;
     uint32_t ver_flag;
 
-    /* ╤ах║╣зр╩©И */
+    /* Х╞╩Е▐√Г╛╛Д╦─Е²≈ */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* ╡аЁЩ╣зр╩©И */
+    /* Ф⌠╕И≥╓Г╛╛Д╦─Е²≈ */
     EEPROM_ERASE(OTA_DATAFLASH_ADD, EEPROM_PAGE_SIZE);
 
     /* Update Image Information */
     block_buf[0] = new_flag;
 
-    /* ╠ЮЁлDataFlash */
+    /* Г╪√Г╗▀DataFlash */
     EEPROM_WRITE(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 }
 

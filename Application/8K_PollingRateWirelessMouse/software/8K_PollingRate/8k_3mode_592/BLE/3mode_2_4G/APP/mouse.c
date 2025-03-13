@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "peripheral.h"
 #include "mouse.h"
 
@@ -29,30 +29,30 @@
 #define KEY_SCAN_DIV    6
 #define WHEEL_DIV       12
 
-// 3·ÖÖÓÒ»µµË¯Ãß£¬30·ÖÖÓ¶şµµË¯Ãß,Î´Á¬½Ó×´Ì¬£¬30s½øÈëÉî¶ÈË¯Ãß
+// 3åˆ†é’Ÿä¸€æ¡£ç¡çœ ï¼Œ30åˆ†é’ŸäºŒæ¡£ç¡çœ ,æœªè¿æ¥çŠ¶æ€ï¼Œ30sè¿›å…¥æ·±åº¦ç¡çœ 
 #define IDEL_SLEEP_TIMEOUT              1600*10
 #define DEEP_SLEEP_TIMEOUT              1600*60*3
 #define IDEL_DEEP_SLEEP_TIMEOUT         1600*30
 
-// µÆÉÁË¸30s£¬ÆµÂÊÎª2Hz£¬Åä¶Ô30s³¬Ê±£¬
+// ç¯é—ªçƒ30sï¼Œé¢‘ç‡ä¸º2Hzï¼Œé…å¯¹30sè¶…æ—¶ï¼Œ
 #define PAIRING_LED_BLINK_INTERVAL            1600*1/4
 #define PAIRING_LED_BLINK_TIMEOUT             1600*30
 
-// Èç¹ûBLE»òÕß2.4G¶Ï¿ªÁ¬½Ó£¬ÉÁË¸30s£¬ÆµÂÊ1Hz,Ôò30sºó¹Ø±ÕËùÓĞ±³¹â£¬½øÈëµÍ¹¦ºÄSleepĞİÃß
+// å¦‚æœBLEæˆ–è€…2.4Gæ–­å¼€è¿æ¥ï¼Œé—ªçƒ30sï¼Œé¢‘ç‡1Hz,åˆ™30såå…³é—­æ‰€æœ‰èƒŒå…‰ï¼Œè¿›å…¥ä½åŠŸè€—Sleepä¼‘çœ 
 #define DISCONNECT_LED_BLINK_INTERVAL            1600*1/2
 #define DISCONNECT_LED_BLINK_TIMEOUT             1600*30
 
-// RGBÖ¸Ê¾³£Á¿ºó3Ãë¹Ø±Õ£¬Ê¡µç
+// RGBæŒ‡ç¤ºå¸¸é‡å3ç§’å…³é—­ï¼Œçœç”µ
 #define RGB_LED_OFF_TIMEOUT             1600*3
 
 volatile uint8_t mouse_scan_flag=0;
 
 uint8_t work_mode = MODE_USB;
 
-#define MOUSE_DATA_LEN       5   // 1BÃüÁîÂë+1B°´¼ü+2BÒÆ¶¯+1B¹öÂÖ
+#define MOUSE_DATA_LEN       5   // 1Bå‘½ä»¤ç +1BæŒ‰é”®+2Bç§»åŠ¨+1Bæ»šè½®
 uint8_t mouse_data[MOUSE_DATA_LEN]={CMD_MOUSE,0,0,0,0};
 
-#define KEY_SCAN_FILTER_COUNT_MAX       1   // 0±íÊ¾µ«µ¥´Î²ÉÑù¼´Êä³ö£¬n±íÊ¾n+1´Î²ÉÑùÏàµÈ²ÅÊä³ö¼üÖµ
+#define KEY_SCAN_FILTER_COUNT_MAX       1   // 0è¡¨ç¤ºä½†å•æ¬¡é‡‡æ ·å³è¾“å‡ºï¼Œnè¡¨ç¤ºn+1æ¬¡é‡‡æ ·ç›¸ç­‰æ‰è¾“å‡ºé”®å€¼
 
 #define KEY_DETECTE_DELAY_US        5
 #define KEY_DETECTE_DELAY()      DelayUs(KEY_DETECTE_DELAY_US)
@@ -63,7 +63,7 @@ uint8_t mouse_data[MOUSE_DATA_LEN]={CMD_MOUSE,0,0,0,0};
 #define TABLE_IDX_SW_BLE        (3)
 #define TABLE_IDX_SW_24G        (2)
 
-// ³¤°´°´¼ü¸öÊı
+// é•¿æŒ‰æŒ‰é”®ä¸ªæ•°
 #define KEY_TIMEOUT_NUM        1
 
 const uint8_t KEY_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
@@ -76,7 +76,7 @@ const uint8_t KEY_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
           0x01, 0x02, 0xE4, 0xE3
     };
 
-// ĞèÒª³¤°´¼ÆÊ±µÄ°´¼ü
+// éœ€è¦é•¿æŒ‰è®¡æ—¶çš„æŒ‰é”®
 const uint8_t KEY_TIMER_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
     {
         /* R0    R1       */
@@ -96,15 +96,15 @@ const uint32_t KEY_R_INDEX[KEY_TABLE_R]=
         KEY_R_0, KEY_R_1, KEY_R_2, KEY_R_3
     };
 
-//³¤°´¼ÆÊ±ÁĞ±í
+//é•¿æŒ‰è®¡æ—¶åˆ—è¡¨
 uint32_t key_timer_list[KEY_TIMEOUT_NUM]={0};
-//³¤°´³¬Ê±¶ÔÓ¦°´¼ü
+//é•¿æŒ‰è¶…æ—¶å¯¹åº”æŒ‰é”®
 const uint8_t KEY_TIMEOUT_TABLE[KEY_TIMEOUT_NUM]=
     {
   /* C   DPI  */
         0xF0
     };
-//³¤°´³¬Ê±ÁĞ±í(s)
+//é•¿æŒ‰è¶…æ—¶åˆ—è¡¨(s)
 const uint8_t KEY_TIMEOUT_LIST[KEY_TIMEOUT_NUM]=
     {
   /* C  DPI*/
@@ -120,8 +120,8 @@ uint8_t key_scan_filter_count_max=KEY_SCAN_FILTER_COUNT_MAX;
 
 uint32_t key_press_time=0;
 
-volatile uint8_t idel_sleep_flag=0; // Ò»µµË¯Ãß
-volatile uint8_t deep_sleep_flag=0; // ¶şµµË¯Ãß
+volatile uint8_t idel_sleep_flag=0; // ä¸€æ¡£ç¡çœ 
+volatile uint8_t deep_sleep_flag=0; // äºŒæ¡£ç¡çœ 
 volatile uint8_t enter_sleep_flag=0; //
 
 uint8_t mouse_taskID=0;
@@ -130,7 +130,7 @@ uint8_t vbat_info=0;
 
 uint8_t led_blink_range=LED_BLINK_ALL;
 
-signed short RoughCalib_Value = 0; // ADC´Öµ÷Æ«²îÖµ
+signed short RoughCalib_Value = 0; // ADCç²—è°ƒåå·®å€¼
 
 connect_status_t connect_state=CON_IDEL;
 
@@ -158,12 +158,12 @@ void mouse_motion_scan(void);
 /*********************************************************************
  * @fn      mouse_process_event
  *
- * @brief   mouse_process_event ÊÂ¼ş´¦Àí
+ * @brief   mouse_process_event äº‹ä»¶å¤„ç†
  *
- * @param   task_id - ÈÎÎñID
- * @param   events  - ÊÂ¼ş±êÖ¾
+ * @param   task_id - ä»»åŠ¡ID
+ * @param   events  - äº‹ä»¶æ ‡å¿—
  *
- * @return  Î´Íê³ÉÊÂ¼ş
+ * @return  æœªå®Œæˆäº‹ä»¶
  */
 uint16_t mouse_process_event(uint8_t task_id, uint16_t events)
 {
@@ -237,7 +237,7 @@ uint16_t mouse_process_event(uint8_t task_id, uint16_t events)
     if(events & MOUSE_VBAT_INFO_EVENT)
     {
         vbat_info = mouse_get_batt_info();
-//        PRINT("bat£º %d%%\n",vbat_info);
+//        PRINT("batï¼š %d%%\n",vbat_info);
         return events ^ MOUSE_VBAT_INFO_EVENT;
     }
 
@@ -304,19 +304,19 @@ void peripheral_enter_sleep()
 //    PRINT("> %x %x %x\n",need_reset_bit,KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3|KEY_R_4|KEY_R_5
 //        |KEY_R_6|KEY_R_7|KEY_R_8|KEY_R_9|KEY_R_10|KEY_R_11|KEY_R_12
 //        |KEY_R_13|KEY_R_14|KEY_R_15|KEY_R_16|KEY_R_17,GPIOA_ReadPortPin(KEY_C_0|KEY_C_1|KEY_C_2|KEY_C_3|KEY_C_4|KEY_C_5));
-    // ÓÉÓÚÇĞ»»Ä£Ê½¿ª¹Ø¹ÒÔØÔÚ°´¼üÉ¨ÃèÏÂ£¬ËùÒÔKEY_R_14Ïà¹ØµÄÆäÓàËÄ¸ö°´¼ü²»Ö§³Ö»½ĞÑ
+    // ç”±äºåˆ‡æ¢æ¨¡å¼å¼€å…³æŒ‚è½½åœ¨æŒ‰é”®æ‰«æä¸‹ï¼Œæ‰€ä»¥KEY_R_14ç›¸å…³çš„å…¶ä½™å››ä¸ªæŒ‰é”®ä¸æ”¯æŒå”¤é†’
     if(!need_reset_bit)
     {
         PRINT("ERR \n");
     }
     GPIOA_ResetBits(need_reset_bit);
-    /* ÅäÖÃ»½ĞÑÔ´Îª GPIO _ */
+    /* é…ç½®å”¤é†’æºä¸º GPIO _ */
     GPIOA_ClearITFlagBit( EC_A|EC_B|SPI_MOTION);
     GPIOB_ClearITFlagBit( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3);
 
     GPIOA_ITModeCfg( SPI_MOTION, GPIO_ITMode_LowLevel );
-//    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3, GPIO_ITMode_LowLevel ); // ÏÂ½µÑØ»½ĞÑ
-    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2, GPIO_ITMode_LowLevel ); // ÏÂ½µÑØ»½ĞÑ
+//    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3, GPIO_ITMode_LowLevel ); // ä¸‹é™æ²¿å”¤é†’
+    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2, GPIO_ITMode_LowLevel ); // ä¸‹é™æ²¿å”¤é†’
     if(EC_A_ST)
         GPIOA_ITModeCfg( EC_A, GPIO_ITMode_LowLevel );
     else
@@ -361,13 +361,13 @@ void peripheral_enter_sleep()
 /*******************************************************************************
  * @fn      peripheral_exit_sleep
  *
- * @brief   ·Ç°´¼ü»½ĞÑ£¬¿ÉÄÜÊÇÊÕµ½ÁËÉÏÎ»»úÊı¾İ»½ĞÑ
+ * @brief   éæŒ‰é”®å”¤é†’ï¼Œå¯èƒ½æ˜¯æ”¶åˆ°äº†ä¸Šä½æœºæ•°æ®å”¤é†’
  *
  * @return  None.
  */
 void peripheral_exit_sleep()
 {
-    // ¹ØÖĞ¶Ï
+    // å…³ä¸­æ–­
     access_weakup();
     idel_sleep_flag = FALSE;
     deep_sleep_flag = FALSE;
@@ -383,7 +383,7 @@ void peripheral_exit_sleep()
 /*********************************************************************
  * @fn      peripheral_pairing_cb
  *
- * @brief   Åä¶ÔĞÂÉè±¸£¬2HZ¿ìËÙÉÁË¸
+ * @brief   é…å¯¹æ–°è®¾å¤‡ï¼Œ2HZå¿«é€Ÿé—ªçƒ
  *
  * @return  none
  */
@@ -403,7 +403,7 @@ void peripheral_pairing_cb()
 /*********************************************************************
  * @fn      peripheral_connecting_cb
  *
- * @brief   ¹ã²¥µÈ´ıÁ¬½ÓÖĞ¡£1HzÉÁË¸
+ * @brief   å¹¿æ’­ç­‰å¾…è¿æ¥ä¸­ã€‚1Hzé—ªçƒ
  *
  * @return  none
  */
@@ -423,7 +423,7 @@ void peripheral_connecting_cb()
 /*********************************************************************
  * @fn      peripheral_disconnected_cb
  *
- * @brief   Èç¹ûBLE»òÕß2.4G¶Ï¿ªÁ¬½Ó£¬Êı×Ö¼üÕâÒ»ĞĞ£¨¶ÔÓ¦R1ÕâĞĞ£©ÉÁË¸30s£¬ÆµÂÊ1Hz£¬Ôò30sºó¹Ø±ÕËùÓĞ±³¹â£¬½øÈëµÍ¹¦ºÄSleepĞİÃß¡£
+ * @brief   å¦‚æœBLEæˆ–è€…2.4Gæ–­å¼€è¿æ¥ï¼Œæ•°å­—é”®è¿™ä¸€è¡Œï¼ˆå¯¹åº”R1è¿™è¡Œï¼‰é—ªçƒ30sï¼Œé¢‘ç‡1Hzï¼Œåˆ™30såå…³é—­æ‰€æœ‰èƒŒå…‰ï¼Œè¿›å…¥ä½åŠŸè€—Sleepä¼‘çœ ã€‚
  *
  * @return  none
  */
@@ -473,7 +473,7 @@ void peripheral_pilot_led_receive(uint8_t led)
 /*********************************************************************
  * @fn      GPIOA_IRQHandler
  *
- * @brief   GPIOAÖĞ¶Ïº¯Êı,ËµÃ÷±»»½ĞÑÁË
+ * @brief   GPIOAä¸­æ–­å‡½æ•°,è¯´æ˜è¢«å”¤é†’äº†
  *
  * @return  none
  */
@@ -484,7 +484,7 @@ void GPIOA_IRQHandler( void )
     PRINT("AQ %x\n",R16_PA_INT_IF);
     GPIOA_ClearITFlagBit( 0xFFFF );
     mouse_scan_flag = 1;
-    // Í£Ö¹Ë¯Ãß
+    // åœæ­¢ç¡çœ 
     R16_PA_INT_EN = 0;
     R16_PB_INT_EN = 0;
 }
@@ -492,7 +492,7 @@ void GPIOA_IRQHandler( void )
 /*********************************************************************
  * @fn      GPIOB_IRQHandler
  *
- * @brief   GPIOBÖĞ¶Ïº¯Êı,ËµÃ÷±»»½ĞÑÁË
+ * @brief   GPIOBä¸­æ–­å‡½æ•°,è¯´æ˜è¢«å”¤é†’äº†
  *
  * @return  none
  */
@@ -503,7 +503,7 @@ void GPIOB_IRQHandler( void )
     PRINT("BQ %x\n",R16_PB_INT_IF);
     GPIOB_ClearITFlagBit( 0xFFFF );
     mouse_scan_flag = 1;
-    // Í£Ö¹Ë¯Ãß
+    // åœæ­¢ç¡çœ 
     R16_PA_INT_EN = 0;
     R16_PB_INT_EN = 0;
 }
@@ -527,10 +527,10 @@ void mouse_init()
 
     paw3395_init();
     GPIOA_ResetBits(SPI_CS);
-    paw3395_write_byte(PAW_RUN_DOWNSHIFT,0xED);//3s ½ørest1
+    paw3395_write_byte(PAW_RUN_DOWNSHIFT,0xED);//3s è¿›rest1
     paw3395_write_byte(PAW_REST_DOWNSHIFT_MULT,0x77);
-    paw3395_write_byte(PAW_REST1_DOWNSHIFT,22);//57s ½ørest2 223
-    paw3395_write_byte(PAW_REST2_DOWNSHIFT,68);//29min ½ørest3
+    paw3395_write_byte(PAW_REST1_DOWNSHIFT,22);//57s è¿›rest2 223
+    paw3395_write_byte(PAW_REST2_DOWNSHIFT,68);//29min è¿›rest3
     paw3395_write_byte(PAW_RESOLUTION_X_LOW, DPI_VALUE[nvs_flash_info.dpi]&0xFF);
     paw3395_write_byte(PAW_RESOLUTION_X_HIGH, (DPI_VALUE[nvs_flash_info.dpi]&0xFF00)>>8);
     paw3395_write_byte(PAW_RESOLUTION_Y_LOW, DPI_VALUE[nvs_flash_info.dpi]&0xFF);
@@ -548,11 +548,11 @@ void mouse_init()
     peripheral_sleep_update();
 
     ADC_ExtSingleChSampInit(SampleFreq_3_2, ADC_PGA_0);
-    RoughCalib_Value = ADC_DataCalib_Rough(); // ÓÃÓÚ¼ÆËãADCÄÚ²¿Æ«²î£¬¼ÇÂ¼µ½È«¾Ö±äÁ¿ RoughCalib_ValueÖĞ
+    RoughCalib_Value = ADC_DataCalib_Rough(); // ç”¨äºè®¡ç®—ADCå†…éƒ¨åå·®ï¼Œè®°å½•åˆ°å…¨å±€å˜é‡ RoughCalib_Valueä¸­
     PRINT("ADC RC =%d \n", RoughCalib_Value);
 
     PWMX_CLKCfg(4);                                    // cycle = 4/Fsys
-    PWMX_CycleCfg(PWMX_Cycle_255);                     // ÖÜÆÚ = 255*cycle
+    PWMX_CycleCfg(PWMX_Cycle_255);                     // å‘¨æœŸ = 255*cycle
     PWMX_ACTOUT(VDR_PWM_R, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_R_IDX], Low_Level, ENABLE);
     PWMX_ACTOUT(VDR_PWM_G, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_G_IDX], Low_Level, ENABLE);
     PWMX_ACTOUT(VDR_PWM_B, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_B_IDX], Low_Level, ENABLE);
@@ -626,7 +626,7 @@ uint8_t mouse_read_xy(uint8_t *pX, uint8_t *pY)
  *
  * @brief   mouse_key_scan
  *
- * @return  ÊÇ·ñÓĞ°´¼ü±ä»¯
+ * @return  æ˜¯å¦æœ‰æŒ‰é”®å˜åŒ–
  */
 __HIGH_CODE
 uint8_t mouse_key_scan(uint8_t *data)
@@ -637,7 +637,7 @@ uint8_t mouse_key_scan(uint8_t *data)
     key_press_time++;
     for(i=0; i<KEY_TABLE_C; i++)
     {
-        if((idel_sleep_flag||deep_sleep_flag)&&(KEY_C_INDEX[i]==KEY_C_0))   // ÖĞ¼üºÍ²¦Âë¿ª¹Ø²»Ö§³Ö»½ĞÑ£¬Ìí¼ÓÅĞ¶Ï·ÀÖ¹°´¼ü¼ì²âÇ¿ÖÆ»½ĞÑ
+        if((idel_sleep_flag||deep_sleep_flag)&&(KEY_C_INDEX[i]==KEY_C_0))   // ä¸­é”®å’Œæ‹¨ç å¼€å…³ä¸æ”¯æŒå”¤é†’ï¼Œæ·»åŠ åˆ¤æ–­é˜²æ­¢æŒ‰é”®æ£€æµ‹å¼ºåˆ¶å”¤é†’
         {
             continue;
         }
@@ -659,7 +659,7 @@ uint8_t mouse_key_scan(uint8_t *data)
         }
         GPIOA_SetBits(KEY_C_0|KEY_C_1);
     }
-    // ¹ıÂË
+    // è¿‡æ»¤
     if(key_scan_filter_count >= key_scan_filter_count_max)
     {
         key_scan_filter_count = 0;
@@ -687,11 +687,11 @@ uint8_t mouse_key_scan(uint8_t *data)
         key_scan_filter_count++;
         return ret;
     }
-    // ´¦ÀíÊı¾İ
+    // å¤„ç†æ•°æ®
     if(!tmos_memcmp(key_data_scan_old, key_data_scan_new, KEY_TABLE_R*KEY_TABLE_C))
     {
         tmos_memcpy(key_data_scan_old, key_data_scan_new, KEY_TABLE_R*KEY_TABLE_C);
-        // ÏÈ¼ì²éµ±Ç°Ä£Ê½
+        // å…ˆæ£€æŸ¥å½“å‰æ¨¡å¼
         if(key_data_scan_new[TABLE_IDX_SW_BLE])
         {
             // SW_BLE
@@ -724,37 +724,37 @@ uint8_t mouse_key_scan(uint8_t *data)
 
         for(i=0; i<KEY_TABLE_R*KEY_TABLE_C; i++)
         {
-            if(key_data_scan_new[i] < key_data_scan_byte[i])    // É¸Ñ¡±ê×¼¼üÅÌ°´¼ü
+            if(key_data_scan_new[i] < key_data_scan_byte[i])    // ç­›é€‰æ ‡å‡†é”®ç›˜æŒ‰é”®
             {
-                //ÊÍ·ÅµÄ°´¼ü
+                //é‡Šæ”¾çš„æŒ‰é”®
                 if(key_data_scan_byte[i]<0xE0)
                 {
-                    // ×óÖĞÓÒÈı¸ö°´¼ü
+                    // å·¦ä¸­å³ä¸‰ä¸ªæŒ‰é”®
                     data[1] &= ~key_data_scan_byte[i];
                     ret = 1;
                 }
                 else if(key_data_scan_byte[i]<0xF0)
                 {
-                    // ²à±ßÁ½°´¼ü
+                    // ä¾§è¾¹ä¸¤æŒ‰é”®
                     data[1] &= ~(1<<(key_data_scan_byte[i]&0x0F));
                     ret = 1;
                 }
                 else {
-                    //DPI ËÉ¿ª
-                    // ²»¿¼ÂÇÑ­»·Ò»ÂÖµÄÇé¿ö£¬Ì«³¤ÁË
+                    //DPI æ¾å¼€
+                    // ä¸è€ƒè™‘å¾ªç¯ä¸€è½®çš„æƒ…å†µï¼Œå¤ªé•¿äº†
                     if(KEY_TIMER_TABLE[i] )
                     {
-                        // ÈôÁĞ±íÄÚÖµÎª0Ôò±íÊ¾ÒÑ¾­½øÁË³¬Ê±ÁË£¬²»´¥·¢ËÉ¿ª
+                        // è‹¥åˆ—è¡¨å†…å€¼ä¸º0åˆ™è¡¨ç¤ºå·²ç»è¿›äº†è¶…æ—¶äº†ï¼Œä¸è§¦å‘æ¾å¼€
                         if(key_timer_list[KEY_TIMER_TABLE[i]-1])
                         {
                             key_timer_list[KEY_TIMER_TABLE[i]-1] = 0;
-                            //¶Ì°´ËÉ¿ª
+                            //çŸ­æŒ‰æ¾å¼€
                             key_release(key_data_scan_byte[i]);
                         }
                     }
                     else
                     {
-                        //¶Ì°´ËÉ¿ª
+                        //çŸ­æŒ‰æ¾å¼€
                         key_release(key_data_scan_byte[i]);
                     }
                 }
@@ -762,41 +762,41 @@ uint8_t mouse_key_scan(uint8_t *data)
             }
             else if((key_data_scan_new[i] == key_data_scan_byte[i]) && key_data_scan_new[i])
             {
-                //Î´ÊÍ·ÅµÄ°´¼ü£¬Ìí¼Óµ½°´¼üÁĞ±í
+                //æœªé‡Šæ”¾çš„æŒ‰é”®ï¼Œæ·»åŠ åˆ°æŒ‰é”®åˆ—è¡¨
                 if(key_data_scan_byte[i]<0xE0)
                 {
-                    // ×óÖĞÓÒÈı¸ö°´¼ü
+                    // å·¦ä¸­å³ä¸‰ä¸ªæŒ‰é”®
                     data[1] |= key_data_scan_new[i];
                 }
                 else if(key_data_scan_byte[i]<0xF0)
                 {
-                    // ²à±ßÁ½°´¼ü ÕâÀïÑİÊ¾±ê×¼Ç°½øºóÍË£¬Èç¹ûĞèÒª×Ô¶¨Òå¿ÉÒÔ¶¯Ì¬ĞŞ¸Ä
+                    // ä¾§è¾¹ä¸¤æŒ‰é”® è¿™é‡Œæ¼”ç¤ºæ ‡å‡†å‰è¿›åé€€ï¼Œå¦‚æœéœ€è¦è‡ªå®šä¹‰å¯ä»¥åŠ¨æ€ä¿®æ”¹
                     data[1] |= 1<<(key_data_scan_new[i]&0x0F);
                 }
                 else {
-                    //DPI ±£³Ö
+                    //DPI ä¿æŒ
                 }
                 key_data_scan_new[i] = 0;
             }
             else if(key_data_scan_new[i])
             {
-                // µ½ÕâÀïËµÃ÷´Ë°´¼üÎªĞÂ°´ÏÂ£¬Ìí¼Óµ½ÁĞ±í
+                // åˆ°è¿™é‡Œè¯´æ˜æ­¤æŒ‰é”®ä¸ºæ–°æŒ‰ä¸‹ï¼Œæ·»åŠ åˆ°åˆ—è¡¨
                 if(key_data_scan_new[i]<0xE0)
                 {
-                    // ×óÖĞÓÒÈı¸ö°´¼ü
+                    // å·¦ä¸­å³ä¸‰ä¸ªæŒ‰é”®
                     data[1] |= key_data_scan_new[i];
                     ret = 1;
                 }
                 else if(key_data_scan_new[i]<0xF0)
                 {
-                    // ²à±ßÁ½°´¼ü ÕâÀïÑİÊ¾±ê×¼Ç°½øºóÍË£¬Èç¹ûĞèÒª×Ô¶¨Òå¿ÉÒÔ¶¯Ì¬ĞŞ¸Ä
+                    // ä¾§è¾¹ä¸¤æŒ‰é”® è¿™é‡Œæ¼”ç¤ºæ ‡å‡†å‰è¿›åé€€ï¼Œå¦‚æœéœ€è¦è‡ªå®šä¹‰å¯ä»¥åŠ¨æ€ä¿®æ”¹
                     data[1] |= 1<<(key_data_scan_new[i]&0x0F);
                     ret = 1;
                 }
                 else
                 {
-                    //DPI °´ÏÂ
-                    // ´¥·¢³¤°´¼ÆÊ±Æ÷
+                    //DPI æŒ‰ä¸‹
+                    // è§¦å‘é•¿æŒ‰è®¡æ—¶å™¨
                     if(KEY_TIMER_TABLE[i])
                     {
                         key_timer_list[KEY_TIMER_TABLE[i]-1] = key_press_time;
@@ -806,7 +806,7 @@ uint8_t mouse_key_scan(uint8_t *data)
             }
         }
     }
-    // ³¤°´¼ÆÊ±É¸Ñ¡
+    // é•¿æŒ‰è®¡æ—¶ç­›é€‰
     for(i=0; i<KEY_TIMEOUT_NUM; i++)
     {
         if(key_timer_list[i])
@@ -829,7 +829,7 @@ uint32_t gTTXCount;
 /*********************************************************************
  * @fn      mouse_motion_scan
  *
- * @brief   Ä£ÄâÊó±êÕı·½ĞÎ¹ì¼£
+ * @brief   æ¨¡æ‹Ÿé¼ æ ‡æ­£æ–¹å½¢è½¨è¿¹
  *
  * @return  none
  */
@@ -944,14 +944,14 @@ void key_press_timeout(uint8_t key)
     PRINT("p t %x\n",key);
     if(key == 0xF0) //DPI
     {
-        //½øÈëÅä¶Ô
+        //è¿›å…¥é…å¯¹
         if(work_mode==MODE_BT)
         {
             access_pairing_process(CTL_MODE_BLE_1);
         }
         else if(work_mode==MODE_2_4G)
         {
-            //³¤°´3sºó½øÈë2.4GÅä¶Ô×´Ì¬
+            //é•¿æŒ‰3såè¿›å…¥2.4Gé…å¯¹çŠ¶æ€
             nvs_flash_info.rf_device_id = RF_ROLE_ID_INVALD;
             tmos_memset(nvs_flash_info.peer_mac, 0, 6);
             nvs_flash_store();
@@ -972,7 +972,7 @@ void key_release(uint8_t key)
 //    PRINT("r %x\n",key);
     if(key == 0xF0) //DPI
     {
-        //ÇĞ»»DPI
+        //åˆ‡æ¢DPI
         nvs_flash_info.dpi++;
         nvs_flash_info.dpi %= DPI_MAX;
         nvs_flash_store();
@@ -992,43 +992,43 @@ void key_release(uint8_t key)
 /*********************************************************************
  * @fn      mouse_get_batt_info
  *
- * @brief   µçÔ´ĞÅÏ¢
+ * @brief   ç”µæºä¿¡æ¯
  *
  * @return  none
  */
 uint8_t mouse_get_batt_info()
 {
     uint16_t adcBuff[4];
-    uint8_t ret;                                   //µçÁ¿°Ù·Ö±È
-    uint8_t powerper;                                   //µçÁ¿°Ù·Ö±È
-    static uint8_t lastper=0;                                   //ÉÏ´ÎµçÁ¿°Ù·Ö±È
-    static uint8_t lastper_1=0;                                   //ÉÏ2´ÎµçÁ¿°Ù·Ö±È
-    static uint8_t lastper_2=0;                                   //ÉÏ3´ÎµçÁ¿°Ù·Ö±È
-    static uint8_t lastper_3=0;                                   //ÉÏ4´ÎµçÁ¿°Ù·Ö±È
+    uint8_t ret;                                   //ç”µé‡ç™¾åˆ†æ¯”
+    uint8_t powerper;                                   //ç”µé‡ç™¾åˆ†æ¯”
+    static uint8_t lastper=0;                                   //ä¸Šæ¬¡ç”µé‡ç™¾åˆ†æ¯”
+    static uint8_t lastper_1=0;                                   //ä¸Š2æ¬¡ç”µé‡ç™¾åˆ†æ¯”
+    static uint8_t lastper_2=0;                                   //ä¸Š3æ¬¡ç”µé‡ç™¾åˆ†æ¯”
+    static uint8_t lastper_3=0;                                   //ä¸Š4æ¬¡ç”µé‡ç™¾åˆ†æ¯”
 
-                                                        //ADC²ÉÑùÍ¨µÀĞèÒªºÍADCÒı½Å¶ÔÓ¦
-    GPIOA_ModeCfg( VBAT_ADC_PIN, GPIO_ModeIN_Floating );  //¸¡¿ÕÊäÈëÄ£Ê½
+                                                        //ADCé‡‡æ ·é€šé“éœ€è¦å’ŒADCå¼•è„šå¯¹åº”
+    GPIOA_ModeCfg( VBAT_ADC_PIN, GPIO_ModeIN_Floating );  //æµ®ç©ºè¾“å…¥æ¨¡å¼
     ADC_ChannelCfg( VBAT_ADC_CHANNAL );
 
     ADC_ExtSingleChSampInit( SampleFreq_3_2, ADC_PGA_0 );
     for(uint8_t i = 0; i < 4; i++)
     {
-        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // Á¬Ğø²ÉÑù
+        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // è¿ç»­é‡‡æ ·
     }
     for(uint8_t i = 0; i < 4; i++)
     {
-        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // Á¬Ğø²ÉÑù
+        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // è¿ç»­é‡‡æ ·
     }
 
-//    PRINT("µçÑ¹£º %d %d %d %d\n",adcBuff[0],adcBuff[1],adcBuff[2],adcBuff[3]);
+//    PRINT("ç”µå‹ï¼š %d %d %d %d\n",adcBuff[0],adcBuff[1],adcBuff[2],adcBuff[3]);
     adcBuff[0] = (adcBuff[0]+adcBuff[1]+adcBuff[2]+adcBuff[3]+2)/4;
 
-    adcBuff[0] = (uint32_t)adcBuff[0] * 1050 / 2048;                        //²âÁ¿µãµçÑ¹
-//    PRINT("µç×èµçÑ¹£º %d\n",adcBuff[0]);
+    adcBuff[0] = (uint32_t)adcBuff[0] * 1050 / 2048;                        //æµ‹é‡ç‚¹ç”µå‹
+//    PRINT("ç”µé˜»ç”µå‹ï¼š %d\n",adcBuff[0]);
 
-    //µç³ØµçÑ¹
-    adcBuff[0] = (uint32_t)adcBuff[0] * 3 / 1;                           //µç³ØµçÑ¹
-//    PRINT("µç³ØµçÑ¹£º %d\n",adcBuff[0]);
+    //ç”µæ± ç”µå‹
+    adcBuff[0] = (uint32_t)adcBuff[0] * 3 / 1;                           //ç”µæ± ç”µå‹
+//    PRINT("ç”µæ± ç”µå‹ï¼š %d\n",adcBuff[0]);
     if( adcBuff[0] <= 3000 )
     {
         powerper = 0;
@@ -1060,7 +1060,7 @@ uint8_t mouse_get_batt_info()
             powerper = 100;
         }
     }
-//    PRINT("powerper£º %d\n",powerper);
+//    PRINT("powerperï¼š %d\n",powerper);
     if(lastper > 1)
     {
         powerper = (lastper+powerper+1)/2;
@@ -1076,8 +1076,8 @@ uint8_t mouse_get_batt_info()
     lastper_2 = lastper_1;
     lastper_1 = lastper;
     lastper = powerper;
-//    PRINT("³Ø×Ó£º %d %d %d %d %d\n",lastper_3,lastper_2,lastper_1,lastper,powerper);
-//    PRINT("µçÁ¿£º %d\n",ret);
+//    PRINT("æ± å­ï¼š %d %d %d %d %d\n",lastper_3,lastper_2,lastper_1,lastper,powerper);
+//    PRINT("ç”µé‡ï¼š %d\n",ret);
 
     return ret;
 }
@@ -1085,7 +1085,7 @@ uint8_t mouse_get_batt_info()
 /*********************************************************************
  * @fn      TMR0_IRQHandler
  *
- * @brief   TMR0_IRQHandler ·¢ËÍÊ±¼äµÈÓÚ 200us+8us+·¢ËÍ³¤¶È*4us
+ * @brief   TMR0_IRQHandler å‘é€æ—¶é—´ç­‰äº 200us+8us+å‘é€é•¿åº¦*4us
  *
  * @return  none
  */

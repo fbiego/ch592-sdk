@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.10
 * Date               : 2018/12/14
-* Description        : oadÏà¹ØÅäÖÃ¶¨Òå
+* Description        : oadç›¸å…³é…ç½®å®šä¹‰
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -20,7 +20,7 @@
 
 /* The entire user code is divided into four pieces, 4K, 84K, 84K, 12K, and the last three pieces are called imageA (user code area), imageB (backup code area) and imageIAP respectively. */
 
-/* FLASH¶¨Òå */
+/* FLASHå®šä¹‰ */
 #define FLASH_BLOCK_SIZE       EEPROM_BLOCK_SIZE
 #define IMAGE_SIZE             84 * 1024
 
@@ -34,14 +34,14 @@
 #define IMAGE_B_START_ADD      (IMAGE_A_START_ADD + IMAGE_SIZE)
 #define IMAGE_B_SIZE           IMAGE_SIZE
 
-/* imageIAP¶¨Òå */
+/* imageIAPå®šä¹‰ */
 #define IMAGE_IAP_FLAG         0x03
 #define IMAGE_IAP_START_ADD    (IMAGE_B_START_ADD + IMAGE_SIZE)
 #define IMAGE_IAP_SIZE         12 * 1024
 
 /* IAP definition */
 /* The following is the IAP download command definition */
-#define CMD_IAP_PROM           0x80               // IAP±à³ÌÃüÁî
+#define CMD_IAP_PROM           0x80               // IAPç¼–ç¨‹å‘½ä»¤
 #define CMD_IAP_ERASE          0x81               // IAP erase command
 #define CMD_IAP_VERIFY         0x82               // IAP verification command
 #define CMD_IAP_END            0x83               // IAP End Flag
@@ -53,7 +53,7 @@
 /* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD      0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* ´æ·ÅÔÚDataFlashÀïµÄOTAĞÅÏ¢ */
+/* å­˜æ”¾åœ¨DataFlashé‡Œçš„OTAä¿¡æ¯ */
 typedef struct
 {
     unsigned char ImageFlag; // The current image flag of the record
@@ -66,28 +66,28 @@ typedef union
 {
     struct
     {
-        unsigned char cmd;          /* ÃüÁîÂë 0x81 */
+        unsigned char cmd;          /* å‘½ä»¤ç  0x81 */
         unsigned char len;          /* Subsequent data length */
         unsigned char addr[2];      /* Erase address */
-        unsigned char block_num[2]; /* ²Á³ı¿éÊı */
+        unsigned char block_num[2]; /* æ“¦é™¤å—æ•° */
 
     } erase; /* Erase command */
     struct
     {
         unsigned char cmd;       /* Command code 0x83 */
         unsigned char len;       /* Subsequent data length */
-        unsigned char status[2]; /* Á½×Ö½Ú×´Ì¬£¬±£Áô */
+        unsigned char status[2]; /* ä¸¤å­—èŠ‚çŠ¶æ€ï¼Œä¿ç•™ */
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* ÃüÁîÂë 0x82 */
+        unsigned char cmd;              /* å‘½ä»¤ç  0x82 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
-        unsigned char buf[IAP_LEN - 4]; /* Ğ£ÑéÊı¾İ */
+        unsigned char buf[IAP_LEN - 4]; /* æ ¡éªŒæ•°æ® */
     } verify;                           /* Verification command */
     struct
     {
-        unsigned char cmd;              /* ÃüÁîÂë 0x80 */
+        unsigned char cmd;              /* å‘½ä»¤ç  0x80 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* address */
         unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
@@ -95,16 +95,16 @@ typedef union
     struct
     {
         unsigned char cmd;              /* Command code 0x84 */
-        unsigned char len;              /* ºóĞøÊı¾İ³¤¶È */
-        unsigned char buf[IAP_LEN - 2]; /* ºóĞøÊı¾İ */
-    } info;                             /* ±à³ÌÃüÁî */
+        unsigned char len;              /* åç»­æ•°æ®é•¿åº¦ */
+        unsigned char buf[IAP_LEN - 2]; /* åç»­æ•°æ® */
+    } info;                             /* ç¼–ç¨‹å‘½ä»¤ */
     struct
     {
         unsigned char buf[IAP_LEN]; /* Receive packets */
     } other;
 } OTA_IAP_CMD_t;
 
-/* ¼ÇÂ¼µ±Ç°µÄImage */
+/* è®°å½•å½“å‰çš„Image */
 extern unsigned char CurrImageFlag;
 
 #endif

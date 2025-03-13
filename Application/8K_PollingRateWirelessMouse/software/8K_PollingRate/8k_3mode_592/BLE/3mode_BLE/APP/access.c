@@ -217,7 +217,7 @@ void access_receive_cb( uint8_t *pData, uint8_t len )
 //            access_update_idel_sleep_timeout(IDEL_SLEEP_EVT_TIMEOUT);
             if(access_state.idel_sleep_flag)
             {
-                // 停止睡眠
+                // 
                 access_state.sleep_en = FALSE;
                 tmos_set_event( access_taskId, ACCESS_WAKE_UP_EVT );
             }
@@ -376,7 +376,7 @@ void access_pairing_mode( void )
         if( ble_state == GAPROLE_CONNECTED )
         {
             PRINT( "CON dis\n" );
-            // 当前还在连接中，断开连接，换地址
+            // 
             hidEmu_disconnect();
             access_state.pairing_state = TRUE;
             // After turning on the broadcast for 60s, enter sleep. If the sleep function is not connected yet, stop broadcasting and sleep directly.

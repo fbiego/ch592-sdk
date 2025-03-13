@@ -127,7 +127,7 @@ typedef enum
     Period_2_S,         // 2s cycle
     Period_4_S,         // 4s cycle
     Period_8_S,         // 8s cycle
-    Period_16_S,        // 16s ÖÜÆÚ
+    Period_16_S,        // 16s Ã–ÃœÃ†Ãš
 } RTC_TMRCycTypeDef;
 
 /**

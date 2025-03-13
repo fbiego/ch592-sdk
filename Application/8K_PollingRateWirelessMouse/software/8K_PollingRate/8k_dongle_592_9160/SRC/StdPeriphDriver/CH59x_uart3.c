@@ -15,7 +15,7 @@
 /*********************************************************************
  * @fn      UART3_DefInit
  *
- * @brief   ´®¿ÚÄ¬ÈÏ³õÊ¼»¯ÅäÖÃ
+ * @brief   ä¸²å£é»˜è®¤åˆå§‹åŒ–é…ç½®
  *
  * @param   none
  *
@@ -24,7 +24,7 @@
 void UART3_DefInit(void)
 {
     UART3_BaudRateCfg(115200);
-    R8_UART3_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN; // FIFO´ò¿ª£¬´¥·¢µã4×Ö½Ú
+    R8_UART3_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN; // FIFOæ‰“å¼€ï¼Œè§¦å‘ç‚¹4å­—èŠ‚
     R8_UART3_LCR = RB_LCR_WORD_SZ;
     R8_UART3_IER = RB_IER_TXD_EN;
     R8_UART3_DIV = 1;

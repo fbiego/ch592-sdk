@@ -63,7 +63,7 @@ extern "C"
 typedef struct PDF_PARAM
 {
     uint16_t MeasureInterval;        //Measurement interval, units of 1min
-    uint8_t TempUnit;               //Temperature unit, 0:¡ãC, 1:¡ãF
+    uint8_t TempUnit;               //Temperature unit, 0:Â¡Ã£C, 1:Â¡Ã£F
     float MaxTempAlarm;             //Alarm temperature upper limit
     float MinTempAlarm;             //Alarm temperature lower limit
     float MaxHumiAlarm;             //Alarm humidity upper limit

@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.2
 * Date               : 2022/01/18
-* Description        : ÀØ√ﬂ≈‰÷√º∞∆‰≥ı ºªØ
+* Description        : √ã¬Ø√É√ü√Ö√§√ñ√É¬º¬∞√Ü√§¬≥√µ√ä¬º¬ª¬Ø
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
@@ -111,7 +111,7 @@ void HAL_SleepInit(void)
 {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     sys_safe_access_enable();
-    R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTCªΩ–—
+    R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTC¬ª¬Ω√ê√ë
     sys_safe_access_disable();              //
     sys_safe_access_enable();
     R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // Trigger mode

@@ -24,19 +24,19 @@ extern "C" {
 /**************************************************************************************************
  *                                              MACROS
  **************************************************************************************************/
-#define LCD_WriteByte0( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)(d)))          /* Ìî³äSEG0,SEG1Çý¶¯ÊýÖµ */
-#define LCD_WriteByte1( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)(d)<<8))       /* Ìî³äSEG2,SEG3Çý¶¯ÊýÖµ */
-#define LCD_WriteByte2( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)(d)<<16))      /* Ìî³äSEG4,SEG5Çý¶¯ÊýÖµ */
-#define LCD_WriteByte3( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)(d)<<24))      /* Ìî³äSEG6,SEG7Çý¶¯ÊýÖµ */
-#define LCD_WriteByte4( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffffff00) | ((UINT32)(d)))          /* Ìî³äSEG8,SEG9Çý¶¯ÊýÖµ */
-#define LCD_WriteByte5( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffff00ff) | ((UINT32)(d)<<8))       /* Ìî³äSEG10,SEG11Çý¶¯ÊýÖµ */
-#define LCD_WriteByte6( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xff00ffff) | ((UINT32)(d)<<16))      /* Ìî³äSEG12,SEG13Çý¶¯ÊýÖµ */
-#define LCD_WriteByte7( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0x00ffffff) | ((UINT32)(d)<<24))      /* Ìî³äSEG14,SEG15Çý¶¯ÊýÖµ */
-#define LCD_WriteByte8( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffffff00) | ((UINT32)(d)))          /* Ìî³äSEG16,SEG17Çý¶¯ÊýÖµ */
-#define LCD_WriteByte9( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffff00ff) | ((UINT32)(d)<<8))       /* Ìî³äSEG18,SEG19Çý¶¯ÊýÖµ */
+#define LCD_WriteByte0( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)(d)))          /* å¡«å……SEG0,SEG1é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte1( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)(d)<<8))       /* å¡«å……SEG2,SEG3é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte2( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)(d)<<16))      /* å¡«å……SEG4,SEG5é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte3( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)(d)<<24))      /* å¡«å……SEG6,SEG7é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte4( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffffff00) | ((UINT32)(d)))          /* å¡«å……SEG8,SEG9é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte5( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffff00ff) | ((UINT32)(d)<<8))       /* å¡«å……SEG10,SEG11é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte6( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xff00ffff) | ((UINT32)(d)<<16))      /* å¡«å……SEG12,SEG13é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte7( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0x00ffffff) | ((UINT32)(d)<<24))      /* å¡«å……SEG14,SEG15é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte8( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffffff00) | ((UINT32)(d)))          /* å¡«å……SEG16,SEG17é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteByte9( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffff00ff) | ((UINT32)(d)<<8))       /* å¡«å……SEG18,SEG19é©±åŠ¨æ•°å€¼ */
 
-#define LCD_WriteSeg16( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xfffffff0) | ((UINT32)(d)))          /* Ìî³äSEG16Çý¶¯ÊýÖµ */
-#define LCD_WriteSeg17( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffffff0f) | ((UINT32)(d)<<4))       /* Ìî³äSEG17Çý¶¯ÊýÖµ */
+#define LCD_WriteSeg16( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xfffffff0) | ((UINT32)(d)))          /* å¡«å……SEG16é©±åŠ¨æ•°å€¼ */
+#define LCD_WriteSeg17( d )     (R32_LCD_RAM2 = (R32_LCD_RAM2 & 0xffffff0f) | ((UINT32)(d)<<4))       /* å¡«å……SEG17é©±åŠ¨æ•°å€¼ */
 
 /**
   * @brief  LCD display battery voltage

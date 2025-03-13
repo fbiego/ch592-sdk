@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "ch9160.h"
 #include <rf.h>
 #include "HAL.h"
@@ -23,9 +23,9 @@
 
 uint8_t app_taskID;
 
-// Ö§³ÖµÄ×î´ó½Ó¿ÚÊıÁ¿
+// æ”¯æŒçš„æœ€å¤§æ¥å£æ•°é‡
 #define USB_INTERFACE_MAX_NUM       4
-// ÖØ´«¼ä¸ô£¬µ¥Î»Îª1¸öRTCÊ±ÖÓ
+// é‡ä¼ é—´éš”ï¼Œå•ä½ä¸º1ä¸ªRTCæ—¶é’Ÿ
 #define RETRAN_INTERVAL         32
 
 const uint8_t LangID_StrDescr[ 4 ] =
@@ -36,10 +36,10 @@ const uint8_t LangID_StrDescr[ 4 ] =
     0x04
 };
 
-// ³§¼ÒĞÅÏ¢
+// å‚å®¶ä¿¡æ¯
 uint8_t MyManuInfo[] = {0x0E, 0x03, 'w', 0, 'c', 0, 'h', 0, '.', 0, 'c', 0, 'n', 0};
 
-// ²úÆ·ĞÅÏ¢
+// äº§å“ä¿¡æ¯
 uint8_t MyProdInfo[] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -54,7 +54,7 @@ uint8_t MyProdInfo[] = {0x0D+11, 0x03,
     'e', 0
 };
 
-// ĞòÁĞºÅ
+// åºåˆ—å·
 uint8_t MySerialNum[] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -68,7 +68,7 @@ uint8_t MySerialNum[] = {0x0D+11, 0x03,
     'l', 0,
     'e', 0
 };
-//   -----±¨¸æÃèÊö·ûKeyboard--------------
+//   -----æŠ¥å‘Šæè¿°ç¬¦Keyboard--------------
 const uint8_t HID_ReportDescriptorKeyboard[]=
 {
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
@@ -112,7 +112,7 @@ const uint8_t HID_ReportDescriptorKeyboard[]=
 
 };
 
-//   -----±¨¸æÃèÊö·ûMouse--------------
+//   -----æŠ¥å‘Šæè¿°ç¬¦Mouse--------------
 const uint8_t HID_ReportDescriptorMouse[]=
 {
         0x05,0x01,                  //81    GLOBAL_USAGE_PAGE(Generic Desktop Controls)
@@ -153,7 +153,7 @@ const uint8_t HID_ReportDescriptorMouse[]=
 };
 
 
-//   -----±¨¸æÃèÊö·ûOther--------------
+//   -----æŠ¥å‘Šæè¿°ç¬¦Other--------------
 const uint8_t HID_ReportDescriptorOther[]=
 {
     0x05,0x0C,                  //0     GLOBAL_USAGE_PAGE(Consumer)
@@ -202,7 +202,7 @@ const uint8_t HID_ReportDescriptorOther[]=
 
 };
 
-//   -----±¨¸æÃèÊö·ûManufacturer--------------
+//   -----æŠ¥å‘Šæè¿°ç¬¦Manufacturer--------------
 const uint8_t HID_ReportDescriptorManufacturer[]=
 {
     0x06, 0x60, 0xFF,  // Usage Page (Vendor Defined 0xFF60)
@@ -223,7 +223,7 @@ const uint8_t HID_ReportDescriptorManufacturer[]=
     0xC0,              // End Collection
 };
 
-//   -----±¨¸æÃèÊö·ûIAP--------------
+//   -----æŠ¥å‘Šæè¿°ç¬¦IAP--------------
 const uint8_t HID_ReportDescriptorIAP[]=
 {
 
@@ -250,7 +250,7 @@ const uint8_t HID_ReportDescSizeOther = sizeof(HID_ReportDescriptorOther);
 const uint8_t HID_ReportDescSizeManufacturer = sizeof(HID_ReportDescriptorManufacturer);
 const uint8_t HID_ReportDescSizeIAP = sizeof(HID_ReportDescriptorIAP);
 
-// Éè±¸ÃèÊö·û
+// è®¾å¤‡æè¿°ç¬¦
 uint8_t MyDevDescr[] = {
     0x12,   /* bLength */
     0x01,   /* bDescriptorType USB_DEVICE_DESCRIPTOR_TYPE*/
@@ -268,7 +268,7 @@ uint8_t MyDevDescr[] = {
     0x01    /* bNumConfigurations: one possible configuration*/
 };
 
-// ÅäÖÃÃèÊö·û
+// é…ç½®æè¿°ç¬¦
 const uint8_t MyCfgDescr[] = {
     0x09,   /* bLength */
     0x02,   /* bDescriptorType USB_CONFIGURATION_DESCRIPTOR_TYPE*/
@@ -278,9 +278,9 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* iConfiguration */
     0xA0,
     0x32,    /* bMaxPower */
-    //ÅäÖÃÃèÊö·û
+    //é…ç½®æè¿°ç¬¦
 
-//   -----Interface ÃèÊö·û Keyboard --------------
+//   -----Interface æè¿°ç¬¦ Keyboard --------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x00,   /* bInterfaceNumber */
@@ -290,7 +290,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x01,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //½Ó¿ÚÃèÊö·û
+    //æ¥å£æè¿°ç¬¦
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -299,7 +299,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeKeyboard),/* wDescriptorLength */
-    //HIDÀàÃèÊö·û
+    //HIDç±»æè¿°ç¬¦
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -307,9 +307,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP1SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
-    //¶Ëµã1ÃèÊö·û
+    //ç«¯ç‚¹1æè¿°ç¬¦
 
-//   -----Interface ÃèÊö·û Mouse --------------
+//   -----Interface æè¿°ç¬¦ Mouse --------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x01,   /* bInterfaceNumber */
@@ -319,7 +319,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x02,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //½Ó¿ÚÃèÊö·û
+    //æ¥å£æè¿°ç¬¦
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -328,7 +328,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeMouse),/* wDescriptorLength */
-    //HIDÀàÃèÊö·û
+    //HIDç±»æè¿°ç¬¦
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -336,9 +336,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP2SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 0.125ms */
-    //¶Ëµã2ÃèÊö·û
+    //ç«¯ç‚¹2æè¿°ç¬¦
 
-//   -----Interface ÃèÊö·û Other --------------
+//   -----Interface æè¿°ç¬¦ Other --------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x02,   /* bInterfaceNumber */
@@ -348,7 +348,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //½Ó¿ÚÃèÊö·û
+    //æ¥å£æè¿°ç¬¦
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -357,7 +357,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeOther),/* wDescriptorLength */
-    //HIDÀàÃèÊö·û
+    //HIDç±»æè¿°ç¬¦
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -366,7 +366,7 @@ const uint8_t MyCfgDescr[] = {
     USB_WBVAL(DevEP3SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
 
-//   -----Interface ÃèÊö·û IAP --------------
+//   -----Interface æè¿°ç¬¦ IAP --------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x03,   /* bInterfaceNumber */
@@ -376,7 +376,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //½Ó¿ÚÃèÊö·û
+    //æ¥å£æè¿°ç¬¦
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -385,7 +385,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeIAP),/* wDescriptorLength */
-    //HIDÀàÃèÊö·û
+    //HIDç±»æè¿°ç¬¦
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -400,7 +400,7 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP4SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
-    //¶Ëµã4ÃèÊö·û
+    //ç«¯ç‚¹4æè¿°ç¬¦
 
 };
 
@@ -414,7 +414,7 @@ uint8_t rf_data_buf[64] = {0};
 /*******************************************************************************
  * @fn      app_relay_rf_to_uart
  *
- * @brief   RFÊÕµ½Êı¾İºóµ÷ÓÃ´Ëº¯Êı·¢ÍùUSB
+ * @brief   RFæ”¶åˆ°æ•°æ®åè°ƒç”¨æ­¤å‡½æ•°å‘å¾€USB
  *
  * @param   None.
  *
@@ -478,7 +478,7 @@ void app_relay_rf_to_uart( )
 /*******************************************************************************
  * @fn      app_relay_ota_to_uart
  *
- * @brief   otaĞèÒª·¢ËÍÊı¾İµ÷ÓÃ´Ëº¯Êı·¢ÍùUSB
+ * @brief   otaéœ€è¦å‘é€æ•°æ®è°ƒç”¨æ­¤å‡½æ•°å‘å¾€USB
  *
  * @param   None.
  *
@@ -509,7 +509,7 @@ void app_relay_ota_to_uart( )
 /*******************************************************************************
  * @fn      app_retran_data_to_uart
  *
- * @brief   ¼ä¸ôRTCÊ±ÖÓÖØ´«ÉÏÒ»°üÎ´Ó¦´ğÊı¾İ
+ * @brief   é—´éš”RTCæ—¶é’Ÿé‡ä¼ ä¸Šä¸€åŒ…æœªåº”ç­”æ•°æ®
  *
  * @param   None.
  *
@@ -521,7 +521,7 @@ void app_retran_data_to_uart( )
     if(uart_wait_ack_falg)
     {
         rtc_count = RTC_GetCycle32k();
-        // ¼ä¸ô5¸öRTCÊ±ÖÓÖØ´«
+        // é—´éš”5ä¸ªRTCæ—¶é’Ÿé‡ä¼ 
         if(RTC_A_SUB_B(rtc_count,uart_trans_rtc) > RETRAN_INTERVAL)
         {
             trans_retran_last_data();
@@ -533,7 +533,7 @@ void app_retran_data_to_uart( )
 /*******************************************************************************
  * @fn      app_data_process
  *
- * @brief   ÂÖÑ¯ÊÇ·ñÓĞĞèÒª´¦ÀíµÄÊı¾İ
+ * @brief   è½®è¯¢æ˜¯å¦æœ‰éœ€è¦å¤„ç†çš„æ•°æ®
  *
  * @param   None.
  *
@@ -562,7 +562,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
         {
             case CMD_SNED_ENDP_DATA1|CMD_ACK:
             {
-                // 0x00±íÊ¾Ö´ĞĞ³É¹¦£¬ÆäËüÖµ±íÊ¾Ê§°Ü¡£
+                // 0x00è¡¨ç¤ºæ‰§è¡ŒæˆåŠŸï¼Œå…¶å®ƒå€¼è¡¨ç¤ºå¤±è´¥ã€‚
                 if(!pData[0])
                 {
                     uart_wait_ack_falg = 0;
@@ -582,7 +582,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                 {
                     if(pData[1] == ENTER_SLEEP)
                     {
-                        // ·¢ËÍ¸ø2.4G¶Ô¶Ë
+                        // å‘é€ç»™2.4Gå¯¹ç«¯
                         rf_data_buf[0] = RF_DATA_SLEEP;
                         tmos_memcpy(&rf_data_buf[1], pData, len);
                         if(rf_send_data(rf_data_buf, len+1))
@@ -618,10 +618,10 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
 
                     case ENDP_4:
                     {
-                        // ×Ô¶¨Òå¶Ëµã£¬¼ì²éÊÇ·ñÊÇOTAµÈÅäÖÃÊı¾İ
+                        // è‡ªå®šä¹‰ç«¯ç‚¹ï¼Œæ£€æŸ¥æ˜¯å¦æ˜¯OTAç­‰é…ç½®æ•°æ®
                         if(OTA_IAPWriteData(&pData[0], len)==HEX_NOT_LOCAL)
                         {
-                            // ËµÃ÷ĞèÒª·¢ËÍ¸ø2.4G¶Ô¶Ë
+                            // è¯´æ˜éœ€è¦å‘é€ç»™2.4Gå¯¹ç«¯
                             rf_data_buf[0] = RF_DATA_IAP;
                             tmos_memcpy(&rf_data_buf[1], pData, len);
                             if(rf_send_data(rf_data_buf, len+1))
@@ -651,9 +651,9 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
             case CMD_GET_INFO|CMD_ACK:
             {
                 PRINT("var %x\n",pData[0]);
-                //0x00±íÊ¾USBÎ´Á¬½Ó£»
-                //0x01±íÊ¾USBÒÑÁ¬½Óµ«Î´Ã¶¾Ù£»
-                //0x02±íÊ¾USBÒÑÁ¬½ÓÇÒÃ¶¾Ù;
+                //0x00è¡¨ç¤ºUSBæœªè¿æ¥ï¼›
+                //0x01è¡¨ç¤ºUSBå·²è¿æ¥ä½†æœªæšä¸¾ï¼›
+                //0x02è¡¨ç¤ºUSBå·²è¿æ¥ä¸”æšä¸¾;
                 PRINT("usb state %x\n",pData[1]);
                 PRINT("usb SetReport %x\n",pData[2]);
                 PRINT("io dir %x\n",pData[3]);
@@ -661,7 +661,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                 PRINT("buffused %x\n",pData[5]|(pData[6]<<8));
                 if(pData[1] != 0x02)
                 {
-                    //USBÉè±¸ÃèÊö·û
+                    //USBè®¾å¤‡æè¿°ç¬¦
                     access_set_usb_desc(usb_desc_index, 0, MyDevDescr[0], MyDevDescr);
                 }
                 break;
@@ -681,54 +681,54 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                     usb_desc_index++;
                     switch(usb_desc_index)
                     {
-                        case 1: //USBÅäÖÃÃèÊö·û
+                        case 1: //USBé…ç½®æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index, 0, MyCfgDescr[2], (uint8_t *)MyCfgDescr);
                             break;
                         }
-                        case 2: //USB HID1±¨±íÃèÊö·û
+                        case 2: //USB HID1æŠ¥è¡¨æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeKeyboard, (uint8_t *)HID_ReportDescriptorKeyboard);
                             break;
                         }
-                        case 3: //USB HID2±¨±íÃèÊö·û
+                        case 3: //USB HID2æŠ¥è¡¨æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeMouse, (uint8_t *)HID_ReportDescriptorMouse);
                             break;
                         }
-                        case 4: //USB HID3±¨±íÃèÊö·û
+                        case 4: //USB HID3æŠ¥è¡¨æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeOther, (uint8_t *)HID_ReportDescriptorOther);
                             break;
                         }
-                        case 5: //USB HID4±¨±íÃèÊö·û
+                        case 5: //USB HID4æŠ¥è¡¨æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeIAP, (uint8_t *)HID_ReportDescriptorIAP);
                             break;
                         }
-                        case 6: //USB×Ö·û´®0(ÓïÑÔ)ÃèÊö·û
+                        case 6: //USBå­—ç¬¦ä¸²0(è¯­è¨€)æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(LangID_StrDescr), (uint8_t *)LangID_StrDescr);
                             break;
                         }
-                        case 7: //USB×Ö·û´®1(³§ÉÌ)ÃèÊö·û
+                        case 7: //USBå­—ç¬¦ä¸²1(å‚å•†)æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MyManuInfo), MyManuInfo);
                             break;
                         }
-                        case 8: //USB×Ö·û´®2(²úÆ·)ÃèÊö·û
+                        case 8: //USBå­—ç¬¦ä¸²2(äº§å“)æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MyProdInfo), MyProdInfo);
                             break;
                         }
-                        case 9: //USB×Ö·û´®3(ĞòÁĞºÅ)ÃèÊö·û
+                        case 9: //USBå­—ç¬¦ä¸²3(åºåˆ—å·)æè¿°ç¬¦
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MySerialNum), MySerialNum);
                             break;
                         }
-                        case 0x0A: //USB×Ö·û´®4ÃèÊö·û
+                        case 0x0A: //USBå­—ç¬¦ä¸²4æè¿°ç¬¦
                         {
-                            // ÎŞ×Ö·û´®4£¬Ö±½ÓÆô¶¯USB
+                            // æ— å­—ç¬¦ä¸²4ï¼Œç›´æ¥å¯åŠ¨USB
                             access_set_info(0x01, 0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x00);
                             break;
                         }
@@ -748,12 +748,12 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
 /*********************************************************************
  * @fn      app_ProcessEvent
  *
- * @brief   RF ÊÂ¼ş´¦Àí
+ * @brief   RF äº‹ä»¶å¤„ç†
  *
- * @param   task_id - ÈÎÎñID
- * @param   events  - ÊÂ¼ş±êÖ¾
+ * @param   task_id - ä»»åŠ¡ID
+ * @param   events  - äº‹ä»¶æ ‡å¿—
  *
- * @return  Î´Íê³ÉÊÂ¼ş
+ * @return  æœªå®Œæˆäº‹ä»¶
  */
 uint16_t app_ProcessEvent(uint8_t task_id, uint16_t events)
 {
@@ -785,11 +785,11 @@ void app_Init( void )
 
 void SoftwareUART_SendChar(char c)
 {
-  // ÆğÊ¼Î»£¨µÍµçÆ½£©
+  // èµ·å§‹ä½ï¼ˆä½ç”µå¹³ï¼‰
   GPIOA_ResetBits(GPIO_Pin_12);
   DelayUs(104);
 
-  // Êı¾İÎ»£¨µÍÎ»ÔÚÇ°£©
+  // æ•°æ®ä½ï¼ˆä½ä½åœ¨å‰ï¼‰
   for (int i = 0; i < 8; i++)
   {
     if (c & (1 << i))
@@ -803,7 +803,7 @@ void SoftwareUART_SendChar(char c)
     DelayUs(104);
   }
 
-  // Í£Ö¹Î»£¨¸ßµçÆ½£©
+  // åœæ­¢ä½ï¼ˆé«˜ç”µå¹³ï¼‰
   GPIOA_SetBits(GPIO_Pin_12);
   DelayUs(104);
 }
@@ -818,7 +818,7 @@ void SoftwareUART_SendString(char* str)
 
 void SoftwareUART_Printf(const char* format, ...)
 {
-    char buffer[1024]; // ¶¨ÒåÒ»¸ö×ã¹»´óµÄ»º³åÇø
+    char buffer[1024]; // å®šä¹‰ä¸€ä¸ªè¶³å¤Ÿå¤§çš„ç¼“å†²åŒº
     va_list args;
 
     va_start(args, format);

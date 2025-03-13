@@ -90,7 +90,7 @@ void task3_entry(void *parameter)
 /* ********************************************************************
 * @fn      main
 *
-* @brief   Ö÷º¯Êý
+* @brief   Ã–Ã·ÂºÂ¯ÃŠÃ½
 *
 * @note    main is one of threads in rt-thread.
 *

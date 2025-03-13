@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2022/03/15
-* Description        : USB IAPÀý³Ì
+* Description        : USB IAPÃ€Ã½Â³ÃŒ
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

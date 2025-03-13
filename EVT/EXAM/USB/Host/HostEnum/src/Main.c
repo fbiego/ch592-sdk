@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.1
 * Date               : 2022/01/25
-* Description        : USB�豸ö��
+* Description        : USBÉè±¸Ã¶¾Ù
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

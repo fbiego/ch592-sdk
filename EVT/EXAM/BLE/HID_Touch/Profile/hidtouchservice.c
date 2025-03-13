@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2018/12/12
- * Description        : ´¥Ãþ·þÎñ
+ * Description        : Â´Â¥ÃƒÃ¾Â·Ã¾ÃŽÃ±
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 

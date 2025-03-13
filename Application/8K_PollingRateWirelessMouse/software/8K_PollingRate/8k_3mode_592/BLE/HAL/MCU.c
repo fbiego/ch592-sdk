@@ -11,7 +11,7 @@
 ********************************************************************************************* */
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "HAL.h"
 #include "access.h"
 #include "nvs_flash.h"
@@ -150,7 +150,7 @@ void CH59X_BLEInit(uint32_t snv_addr)
 /* ******************************************************************************
 * @fn      HAL_ProcessEvent
 *
-* @brief   Ó²¼ş²ãÊÂÎñ´¦Àí
+* @brief   ç¡¬ä»¶å±‚äº‹åŠ¡å¤„ç†
 *
 * @param   task_id - The TMOS assigned task ID.
 * @param   events  - events to process.  This is a bit map and can

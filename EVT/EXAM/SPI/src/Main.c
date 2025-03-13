@@ -3,7 +3,7 @@
 * Author             : WCH
 * Version            : V1.0
 * Date               : 2020/08/06
-* Description        : SPI0演示 Master/Slave 模式数据收发
+* Description        : SPI0婕旂ず Master/Slave 妯″紡鏁版嵁鏀跺彂
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for

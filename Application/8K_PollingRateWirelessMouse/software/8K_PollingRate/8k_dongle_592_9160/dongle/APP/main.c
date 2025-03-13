@@ -57,7 +57,7 @@ void process_main( void )
 
 /* ******************************************************************************
 * Function Name  : main
-* Description    : Ö÷º¯Êý
+* Description    : Ã–Ã·ÂºÂ¯ÃŠÃ½
 * Input          : None
 * Output         : None
 * Return         : None

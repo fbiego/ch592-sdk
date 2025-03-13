@@ -70,7 +70,7 @@ void PWMX_16bit_CycleCfg(uint16_t cyc)
 /* ********************************************************************
 * @fn      PWMX_16bit_ACTOUT
 *
-* @brief   PWM4-PWM9 Í¨µÀ16Î»Êä³ö²¨ĞÎÅäÖÃ
+* @brief   PWM4-PWM9 é€šé“16ä½è¾“å‡ºæ³¢å½¢é…ç½®
 *
 * @param   ch      - select channel of pwm, refer to channel of PWM define
 * @param   da      - effective pulse width
@@ -110,7 +110,7 @@ void PWMX_16bit_ACTOUT(uint8_t ch, uint16_t da, PWMX_PolarTypeDef pr, Functional
 /* ********************************************************************
 * @fn      PWMX_ACTOUT
 *
-* @brief   PWM4-PWM11Í¨µÀÊä³ö²¨ĞÎÅäÖÃ
+* @brief   PWM4-PWM11é€šé“è¾“å‡ºæ³¢å½¢é…ç½®
 *
 * @param   ch      - select channel of pwm, refer to channel of PWM define
 * @param   da      - effective pulse width

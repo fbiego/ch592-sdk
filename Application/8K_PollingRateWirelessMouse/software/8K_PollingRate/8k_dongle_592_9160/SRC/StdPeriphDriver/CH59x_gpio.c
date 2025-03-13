@@ -168,7 +168,7 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
             R32_PB_OUT |= pin;
             break;
 
-        case GPIO_ITMode_FallEdge: // ÏÂ½µÑØ´¥·¢
+        case GPIO_ITMode_FallEdge: // 
             R16_PB_INT_MODE |= Pin;
             R32_PB_CLR |= pin;
             break;

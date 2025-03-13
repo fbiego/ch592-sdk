@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2021/11/10
- * Description        : multinetflood£¬×é²¥ÍøÂç·ººé´«ÊäÀı×Ó
+ * Description        : multinetfloodÂ£Â¬Ã—Ã©Â²Â¥ÃÃ¸Ã‚Ã§Â·ÂºÂºÃ©Â´Â«ÃŠÃ¤Ã€Ã½Ã—Ã“
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 

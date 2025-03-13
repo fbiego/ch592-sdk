@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.2
  * Date               : 2022/01/18
- * Description        : RTCÅäÖÃ¼°Æä³õÊ¼»¯
+ * Description        : RTCé…ç½®åŠå…¶åˆå§‹åŒ–
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼ş°üº¬ */
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "HAL.h"
 #include "flash_info.h"
 
@@ -30,9 +30,9 @@ volatile uint32_t RTCTigFlag;
 /*******************************************************************************
  * @fn      RTC_SetTignTime
  *
- * @brief   ÅäÖÃRTC´¥·¢Ê±¼ä
+ * @brief   é…ç½®RTCè§¦å‘æ—¶é—´
  *
- * @param   time    - ´¥·¢Ê±¼ä.
+ * @param   time    - è§¦å‘æ—¶é—´.
  *
  * @return  None.
  */
@@ -47,7 +47,7 @@ void RTC_SetTignTime(uint32_t time)
 /*******************************************************************************
  * @fn      RTC_IRQHandler
  *
- * @brief   RTCÖĞ¶Ï´¦Àí
+ * @brief   RTCä¸­æ–­å¤„ç†
  *
  * @param   None.
  *
@@ -64,7 +64,7 @@ void RTC_IRQHandler(void)
 /*******************************************************************************
  * @fn      SYS_GetClockValue
  *
- * @brief   »ñÈ¡RTCµ±Ç°¼ÆÊıÖµ
+ * @brief   è·å–RTCå½“å‰è®¡æ•°å€¼
  *
  * @param   None.
  *
@@ -85,7 +85,7 @@ static uint32_t SYS_GetClockValue(void)
 /*******************************************************************************
  * @fn      HAL_Time0Init
  *
- * @brief   ÏµÍ³¶¨Ê±Æ÷³õÊ¼»¯
+ * @brief   ç³»ç»Ÿå®šæ—¶å™¨åˆå§‹åŒ–
  *
  * @param   None.
  *
@@ -107,13 +107,13 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_OSC32K_XT | RB_CLK_INT32K_PON | RB_CLK_XT32K_PON;
     sys_safe_access_disable();
 #endif
-//    RTC_InitTime( 2020, 1, 1, 0, 0, 0 );    //RTCÊ±ÖÓ³õÊ¼»¯µ±Ç°Ê±¼ä
+//    RTC_InitTime( 2020, 1, 1, 0, 0, 0 );    //RTCæ—¶é’Ÿåˆå§‹åŒ–å½“å‰æ—¶é—´
     RTC_InitTime(DeviceInfo.StartTime.Year,
                  (uint16_t)DeviceInfo.StartTime.Month,
                  (uint16_t)DeviceInfo.StartTime.Day,
                  (uint16_t)DeviceInfo.StartTime.Hour,
                  (uint16_t)DeviceInfo.StartTime.Minute,
-                 (uint16_t)DeviceInfo.StartTime.Second); //RTCÊ±ÖÓ³õÊ¼»¯µ±Ç°Ê±¼ä
+                 (uint16_t)DeviceInfo.StartTime.Second); //RTCæ—¶é’Ÿåˆå§‹åŒ–å½“å‰æ—¶é—´
 
     tmos_memset( &conf, 0, sizeof(bleClockConfig_t) );
     conf.ClockAccuracy = CLK_OSC32K ? 1000 : 50;

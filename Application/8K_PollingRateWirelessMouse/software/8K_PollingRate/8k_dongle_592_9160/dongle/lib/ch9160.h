@@ -18,7 +18,7 @@
 "C" {
 #endif
 
-// ACCESS_CMD³¬Ê±10ms
+// ACCESS_CMDè¶…æ—¶10ms
 #define ACCESS_CMD_TIMEOUT      16
 
 // ACCESS_STATE
@@ -34,7 +34,7 @@
 #define CHK_DATA                0x55
 #define CHK_ACK                 0xAA
 
-// »ù±¾Êı¾İ
+// åŸºæœ¬æ•°æ®
 #define CMD_CHK_CONNECT         0x01
 #define CMD_GET_INFO            0x02
 #define CMD_SET_INFO            0x03
@@ -69,34 +69,34 @@ extern const uint8_t VER_CH9160_LIB[];
 typedef void (*access_cmd_cb_t)(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len);
 
 /**
- * @brief   ×¢²á½ÓÈë²ãÃüÁî½ÓÊÕ»Øµ÷
+ * @brief   æ³¨å†Œæ¥å…¥å±‚å‘½ä»¤æ¥æ”¶å›è°ƒ
  *
- * @param   cb - »Øµ÷º¯Êı
+ * @param   cb - å›è°ƒå‡½æ•°
  */
 void access_register_cmd_cb(access_cmd_cb_t cb);
 
 /**
- * @brief   ¼ì²éUSBÁ¬½Ó×´Ì¬
+ * @brief   æ£€æŸ¥USBè¿æ¥çŠ¶æ€
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_chk_connect(void);
 
 /**
- * @brief   ¼ì²éUSBÁ¬½Ó×´Ì¬
+ * @brief   æ£€æŸ¥USBè¿æ¥çŠ¶æ€
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_get_info(void);
 
 /**
- * @brief   ÉèÖÃUSB
+ * @brief   è®¾ç½®USB
  *
- * @param   usb_enable  : 1 - Ê¹ÄÜUSB; 0 - ¹Ø±ÕUSB
- *          io_dir      : IO·½Ïò 0±íÊ¾ÊäÈë; 1±íÊ¾Êä³ö
- *          io_pin      : IOµçÆ½ 0±íÊ¾µÍµçÆ½; 1±íÊ¾¸ßµçÆ½
- *          endpx_size  : 0~9¶ÔÓ¦¶Ëµã³¤¶ÈÎª2µÄ0~9´ÎÃİ£¬±ÈÈç2¶ÔÓ¦³¤¶ÈÎª4£¬6¶ÔÓ¦³¤¶ÈÎª64£¬9¶ÔÓ¦³¤¶ÈÎª512
- *          sleep_off   : 2 - USBÉî¶ÈË¯Ãß; 1 - ¹Ø±ÕUSBË¯Ãß; 0 - USBÇ³Ë¯Ãß
+ * @param   usb_enable  : 1 - ä½¿èƒ½USB; 0 - å…³é—­USB
+ *          io_dir      : IOæ–¹å‘ 0è¡¨ç¤ºè¾“å…¥; 1è¡¨ç¤ºè¾“å‡º
+ *          io_pin      : IOç”µå¹³ 0è¡¨ç¤ºä½ç”µå¹³; 1è¡¨ç¤ºé«˜ç”µå¹³
+ *          endpx_size  : 0~9å¯¹åº”ç«¯ç‚¹é•¿åº¦ä¸º2çš„0~9æ¬¡å¹‚ï¼Œæ¯”å¦‚2å¯¹åº”é•¿åº¦ä¸º4ï¼Œ6å¯¹åº”é•¿åº¦ä¸º64ï¼Œ9å¯¹åº”é•¿åº¦ä¸º512
+ *          sleep_off   : 2 - USBæ·±åº¦ç¡çœ ; 1 - å…³é—­USBç¡çœ ; 0 - USBæµ…ç¡çœ 
  *
  * @return  @ACCESS_STATE.
  */
@@ -104,110 +104,110 @@ uint8_t access_set_info(uint8_t usb_enable, uint8_t io_dir, uint8_t io_pin,
     uint8_t endp1_size, uint8_t endp2_size, uint8_t endp3_size, uint8_t endp4_size, uint8_t sleep_off);
 
 /**
- * @brief   »ñÈ¡USBÃèÊö·û
+ * @brief   è·å–USBæè¿°ç¬¦
  *
- * @param   desc_type   : 0x00    USBÉè±¸ÃèÊö·û
- *                        0x01    USBÅäÖÃÃèÊö·û
- *                        0x02    USB HID1±¨±íÃèÊö·û
- *                        0x03    USB HID2±¨±íÃèÊö·û
- *                        0x04    USB HID3±¨±íÃèÊö·û
- *                        0x05    USB HID4±¨±íÃèÊö·û
- *                        0x06    USB HID5±¨±íÃèÊö·û
- *                        0x07    USB×Ö·û´®0(ÓïÑÔ)ÃèÊö·û
- *                        0x08    USB×Ö·û´®1(³§ÉÌ)ÃèÊö·û
- *                        0x09    USB×Ö·û´®2(²úÆ·)ÃèÊö·û
- *                        0x0A    USB×Ö·û´®3(ĞòÁĞºÅ)ÃèÊö·û
- *                        0x0B    USB×Ö·û´®4ÃèÊö·û
- *          offset      : USBÃèÊö·ûÆ«ÒÆµØÖ·
- *          length      : USBÃèÊö·ûÊı¾İ³¤¶È
+ * @param   desc_type   : 0x00    USBè®¾å¤‡æè¿°ç¬¦
+ *                        0x01    USBé…ç½®æè¿°ç¬¦
+ *                        0x02    USB HID1æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x03    USB HID2æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x04    USB HID3æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x05    USB HID4æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x06    USB HID5æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x07    USBå­—ç¬¦ä¸²0(è¯­è¨€)æè¿°ç¬¦
+ *                        0x08    USBå­—ç¬¦ä¸²1(å‚å•†)æè¿°ç¬¦
+ *                        0x09    USBå­—ç¬¦ä¸²2(äº§å“)æè¿°ç¬¦
+ *                        0x0A    USBå­—ç¬¦ä¸²3(åºåˆ—å·)æè¿°ç¬¦
+ *                        0x0B    USBå­—ç¬¦ä¸²4æè¿°ç¬¦
+ *          offset      : USBæè¿°ç¬¦åç§»åœ°å€
+ *          length      : USBæè¿°ç¬¦æ•°æ®é•¿åº¦
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_get_usb_desc(uint8_t desc_type, uint16_t offset, uint16_t length);
 
 /**
- * @brief   ÉèÖÃUSBÃèÊö·û
+ * @brief   è®¾ç½®USBæè¿°ç¬¦
  *
- * @param   desc_type   : 0x00    USBÉè±¸ÃèÊö·û
- *                        0x01    USBÅäÖÃÃèÊö·û
- *                        0x02    USB HID1±¨±íÃèÊö·û
- *                        0x03    USB HID2±¨±íÃèÊö·û
- *                        0x04    USB HID3±¨±íÃèÊö·û
- *                        0x05    USB HID4±¨±íÃèÊö·û
- *                        0x06    USB HID5±¨±íÃèÊö·û
- *                        0x07    USB×Ö·û´®0(ÓïÑÔ)ÃèÊö·û
- *                        0x08    USB×Ö·û´®1(³§ÉÌ)ÃèÊö·û
- *                        0x09    USB×Ö·û´®2(²úÆ·)ÃèÊö·û
- *                        0x0A    USB×Ö·û´®3(ĞòÁĞºÅ)ÃèÊö·û
- *                        0x0B    USB×Ö·û´®4ÃèÊö·û
- *          offset      : USBÃèÊö·ûÆ«ÒÆµØÖ·
- *          length      : USBÃèÊö·ûÊı¾İ³¤¶È
- *          pData       : USBÃèÊö·ûÊı¾İ
+ * @param   desc_type   : 0x00    USBè®¾å¤‡æè¿°ç¬¦
+ *                        0x01    USBé…ç½®æè¿°ç¬¦
+ *                        0x02    USB HID1æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x03    USB HID2æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x04    USB HID3æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x05    USB HID4æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x06    USB HID5æŠ¥è¡¨æè¿°ç¬¦
+ *                        0x07    USBå­—ç¬¦ä¸²0(è¯­è¨€)æè¿°ç¬¦
+ *                        0x08    USBå­—ç¬¦ä¸²1(å‚å•†)æè¿°ç¬¦
+ *                        0x09    USBå­—ç¬¦ä¸²2(äº§å“)æè¿°ç¬¦
+ *                        0x0A    USBå­—ç¬¦ä¸²3(åºåˆ—å·)æè¿°ç¬¦
+ *                        0x0B    USBå­—ç¬¦ä¸²4æè¿°ç¬¦
+ *          offset      : USBæè¿°ç¬¦åç§»åœ°å€
+ *          length      : USBæè¿°ç¬¦æ•°æ®é•¿åº¦
+ *          pData       : USBæè¿°ç¬¦æ•°æ®
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_set_usb_desc(uint8_t desc_type, uint16_t offset, uint16_t length, uint8_t *pData);
 
 /**
- * @brief   Ö¸¶¨¶Ëµã·¢ËÍÊı¾İ£¬·¢ËÍºóĞèµÈ´ıÊÕµ½Ó¦´ğºóÔÙ·¢ËÍĞÂµÄÊı¾İ
+ * @brief   æŒ‡å®šç«¯ç‚¹å‘é€æ•°æ®ï¼Œå‘é€åéœ€ç­‰å¾…æ”¶åˆ°åº”ç­”åå†å‘é€æ–°çš„æ•°æ®
  *
- * @param   endp    : ¶ËµãºÅ£¬Ö§³Ö1~4
- *          pData   : Êı¾İÖ¸Õë
- *          length  : Êı¾İ³¤¶È
+ * @param   endp    : ç«¯ç‚¹å·ï¼Œæ”¯æŒ1~4
+ *          pData   : æ•°æ®æŒ‡é’ˆ
+ *          length  : æ•°æ®é•¿åº¦
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_send_endp_data( uint8_t endp, uint8_t *pData, uint16_t length);
 
 /**
- * @brief   Ö¸¶¨¶Ëµã·¢ËÍÊı¾İ£¬ÎŞĞèµÈ´ıÓ¦´ğ
+ * @brief   æŒ‡å®šç«¯ç‚¹å‘é€æ•°æ®ï¼Œæ— éœ€ç­‰å¾…åº”ç­”
  *
- * @param   endp    : ¶ËµãºÅ£¬Ö§³Ö1~4
- *          pData   : Êı¾İÖ¸Õë
- *          length  : Êı¾İ³¤¶È
+ * @param   endp    : ç«¯ç‚¹å·ï¼Œæ”¯æŒ1~4
+ *          pData   : æ•°æ®æŒ‡é’ˆ
+ *          length  : æ•°æ®é•¿åº¦
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_send_endp_data_without_ack( uint8_t endp, uint8_t *pData, uint16_t length);
 
 /**
- * @brief   ¸´Î»USB
+ * @brief   å¤ä½USB
  *
- * @param   reset_type :  0x00£ºĞ¾Æ¬ÕûÌå¸´Î»
- *                        0x01£ºĞ¾Æ¬½öUSB¸´Î»
+ * @param   reset_type :  0x00ï¼šèŠ¯ç‰‡æ•´ä½“å¤ä½
+ *                        0x01ï¼šèŠ¯ç‰‡ä»…USBå¤ä½
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_usb_reset(uint8_t reset_type);
 
 /**
- * @brief   ÊÕµ½USBÖ÷¶¯ÉÏ±¨µÄÃüÁîºóĞèÒª·¢ËÍÓ¦´ğ
+ * @brief   æ”¶åˆ°USBä¸»åŠ¨ä¸ŠæŠ¥çš„å‘½ä»¤åéœ€è¦å‘é€åº”ç­”
  *
- * @param   cmd :  ½ÓÊÕµ½µÄUSBÖ÷¶¯ÉÏ±¨µÄÃüÁîÂë
+ * @param   cmd :  æ¥æ”¶åˆ°çš„USBä¸»åŠ¨ä¸ŠæŠ¥çš„å‘½ä»¤ç 
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t access_send_ack(uint8_t cmd);
 
 /**
- * @brief   USBÊı¾İ´¦Àí
+ * @brief   USBæ•°æ®å¤„ç†
  */
 void trans_process(void);
 
 /**
- * @brief   ÖØ´«ÉÏÒ»°ü·¢ËÍ¸øUSBµÄÊı¾İ
+ * @brief   é‡ä¼ ä¸Šä¸€åŒ…å‘é€ç»™USBçš„æ•°æ®
  *
  * @return  @ACCESS_STATE.
  */
 uint8_t trans_retran_last_data(void );
 
 /**
- * @brief   ½ÓÈë²ã³õÊ¼»¯
+ * @brief   æ¥å…¥å±‚åˆå§‹åŒ–
  */
 void access_Init( void );
 
 /**
- * @brief   CH9160³õÊ¼»¯
+ * @brief   CH9160åˆå§‹åŒ–
  */
 void ch9160_Init( void );
 

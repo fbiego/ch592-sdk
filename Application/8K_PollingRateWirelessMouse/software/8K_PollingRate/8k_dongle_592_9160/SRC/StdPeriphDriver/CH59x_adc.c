@@ -15,17 +15,17 @@
 /*********************************************************************
  * @fn      ADC_DataCalib_Rough
  *
- * @brief   ²ÉÑùÊı¾İ´Öµ÷,»ñÈ¡Æ«²îÖµ,±ØĞëÏÈÅäÖÃADCºóµ÷ÓÃ´Ëº¯Êı»ñÈ¡Ğ£×¼Öµ
+ * @brief   é‡‡æ ·æ•°æ®ç²—è°ƒ,è·å–åå·®å€¼,å¿…é¡»å…ˆé…ç½®ADCåè°ƒç”¨æ­¤å‡½æ•°è·å–æ ¡å‡†å€¼
  *
  * @param   none
  *
- * @return  Æ«²î
+ * @return  åå·®
  */
 signed short ADC_DataCalib_Rough(void) // Sampling data roughly tuned to obtain deviation value
 {
     uint16_t i;
     uint32_t sum = 0;
-    uint8_t  ch = 0;   // ±¸·İÍ¨µÀ
+    uint8_t  ch = 0;   // å¤‡ä»½é€šé“
     uint8_t  cfg = 0;   // Backup
 
     ch = R8_ADC_CHANNEL;
@@ -147,11 +147,11 @@ void TouchKey_ChSampInit(void)
 /*********************************************************************
  * @fn      ADC_ExcutSingleConver
  *
- * @brief   ADCÖ´ĞĞµ¥´Î×ª»»
+ * @brief   ADCæ‰§è¡Œå•æ¬¡è½¬æ¢
  *
  * @param   none
  *
- * @return  ADC×ª»»ºóµÄÊı¾İ
+ * @return  ADCè½¬æ¢åçš„æ•°æ®
  */
 uint16_t ADC_ExcutSingleConver(void)
 {

@@ -32,21 +32,21 @@ static uint8_t halPrevValidKeys = 0;
 //static uint8_t KeyUpOnceFlag = 1;
 
 
-static uint8_t halPentaClickFlag = 0; //¼ÆÊý°´¼ü°´ÏÂµÄ´ÎÊý±êÖ¾
+static uint8_t halPentaClickFlag = 0; //è®¡æ•°æŒ‰é”®æŒ‰ä¸‹çš„æ¬¡æ•°æ ‡å¿—
 
 static uint16_t shutdown_time_count = 0;
 
 //
-///* ×¼±¸½øÈëshutdown±êÖ¾ */
+///* å‡†å¤‡è¿›å…¥shutdownæ ‡å¿— */
 //uint8_t SHUTDOWN_FLAG = 0;
 //
-///* °´¼ü¿ÕÏÐÊ±¼ä */
+///* æŒ‰é”®ç©ºé—²æ—¶é—´ */
 //uint16_t KeyIdleTime = 0;
 //
-///* °´¼ü¿ÕÏÐ¿ªÆôË¯ÃßÊ±¼ä£¬Ä¬ÈÏÎª5s */
+///* æŒ‰é”®ç©ºé—²å¼€å¯ç¡çœ æ—¶é—´ï¼Œé»˜è®¤ä¸º5s */
 //uint16_t KeyIdleTimeout = 5;
 //
-///* °´¼üÂÖÑ¯µÄ±êÖ¾±êÖ¾ */
+///* æŒ‰é”®è½®è¯¢çš„æ ‡å¿—æ ‡å¿— */
 //uint8_t KeyPollEnFlag = 0;
 
 
@@ -106,7 +106,7 @@ void HAL_KeyPoll (void)
         if(shutdown_time_count > (4000/HAL_KEY_POLLING_PERIOD))
         {
             shutdown_time_count = 0;
-            halPentaClickFlag = 0; //¶Ì°´Ê±¼äÇåÁã
+            halPentaClickFlag = 0; //çŸ­æŒ‰æ—¶é—´æ¸…é›¶
             LOG_INFO("Clear shutdown time count\n");
         }
         else
@@ -164,7 +164,7 @@ void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
             HAL_SaveDeviceInfo();
         }
     }
-    else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1°´ÏÂ²¢Ì§Æð
+    else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1æŒ‰ä¸‹å¹¶æŠ¬èµ·
     {
         if (DeviceStatus == DEF_DEVICE_STATUS_FACTORY)
         {
@@ -179,19 +179,19 @@ void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
         }
     }
 
-    halPrevValidKeys = keys; //±£´æÓÐÐ§¼üÖµ
+    halPrevValidKeys = keys; //ä¿å­˜æœ‰æ•ˆé”®å€¼
 }
 
 
 void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 {
-    if (((keys & HAL_KEY_SW_1) == 0) && ((halPrevValidKeys & HAL_KEY_SW_1) != 0))         //key1°´ÏÂ²¢Ì§Æð
+    if (((keys & HAL_KEY_SW_1) == 0) && ((halPrevValidKeys & HAL_KEY_SW_1) != 0))         //key1æŒ‰ä¸‹å¹¶æŠ¬èµ·
     {
         if(halPentaClickFlag == 4)
         {
             halPentaClickFlag = 0;
             DeviceStatus = DEF_DEVICE_STATUS_FACTORY;
-            LOG_INFO("Penta clik\n"); //°´¼ü¼ä¸ô4sÒÔÄÚÓÐÐ§
+            LOG_INFO("Penta clik\n"); //æŒ‰é”®é—´éš”4sä»¥å†…æœ‰æ•ˆ
 
             tmos_start_task(Peripheral_TaskID, SBP_DISABLE_ADV_EVT, MS1_TO_SYSTEM_TIME(20));
 
@@ -213,7 +213,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
         }
     }
 
-    halPrevValidKeys = keys; //±£´æÓÐÐ§¼üÖµ
+    halPrevValidKeys = keys; //ä¿å­˜æœ‰æ•ˆé”®å€¼
 }
 
 //void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
@@ -239,7 +239,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 //                }
 //            }
 //        }
-//        else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1°´ÏÂ²¢Ì§Æð
+//        else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1æŒ‰ä¸‹å¹¶æŠ¬èµ·
 //        {
 //            KeyIdleTime = 0;
 //            if (WakeupFlag == 1)
@@ -258,12 +258,12 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////                if(halPentaClickFlag == 4)
 ////                {
 ////                    halPentaClickFlag = 0;
-////                    LOG_INFO("Penta clik\n"); //°´¼ü¼ä¸ô4sÒÔÄÚÓÐÐ§
+////                    LOG_INFO("Penta clik\n"); //æŒ‰é”®é—´éš”4sä»¥å†…æœ‰æ•ˆ
 ////                    SHUTDOWN_FLAG = 1;
 ////                    MyHalLedControl.times += 5;
 ////                    tmos_stop_task(halTaskID, SBP_BAT_VOL_GET_EVT);
 ////                    tmos_clear_event(halTaskID, SBP_BAT_VOL_GET_EVT);
-////                    tmos_start_task(halTaskID, HAL_SHUTDOWN_EVENT, MS1_TO_SYSTEM_TIME(6200)); //µÆÉÁË¸Íê³ÉºóË¯Ãß
+////                    tmos_start_task(halTaskID, HAL_SHUTDOWN_EVENT, MS1_TO_SYSTEM_TIME(6200)); //ç¯é—ªçƒå®ŒæˆåŽç¡çœ 
 ////                }
 ////                else
 ////                {
@@ -272,7 +272,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////            }
 //        }
 //
-//        halPrevValidKeys = ScanKeys; //±£´æÓÐÐ§¼üÖµ
+//        halPrevValidKeys = ScanKeys; //ä¿å­˜æœ‰æ•ˆé”®å€¼
 //    }
 //
 //
@@ -281,7 +281,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////        if(shutdown_time_count > (4000/HAL_KEY_POLLING_PERIOD))
 ////        {
 ////            shutdown_time_count = 0;
-////            halPentaClickFlag = 0; //¶Ì°´Ê±¼äÇåÁã
+////            halPentaClickFlag = 0; //çŸ­æŒ‰æ—¶é—´æ¸…é›¶
 ////#if DEBUG1
 ////            PRINT("Clear shutdown time count\n");
 ////#endif

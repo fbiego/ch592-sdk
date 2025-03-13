@@ -73,7 +73,7 @@ void RTC_SetTignTime(uint32_t time)
 /* ******************************************************************************
 * @fn          RTC_IRQHandler
 *
-* @brief       RTC中断处理
+* @brief       RTC涓柇澶勭悊
 *
 * input parameters
 *
@@ -185,7 +185,7 @@ void TMR3_IRQHandler(void) // TMR3
 /*******************************************************************************
  * @fn          HAL_Time0Init
  *
- * @brief       系统定时器初始化
+ * @brief       绯荤粺瀹氭椂鍣ㄥ垵濮嬪寲
  *
  * input parameters
  *
@@ -217,7 +217,7 @@ void HAL_TimeInit( void )
   SysTick_Config(0xFFFFFFFF);
   PFIC_DisableIRQ(SysTick_IRQn);
 
-  // tmos时间相关配置
+  // tmos鏃堕棿鐩稿叧閰嶇疆
   conf.ClockAccuracy = 500;
   conf.ClockFrequency = CAB_LSIFQ;
   conf.ClockMaxCount = RTC_MAX_COUNT;

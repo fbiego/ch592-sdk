@@ -118,7 +118,7 @@ void PWMX_16bit_CycleCfg(uint16_t cyc);
 #define PWM11_ActDataWidth(d)    (R8_PWM11_DATA = d)
 
 /* *
-* @brief   PWM4-PWM11Í¨µÀÊä³ö²¨ĞÎÅäÖÃ
+* @brief   PWM4-PWM11é€šé“è¾“å‡ºæ³¢å½¢é…ç½®
 *
 * @param   ch      - select channel of pwm, refer to channel of PWM define
 * @param   da      - effective pulse width
@@ -127,7 +127,7 @@ void PWMX_16bit_CycleCfg(uint16_t cyc);
 void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s);
 
 /* *
-* @brief   PWM4-PWM9 Í¨µÀ16Î»Êä³ö²¨ĞÎÅäÖÃ
+* @brief   PWM4-PWM9 é€šé“16ä½è¾“å‡ºæ³¢å½¢é…ç½®
 *
 * @param   ch      - select channel of pwm, refer to channel of PWM define
 * @param   da      - effective pulse width
