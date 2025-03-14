@@ -440,7 +440,7 @@ const uint8_t MyCfgDescr[] = {
 //    0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
 //    0x00,   /* iInterface */
 //
-//    //接口描述符
+//    //Interface Descriptor
 //    0x09,   /* bLength */
 //    0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
 //    USB_WBVAL(0x0100),/* bcdHID */
