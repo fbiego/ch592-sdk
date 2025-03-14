@@ -10,7 +10,7 @@
 
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 
 
@@ -19,22 +19,21 @@
  */
 tmosTaskID halTaskID;
 
-/*******************************************************************************
- * @fn          HAL_ProcessEvent
- *
- * @brief       硬件层事务处理
- *
- * input parameters
- *
- * @param       task_id.
- * @param       events.
- *
- * output parameters
- *
- * @param       events.
- *
- * @return      None.
- */
+/* *********************************************************************************************
+* @fn HAL_ProcessEvent
+*
+* @brief Hardware layer transaction processing
+*
+* input parameters
+*
+* @param task_id.
+* @param events.
+*
+* output parameters
+*
+* @param events.
+*
+* @return None. */
 tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
   if( events & HAL_TEST_EVENT ){
@@ -45,21 +44,20 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
   return 0;
 }
 
-/*******************************************************************************
- * @fn          Hal_Init
- *
- * @brief       硬件初始化
- *
- * input parameters
- *
- * @param       None.
- *
- * output parameters
- *
- * @param       None.
- *
- * @return      None.
- */
+/* *********************************************************************************************
+* @fn Hal_Init
+*
+* @brief hardware initialization
+*
+* input parameters
+*
+* @param None.
+*
+* output parameters
+*
+* @param None.
+*
+* @return None. */
  void HAL_Init( void )
 {
   halTaskID = TMOS_ProcessEventRegister( HAL_ProcessEvent );

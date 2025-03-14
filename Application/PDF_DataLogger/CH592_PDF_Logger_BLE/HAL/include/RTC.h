@@ -46,11 +46,10 @@ extern volatile uint32_t RTCTigFlag;
  */
 void HAL_TimeInit(void);
 
-/**
- * @brief   配置RTC触发时间
- *
- * @param   time    - 触发时间.
- */
+/* *
+* @brief Configure RTC trigger time
+*
+* @param time - Trigger time. */
 extern void RTC_SetTignTime(uint32_t time);
 
 #ifdef __cplusplus

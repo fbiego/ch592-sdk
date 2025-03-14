@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : RTC.c
- * Author             : WCH
- * Version            : V1.2
- * Date               : 2022/01/18
- * Description        : RTC配置及其初始化
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT *******************************
+* File Name          : RTC.c
+* Author             : WCH
+* Version            : V1.2
+* Date               : 2022/01/18
+* Description        : RTC配置及其初始化
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+****************************************************************************** */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 #include "flash_info.h"
 
@@ -27,15 +27,14 @@
  */
 volatile uint32_t RTCTigFlag;
 
-/*******************************************************************************
- * @fn      RTC_SetTignTime
- *
- * @brief   配置RTC触发时间
- *
- * @param   time    - 触发时间.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RTC_SetTignTime
+*
+* @brief Configure RTC trigger time
+*
+* @param time - Trigger time.
+*
+* @return None. */
 void RTC_SetTignTime(uint32_t time)
 {
     sys_safe_access_enable();
@@ -44,15 +43,14 @@ void RTC_SetTignTime(uint32_t time)
     RTCTigFlag = 0;
 }
 
-/*******************************************************************************
- * @fn      RTC_IRQHandler
- *
- * @brief   RTC中断处理
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RTC_IRQHandler
+*
+* @brief RTC interrupt handling
+*
+* @param None.
+*
+* @return None. */
 __INTERRUPT
 __HIGH_CODE
 void RTC_IRQHandler(void)
@@ -61,15 +59,14 @@ void RTC_IRQHandler(void)
     RTCTigFlag = 1;
 }
 
-/*******************************************************************************
- * @fn      SYS_GetClockValue
- *
- * @brief   获取RTC当前计数值
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn SYS_GetClockValue
+*
+* @brief Get the current count value of RTC
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 static uint32_t SYS_GetClockValue(void)
 {
@@ -82,15 +79,14 @@ static uint32_t SYS_GetClockValue(void)
 
     return (i);
 }
-/*******************************************************************************
- * @fn      HAL_Time0Init
- *
- * @brief   系统定时器初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn HAL_Time0Init
+*
+* @brief System timer initialization
+*
+* @param None.
+*
+* @return None. */
 void HAL_TimeInit(void)
 {
     bleClockConfig_t conf;
@@ -107,7 +103,7 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_OSC32K_XT | RB_CLK_INT32K_PON | RB_CLK_XT32K_PON;
     sys_safe_access_disable();
 #endif
-//    RTC_InitTime( 2020, 1, 1, 0, 0, 0 );    //RTC时钟初始化当前时间
+// RTC_InitTime(2020, 1, 1, 0, 0, 0); //RTC clock initializes the current time
     RTC_InitTime(DeviceInfo.StartTime.Year,
                  (uint16_t)DeviceInfo.StartTime.Month,
                  (uint16_t)DeviceInfo.StartTime.Day,

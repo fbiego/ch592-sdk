@@ -45,9 +45,8 @@
 #include <stdio.h>
 #endif
 
-/**
- * @brief  系统主频时钟（Hz）
- */
+/* *
+* @brief System main frequency clock (Hz) */
 #ifndef	 FREQ_SYS
 #define  FREQ_SYS		32000000
 #endif
@@ -56,9 +55,8 @@
 #define  SAFEOPERATE   __nop();__nop()
 #endif
 
-/**
- * @brief  32K时钟（Hz）
- */
+/* *
+* @brief 32K clock (Hz) */
 #ifdef CLK_OSC32K
 #if ( CLK_OSC32K == 1 )
 #define CAB_LSIFQ       32000

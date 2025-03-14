@@ -32,7 +32,7 @@ static uint8_t halPrevValidKeys = 0;
 //static uint8_t KeyUpOnceFlag = 1;
 
 
-static uint8_t halPentaClickFlag = 0; //计数按键按下的次数标志
+static uint8_t halPentaClickFlag = 0; // Count the number of times the key is pressed
 
 static uint16_t shutdown_time_count = 0;
 
@@ -40,10 +40,10 @@ static uint16_t shutdown_time_count = 0;
 ///* 准备进入shutdown标志 */
 //uint8_t SHUTDOWN_FLAG = 0;
 //
-///* 按键空闲时间 */
+// /* Key Idle Time */
 //uint16_t KeyIdleTime = 0;
 //
-///* 按键空闲开启睡眠时间，默认为5s */
+// /* The button is idle and turns on the sleep time, the default is 5s */
 //uint16_t KeyIdleTimeout = 5;
 //
 ///* 按键轮询的标志标志 */
@@ -106,7 +106,7 @@ void HAL_KeyPoll (void)
         if(shutdown_time_count > (4000/HAL_KEY_POLLING_PERIOD))
         {
             shutdown_time_count = 0;
-            halPentaClickFlag = 0; //短按时间清零
+            halPentaClickFlag = 0; // Clear the time of the short press
             LOG_INFO("Clear shutdown time count\n");
         }
         else
@@ -164,7 +164,7 @@ void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
             HAL_SaveDeviceInfo();
         }
     }
-    else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1按下并抬起
+    else if (halPrevValidKeys & HAL_KEY_SW_1)         // key1 press and lift
     {
         if (DeviceStatus == DEF_DEVICE_STATUS_FACTORY)
         {
@@ -185,7 +185,7 @@ void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
 
 void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 {
-    if (((keys & HAL_KEY_SW_1) == 0) && ((halPrevValidKeys & HAL_KEY_SW_1) != 0))         //key1按下并抬起
+    if (((keys & HAL_KEY_SW_1) == 0) && ((halPrevValidKeys & HAL_KEY_SW_1) != 0))         // key1 press and lift
     {
         if(halPentaClickFlag == 4)
         {
@@ -239,7 +239,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 //                }
 //            }
 //        }
-//        else if (halPrevValidKeys & HAL_KEY_SW_1)         //key1按下并抬起
+// else if (halPrevValidKeys & HAL_KEY_SW_1) //key1 Press and lift
 //        {
 //            KeyIdleTime = 0;
 //            if (WakeupFlag == 1)
@@ -258,12 +258,12 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////                if(halPentaClickFlag == 4)
 ////                {
 ////                    halPentaClickFlag = 0;
-////                    LOG_INFO("Penta clik\n"); //按键间隔4s以内有效
+// // LOG_INFO("Penta clik\n"); //The key interval is valid within 4 seconds
 ////                    SHUTDOWN_FLAG = 1;
 ////                    MyHalLedControl.times += 5;
 ////                    tmos_stop_task(halTaskID, SBP_BAT_VOL_GET_EVT);
 ////                    tmos_clear_event(halTaskID, SBP_BAT_VOL_GET_EVT);
-////                    tmos_start_task(halTaskID, HAL_SHUTDOWN_EVENT, MS1_TO_SYSTEM_TIME(6200)); //灯闪烁完成后睡眠
+// // tmos_start_task(halTaskID, HAL_SHUTDOWN_EVENT, MS1_TO_SYSTEM_TIME(6200)); // Sleep after the light is flashing
 ////                }
 ////                else
 ////                {
@@ -272,7 +272,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////            }
 //        }
 //
-//        halPrevValidKeys = ScanKeys; //保存有效键值
+// halPrevValidKeys = ScanKeys; //Save valid key values
 //    }
 //
 //

@@ -81,11 +81,11 @@ uint32_t GetSysClock(void)
 
     rev = R32_CLK_SYS_CFG & 0xff;
     if((rev & 0x40) == (0 << 6))
-    { // 32M进行分频
+    { // 32M for frequency division
         return (32000000 / (rev & 0x1f));
     }
     else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL进行分频
+    { // PLL for frequency division
         return (480000000 / (rev & 0x1f));
     }
     else
@@ -147,15 +147,14 @@ void SYS_DisableAllIrq(uint32_t *pirqv)
     PFIC->IRER[1] = 0xffffffff;
 }
 
-/*********************************************************************
- * @fn      SYS_RecoverIrq
- *
- * @brief   恢复之前关闭的中断值
- *
- * @param   irq_status  - 当前保留中断值
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SYS_RecoverIrq
+*
+* @brief restores the interrupt value that was closed before
+*
+* @param irq_status - currently retained interrupt value
+*
+* @return none */
 __HIGH_CODE
 void SYS_RecoverIrq(uint32_t irq_status)
 {
@@ -163,15 +162,14 @@ void SYS_RecoverIrq(uint32_t irq_status)
     PFIC->IENR[1] = (irq_status >> 24);
 }
 
-/*********************************************************************
- * @fn      SYS_GetSysTickCnt
- *
- * @brief   获取当前系统(SYSTICK)计数值
- *
- * @param   none
- *
- * @return  当前计数值
- */
+/* ***************************************************************************
+* @fn SYS_GetSysTickCnt
+*
+* @brief Get the current system (SYSTICK) count value
+*
+* @param none
+*
+* @return Current count value */
 uint32_t SYS_GetSysTickCnt(void)
 {
     uint32_t val;
@@ -318,15 +316,14 @@ void mDelayuS(uint16_t t)
     } while(--i);
 }
 
-/*********************************************************************
- * @fn      mDelaymS
- *
- * @brief   mS 延时
- *
- * @param   t       - 时间参数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mDelaymS
+*
+* @brief mS Delay
+*
+* @param t - Time parameters
+*
+* @return none */
 __HIGH_CODE
 void mDelaymS(uint16_t t)
 {

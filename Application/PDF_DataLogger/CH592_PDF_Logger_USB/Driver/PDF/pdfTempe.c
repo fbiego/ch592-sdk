@@ -1,8 +1,6 @@
-/*
-*生成pdf模板代码:
+/* * Generate pdf template code:
 *Created on: 2023-07-26
-*Author: WCH
-*/
+*Author: WCH */
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -17,7 +15,7 @@
 #define LOG_INFO(...)
 #endif
 
-// 首条记录时间
+// First record time
 uint8_t timeStart[6] = { 23,  7,  27,  12,  12,  12};
 #define   YEAR_OFFSET          0
 #define   MONTH_OFFSET         1

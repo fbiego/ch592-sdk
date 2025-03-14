@@ -33,7 +33,7 @@
 /* FLASH definition */
 #define FLASH_BLOCK_SIZE       EEPROM_BLOCK_SIZE
 
-/* imageA定义 */
+/* imageA definition */
 #define IMAGE_A_FLAG           0x01
 #define IMAGE_A_2_4G_START_ADD      (4 * 1024)
 #define IMAGE_A_2_4G_SIZE           (56 * 1024)
@@ -52,7 +52,7 @@
 #define IMAGE_IAP_SIZE         (12 * 1024)
 
 /* IAP definition */
-#define IAP_STATE_SUCCESS      0x00               // IAP成功
+#define IAP_STATE_SUCCESS      0x00               // IAP Success
 #define IAP_STATE_RETRAN       0x01               // IAP retransmission
 #define IAP_STATE_FAILURE      0xFF               // IAP failed
 
@@ -106,7 +106,7 @@ typedef union
     } erase; /* Erase command */
     struct
     {
-        unsigned char cmd;       /* 命令码 0x83 */
+        unsigned char cmd;       /* Command code 0x83 */
         unsigned char len;       /* Subsequent data length */
         unsigned char status[2]; /* Two byte state, reserved */
     } end;                       /* End command */
@@ -116,20 +116,20 @@ typedef union
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */
-    } verify;                           /* 校验命令 */
+    } verify;                           /* Verification command */
     struct
     {
         unsigned char cmd;              /* Command code 0x80 */
-        unsigned char len;              /* 后续数据长度 */
+        unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* address */
         unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
-    } program;                          /* 编程命令 */
+    } program;                          /* Programming commands */
     struct
     {
         unsigned char cmd;              /* Command code 0x84 */
         unsigned char len;              /* Subsequent data length */
         unsigned char buf[IAP_LEN - 2]; /* Follow-up data */
-    } info;                             /* 编程命令 */
+    } info;                             /* Programming commands */
     struct
     {
         unsigned char buf[IAP_LEN]; /* Receive packets */

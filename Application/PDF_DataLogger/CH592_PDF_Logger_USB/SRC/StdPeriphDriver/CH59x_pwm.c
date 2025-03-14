@@ -62,18 +62,17 @@ void PWMX_CycleCfg(PWMX_CycleTypeDef cyc)
     }
 }
 
-/*********************************************************************
- * @fn      PWMX_ACTOUT
- *
- * @brief   PWM4-PWM11通道输出波形配置
- *
- * @param   ch      - select channel of pwm, refer to channel of PWM define
- * @param   da      - effective pulse width
- * @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
- * @param   s       - control pwmx function, ENABLE or DISABLE
- *
- * @return  none
- */
+/* ********************************************************************
+* @fn      PWMX_ACTOUT
+*
+* @brief   PWM4-PWM11通道输出波形配置
+*
+* @param   ch      - select channel of pwm, refer to channel of PWM define
+* @param   da      - effective pulse width
+* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
+* @param   s       - control pwmx function, ENABLE or DISABLE
+*
+* @return  none */
 void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s)
 {
     uint8_t i;
@@ -96,20 +95,19 @@ void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s
     }
 }
 
-/*********************************************************************
- * @fn      PWMX_AlterOutCfg
- *
- * @brief   PWM 交替输出模式配置
- *
- * @param   ch      - select group of PWM alternate output
- *                    RB_PWM4_5_STAG_EN     -  PWM4 和 PWM5 通道交替输出
- *                    RB_PWM6_7_STAG_EN     -  PWM6 和 PWM7 通道交替输出
- *                    RB_PWM8_9_STAG_EN     -  PWM8 和 PWM9 通道交替输出
- *                    RB_PWM10_11_STAG_EN   -  PWM10 和 PWM11 通道交替输出
- * @param   s       - control pwmx function, ENABLE or DISABLE
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWMX_AlterOutCfg
+*
+* @brief PWM Alternating Output Mode Configuration
+*
+* @param ch - select group of PWM alternate output
+* RB_PWM4_5_STAG_EN - Alternate output of PWM4 and PWM5 channels
+* RB_PWM6_7_STAG_EN - Alternate output of PWM6 and PWM7 channels
+* RB_PWM8_9_STAG_EN - Alternate output of PWM8 and PWM9 channels
+* RB_PWM10_11_STAG_EN - Alternate output of PWM10 and PWM11 channels
+* @param s - control pwmx function, ENABLE or DISABLE
+*
+* @return none */
 void PWMX_AlterOutCfg(uint8_t ch, FunctionalState s)
 {
     if(s == DISABLE)

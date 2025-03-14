@@ -22,7 +22,7 @@ extern "C" {
  */
 #define CH_PWM4     0x01  // PWM4 Channel
 #define CH_PWM5     0x02  // PWM5 Channel
-#define CH_PWM6     0x04  // PWM6 通道
+#define CH_PWM6     0x04  // PWM6 Channel
 #define CH_PWM7     0x08  // PWM7 Channel
 #define CH_PWM8     0x10  // PWM8 Channel
 #define CH_PWM9     0x20  // PWM9 Channel

@@ -10,7 +10,7 @@
 
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 
 
@@ -142,7 +142,7 @@ void HAL_TimeInit( void )
   conf.ClockMaxCount = RTC_MAX_COUNT;
   conf.getClockValue = SYS_GetClockValue;
 
-  // rf通信时间相关配置
+  // rf communication time related configuration
   conf.Clock1Frequency = GetSysClock( )/1000;  //kHz
   conf.getClock1Value = SYS_GetClock1Value;
   conf.SetPendingIRQ = SYS_SetPendingIRQ;

@@ -13,15 +13,14 @@
 #include "CH59x_common.h"
 
 volatile uint32_t IRQ_STA = 0;
-/*********************************************************************
- * @fn      SetSysClock
- *
- * @brief   配置系统运行时钟
- *
- * @param   sc      - 系统时钟源选择 refer to SYS_CLKTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SetSysClock
+*
+* @brief Configure the system running clock
+*
+* @param sc - System clock source selection refer to SYS_CLKTypeDef
+*
+* @return none */
 __HIGH_CODE
 void SetSysClock(SYS_CLKTypeDef sc)
 {
@@ -62,7 +61,7 @@ void SetSysClock(SYS_CLKTypeDef sc)
         R32_CLK_SYS_CFG |= RB_CLK_SYS_MOD;
         sys_safe_access_disable();
     }
-    //更改FLASH clk的驱动能力
+    // Change the drive capability of FLASH clk
     sys_safe_access_enable();
     R8_PLL_CONFIG |= 1 << 7;
     sys_safe_access_disable();
@@ -87,11 +86,11 @@ uint32_t GetSysClock(void)
         return (32000000 / (rev & 0x1f));
     }
     else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL进行分频
+    { // PLL for frequency division
         return (480000000 / (rev & 0x1f));
     }
     else
-    { // 32K做主频
+    { // 32K is the main frequency
         return (32000);
     }
 }
@@ -135,15 +134,14 @@ void SYS_ResetExecute(void)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      SYS_DisableAllIrq
- *
- * @brief   关闭所有中断，并保留当前中断值
- *
- * @param   pirqv   - 当前保留中断值
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SYS_DisableAllIrq
+*
+* @brief Close all interrupts and keep the current interrupt value
+*
+* @param pirqv - Currently reserved interrupt value
+*
+* @return none */
 void SYS_DisableAllIrq(uint32_t *pirqv)
 {
     *pirqv = (PFIC->ISR[0] >> 8) | (PFIC->ISR[1] << 24);
@@ -151,15 +149,14 @@ void SYS_DisableAllIrq(uint32_t *pirqv)
     PFIC->IRER[1] = 0xffffffff;
 }
 
-/*********************************************************************
- * @fn      SYS_RecoverIrq
- *
- * @brief   恢复之前关闭的中断值
- *
- * @param   irq_status  - 当前保留中断值
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SYS_RecoverIrq
+*
+* @brief restores the interrupt value that was closed before
+*
+* @param irq_status - currently retained interrupt value
+*
+* @return none */
 void SYS_RecoverIrq(uint32_t irq_status)
 {
     PFIC->IENR[0] = (irq_status << 8);
@@ -183,15 +180,14 @@ uint32_t SYS_GetSysTickCnt(void)
     return (val);
 }
 
-/*********************************************************************
- * @fn      WWDG_ITCfg
- *
- * @brief   看门狗定时器溢出中断使能
- *
- * @param   s       - 溢出是否中断
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn WWDG_ITCfg
+*
+* @brief Watchdog timer overflow interrupt enable
+*
+* @param s - whether the overflow is interrupted
+*
+* @return none */
 void WWDG_ITCfg(FunctionalState s)
 {
     uint8_t ctrl = R8_RST_WDOG_CTRL;
@@ -237,15 +233,14 @@ void WWDG_ResetCfg(FunctionalState s)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      WWDG_ClearFlag
- *
- * @brief   清除看门狗中断标志，重新加载计数值也可清除
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn WWDG_ClearFlag
+*
+* @brief Clear the watchdog interrupt flag, and reload the count value can also be cleared
+*
+* @param none
+*
+* @return none */
 void WWDG_ClearFlag(void)
 {
     sys_safe_access_enable();
@@ -253,15 +248,14 @@ void WWDG_ClearFlag(void)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      HardFault_Handler
- *
- * @brief   硬件错误中断，进入后执行复位，复位类型为上电复位
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn HardFault_Handler
+*
+* @brief The hardware error interrupts, and the reset is power-on reset after entering.
+*
+* @param none
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 __attribute__((weak))
@@ -277,15 +271,14 @@ void HardFault_Handler(void)
     while(1);
 }
 
-/*********************************************************************
- * @fn      mDelayuS
- *
- * @brief   uS 延时
- *
- * @param   t       - 时间参数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mDelayuS
+*
+* @brief uS Delay
+*
+* @param t - Time parameters
+*
+* @return none */
 __HIGH_CODE
 void mDelayuS(uint16_t t)
 {
@@ -321,15 +314,14 @@ void mDelayuS(uint16_t t)
     } while(--i);
 }
 
-/*********************************************************************
- * @fn      mDelaymS
- *
- * @brief   mS 延时
- *
- * @param   t       - 时间参数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mDelaymS
+*
+* @brief mS Delay
+*
+* @param t - Time parameters
+*
+* @return none */
 __HIGH_CODE
 void mDelaymS(uint16_t t)
 {
@@ -351,14 +343,14 @@ int _write(int fd, char *buf, int size)
         while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
         R8_UART0_THR = *buf++; /* 发送数据 */
 #elif DEBUG == Debug_UART1
-        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
-        R8_UART1_THR = *buf++; /* 发送数据 */
+        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* Wait for data to be sent */
+        R8_UART1_THR = *buf++; /* Send data */
 #elif DEBUG == Debug_UART2
         while(R8_UART2_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
         R8_UART2_THR = *buf++; /* 发送数据 */
 #elif DEBUG == Debug_UART3       
-        while(R8_UART3_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
-        R8_UART3_THR = *buf++; /* 发送数据 */
+        while(R8_UART3_TFC == UART_FIFO_SIZE);                  /* Wait for data to be sent */
+        R8_UART3_THR = *buf++; /* Send data */
 #endif
     }
     return size;

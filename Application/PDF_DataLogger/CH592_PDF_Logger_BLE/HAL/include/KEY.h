@@ -54,12 +54,12 @@ extern "C"
 #define KEY3_IN             ()
 #define KEY4_IN             ()
 
-#define HAL_PUSH_BUTTON1()          ( KEY1_IN ) //添加自定义按键
+#define HAL_PUSH_BUTTON1()          ( KEY1_IN ) // Add custom keys
 #define HAL_PUSH_BUTTON2()          ( 0 )
 #define HAL_PUSH_BUTTON3()          ( 0 )
 #define HAL_PUSH_BUTTON4()          ( 0 )
 
-#define WAKE_UP_KEY_RELEASE()       (R32_PA_PIN & KEY1_BV)      //睡眠唤醒引脚是否释放
+#define WAKE_UP_KEY_RELEASE()       (R32_PA_PIN & KEY1_BV)      // Is the sleep wake-up pin released?
 
 /**************************************************************************************************
  * TYPEDEFS

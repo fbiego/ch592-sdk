@@ -13,13 +13,13 @@
 #include "CH59x_common.h"
 #include "CH59x_lcd.h"
 
-/*******************************************************************************
-* Function Name  : LCD_DefInit
-* Description    : LCD段式屏驱动初始化配置
-* Input          : duty 占空比
-*                  bias 偏压比
-* Return         : None
-*******************************************************************************/
+/* *********************************************************************************************
+* Function Name: LCD_DefInit
+* Description: LCD segment screen driver initialization configuration
+* Input : duty cycle
+* bias ratio
+* Return : None
+********************************************************************************************* */
 void LCD_Init(LCDDutyTypeDef duty, LCDBiasTypeDef bias)
 {
     R32_PIN_CONFIG2 = 0xfffeff3f; // 关闭数字输入

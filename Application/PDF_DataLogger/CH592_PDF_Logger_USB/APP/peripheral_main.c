@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2020/08/06
- * Description        : 外设从机应用主函数及任务系统初始化
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2020/08/06
+* Description: Peripheral slave application master function and task system initialization
+************************************************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "CH59x_common.h"
 #include "peripheral.h"
 #include "flash_info.h"
@@ -54,24 +54,22 @@ const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 /* Status of device */
 uint8_t DeviceStatus;
 
-/*********************************************************************
- * @fn      Main_Circulation
- *
- * @brief   主循环
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn Main_Circulation
+*
+* @brief main loop
+*
+* @return none */
 
 float AHT20_TemperatureValue;
 float AHT20_HumidityValue;
 
-/*********************************************************************
- * @fn      main
- *
- * @brief   主函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn main
+*
+* @brief main function
+*
+* @return none */
 int main(void)
 {
     SetSysClock(CLK_SOURCE_PLL_60MHz);

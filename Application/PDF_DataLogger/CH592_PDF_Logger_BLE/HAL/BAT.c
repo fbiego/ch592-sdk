@@ -87,7 +87,7 @@ uint8_t HAL_BatLowVolCheck(void)
 {
     uint16_t adc;
 
-    adc = ADC_GetAverage(8); //ADC采集8次
+    adc = ADC_GetAverage(8); // ADC acquisition 8 times
 //    LOG_INFO("BAT_ADC = %d\n", adc);
 
     if(adc > BATT_ADC_LEVEL_2V3)

@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "ch9160.h"
 #include <rf.h>
 #include "HAL.h"
@@ -23,9 +23,9 @@
 
 uint8_t app_taskID;
 
-// 支持的最大接口数量
+// The maximum number of interfaces supported
 #define USB_INTERFACE_MAX_NUM       4
-// 重传间隔，单位为1个RTC时钟
+// Retransmission interval, unit is 1 RTC clock
 #define RETRAN_INTERVAL         32
 
 const uint8_t LangID_StrDescr[ 4 ] =
@@ -36,10 +36,10 @@ const uint8_t LangID_StrDescr[ 4 ] =
     0x04
 };
 
-// 厂家信息
+// Manufacturer information
 uint8_t MyManuInfo[] = {0x0E, 0x03, 'w', 0, 'c', 0, 'h', 0, '.', 0, 'c', 0, 'n', 0};
 
-// 产品信息
+// Product Information
 uint8_t MyProdInfo[] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -54,7 +54,7 @@ uint8_t MyProdInfo[] = {0x0D+11, 0x03,
     'e', 0
 };
 
-// 序列号
+// Serial number
 uint8_t MySerialNum[] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -68,7 +68,7 @@ uint8_t MySerialNum[] = {0x0D+11, 0x03,
     'l', 0,
     'e', 0
 };
-//   -----报告描述符Keyboard--------------
+// ----Report descriptor Keyboard---------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorKeyboard[]=
 {
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
@@ -112,7 +112,7 @@ const uint8_t HID_ReportDescriptorKeyboard[]=
 
 };
 
-//   -----报告描述符Mouse--------------
+// ----Report descriptor Mouse---------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorMouse[]=
 {
         0x05,0x01,                  //81    GLOBAL_USAGE_PAGE(Generic Desktop Controls)
@@ -153,7 +153,7 @@ const uint8_t HID_ReportDescriptorMouse[]=
 };
 
 
-//   -----报告描述符Other--------------
+// ----Report descriptor Other----------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorOther[]=
 {
     0x05,0x0C,                  //0     GLOBAL_USAGE_PAGE(Consumer)
@@ -202,7 +202,7 @@ const uint8_t HID_ReportDescriptorOther[]=
 
 };
 
-//   -----报告描述符Manufacturer--------------
+// ----Report descriptor Manufacturer------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorManufacturer[]=
 {
     0x06, 0x60, 0xFF,  // Usage Page (Vendor Defined 0xFF60)
@@ -223,7 +223,7 @@ const uint8_t HID_ReportDescriptorManufacturer[]=
     0xC0,              // End Collection
 };
 
-//   -----报告描述符IAP--------------
+// ----Report descriptor IAP---------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorIAP[]=
 {
 
@@ -250,7 +250,7 @@ const uint8_t HID_ReportDescSizeOther = sizeof(HID_ReportDescriptorOther);
 const uint8_t HID_ReportDescSizeManufacturer = sizeof(HID_ReportDescriptorManufacturer);
 const uint8_t HID_ReportDescSizeIAP = sizeof(HID_ReportDescriptorIAP);
 
-// 设备描述符
+// Device descriptor
 uint8_t MyDevDescr[] = {
     0x12,   /* bLength */
     0x01,   /* bDescriptorType USB_DEVICE_DESCRIPTOR_TYPE*/
@@ -268,7 +268,7 @@ uint8_t MyDevDescr[] = {
     0x01    /* bNumConfigurations: one possible configuration*/
 };
 
-// 配置描述符
+// Configuration descriptor
 const uint8_t MyCfgDescr[] = {
     0x09,   /* bLength */
     0x02,   /* bDescriptorType USB_CONFIGURATION_DESCRIPTOR_TYPE*/
@@ -278,9 +278,9 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* iConfiguration */
     0xA0,
     0x32,    /* bMaxPower */
-    //配置描述符
+    // Configuration descriptor
 
-//   -----Interface 描述符 Keyboard --------------
+// -----Interface Descriptor Keyboard ---------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x00,   /* bInterfaceNumber */
@@ -290,7 +290,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x01,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -299,7 +299,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeKeyboard),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -307,9 +307,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP1SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
-    //端点1描述符
+    // Endpoint 1 descriptor
 
-//   -----Interface 描述符 Mouse --------------
+// -----Interface Descriptor Mouse ---------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x01,   /* bInterfaceNumber */
@@ -319,7 +319,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x02,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -328,7 +328,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeMouse),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -336,9 +336,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP2SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 0.125ms */
-    //端点2描述符
+    // Endpoint 2 descriptor
 
-//   -----Interface 描述符 Other --------------
+// -----Interface Descriptor Other ----------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x02,   /* bInterfaceNumber */
@@ -348,7 +348,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -357,7 +357,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeOther),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -366,7 +366,7 @@ const uint8_t MyCfgDescr[] = {
     USB_WBVAL(DevEP3SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
 
-//   -----Interface 描述符 IAP --------------
+// -----Interface Descriptor IAP ---------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x03,   /* bInterfaceNumber */
@@ -376,7 +376,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -385,7 +385,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeIAP),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -400,7 +400,7 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP4SIZE),/* wMaxPacketSize */
     0x08,   /* bInterval *//* 1ms */
-    //端点4描述符
+    // Endpoint 4 descriptor
 
 };
 
@@ -411,15 +411,14 @@ uint32_t rtc_count;
 uint32_t usb_enum_success_flag=0;
 uint8_t rf_data_buf[64] = {0};
 
-/*******************************************************************************
- * @fn      app_relay_rf_to_uart
- *
- * @brief   RF收到数据后调用此函数发往USB
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn app_relay_rf_to_uart
+*
+* @brief RF calls this function to send to USB after receiving the data
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void app_relay_rf_to_uart( )
 {
@@ -475,15 +474,14 @@ void app_relay_rf_to_uart( )
     }
 }
 
-/*******************************************************************************
- * @fn      app_relay_ota_to_uart
- *
- * @brief   ota需要发送数据调用此函数发往USB
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn app_relay_ota_to_uart
+*
+* @brief ota needs to send data and call this function to send it to USB
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void app_relay_ota_to_uart( )
 {
@@ -506,22 +504,21 @@ void app_relay_ota_to_uart( )
     }
 }
 
-/*******************************************************************************
- * @fn      app_retran_data_to_uart
- *
- * @brief   间隔RTC时钟重传上一包未应答数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn app_retran_data_to_uart
+*
+* @brief Interval RTC clock retransmits the previous packet of unanswered data
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void app_retran_data_to_uart( )
 {
     if(uart_wait_ack_falg)
     {
         rtc_count = RTC_GetCycle32k();
-        // 间隔5个RTC时钟重传
+        // Retransmission of 5 RTC clocks apart
         if(RTC_A_SUB_B(rtc_count,uart_trans_rtc) > RETRAN_INTERVAL)
         {
             trans_retran_last_data();
@@ -530,15 +527,14 @@ void app_retran_data_to_uart( )
     }
 }
 
-/*******************************************************************************
- * @fn      app_data_process
- *
- * @brief   轮询是否有需要处理的数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn app_data_process
+*
+* @brief polling if there is data to be processed
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void app_data_process( )
 {
@@ -562,7 +558,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
         {
             case CMD_SNED_ENDP_DATA1|CMD_ACK:
             {
-                // 0x00表示执行成功，其它值表示失败。
+                // 0x00 means execution is successful, and other values ​​indicate failure.
                 if(!pData[0])
                 {
                     uart_wait_ack_falg = 0;
@@ -582,7 +578,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                 {
                     if(pData[1] == ENTER_SLEEP)
                     {
-                        // 发送给2.4G对端
+                        // Send to 2.4G peer
                         rf_data_buf[0] = RF_DATA_SLEEP;
                         tmos_memcpy(&rf_data_buf[1], pData, len);
                         if(rf_send_data(rf_data_buf, len+1))
@@ -618,10 +614,10 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
 
                     case ENDP_4:
                     {
-                        // 自定义端点，检查是否是OTA等配置数据
+                        // Customize the endpoint to check whether it is OTA and other configuration data
                         if(OTA_IAPWriteData(&pData[0], len)==HEX_NOT_LOCAL)
                         {
-                            // 说明需要发送给2.4G对端
+                            // Instructions need to be sent to 2.4G peers
                             rf_data_buf[0] = RF_DATA_IAP;
                             tmos_memcpy(&rf_data_buf[1], pData, len);
                             if(rf_send_data(rf_data_buf, len+1))
@@ -651,9 +647,9 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
             case CMD_GET_INFO|CMD_ACK:
             {
                 PRINT("var %x\n",pData[0]);
-                //0x00表示USB未连接；
-                //0x01表示USB已连接但未枚举；
-                //0x02表示USB已连接且枚举;
+                // 0x00 means that USB is not connected;
+                // 0x01 means that USB is connected but not enumerated;
+                // 0x02 means that USB is connected and enumerated;
                 PRINT("usb state %x\n",pData[1]);
                 PRINT("usb SetReport %x\n",pData[2]);
                 PRINT("io dir %x\n",pData[3]);
@@ -661,7 +657,7 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                 PRINT("buffused %x\n",pData[5]|(pData[6]<<8));
                 if(pData[1] != 0x02)
                 {
-                    //USB设备描述符
+                    // USB device descriptor
                     access_set_usb_desc(usb_desc_index, 0, MyDevDescr[0], MyDevDescr);
                 }
                 break;
@@ -681,54 +677,54 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
                     usb_desc_index++;
                     switch(usb_desc_index)
                     {
-                        case 1: //USB配置描述符
+                        case 1: // USB configuration descriptor
                         {
                             access_set_usb_desc(usb_desc_index, 0, MyCfgDescr[2], (uint8_t *)MyCfgDescr);
                             break;
                         }
-                        case 2: //USB HID1报表描述符
+                        case 2: // USB HID1 report descriptor
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeKeyboard, (uint8_t *)HID_ReportDescriptorKeyboard);
                             break;
                         }
-                        case 3: //USB HID2报表描述符
+                        case 3: // USB HID2 report descriptor
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeMouse, (uint8_t *)HID_ReportDescriptorMouse);
                             break;
                         }
-                        case 4: //USB HID3报表描述符
+                        case 4: // USB HID3 report descriptor
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeOther, (uint8_t *)HID_ReportDescriptorOther);
                             break;
                         }
-                        case 5: //USB HID4报表描述符
+                        case 5: // USB HID4 report descriptor
                         {
                             access_set_usb_desc(usb_desc_index, 0, HID_ReportDescSizeIAP, (uint8_t *)HID_ReportDescriptorIAP);
                             break;
                         }
-                        case 6: //USB字符串0(语言)描述符
+                        case 6: // USB string 0 (language) descriptor
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(LangID_StrDescr), (uint8_t *)LangID_StrDescr);
                             break;
                         }
-                        case 7: //USB字符串1(厂商)描述符
+                        case 7: // USB string 1 (manufacturer) descriptor
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MyManuInfo), MyManuInfo);
                             break;
                         }
-                        case 8: //USB字符串2(产品)描述符
+                        case 8: // USB string 2 (product) descriptor
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MyProdInfo), MyProdInfo);
                             break;
                         }
-                        case 9: //USB字符串3(序列号)描述符
+                        case 9: // USB string 3 (serial number) descriptor
                         {
                             access_set_usb_desc(usb_desc_index+1, 0, sizeof(MySerialNum), MySerialNum);
                             break;
                         }
-                        case 0x0A: //USB字符串4描述符
+                        case 0x0A: // USB string 4 descriptor
                         {
-                            // 无字符串4，直接启动USB
+                            // No string 4, start USB directly
                             access_set_info(0x01, 0x00, 0x00, 0x06, 0x06, 0x06, 0x06, 0x00);
                             break;
                         }
@@ -745,16 +741,15 @@ void app_cmd_cb(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len)
 }
 
 
-/*********************************************************************
- * @fn      app_ProcessEvent
- *
- * @brief   RF 事件处理
- *
- * @param   task_id - 任务ID
- * @param   events  - 事件标志
- *
- * @return  未完成事件
- */
+/* ***************************************************************************
+* @fn app_ProcessEvent
+*
+* @brief RF event handling
+*
+* @param task_id - Task ID
+* @param events - Event flags
+*
+* @return Unfinished Event */
 uint16_t app_ProcessEvent(uint8_t task_id, uint16_t events)
 {
     if( events & 1 )
@@ -785,11 +780,11 @@ void app_Init( void )
 
 void SoftwareUART_SendChar(char c)
 {
-  // 起始位（低电平）
+  // Start bit (low level)
   GPIOA_ResetBits(GPIO_Pin_12);
   DelayUs(104);
 
-  // 数据位（低位在前）
+  // Data bits (low bit is in front)
   for (int i = 0; i < 8; i++)
   {
     if (c & (1 << i))
@@ -803,7 +798,7 @@ void SoftwareUART_SendChar(char c)
     DelayUs(104);
   }
 
-  // 停止位（高电平）
+  // Stop bit (high level)
   GPIOA_SetBits(GPIO_Pin_12);
   DelayUs(104);
 }
@@ -818,7 +813,7 @@ void SoftwareUART_SendString(char* str)
 
 void SoftwareUART_Printf(const char* format, ...)
 {
-    char buffer[1024]; // 定义一个足够大的缓冲区
+    char buffer[1024]; // Define a buffer that is large enough
     va_list args;
 
     va_start(args, format);

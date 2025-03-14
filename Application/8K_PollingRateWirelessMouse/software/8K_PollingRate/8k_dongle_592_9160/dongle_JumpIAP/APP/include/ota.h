@@ -35,13 +35,13 @@
 #define IMAGE_B_START_ADD      (IMAGE_A_START_ADD + IMAGE_SIZE)
 #define IMAGE_B_SIZE           IMAGE_SIZE
 
-/* imageIAP定义 */
+/* imageIAP definition */
 #define IMAGE_IAP_FLAG         0x03
 #define IMAGE_IAP_START_ADD    (IMAGE_B_START_ADD + IMAGE_SIZE)
 #define IMAGE_IAP_SIZE         12 * 1024
 
-/* IAP定义 */
-/* 以下为IAP下载命令定义 */
+/* IAP definition */
+/* The following is the IAP download command definition */
 #define CMD_IAP_PROM           0x80               // IAP programming commands
 #define CMD_IAP_ERASE          0x81               // IAP erase command
 #define CMD_IAP_VERIFY         0x82               // IAP verification command
@@ -54,14 +54,14 @@
 /* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD      0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* 存放在DataFlash里的OTA信息 */
+/* OTA information stored in DataFlash */
 typedef struct
 {
-    unsigned char ImageFlag; //记录的当前的image标志
+    unsigned char ImageFlag; // The current image flag of the record
     unsigned char Revd[3];
 } OTADataFlashInfo_t;
 
-/* OTA IAP通讯协议定义 */
+/* OTA IAP Communication Protocol Definition */
 /* Addresses use 4x offset */
 typedef union
 {
@@ -76,28 +76,28 @@ typedef union
     struct
     {
         unsigned char cmd;       /* Command code 0x83 */
-        unsigned char len;       /* 后续数据长度 */
-        unsigned char status[2]; /* 两字节状态，保留 */
+        unsigned char len;       /* Subsequent data length */
+        unsigned char status[2]; /* Two byte state, reserved */
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x82 */
+        unsigned char cmd;              /* Command code 0x82 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */
-    } verify;                           /* 校验命令 */
+    } verify;                           /* Verification command */
     struct
     {
         unsigned char cmd;              /* Command code 0x80 */
-        unsigned char len;              /* 后续数据长度 */
+        unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* address */
         unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
     } program;                          /* Programming commands */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x84 */
-        unsigned char len;              /* 后续数据长度 */
-        unsigned char buf[IAP_LEN - 2]; /* 后续数据 */
+        unsigned char cmd;              /* Command code 0x84 */
+        unsigned char len;              /* Subsequent data length */
+        unsigned char buf[IAP_LEN - 2]; /* Follow-up data */
     } info;                             /* Programming commands */
     struct
     {
@@ -105,7 +105,7 @@ typedef union
     } other;
 } OTA_IAP_CMD_t;
 
-/* 记录当前的Image */
+/* Record the current Image */
 extern unsigned char CurrImageFlag;
 
 #endif

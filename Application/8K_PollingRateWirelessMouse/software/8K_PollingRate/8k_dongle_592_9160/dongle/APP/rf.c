@@ -1,17 +1,17 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : rf_test.c
- * Author             : WCH
- * Version            : V1.0
- * Date               : 2022/03/15
- * Description        : rf收发测试例程，单向发送
- *                      PB15低电平为发送模式，默认为接收模式
- *
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : rf_test.c
+* Author: WCH
+* Version: V1.0
+* Date: 2022/03/15
+* Description: rf send and receive test routine, one-way send
+* PB15 low level is the sending mode, default is the receiving mode
+*
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* SPDX-License-Identifier: Apache-2.0
+********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "ch9160.h"
 #include <rf.h>
 #include "CH59x_common.h"
@@ -59,15 +59,14 @@ tmosTaskID rfTaskID;
 uint8_t gDeviceId;
 
 uint8_t self_mac[6] = {0};
-/*******************************************************************************
- * @fn      rfRoleBoundProcess
- *
- * @brief   RF 收发DMA初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rfRoleBoundProcess
+*
+* @brief RF Send and receive DMA initialization
+*
+* @param None.
+*
+* @return None. */
 void rfDMADescInit( void )
 {
     int num;
@@ -93,15 +92,14 @@ void rfDMADescInit( void )
     pDMATxGet = DMATxDscrTab;
 }
 
-/*******************************************************************************
- * @fn      rf_get_data
- *
- * @brief   获取一包RF接收DMA中的数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_get_data
+*
+* @brief Get a packet of RF receiving data in DMA
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 uint8_t *rf_get_data( uint8_t *pLen)
 {
@@ -115,15 +113,14 @@ uint8_t *rf_get_data( uint8_t *pLen)
     }
 }
 
-/*******************************************************************************
- * @fn      rf_delete_data
- *
- * @brief   删除一包RF接收DMA中的数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_delete_data
+*
+* @brief Delete a packet of RF receiving data in DMA
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void rf_delete_data()
 {
@@ -131,15 +128,14 @@ void rf_delete_data()
     pDMARxGet = (RF_DMADESCTypeDef *) pDMARxGet->NextDescAddr;
 }
 
-/*******************************************************************************
- * @fn      rf_send_data
- *
- * @brief   向RF发送DMA中添加一包数据
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rf_send_data
+*
+* @brief Add a packet of data to send DMA to RF
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 uint8_t rf_send_data( uint8_t *pData, uint8_t len)
 {
@@ -160,24 +156,23 @@ uint8_t rf_send_data( uint8_t *pData, uint8_t len)
     return 0xFF;
 }
 
-/*******************************************************************************
- * @fn      RF_ProcessCallBack
- *
- * @brief   RF 状态回调，注意此函数为中断中调用
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_ProcessCallBack
+*
+* @brief RF state callback, note that this function is called in interrupt
+*
+* @param None.
+*
+* @return None. */
 __HIGH_CODE
 void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
 {
-    // 收到数据回调
+    // Received a data callback
     if( sta & RF_STATE_RX )
     {
 //        rssi = RFIP_ReadRssi();
     }
-    // 接收DMA满
+    // Receive DMA full
     if( sta & RF_STATE_RBU )
     {
 //        PRINT( "!\n" );
@@ -190,15 +185,14 @@ void RF_ProcessCallBack( rfRole_States_t sta,uint8_t id  )
     }
 }
 
-/*******************************************************************************
- * @fn      rfRoleBoundProcess
- *
- * @brief   连接绑定状态回调
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn rfRoleBoundProcess
+*
+* @brief Connection binding status callback
+*
+* @param None.
+*
+* @return None. */
 void rfRoleBoundProcess( staBound_t *pSta )
 {
     PRINT( "bound %x\n",pSta->status );
@@ -211,13 +205,13 @@ void rfRoleBoundProcess( staBound_t *pSta )
     if( !pSta->status )
     {
         gDeviceId = pSta->devId;
-        // 判断当前RF角色
+        // Determine the current RF role
         if( !(pSta->role&1) )
         {
-            // 当前为接收端（dongle）
-            // 配置当前连接参数，由于只有一个设备，所以所有间隔都设置为同一个设备
+            // Currently the receiver (dongle)
+            // Configure the current connection parameters. Since there is only one device, all intervals are set to the same device.
             SpeedList[0].deviceId = pSta->devId;
-            SpeedList[0].rssi = 0; // 0-表示可以连接所有rssi设备，其他值表示只可以连接RSSI大于该值的设备
+            SpeedList[0].rssi = 0; // 0- means that all rssi devices can be connected, and other values ​​can only connect devices with RSSI greater than this value.
             tmos_memcpy(SpeedList[0].peerInfo, pSta->PeerInfo, 6);
             gSpeedList_t.number = ROLE_SPEED_LIST_NUM;
             gSpeedList_t.pList = SpeedList;
@@ -231,26 +225,26 @@ void rfRoleBoundProcess( staBound_t *pSta )
         }
         else
         {
-            // 当前为发送端（鼠标）
+            // Currently the sending end (mouse)
         }
     }
     else
     {
         if( !(pSta->role&1) )
         {
-            // 当前为接收端（dongle）
+            // Currently the receiver (dongle)
         }
         else
         {
-            // 当前为发送端（鼠标）
+            // Currently the sending end (mouse)
         }
-        // RF自动回连超时失败
+        // RF automatic reconnection timeout failed
         if( pSta->status == FAILURE )
         {
             RFRole_ClearRxData(gDeviceId);
             tmos_set_event( rfTaskID, RF_START_PEER_BOUND_EVENT );
         }
-        // RF当前连接断开，自动启用回连
+        // RF is currently disconnected, and the connection is automatically enabled
         else if( pSta->status == bleTimeout )
         {
             PRINT( "connect timeout.\n" );
@@ -272,15 +266,14 @@ void BB_IRQHandler( void )
     BB_LibIRQHandler();
 }
 
-/*******************************************************************************
- * @fn      RF_ProcessEvent
- *
- * @brief   RF层系统任务处理
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_ProcessEvent
+*
+* @brief RF layer system task processing
+*
+* @param None.
+*
+* @return None. */
 tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
     if( events & SYS_EVENT_MSG )
@@ -301,10 +294,10 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         rfBoundHost_t bound;
         tmos_memset( &bound, 0, sizeof(rfBoundHost_t) );
 
-        // 第一次启动，可以连接任意的设备
+        // The first time you start, you can connect to any device
         SpeedList[0].deviceId = RF_ROLE_BOUND_ID;
-        SpeedList[0].rssi = -70; // 0-表示可以连接所有rssi设备，其他值表示只可以连接RSSI大于该值的设备
-        SpeedList[0].devType = 0; // 0-表示可以连接所有设备类型，也可以指定可以连接的设备的类型
+        SpeedList[0].rssi = -70; // 0- means that all rssi devices can be connected, and other values ​​can only connect devices with RSSI greater than this value.
+        SpeedList[0].devType = 0; // 0- means that all device types can be connected, or the type of device that can be connected
         tmos_memset(SpeedList[0].peerInfo, 0, 6);
         gSpeedList_t.number = ROLE_SPEED_LIST_NUM;
         gSpeedList_t.pList = SpeedList;
@@ -314,7 +307,7 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         bound.periTime = 8;
         bound.hop = RF_HOP_MANUF_MODE;
         bound.timeout = 100;
-        bound.devType = 0;  // 0-表示可以连接所有设备类型，也可以指定可以连接的设备的类型
+        bound.devType = 0;  // 0- means that all device types can be connected, or the type of device that can be connected
         tmos_memcpy(bound.OwnInfo, self_mac, 6);
         bound.rfBoundCB = rfRoleBoundProcess;
         RFBound_StartHost( &bound );
@@ -326,10 +319,10 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         rfBoundHost_t bound;
         tmos_memset( &bound, 0, sizeof(rfBoundHost_t) );
 
-        // 第二次启动，只可以连配对的设备
+        // The second time you start, you can only connect to paired devices
         SpeedList[0].deviceId = RF_ROLE_BOUND_ID;
-        SpeedList[0].rssi = 0; // 0-表示可以连接所有rssi设备，其他值表示只可以连接RSSI大于该值的设备
-        SpeedList[0].devType = 0; // 0-表示可以连接所有设备类型，也可以指定可以连接的设备的类型
+        SpeedList[0].rssi = 0; // 0- means that all rssi devices can be connected, and other values ​​can only connect devices with RSSI greater than this value.
+        SpeedList[0].devType = 0; // 0- means that all device types can be connected, or the type of device that can be connected
         tmos_memset(SpeedList[0].peerInfo, 0, 6);
         if(!tmos_isbufset(nvs_flash_info.peer_mac, 0, 6))
         {
@@ -343,7 +336,7 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
         bound.periTime = 8;
         bound.hop = RF_HOP_MANUF_MODE;
         bound.timeout = 100;
-        bound.devType = 0;  // 0-表示可以连接所有设备类型，也可以指定可以连接的设备的类型
+        bound.devType = 0;  // 0- means that all device types can be connected, or the type of device that can be connected
         tmos_memcpy(bound.OwnInfo, self_mac, 6);
 
         bound.rfBoundCB = rfRoleBoundProcess;
@@ -360,15 +353,14 @@ tmosEvents RF_ProcessEvent( tmosTaskID task_id, tmosEvents events )
     return 0;
 }
 
-/*******************************************************************************
- * @fn      RF_Init
- *
- * @brief   RF应用层初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn RF_Init
+*
+* @brief RF application layer initialization
+*
+* @param None.
+*
+* @return None. */
 void RF_Init( void )
 {
     rfTaskID = TMOS_ProcessEventRegister( RF_ProcessEvent );

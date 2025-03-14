@@ -12,7 +12,7 @@
 
 /******************************************************************************/
 
-// 如需修改跳转地址，直接修改启动文件 startup_CH59x.s 中跳转指令 “j” 之后的地址
+// If you need to modify the jump address, directly modify the address after the jump command "j" in the startup file startup_CH59x.s
 
 /* ***************************************************************************
 * @fn main

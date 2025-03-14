@@ -49,18 +49,18 @@
 #define IMAGE_IAP_SIZE         12 * 1024
 
 #define IAP_STATE_SUCCESS      0x00               // IAP Success
-#define IAP_STATE_RETRAN       0xFE               // IAP重传
-#define IAP_STATE_FAILURE      0xFF               // IAP失败
+#define IAP_STATE_RETRAN       0xFE               // IAP retransmission
+#define IAP_STATE_FAILURE      0xFF               // IAP failed
 
 /* IAP definition */
 /* The following is the IAP download command definition */
 #define CMD_HAND_SHAKE         0x5A               // Handshake command
 #define CMD_HAND_SHAKE_ACK     0xA5               // Handshake ACK
 
-#define CMD_IAP_PROM           0x80               // IAP编程命令
+#define CMD_IAP_PROM           0x80               // IAP programming commands
 #define CMD_IAP_ERASE          0x81               // IAP erase command
 #define CMD_IAP_VERIFY         0x82               // IAP verification command
-#define CMD_IAP_END            0x83               // IAP结束标志
+#define CMD_IAP_END            0x83               // IAP End Flag
 #define CMD_IAP_INFO           0x84               // IAP selects firmware to obtain device information
 #define CMD_IAP_INFO_ACK       0x04               // IAP Select Firmware ACK
 #define CMD_SINGLE_CHANNEL     0xC0               // Single carrier command
@@ -82,7 +82,7 @@
 /* Stored in DataFlash address, cannot occupy Bluetooth location */
 #define OTA_DATAFLASH_ADD      0x00077000 - FLASH_ROM_MAX_SIZE
 
-/* 存放在DataFlash里的OTA信息 */
+/* OTA information stored in DataFlash */
 typedef struct
 {
     unsigned char ImageFlag; // The current image flag of the record
@@ -90,15 +90,15 @@ typedef struct
 } OTADataFlashInfo_t;
 
 /* OTA IAP Communication Protocol Definition */
-/* 地址使用4倍偏移 */
+/* Addresses use 4x offset */
 typedef union
 {
     struct
     {
-        unsigned char cmd;          /* 命令码 0x5A */
+        unsigned char cmd;          /* Command code 0x5A */
         unsigned char len;          /* Subsequent data length */
         unsigned char string[7];    /* WCH@IAP */
-    } handshake; /* 握手命令 */
+    } handshake; /* Handshake command */
     struct
     {
         unsigned char cmd;          /* Command code 0x81 */
@@ -109,13 +109,13 @@ typedef union
     } erase; /* Erase command */
     struct
     {
-        unsigned char cmd;       /* 命令码 0x83 */
+        unsigned char cmd;       /* Command code 0x83 */
         unsigned char len;       /* Subsequent data length */
         unsigned char status[2]; /* Two byte state, reserved */
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x82 */
+        unsigned char cmd;              /* Command code 0x82 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */

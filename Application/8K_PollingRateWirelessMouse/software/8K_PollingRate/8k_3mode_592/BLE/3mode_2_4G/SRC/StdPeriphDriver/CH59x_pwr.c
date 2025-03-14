@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      PWR_DCDCCfg
- *
- * @brief   启用内部DC/DC电源，用于节约系统功耗
- *
- * @param   s       - 是否打开DCDC电源
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_DCDCCfg
+*
+* @brief Enable internal DC/DC power supply to save system power consumption
+*
+* @param s - Whether to turn on DCDC power
+*
+* @return none */
 void PWR_DCDCCfg(FunctionalState s)
 {
     uint16_t adj = R16_AUX_POWER_ADJ;
@@ -30,7 +29,7 @@ void PWR_DCDCCfg(FunctionalState s)
     {
         
         adj &= ~RB_DCDC_CHARGE;
-        plan &= ~(RB_PWR_DCDC_EN | RB_PWR_DCDC_PRE); // 旁路 DC/DC
+        plan &= ~(RB_PWR_DCDC_EN | RB_PWR_DCDC_PRE); // Bypass DC/DC
         sys_safe_access_enable();
         R16_AUX_POWER_ADJ = adj;
         R16_POWER_PLAN = plan;
@@ -57,25 +56,24 @@ void PWR_DCDCCfg(FunctionalState s)
     }
 }
 
-/*********************************************************************
- * @fn      PWR_UnitModCfg
- *
- * @brief   可控单元模块的电源控制
- *
- * @param   s       - 是否打开电源
- * @param   unit    - please refer to unit of controllable power supply
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_UnitModCfg
+*
+* @brief Power control of controllable unit module
+*
+* @param s - Whether to power on
+* @param unit - please refer to unit of controlled power supply
+*
+* @return none */
 void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
 {
     uint8_t ck32k_cfg = R8_CK32K_CONFIG;
 
-    if(s == DISABLE) //关闭
+    if(s == DISABLE) // closure
     {
         ck32k_cfg &= ~(unit & 0x03);
     }
-    else //打开
+    else // Open
     {
         ck32k_cfg |= (unit & 0x03);
     }
@@ -85,16 +83,15 @@ void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      PWR_PeriphClkCfg
- *
- * @brief   外设时钟控制位
- *
- * @param   s       - 是否打开对应外设时钟
- * @param   perph   - please refer to Peripher CLK control bit define
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_PeriphClkCfg
+*
+* @brief Peripheral clock control bit
+*
+* @param s - Whether to turn on the corresponding peripheral clock
+* @param perph - please refer to Peripher CLK control bit define
+*
+* @return none */
 void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
 {
     uint32_t sleep_ctrl = R32_SLEEP_CONTROL;
@@ -113,21 +110,20 @@ void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      PWR_PeriphWakeUpCfg
- *
- * @brief   睡眠唤醒源配置
- *
- * @param   s       - 是否打开此外设睡眠唤醒功能
- * @param   perph   - 需要设置的唤醒源
- *                    RB_SLP_USB_WAKE   -  USB 为唤醒源
- *                    RB_SLP_RTC_WAKE   -  RTC 为唤醒源
- *                    RB_SLP_GPIO_WAKE  -  GPIO 为唤醒源
- *                    RB_SLP_BAT_WAKE   -  BAT 为唤醒源
- * @param   mode    - refer to WakeUP_ModeypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_PeriphWakeUpCfg
+*
+* @brief Sleep wake source configuration
+*
+* @param s - Whether to turn on the sleep wake-up function of this peripheral
+* @param perph - Wake source that needs to be set
+* RB_SLP_USB_WAKE - USB is the wake-up source
+* RB_SLP_RTC_WAKE - RTC is the wake-up source
+* RB_SLP_GPIO_WAKE - GPIO is the wake-up source
+* RB_SLP_BAT_WAKE - BAT is the wake-up source
+* @param mode - refer to WakeUP_ModeypeDef
+*
+* @return none */
 void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode)
 {
     uint8_t m;
@@ -167,16 +163,15 @@ void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mod
     }
 }
 
-/*********************************************************************
- * @fn      PowerMonitor
- *
- * @brief   电源监控
- *
- * @param   s       - 是否打开此功能
- * @param   vl      - refer to VolM_LevelypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PowerMonitor
+*
+* @brief Power Monitoring
+*
+* @param s - Whether to turn on this feature
+* @param vl - refer to VolM_LevelypeDef
+*
+* @return none */
 void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl)
 {
     uint8_t ctrl = R8_BAT_DET_CTRL;
@@ -213,20 +208,19 @@ void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl)
     }
 }
 
-/*********************************************************************
- * @fn      LowPower_Idle
- *
- * @brief   低功耗-Idle模式
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LowPower_Idle
+*
+* @brief low power consumption - Idle mode
+*
+* @param none
+*
+* @return none */
 __HIGH_CODE
 void LowPower_Idle(void)
 {
     FLASH_ROM_SW_RESET();
-    R8_FLASH_CTRL = 0x04; //flash关闭
+    R8_FLASH_CTRL = 0x04; // flash close
 
     PFIC->SCTLR &= ~(1 << 2); // sleep
     __WFI();
@@ -234,29 +228,28 @@ void LowPower_Idle(void)
     __nop();
 }
 
-/*********************************************************************
- * @fn      LowPower_Halt
- *
- * @brief   低功耗-Halt模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LowPower_Halt
+*
+* @brief Low power consumption - Halt mode, this low power consumption cuts to the HSI/5 clock operation, and after wake-up, the user needs to re-select the system clock source by himself
+*
+* @param none
+*
+* @return none */
 __HIGH_CODE
 void LowPower_Halt(void)
 {
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
-    R8_FLASH_CTRL = 0x04; //flash关闭
+    R8_FLASH_CTRL = 0x04; // flash close
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
+    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // 关闭电压监控
+    R8_BAT_DET_CTRL = 0; // Turn off voltage monitoring
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;
@@ -275,18 +268,18 @@ void LowPower_Halt(void)
     sys_safe_access_disable();
 }
 
-/*******************************************************************************
-* Function Name  : LowPower_Sleep
-* Description    : 低功耗-Sleep模式。
-                   注意当主频为80M时，睡眠唤醒中断不可调用flash内代码，且退出此函数前需要加上30us延迟。
-* Input          : rm:
-                    RB_PWR_RAM2K	-	2K retention SRAM 供电
-                    RB_PWR_RAM24K	-	24K main SRAM 供电
-                    RB_PWR_EXTEND	-	USB 和 BLE 单元保留区域供电
-                    RB_PWR_XROM   - FlashROM 供电
-                   NULL	-	以上单元都断电
-* Return         : None
-*******************************************************************************/
+/* *********************************************************************************************
+* Function Name: LowPower_Sleep
+* Description: Low power consumption-Sleep mode.
+Note that when the main frequency is 80M, the flash code cannot be called during the sleep wake-up interrupt, and a 30us delay is required before exiting this function.
+* Input : rm:
+RB_PWR_RAM2K - 2K retention SRAM powered
+RB_PWR_RAM24K - 24K main SRAM powered
+RB_PWR_EXTEND - USB and BLE units reserved area power supply
+RB_PWR_XROM - FlashROM Powered
+NULL - All of the above units are powered off
+* Return : None
+********************************************************************************************* */
 __HIGH_CODE
 void LowPower_Sleep(uint16_t rm)
 {
@@ -298,11 +291,11 @@ void LowPower_Sleep(uint16_t rm)
 
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
+    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // 关闭电压监控
+    R8_BAT_DET_CTRL = 0; // Turn off voltage monitoring
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;
@@ -346,19 +339,18 @@ void LowPower_Sleep(uint16_t rm)
     }
 }
 
-/*********************************************************************
- * @fn      LowPower_Shutdown
- *
- * @brief   低功耗-Shutdown模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
- *          @note 注意调用此函数，DCDC功能强制关闭，唤醒后可以手动再次打开
- *
- * @param   rm      - 供电模块选择
- *                    RB_PWR_RAM2K  -   2K retention SRAM 供电
- *                    RB_PWR_RAM16K -   16K main SRAM 供电
- *                    NULL          -   以上单元都断电
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LowPower_Shutdown
+*
+* @brief Low power consumption - Shutdown mode, this low power consumption cuts to the HSI/5 clock operation, and after wake-up, the user needs to re-select the system clock source by himself
+* @note Note: Call this function, the DCDC function is forced to be closed, and it can be manually turned on again after wake-up.
+*
+* @param rm - Power supply module selection
+* RB_PWR_RAM2K - 2K retention SRAM powered
+* RB_PWR_RAM16K - 16K main SRAM powered
+* NULL - All the above units are powered off
+*
+* @return none */
 __HIGH_CODE
 void LowPower_Shutdown(uint16_t rm)
 {
@@ -367,11 +359,11 @@ void LowPower_Shutdown(uint16_t rm)
     FLASH_ROM_SW_RESET();
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
-    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
+    x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // 关闭电压监控
+    R8_BAT_DET_CTRL = 0; // Turn off voltage monitoring
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;

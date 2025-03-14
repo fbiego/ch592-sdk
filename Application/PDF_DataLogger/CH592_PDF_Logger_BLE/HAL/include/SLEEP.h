@@ -31,13 +31,12 @@ extern "C" {
  */
 extern void HAL_SleepInit(void);
 
-/**
- * @brief   启动睡眠
- *
- * @param   time    - 唤醒的时间点（RTC绝对值）
- *
- * @return  state.
- */
+/* *
+* @brief Start sleep
+*
+* @param time - Wake-up time point (RTC absolute value)
+*
+* @return state. */
 extern uint32_t CH59x_LowPower(uint32_t time);
 
 /*********************************************************************

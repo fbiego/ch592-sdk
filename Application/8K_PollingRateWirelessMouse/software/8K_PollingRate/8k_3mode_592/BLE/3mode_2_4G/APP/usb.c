@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include <rf.h>
 #include "rf_device.h"
 #include "CH59x_common.h"
@@ -23,9 +23,9 @@
 /*********************************************************************
  * GLOBAL TYPEDEFS
  */
-// 支持的最大接口数量
+// The maximum number of interfaces supported
 #define USB_INTERFACE_MAX_NUM       4
-// 接口号的最大值
+// Maximum value of interface number
 #define USB_INTERFACE_MAX_INDEX     3
 
 const uint8_t LangID_StrDescr[ 4 ] =
@@ -36,10 +36,10 @@ const uint8_t LangID_StrDescr[ 4 ] =
     0x04
 };
 
-// 厂家信息
+// Manufacturer information
 uint8_t MyManuInfo[64] = {0x0E, 0x03, 'w', 0, 'c', 0, 'h', 0, '.', 0, 'c', 0, 'n', 0};
 
-// 产品信息
+// Product Information
 uint8_t MyProdInfo[64] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -54,7 +54,7 @@ uint8_t MyProdInfo[64] = {0x0D+11, 0x03,
     'e', 0
 };
 
-// 序列号
+// Serial number
 uint8_t MySerialNum[64] = {0x0D+11, 0x03,
     '2', 0,
     '.', 0,
@@ -70,7 +70,7 @@ uint8_t MySerialNum[64] = {0x0D+11, 0x03,
 };
 
 
-//   -----报告描述符Mouse--------------
+// ----Report descriptor Mouse---------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorMouse[]=
 {
         0x05,0x01,                  //81    GLOBAL_USAGE_PAGE(Generic Desktop Controls)
@@ -111,10 +111,10 @@ const uint8_t HID_ReportDescriptorMouse[]=
 
 };
 
-//   -----报告描述符Other--------------
+// ----Report descriptor Other----------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorOther[]=
 {
-    //键盘报表：
+    // Keyboard report:
 //      0x05, 0x01,     // Usage Pg (Generic Desktop)
 //      0x09, 0x06,     // Usage (Keyboard)
 //      0xA1, 0x01,     // Collection: (Application)
@@ -210,7 +210,7 @@ const uint8_t HID_ReportDescriptorOther[]=
         // 90 bytes
 
 
-    //全键盘：
+    // Full keyboard:
     0x05,0x01,                  //0     GLOBAL_USAGE_PAGE(Generic Desktop Controls)
     0x09,0x06,                  //2     LOCAL_USAGE(Keyboard)
     0xA1,0x01,                  //4     MAIN_COLLECTION(Applicatior)
@@ -226,7 +226,7 @@ const uint8_t HID_ReportDescriptorOther[]=
     0xC0,                       //24    MAIN_COLLECTION_END
 
 
-    //多媒体控制：
+    // Multimedia control:
     0x05,0x0C,                  //0     GLOBAL_USAGE_PAGE(Consumer)
     0x09,0x01,                  //2     LOCAL_USAGE(    Consumer Control    )
     0xA1,0x01,                  //4     MAIN_COLLECTION(Applicatior)
@@ -241,7 +241,7 @@ const uint8_t HID_ReportDescriptorOther[]=
     0xC0,                       //24    MAIN_COLLECTION_END
 
 
-    //系统控制：
+    // System control:
     0x05,0x01,                  //0     GLOBAL_USAGE_PAGE(Generic Desktop Controls)
     0x09,0x80,                  //2     LOCAL_USAGE()
     0xA1,0x01,                  //4     MAIN_COLLECTION(Applicatior)
@@ -260,7 +260,7 @@ const uint8_t HID_ReportDescriptorOther[]=
     0xC0,                       //30    MAIN_COLLECTION_END
 };
 
-//   -----报告描述符Manufacturer--------------
+// ----Report descriptor Manufacturer------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorManufacturer[]=
 {
     0x06,0x13,0xFF,             //0     GLOBAL_USAGE_PAGE(Reserved or Other)
@@ -279,7 +279,7 @@ const uint8_t HID_ReportDescriptorManufacturer[]=
     0xC0,                       //29    MAIN_COLLECTION_END
 };
 
-//   -----报告描述符IAP--------------
+// ----Report descriptor IAP---------------------------------------------------------------------------------------------------------------------
 const uint8_t HID_ReportDescriptorIAP[]=
 {
 
@@ -306,7 +306,7 @@ const uint8_t HID_ReportDescSizeOther = sizeof(HID_ReportDescriptorOther);
 const uint8_t HID_ReportDescSizeManufacturer = sizeof(HID_ReportDescriptorManufacturer);
 const uint8_t HID_ReportDescSizeIAP = sizeof(HID_ReportDescriptorIAP);
 
-// 设备描述符
+// Device descriptor
 uint8_t MyDevDescr[] = {
     0x12,   /* bLength */
     0x01,   /* bDescriptorType USB_DEVICE_DESCRIPTOR_TYPE*/
@@ -323,7 +323,7 @@ uint8_t MyDevDescr[] = {
     0x03,   /* iSerialNumber USB_DEVICE_STRING_RESERVED*/
     0x01    /* bNumConfigurations: one possible configuration*/
 };
-// 配置描述符
+// Configuration descriptor
 const uint8_t MyCfgDescr[] = {
     0x09,   /* bLength */
     0x02,   /* bDescriptorType USB_CONFIGURATION_DESCRIPTOR_TYPE*/
@@ -334,9 +334,9 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* iConfiguration */
     0xA0,
     0x23,    /* bMaxPower */
-    //配置描述符
+    // Configuration descriptor
 
-//   -----Interface 描述符 Mouse --------------
+// -----Interface Descriptor Mouse ---------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x00,   /* bInterfaceNumber */
@@ -346,7 +346,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x02,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -355,7 +355,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeMouse),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -363,9 +363,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP2SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 1ms */
-    //端点2描述符
+    // Endpoint 2 descriptor
 
-//   -----Interface 描述符 Other --------------
+// -----Interface Descriptor Other ----------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x01,   /* bInterfaceNumber */
@@ -375,7 +375,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bInterfaceSubClass */
     0x01,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -384,7 +384,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeOther),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -393,7 +393,7 @@ const uint8_t MyCfgDescr[] = {
     USB_WBVAL(DevEP2SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 1ms */
 
-//   -----Interface 描述符 Other --------------
+// -----Interface Descriptor Other ----------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x02,   /* bInterfaceNumber */
@@ -403,7 +403,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -412,7 +412,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeManufacturer),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -427,9 +427,9 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP3SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 1ms */
-    //端点5描述符
+    // Endpoint 5 descriptor
 
-////   -----Interface 描述符 Other --------------
+// // -----Interface descriptor Other ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //    0x09,   /* bLength */
 //    0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
 //    0x03,   /* bInterfaceNumber */
@@ -448,9 +448,9 @@ const uint8_t MyCfgDescr[] = {
 //    0x00,   /* bNumDescriptors */
 //    0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
 //    USB_WBVAL(0),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
-//   -----Interface 描述符 Other --------------
+// -----Interface Descriptor Other ----------------------------------------------------------------------------------------------------------------------
     0x09,   /* bLength */
     0x04,   /* bDescriptorType USB_INTERFACE_DESCRIPTOR_TYPE*/
     0x03,   /* bInterfaceNumber */
@@ -460,7 +460,7 @@ const uint8_t MyCfgDescr[] = {
     0x00,   /* bInterfaceSubClass */
     0x00,   /* HID Protocol Codes HID_PROTOCOL_NONE*/
     0x00,   /* iInterface */
-    //接口描述符
+    // Interface descriptor
 
     0x09,   /* bLength */
     0x21,   /* bDescriptorType HID_HID_DESCRIPTOR_TYPE*/
@@ -469,7 +469,7 @@ const uint8_t MyCfgDescr[] = {
     0x01,   /* bNumDescriptors */
     0x22,   /* bDescriptorType HID_REPORT_DESCRIPTOR_TYPE*/
     USB_WBVAL(HID_ReportDescSizeIAP),/* wDescriptorLength */
-    //HID类描述符
+    // HID class descriptor
 
     0x07,   /* bLength */
     0x05,   /* bDescriptorType USB_ENDPOINT_DESCRIPTOR_TYPE*/
@@ -484,7 +484,7 @@ const uint8_t MyCfgDescr[] = {
     0x03,   /* bmAttributes */
     USB_WBVAL(DevEP6SIZE),/* wMaxPacketSize */
     0x01,   /* bInterval *//* 1ms */
-    //端点6描述符
+    // Endpoint 6 descriptor
 
 };
 
@@ -500,12 +500,12 @@ uint16_t       SetupReqLen;
 const uint8_t *pDescr;
 uint8_t        Report_Value[USB_INTERFACE_MAX_INDEX+1] = {0x00};
 uint8_t        Idle_Value[USB_INTERFACE_MAX_INDEX+1] = {0x00};
-volatile uint8_t        USB_SleepStatus = HOST_WAKEUP_ENABLE; /* USB睡眠状态 */
+volatile uint8_t        USB_SleepStatus = HOST_WAKEUP_ENABLE; /* USB sleep state */
 volatile uint8_t    USB_READY_FLAG = 1;
 USB_receive_cb_t    USB_receive_cb;
 uint8_t         led_val = 0;
 uint8_t         USB_receive_buf[64+2];
-volatile uint8_t intflag = 0;   //intflag用于存放标志寄存器值
+volatile uint8_t intflag = 0;   // intflag is used to store flag register values
 uint8_t         usb_enum_flag = 0;
 uint8_t         usb_enum_success_flag=0;
 
@@ -642,11 +642,11 @@ void USB_cfg_serial_num( uint8_t *pData, uint8_t len )
  */
 void USB_Wake_up( void )
 {
-    R16_PIN_ANALOG_IE &= ~RB_PIN_USB_DP_PU;         // USB上拉电阻
+    R16_PIN_ANALOG_IE &= ~RB_PIN_USB_DP_PU;         // USB pull-up resistor
     R8_UDEV_CTRL |= RB_UD_LOW_SPEED;
     mDelaymS(8);
     R8_UDEV_CTRL &= ~RB_UD_LOW_SPEED;
-    R16_PIN_ANALOG_IE |= RB_PIN_USB_DP_PU;         // USB上拉电阻
+    R16_PIN_ANALOG_IE |= RB_PIN_USB_DP_PU;         // USB pull-up resistor
 }
 
 /*********************************************************************
@@ -661,14 +661,13 @@ void USB_receive_cb_register(USB_receive_cb_t cback)
     USB_receive_cb = cback;
 }
 
-/*********************************************************************
- * @fn      USB_mouse_report
- *
- * @brief   上报mouse数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_mouse_report
+*
+* @brief Report mouse data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_mouse_report(uint8_t *pData,uint8_t len)
 {
     if(!USB_READY_FLAG)
@@ -681,14 +680,13 @@ uint8_t USB_mouse_report(uint8_t *pData,uint8_t len)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_class_keyboard_report
- *
- * @brief   上报class_keyboard数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_class_keyboard_report
+*
+* @brief Report class_keyboard data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_class_keyboard_report(uint8_t *pData,uint8_t len)
 {
     if(!USB_READY_FLAG)
@@ -702,14 +700,13 @@ uint8_t USB_class_keyboard_report(uint8_t *pData,uint8_t len)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_all_keyboard_report
- *
- * @brief   上报all_keyboard数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_all_keyboard_report
+*
+* @brief Report all_keyboard data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_all_keyboard_report(uint8_t *pData,uint8_t len)
 {
     if(!USB_READY_FLAG)
@@ -722,14 +719,13 @@ uint8_t USB_all_keyboard_report(uint8_t *pData,uint8_t len)
     DevEP2_IN_Deal(len+1);
     return 0;
 }
-/*********************************************************************
- * @fn      USB_manufacturer_report
- *
- * @brief   上报manufacturer数据，用户注意做好上层协议
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_manufacturer_report
+*
+* @brief Report manufacturer data, users should pay attention to making upper-level protocols
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_manufacturer_report(uint8_t *pData,uint8_t len)
 {
     USB_READY_FLAG = 0;
@@ -738,14 +734,13 @@ uint8_t USB_manufacturer_report(uint8_t *pData,uint8_t len)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_consumer_report
- *
- * @brief   上报consumer数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_consumer_report
+*
+* @brief Report consumer data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_consumer_report(uint8_t *pData,uint8_t len)
 {
     if(!USB_READY_FLAG)
@@ -759,14 +754,13 @@ uint8_t USB_consumer_report(uint8_t *pData,uint8_t len)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_sys_ctl_report
- *
- * @brief   上报sys_ctl数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_sys_ctl_report
+*
+* @brief Report sys_ctl data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_sys_ctl_report(uint8_t data)
 {
     if(!USB_READY_FLAG)
@@ -780,14 +774,13 @@ uint8_t USB_sys_ctl_report(uint8_t data)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_IAP_report
- *
- * @brief   上报IAP数据
- *
- * @return  0：成功
- *          1：出错
- */
+/* ***************************************************************************
+* @fn USB_IAP_report
+*
+* @brief Report IAP data
+*
+* @return 0: Success
+* 1: An error occurred */
 uint8_t USB_IAP_report(uint8_t *pData,uint8_t len)
 {
     USB_READY_FLAG = 0;
@@ -796,54 +789,53 @@ uint8_t USB_IAP_report(uint8_t *pData,uint8_t len)
     return 0;
 }
 
-/*********************************************************************
- * @fn      USB_IRQ_trans_process
- *
- * @brief   USB中断函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn USB_IRQ_trans_process
+*
+* @brief USB interrupt function
+*
+* @return none */
 void USB_IRQ_trans_process( void )
 {
-    uint8_t len, chtype;        //len用于拷贝函数，chtype用于存放数据传输方向、命令的类型、接收的对象等信息
-    uint8_t  errflag = 0;   //errflag用于标记是否支持主机的指令
+    uint8_t len, chtype;        // len is used to copy functions, and chtype is used to store information such as data transmission direction, command type, and received objects.
+    uint8_t  errflag = 0;   // errflag directive used to mark whether the host is supported
 
-    if( intflag & RB_UIF_TRANSFER )   //判断_INT_FG中的USB传输完成中断标志位。若有传输完成中断了，进if语句
+    if( intflag & RB_UIF_TRANSFER )   // Determines the USB transmission completion interrupt flag in _INT_FG.If the transmission is interrupted, enter the if statement
     {
-        if( (R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN ) // 非空闲   //判断中断状态寄存器中的5:4位，查看令牌的PID标识。若这两位不是11（表示空闲），进if语句
+        if( (R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN ) // Non-idle //Judge 5:4 bits in the interrupt status register and view the PID ID of the token.If these two digits are not 11 (meaning idle), enter the if statement
         {
             switch( R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP) )
-            //取得令牌的PID标识和设备模式下的3:0位的端点号。主机模式下3:0位是应答PID标识位
-            // 分析操作令牌和端点号
-            {//端点0用于控制传输。以下的端点0的IN和OUT令牌相应程序，对应控制传输的数据阶段和状态阶段。
-                case UIS_TOKEN_IN:      //令牌包的PID为IN，5:4位为10。3:0位的端点号为0。IN令牌：设备给主机发数据。_UIS_：USB中断状态
-                {                       //端点0为双向端点，用作控制传输。 “|0”运算省略了
+            // Get the PID ID of the token and the endpoint number of the 3:0 bit in device mode.In host mode, 3:0 bit is the answer PID identification bit
+            // Analyze operation tokens and endpoint numbers
+            {// Endpoint 0 is used to control transmission.The following IN and OUT tokens of endpoint 0 correspond to the corresponding program, corresponding to the data stage and status stage of the control transmission.
+                case UIS_TOKEN_IN:      // The PID of the token package is IN, and the 5:4 bit is 10. The endpoint number of the 3:0 bit is 0.IN token: The device sends data to the host._UIS_: USB interrupt status
+                {                       // Endpoint 0 is a bidirectional endpoint, used as control transmission."|0" operation is omitted
                     switch( SetupReqCode )
-                    //这个值会在收到SETUP包时赋值。在后面会有SETUP包处理程序，对应控制传输的设置阶段。
+                    // This value will be assigned when the SETUP packet is received.There will be a SETUP packet handler later, corresponding to the setting stage of control transmission.
                     {
-                        case USB_GET_DESCRIPTOR:    //USB标准命令，主机从USB设备获取描述
-                            len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen; // 本次包传输长度。最长为64字节，超过64字节的分多次处理，前几次要满包。
-                            tmos_memcpy( pEP0_DataBuf, pDescr, len ); //tmos_memcpy:内存拷贝函数，从(二号位)地址拷贝(三号位)字符串长度到(一号位)地址中
-                            //DMA直接与内存相连，会检测到内存的改写，而后不用单片机控制就可以将内存中的数据发送出去。如果只是两个数组互相赋值，不涉及与DMA匹配的物理内存，就无法触发DMA。
-                            SetupReqLen -= len;     //记录剩下的需要发送的数据长度
-                            pDescr += len;          //更新接下来需要发送的数据的起始地址,拷贝函数用
-                            R8_UEP0_T_LEN = len;    //端点0发送长度寄存器中写入本次包传输长度
-                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // 同步切换。IN方向（对于单片机就是T方向）的PID中的DATA0和DATA1切换
-                            break;                  //赋值完端点控制寄存器的握手包响应（ACK、NAK、STALL），由硬件打包成符合规范的包，DMA自动发送
-                        case USB_SET_ADDRESS:       //USB标准命令，主机为设备设置一个唯一地址，范围0～127，0为默认地址
+                        case USB_GET_DESCRIPTOR:    // USB standard command, the host obtains description from the USB device
+                            len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen; // The packet transmission length is.The maximum length is 64 bytes, and more than 64 bytes are processed in multiple times, and the first few times will be full.
+                            tmos_memcpy( pEP0_DataBuf, pDescr, len ); // tmos_memcpy: Memory copy function, copy (number 2) string length from (number 2) address to (number 1) address
+                            // DMA is directly connected to memory and will detect memory rewriting, and then the data in memory can be sent out without the control of the microcontroller.If only two arrays are assigned to each other and do not involve physical memory matching DMA, DMA cannot be triggered.
+                            SetupReqLen -= len;     // Record the remaining length of data to be sent
+                            pDescr += len;          // Update the starting address of the data to be sent next, and use the copy function to
+                            R8_UEP0_T_LEN = len;    // Endpoint 0 send length register writes the packet transmission length
+                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;   // Synchronous switch.Switch DATA0 and DATA1 in PID of IN direction (for microcontrollers, the T direction)
+                            break;                  // The handshake packet response (ACK, NAK, STALL) of the endpoint control register is packaged into a package that complies with the specifications by the hardware, and DMA will automatically send it.
+                        case USB_SET_ADDRESS:       // USB standard command, the host sets a unique address for the device, the range 0 to 127, and 0 is the default address
                             R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
-                            //7位地址+最高位的用户自定义地址（默认为1），或上“包传输长度”（这里的“包传输长度”在后面赋值成了地址位）
+                            // 7-bit address + the user-defined address of the highest bit (default is 1), or the "packet transmission length" on the top (the "packet transmission length" here is assigned as the address bit later)
                             R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-                            //R响应OUT事务ACK，T响应IN事务NAK。这个CASE分支里是IN方向，当DMA相应内存中，单片机没有数据更新时，回NAK握手包。
-                            break;                                                  //一般程序里的OUT事务，设备会回包给主机，不响应NAK。
+                            // R responds to OUT transaction ACK, T responds to IN transaction NAK.This CASE branch is in the IN direction. When the DMA corresponding memory is in the microcontroller, it returns to the NAK handshake package.
+                            break;                                                  // Generally, the device will return the OUT transaction in the program to the host and will not respond to NAK.
 
-                        case USB_SET_FEATURE:       //USB标准命令，主机要求启动一个在设备、接口或端点上的特征
+                        case USB_SET_FEATURE:       // USB standard command, the host requires a feature on the device, interface, or endpoint
                             break;
 
                         default:
-                            R8_UEP0_T_LEN = 0;      //状态阶段完成中断或者是强制上传0长度数据包结束控制传输（数据字段长度为0的数据包，包里SYNC、PID、EOP字段都有）
+                            R8_UEP0_T_LEN = 0;      // The status stage is interrupted or forced upload of 0-length packets to end control transmission (data packets with data field length 0, all SYNC, PID, and EOP fields are included in the packet)
                             R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-                            //R响应OUT事务ACK，T响应IN事务NAK。这个CASE分支里是OUT方向，当DMA相应内存中更新了数据且单片机验收正常时，回ACK握手包。
+                            // R responds to OUT transaction ACK, T responds to IN transaction NAK.This CASE branch is OUT direction. When the data is updated in the corresponding DMA memory and the microcontroller acceptance is normal, return to the ACK handshake bag.
                             USB_READY_FLAG = 1;
                             if(usb_enum_flag)
                             {
@@ -857,9 +849,9 @@ void USB_IRQ_trans_process( void )
                 }
                     break;
 
-                case UIS_TOKEN_OUT:     //令牌包的PID为OUT，5:4位为00。3:0位的端点号为0。OUT令牌：主机给设备发数据。
-                {                       //端点0为双向端点，用作控制传输。 “|0”运算省略了
-                    len = R8_USB_RX_LEN;    //读取当前USB接收长度寄存器中存储的接收的数据字节数 //接收长度寄存器为各个端点共用，发送长度寄存器各有各的
+                case UIS_TOKEN_OUT:     // The PID of the token package is OUT, and the 5:4 bit is 00. The endpoint number of the 3:0 bit is 0.OUT token: The host sends data to the device.
+                {                       // Endpoint 0 is a bidirectional endpoint, used as control transmission."|0" operation is omitted
+                    len = R8_USB_RX_LEN;    // Read the number of received data bytes stored in the current USB receiving length register //The receiving length register is shared by each endpoint, and the sending length register has its own
                     if((pEP0_DataBuf[0]==REPORT_ID_KEYBOARD)&&USB_receive_cb&&(len==2))
                     {
                         USB_receive_buf[0] = USB_DATA_LED;
@@ -876,8 +868,8 @@ void USB_IRQ_trans_process( void )
 
                 case UIS_TOKEN_OUT | 3:
                 {
-                    R8_UEP3_CTRL ^= RB_UEP_R_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    len = R8_USB_RX_LEN;    //读取当前USB接收长度寄存器中存储的接收的数据字节数 //接收长度寄存器为各个端点共用，发送长度寄存器各有各的
+                    R8_UEP3_CTRL ^= RB_UEP_R_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    len = R8_USB_RX_LEN;    // Read the number of received data bytes stored in the current USB receiving length register //The receiving length register is shared by each endpoint, and the sending length register has its own
                     if(USB_receive_cb)
                     {
                         USB_receive_buf[0] = USB_DATA_MANUFACTURER;
@@ -893,8 +885,8 @@ void USB_IRQ_trans_process( void )
 
                 case UIS_TOKEN_OUT | 6:
                 {
-                    R8_UEP6_CTRL ^= RB_UEP_R_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    len = R8_USB_RX_LEN;    //读取当前USB接收长度寄存器中存储的接收的数据字节数 //接收长度寄存器为各个端点共用，发送长度寄存器各有各的
+                    R8_UEP6_CTRL ^= RB_UEP_R_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    len = R8_USB_RX_LEN;    // Read the number of received data bytes stored in the current USB receiving length register //The receiving length register is shared by each endpoint, and the sending length register has its own
                     if(USB_receive_cb)
                     {
                         USB_receive_buf[0] = USB_DATA_IAP;
@@ -908,95 +900,95 @@ void USB_IRQ_trans_process( void )
                 }
                     break;
 
-                case UIS_TOKEN_IN | 1: //令牌包的PID为IN，端点号为1
-                    R8_UEP1_CTRL ^= RB_UEP_T_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; //当DMA中没有由单片机更新数据时，将T响应IN事务置为NAK。更新了就发出数据。
+                case UIS_TOKEN_IN | 1: // The PID of the token package is IN and the endpoint number is 1
+                    R8_UEP1_CTRL ^= RB_UEP_T_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; // When the data is not updated by the microcontroller in the DMA, the T response IN transaction is set to NAK.Publish data after update.
                     USB_READY_FLAG = 1;
 #if CONFIG_USB_DEBUG
                     PRINT( "Ready_IN_EP1 = %d\n", USB_READY_FLAG );
 #endif
                     break;
 
-                case UIS_TOKEN_IN | 2: //令牌包的PID为IN，端点号为2
-                    R8_UEP2_CTRL ^= RB_UEP_T_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; //当DMA中没有由单片机更新数据时，将T响应IN事务置为NAK。更新了就发出数据。
+                case UIS_TOKEN_IN | 2: // The PID of the token package is IN and the endpoint number is 2
+                    R8_UEP2_CTRL ^= RB_UEP_T_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; // When the data is not updated by the microcontroller in the DMA, the T response IN transaction is set to NAK.Publish data after update.
                     USB_READY_FLAG = 1;
 #if CONFIG_USB_DEBUG
                     PRINT( "Ready_IN_EP2 = %d\n", USB_READY_FLAG );
 #endif
                     break;
 
-                case UIS_TOKEN_IN | 3: //令牌包的PID为IN，端点号为3
-                    R8_UEP3_CTRL ^= RB_UEP_T_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; //当DMA中没有由单片机更新数据时，将T响应IN事务置为NAK。更新了就发出数据。
+                case UIS_TOKEN_IN | 3: // The PID of the token package is IN and the endpoint number is 3
+                    R8_UEP3_CTRL ^= RB_UEP_T_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; // When the data is not updated by the microcontroller in the DMA, the T response IN transaction is set to NAK.Publish data after update.
                     USB_READY_FLAG = 1;
 #if CONFIG_USB_DEBUG
                     PRINT( "Ready_IN_EP3 = %d\n", USB_READY_FLAG );
 #endif
                     break;
 
-                case UIS_TOKEN_IN | 5: //令牌包的PID为IN，端点号为5
-                    R8_UEP5_CTRL ^= RB_UEP_T_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    R8_UEP5_CTRL = (R8_UEP5_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; //当DMA中没有由单片机更新数据时，将T响应IN事务置为NAK。更新了就发出数据。
+                case UIS_TOKEN_IN | 5: // The PID of the token package is IN and the endpoint number is 5
+                    R8_UEP5_CTRL ^= RB_UEP_T_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    R8_UEP5_CTRL = (R8_UEP5_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; // When the data is not updated by the microcontroller in the DMA, the T response IN transaction is set to NAK.Publish data after update.
                     USB_READY_FLAG = 1;
 #if CONFIG_USB_DEBUG
                     PRINT( "Ready_IN_EP5 = %d\n", USB_READY_FLAG );
 #endif
                     break;
 
-                case UIS_TOKEN_IN | 6: //令牌包的PID为IN，端点号为3
-                    R8_UEP6_CTRL ^= RB_UEP_T_TOG;       //IN事务的DATA切换一下。设定将要发送的包的PID。
-                    R8_UEP6_CTRL = (R8_UEP6_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; //当DMA中没有由单片机更新数据时，将T响应IN事务置为NAK。更新了就发出数据。
+                case UIS_TOKEN_IN | 6: // The PID of the token package is IN and the endpoint number is 3
+                    R8_UEP6_CTRL ^= RB_UEP_T_TOG;       // Switch the DATA of the IN transaction.Sets the PID of the packet to be sent.
+                    R8_UEP6_CTRL = (R8_UEP6_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK; // When the data is not updated by the microcontroller in the DMA, the T response IN transaction is set to NAK.Publish data after update.
                     USB_READY_FLAG = 1;
 #if CONFIG_USB_DEBUG
                     PRINT( "Ready_IN_EP6 = %d\n", USB_READY_FLAG );
 #endif
                     break;
             }
-            R8_USB_INT_FG = RB_UIF_TRANSFER;    //写1清零中断标志
+            R8_USB_INT_FG = RB_UIF_TRANSFER;    // Write 1 Clear interrupt flag
         }
 
-        if( R8_USB_INT_ST & RB_UIS_SETUP_ACT ) // Setup包处理
+        if( R8_USB_INT_ST & RB_UIS_SETUP_ACT ) // Setup package processing
         {
 //            R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
-            //R响应OUT事务期待为DATA1（DMA收到的数据包的PID要为DATA1，否则算数据错误要重传）和ACK（DMA相应内存中收到了数据，单片机验收正常）
-            //T响应IN事务设定为DATA1（单片机有数据送入DMA相应内存，以DATA1发送出去）和NAK（单片机没有准备好数据）。
-            SetupReqLen = pSetupReqPak->wLength;    //数据阶段的字节数      //pSetupReqPak：将端点0的RAM地址强制转换成一个存放结构体的地址，结构体成员依次紧凑排列
-            SetupReqCode = pSetupReqPak->bRequest;  //命令的序号
-            chtype = pSetupReqPak->bRequestType;    //包含数据传输方向、命令的类型、接收的对象等信息
+            // R responds to OUT transaction expectation to be DATA1 (the PID of the data packet received by DMA must be DATA1, otherwise the calculation data error will be retransmitted) and ACK (the data received in the corresponding memory of DMA, and the acceptance of the microcontroller is normal)
+            // The T response IN transaction is set to DATA1 (the microcontroller has data sent to the corresponding DMA memory and is sent out with DATA1) and NAK (the microcontroller has not prepared data).
+            SetupReqLen = pSetupReqPak->wLength;    // Number of bytes in the data stage //pSetupReqPak: casts the RAM address of endpoint 0 into an address that stores the structure, and the structure members are arranged in order.
+            SetupReqCode = pSetupReqPak->bRequest;  // The sequence number of the command
+            chtype = pSetupReqPak->bRequestType;    // Contains information such as data transmission direction, command type, received object, etc.
 
             len = 0;
             errflag = 0;
-            if( (pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD ) //判断命令的类型，如果不是标准请求，进if语句
+            if( (pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD ) // Determine the type of the command, if it is not a standard request, enter the if statement
             {
-                /* 非标准请求 */
-                /* 其它请求,如类请求，产商请求等 */
-                if( pSetupReqPak->bRequestType & 0x40 )   //取得命令中的某一位，判断是否为0，不为零进if语句
+                /* Non-standard request */
+                /* Other requests, such as class requests, manufacturer requests, etc. */
+                if( pSetupReqPak->bRequestType & 0x40 )   // Get a certain one of the commands and determine whether it is 0, and enter the if statement without zero
                 {
-                    /* 厂商请求 */
+                    /* Manufacturer request */
                 }
-                else if( pSetupReqPak->bRequestType & 0x20 )  //取得命令中的某一位，判断是否为0，不为零进if语句
-                {   //判断为HID类请求
+                else if( pSetupReqPak->bRequestType & 0x20 )  // Get a certain one of the commands and determine whether it is 0, and enter the if statement without zero
+                {   // Determined as HID class request
                     switch( SetupReqCode )
-                    //判断命令的序号
+                    // Determine the sequence number of the command
                     {
-                        case DEF_USB_SET_IDLE: /* 0x0A: SET_IDLE */         //主机想设置HID设备特定输入报表的空闲时间间隔
+                        case DEF_USB_SET_IDLE: /* 0x0A: SET_IDLE */         // The host wants to set the idle time interval for the specific input report of the HID device
                             Idle_Value[pSetupReqPak->wIndex] = (uint8_t)(pSetupReqPak->wValue>>8);
-                            break; //这个一定要有
+                            break; // This must have
 
-                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     //主机想设置HID设备的报表描述符
+                        case DEF_USB_SET_REPORT: /* 0x09: SET_REPORT */     // The host wants to set the report descriptor for the HID device
                             break;
 
-                        case DEF_USB_SET_PROTOCOL: /* 0x0B: SET_PROTOCOL */ //主机想设置HID设备当前所使用的协议
+                        case DEF_USB_SET_PROTOCOL: /* 0x0B: SET_PROTOCOL */ // The host wants to set the protocol currently used by the HID device
                             Report_Value[pSetupReqPak->wIndex] = (uint8_t)(pSetupReqPak->wValue);
                             break;
 
-                        case DEF_USB_GET_IDLE: /* 0x02: GET_IDLE */         //主机想读取HID设备特定输入报表的当前的空闲比率
+                        case DEF_USB_GET_IDLE: /* 0x02: GET_IDLE */         // The host wants to read the current idle ratio of the HID device-specific input report
                             EP0_Databuf[0] = Idle_Value[pSetupReqPak->wIndex];
                             len = 1;
                             break;
 
-                        case DEF_USB_GET_PROTOCOL: /* 0x03: GET_PROTOCOL */     //主机想获得HID设备当前所使用的协议
+                        case DEF_USB_GET_PROTOCOL: /* 0x03: GET_PROTOCOL */     // The host wants to obtain the protocol currently used by the HID device
                             EP0_Databuf[0] = Report_Value[pSetupReqPak->wIndex];
                             len = 1;
                             break;
@@ -1006,104 +998,104 @@ void USB_IRQ_trans_process( void )
                     }
                 }
             }
-            else    //判断为标准请求
+            else    // Determined as a standard request
             {
                 switch( SetupReqCode )
-                //判断命令的序号
+                // Determine the sequence number of the command
                 {
-                    case USB_GET_DESCRIPTOR:    //主机想获得标准描述符
+                    case USB_GET_DESCRIPTOR:    // The host wants to obtain the standard descriptor
                     {
                         switch( ((pSetupReqPak->wValue) >> 8) )
-                        //右移8位，看原来的高8位是否为0，为1表示方向为IN方向，则进s-case语句
+                        // Move the right 8 bits to see if the original high 8 bits are 0. If it is 1, it means that the direction is IN. Then enter the s-case statement
                         {
-                            case USB_DESCR_TYP_DEVICE:  //不同的值代表不同的命令。主机想获得设备描述符
+                            case USB_DESCR_TYP_DEVICE:  // Different values ​​represent different commands.The host wants to obtain the device descriptor
                             {
                                 tmos_stop_task(tran_taskID, SBP_ENTER_SLEEP_EVT);
-                                pDescr = MyDevDescr;    //将设备描述符字符串放在pDescr地址中，“获得标准描述符”这个case末尾会用拷贝函数发送
-                                len = MyDevDescr[0];    //协议规定设备描述符的首字节存放字节数长度。拷贝函数会用到len参数
+                                pDescr = MyDevDescr;    // Put the device descriptor string in the pDescr address, and the end of the case "Get standard descriptor" will be sent with a copy function.
+                                len = MyDevDescr[0];    // The protocol specifies the length of the first byte of the device descriptor.The copy function will use the len parameter
                             }
                                 break;
 
-                            case USB_DESCR_TYP_CONFIG:  //主机想获得配置描述符
+                            case USB_DESCR_TYP_CONFIG:  // The host wants to obtain the configuration descriptor
                             {
-                                pDescr = MyCfgDescr;    //将配置描述符字符串放在pDescr地址中，之后会发送
-                                len = MyCfgDescr[2];    //协议规定配置描述符的第三个字节存放配置信息的总长
+                                pDescr = MyCfgDescr;    // Place the configuration descriptor string in the pDescr address and will be sent later
+                                len = MyCfgDescr[2];    // The protocol specifies the total length of the configuration information stored in the third byte of the configuration descriptor.
                             }
                                 break;
 
-                            case USB_DESCR_TYP_HID:     //主机想获得人机接口类描述符。此处结构体中的wIndex与配置描述符不同，意为接口号。
+                            case USB_DESCR_TYP_HID:     // The host wants to obtain the human-computer interface class descriptor.The wIndex in the structure here is different from the configuration descriptor, meaning the interface number.
                                 switch( (pSetupReqPak->wIndex) & 0xff )
-                                //取低八位，高八位抹去
+                                // Take the lower eight digits and wipe off the higher eight digits
                                 {
-                                    /* 选择接口 */
+                                    /* Select an interface */
                                     case 0:
-                                        pDescr = (uint8_t *) (&MyCfgDescr[18]);  //接口1的类描述符存放位置，待发送
+                                        pDescr = (uint8_t *) (&MyCfgDescr[18]);  // The class descriptor storage location of interface 1, to be sent
                                         len = 9;
                                         break;
 
-                                    /* 选择接口 */
+                                    /* Select an interface */
                                     case 1:
-                                        pDescr = (uint8_t *) (&MyCfgDescr[43]);  //接口1的类描述符存放位置，待发送
+                                        pDescr = (uint8_t *) (&MyCfgDescr[43]);  // The class descriptor storage location of interface 1, to be sent
                                         len = 9;
                                         break;
 
-                                    /* 选择接口 */
+                                    /* Select an interface */
                                     case 2:
-                                        pDescr = (uint8_t *) (&MyCfgDescr[68]);  //接口1的类描述符存放位置，待发送
+                                        pDescr = (uint8_t *) (&MyCfgDescr[68]);  // The class descriptor storage location of interface 1, to be sent
                                         len = 9;
                                         break;
 
-                                    /* 选择接口 */
+                                    /* Select an interface */
                                     case 3:
-                                        pDescr = (uint8_t *) (&MyCfgDescr[68+25+7]);  //接口1的类描述符存放位置，待发送
+                                        pDescr = (uint8_t *) (&MyCfgDescr[68+25+7]);  // The class descriptor storage location of interface 1, to be sent
                                         len = 9;
                                         break;
 
-//                                    /* 选择接口 */
+// /* Select interface */
 //                                    case 4:
-//                                        pDescr = (uint8_t *) (&MyCfgDescr[68+25+9+9]);  //接口1的类描述符存放位置，待发送
+// pDescr = (uint8_t *) (&MyCfgDescr[68+25+9+9]); //The class descriptor storage location of interface 1, to be sent
 //                                        len = 9;
 //                                        break;
 
                                     default:
-                                        /* 不支持的字符串描述符 */
+                                        /* Unsupported string descriptors */
                                         errflag = 0xff;
                                         break;
                                 }
                                 break;
 
-                            case USB_DESCR_TYP_REPORT:  //主机想获得设备报表描述符
+                            case USB_DESCR_TYP_REPORT:  // The host wants to obtain the device report descriptor
                             {
-                                if( ((pSetupReqPak->wIndex) & 0xff) == 0 ) //接口0报表描述符
+                                if( ((pSetupReqPak->wIndex) & 0xff) == 0 ) // Interface 0 report descriptor
                                 {
-                                    pDescr = HID_ReportDescriptorMouse; //数据准备上传
+                                    pDescr = HID_ReportDescriptorMouse; // Data ready to be uploaded
                                     len = HID_ReportDescSizeMouse;
                                 }
-                                else if( ((pSetupReqPak->wIndex) & 0xff) == 1 ) //接口1报表描述符
+                                else if( ((pSetupReqPak->wIndex) & 0xff) == 1 ) // Interface 1 report descriptor
                                 {
-                                    pDescr = HID_ReportDescriptorOther; //数据准备上传
+                                    pDescr = HID_ReportDescriptorOther; // Data ready to be uploaded
                                     len = HID_ReportDescSizeOther;
                                 }
-                                else if( ((pSetupReqPak->wIndex) & 0xff) == 2 ) //接口2报表描述符
+                                else if( ((pSetupReqPak->wIndex) & 0xff) == 2 ) // Interface 2 report descriptor
                                 {
-                                    pDescr = HID_ReportDescriptorManufacturer; //数据准备上传
+                                    pDescr = HID_ReportDescriptorManufacturer; // Data ready to be uploaded
                                     len = HID_ReportDescSizeManufacturer;
                                 }
-                                else if( ((pSetupReqPak->wIndex) & 0xff) == 3 ) //接口3报表描述符
+                                else if( ((pSetupReqPak->wIndex) & 0xff) == 3 ) // Interface 3 report descriptor
                                 {
                                     usb_enum_flag = 1;
-                                    pDescr = HID_ReportDescriptorIAP; //数据准备上传
+                                    pDescr = HID_ReportDescriptorIAP; // Data ready to be uploaded
                                     len = HID_ReportDescSizeIAP;
                                 }
                                 else
-                                    len = 0xff; //本程序只有4个接口，这句话正常不可能执行
+                                    len = 0xff; // This program has only 4 interfaces, so this sentence is not possible to be executed normally
                             }
                                 break;
 
-                            case USB_DESCR_TYP_STRING:  //主机想获得设备字符串描述符
+                            case USB_DESCR_TYP_STRING:  // The host wants to obtain the device string descriptor
                             {
                                 switch( (pSetupReqPak->wValue) & 0xff )
-                                //根据wValue的值传递字符串信息
+                                // Pass string information according to the value of wValue
                                 {
                                     case 0:
                                         pDescr = LangID_StrDescr;
@@ -1122,7 +1114,7 @@ void USB_IRQ_trans_process( void )
                                         len = MySerialNum[0];
                                         break;
                                     default:
-                                        errflag = 0xFF; // 不支持的字符串描述符
+                                        errflag = 0xFF; // Unsupported string descriptors
                                         break;
                                 }
                             }
@@ -1133,77 +1125,77 @@ void USB_IRQ_trans_process( void )
                                 break;
                         }
                         if( SetupReqLen > len )
-                            SetupReqLen = len;      //实际需上传总长度
-                        len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;   //最大长度为64字节
-                        tmos_memcpy( pEP0_DataBuf, pDescr, len );  //拷贝函数
+                            SetupReqLen = len;      // The total length needs to be uploaded
+                        len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;   // Maximum length is 64 bytes
+                        tmos_memcpy( pEP0_DataBuf, pDescr, len );  // Copy functions
                         pDescr += len;
                     }
                         break;
 
-                    case USB_SET_ADDRESS:       //主机想设置设备地址
-                        SetupReqLen = (pSetupReqPak->wValue) & 0xff;    //将主机分发的位设备地址暂存在SetupReqLen中
-                        break;                                          //控制阶段会赋值给设备地址参数
+                    case USB_SET_ADDRESS:       // The host wants to set the device address
+                        SetupReqLen = (pSetupReqPak->wValue) & 0xff;    // The bit device address distributed by the host is temporarily stored in SetupReqLen
+                        break;                                          // The control phase will be assigned to the device address parameters
 
-                    case USB_GET_CONFIGURATION: //主机想获得设备当前配置
-                        pEP0_DataBuf[0] = DevConfig;    //将设备配置放进RAM
+                    case USB_GET_CONFIGURATION: // The host wants to obtain the current configuration of the device
+                        pEP0_DataBuf[0] = DevConfig;    // Put device configuration into RAM
                         if( SetupReqLen > 1 )
-                            SetupReqLen = 1;    //将数据阶段的字节数置1。因为DevConfig只有一个字节
+                            SetupReqLen = 1;    // Set the number of bytes in the data stage by 1.Because DevConfig has only one byte
                         break;
 
-                    case USB_SET_CONFIGURATION: //主机想设置设备当前配置
-                        DevConfig = (pSetupReqPak->wValue) & 0xff;  //取低八位，高八位抹去
+                    case USB_SET_CONFIGURATION: // The host wants to set the current configuration of the device
+                        DevConfig = (pSetupReqPak->wValue) & 0xff;  // Take the lower eight digits and wipe off the higher eight digits
                         break;
 
-                    case USB_CLEAR_FEATURE:     //关闭USB设备的特征/功能。可以是设备或是端点层面上的。
+                    case USB_CLEAR_FEATURE:     // Turn off the features/functions of the USB device.It can be at the device or endpoint level.
                     {
-                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) //判断是不是端点特征（清除端点停止工作的状态）
+                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) // Determine whether it is an endpoint feature (clear the state where the endpoint stops working)
                         {
                             switch( (pSetupReqPak->wIndex) & 0xff )
-                            //取低八位，高八位抹去。判断索引
-                            {//16位的最高位判断数据传输方向，0为OUT，1为IN。低位为端点号。
-                                case 0x81:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                            // Take the lower eight digits and erase the higher eight digits.Judge index
+                            {// The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
+                                case 0x81:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
-                                case 0x01:      //清零_TOG和_R_RES这三位，并将后者写成_ACK，响应OUT事务ACK表示接收正常
+                                case 0x01:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
-                                case 0x82:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                                case 0x82:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
-                                case 0x02:      //清零_TOG和_R_RES这三位，并将后者写成_ACK，响应OUT事务ACK表示接收正常
+                                case 0x02:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
                                     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
-                                case 0x83:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                                case 0x83:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
-                                case 0x03:      //清零_TOG和_R_RES这三位，并将后者写成_ACK，响应OUT事务ACK表示接收正常
+                                case 0x03:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
                                     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
-                                case 0x85:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                                case 0x85:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP5_CTRL = (R8_UEP5_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
-                                case 0x05:      //清零_TOG和_R_RES这三位，并将后者写成_ACK，响应OUT事务ACK表示接收正常
+                                case 0x05:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
                                     R8_UEP5_CTRL = (R8_UEP5_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
-                                case 0x86:      //清零_TOG和_T_RES这三位，并将后者写成_NAK，响应IN事务NAK表示无数据返回
+                                case 0x86:      // Clear the three bits of _TOG and _T_RES, and write the latter as _NAK, and respond to IN transaction NAK that means no data is returned.
                                     R8_UEP6_CTRL = (R8_UEP6_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
                                     break;
-                                case 0x06:      //清零_TOG和_R_RES这三位，并将后者写成_ACK，响应OUT事务ACK表示接收正常
+                                case 0x06:      // Clear the three bits of _TOG and _R_RES, and write the latter as _ACK, and respond to OUT transaction ACK that indicates normal reception.
                                     R8_UEP6_CTRL = (R8_UEP6_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
                                     break;
                                 default:
-                                    errflag = 0xFF; // 不支持的端点
+                                    errflag = 0xFF; // Unsupported endpoints
                                     break;
                             }
                         }
-                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) //判断是不是设备特征（用于设备唤醒）
+                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) // Determine whether it is a device feature (used to wake up the device)
                         {
 #if CONFIG_USB_DEBUG
                             PRINT( "清睡眠\n" );
 #endif
-                            if( pSetupReqPak->wValue == 1 )   //唤醒标志位为1
+                            if( pSetupReqPak->wValue == 1 )   // The wake-up flag is 1
                             {
-                                USB_SleepStatus &= ~HOST_SET_FEATURE;   //最低位清零
+                                USB_SleepStatus &= ~HOST_SET_FEATURE;   // Clear the lowest position
                                 USB_SleepStatus |= HOST_WAKEUP_ENABLE;
                             }
                         }
@@ -1214,57 +1206,57 @@ void USB_IRQ_trans_process( void )
                     }
                         break;
 
-                    case USB_SET_FEATURE:       //开启USB设备的特征/功能。可以是设备或是端点层面上的。
-                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) //判断是不是端点特征（使端点停止工作）
+                    case USB_SET_FEATURE:       // Turn on the features/functions of the USB device.It can be at the device or endpoint level.
+                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) // Determine whether it is an endpoint feature (make the endpoint stop working)
                         {
-                            /* 端点 */
+                            /* Endpoint */
                             switch( pSetupReqPak->wIndex )
-                            //判断索引
-                            {//16位的最高位判断数据传输方向，0为OUT，1为IN。低位为端点号。
-                                case 0x81:      //清零_TOG和_T_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                            // Judge index
+                            {// The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
+                                case 0x81:      // Clear _TOG and _T_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                                     break;
-                                case 0x01:      //清零_TOG和_R_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x01:      // Clear _TOG and _R_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                                     break;
-                                case 0x82:      //清零_TOG和_T_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x82:      // Clear _TOG and _T_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                                     break;
-                                case 0x02:      //清零_TOG和_R_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x02:      // Clear _TOG and _R_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                                     break;
-                                case 0x83:      //清零_TOG和_T_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x83:      // Clear _TOG and _T_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                                     break;
-                                case 0x03:      //清零_TOG和_R_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x03:      // Clear _TOG and _R_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                                     break;
-                                case 0x85:      //清零_TOG和_T_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x85:      // Clear _TOG and _T_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP5_CTRL = (R8_UEP5_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                                     break;
-                                case 0x05:      //清零_TOG和_R_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x05:      // Clear _TOG and _R_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP5_CTRL = (R8_UEP5_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                                     break;
-                                case 0x86:      //清零_TOG和_T_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x86:      // Clear _TOG and _T_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP6_CTRL = (R8_UEP6_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_STALL;
                                     break;
-                                case 0x06:      //清零_TOG和_R_RES三位，并将后者写成_STALL，根据主机指令停止端点的工作
+                                case 0x06:      // Clear _TOG and _R_RES, and write the latter as _STALL to stop the endpoint's work according to the host instruction.
                                     R8_UEP6_CTRL = (R8_UEP6_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_STALL;
                                     break;
                                 default:
-                                    /* 不支持的端点 */
-                                    errflag = 0xFF; // 不支持的端点
+                                    /* Unsupported endpoints */
+                                    errflag = 0xFF; // Unsupported endpoints
                                     break;
                             }
                         }
-                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) //判断是不是设备特征（使设备休眠）
+                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) // Determine whether it is a device feature (make the device sleepy)
                         {
 #if CONFIG_USB_DEBUG
                             PRINT( "设置睡眠\n" );
 #endif
                             if( pSetupReqPak->wValue == 1 )
                             {
-                                USB_SleepStatus |= HOST_SET_FEATURE;    //设置睡眠
+                                USB_SleepStatus |= HOST_SET_FEATURE;    // Setting up sleep
                             }
                         }
                         else
@@ -1273,82 +1265,82 @@ void USB_IRQ_trans_process( void )
                         }
                         break;
 
-                    case USB_GET_INTERFACE:     //主机想获得接口当前工作的选择设置值
+                    case USB_GET_INTERFACE:     // The host wants to obtain the selection setting value for the interface currently working
                         pEP0_DataBuf[0] = 0x00;
                         if( SetupReqLen > 1 )
-                            SetupReqLen = 1;    //将数据阶段的字节数置1。因为待传数据只有一个字节
+                            SetupReqLen = 1;    // Set the number of bytes in the data stage by 1.Because there is only one byte of data to be transmitted
                         break;
 
-                    case USB_SET_INTERFACE:     //主机想激活设备的某个接口
+                    case USB_SET_INTERFACE:     // The host wants to activate an interface of the device
                         break;
 
-                    case USB_GET_STATUS:        //主机想获得设备、接口或是端点的状态
-                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) //判断是否为端点状态
+                    case USB_GET_STATUS:        // The host wants to obtain the status of the device, interface, or endpoint
+                        if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP ) // Determine whether it is endpoint status
                         {
-                            /* 端点 */
+                            /* Endpoint */
                             pEP0_DataBuf[0] = 0x00;
                             switch( pSetupReqPak->wIndex )
-                            {       //16位的最高位判断数据传输方向，0为OUT，1为IN。低位为端点号。
-                                case 0x81:      //判断_TOG和_T_RES三位，若处于STALL状态，进if语句
+                            {       // The highest bit of 16 bits determines the data transmission direction, 0 is OUT and 1 is IN.The low position is the endpoint number.
+                                case 0x81:      // Judgment _TOG and _T_RES, if in STALL state, enter if statement
                                     if( (R8_UEP1_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL )
                                     {
-                                        pEP0_DataBuf[0] = 0x01; //返回D0为1，表示端点被停止工作了。该位由SET_FEATURE和CLEAR_FEATURE命令配置。
+                                        pEP0_DataBuf[0] = 0x01; // Returning D0 is 1, indicating that the endpoint has stopped working.This bit is configured by the SET_FEATURE and CLEAR_FEATURE commands.
                                     }
                                     break;
 
-                                case 0x01:      //判断_TOG和_R_RES三位，若处于STALL状态，进if语句
+                                case 0x01:      // Judge the three digits _TOG and _R_RES, if in STALL state, enter the if statement
                                     if( (R8_UEP1_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL )
                                     {
                                         pEP0_DataBuf[0] = 0x01;
                                     }
                                     break;
-                                case 0x82:      //判断_TOG和_T_RES三位，若处于STALL状态，进if语句
+                                case 0x82:      // Judgment _TOG and _T_RES, if in STALL state, enter if statement
                                     if( (R8_UEP2_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL )
                                     {
-                                        pEP0_DataBuf[0] = 0x01; //返回D0为1，表示端点被停止工作了。该位由SET_FEATURE和CLEAR_FEATURE命令配置。
+                                        pEP0_DataBuf[0] = 0x01; // Returning D0 is 1, indicating that the endpoint has stopped working.This bit is configured by the SET_FEATURE and CLEAR_FEATURE commands.
                                     }
                                     break;
 
-                                case 0x02:      //判断_TOG和_R_RES三位，若处于STALL状态，进if语句
+                                case 0x02:      // Judge the three digits _TOG and _R_RES, if in STALL state, enter the if statement
                                     if( (R8_UEP2_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL )
                                     {
                                         pEP0_DataBuf[0] = 0x01;
                                     }
                                     break;
-                                case 0x83:      //判断_TOG和_T_RES三位，若处于STALL状态，进if语句
+                                case 0x83:      // Judgment _TOG and _T_RES, if in STALL state, enter if statement
                                     if( (R8_UEP3_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL )
                                     {
-                                        pEP0_DataBuf[0] = 0x01; //返回D0为1，表示端点被停止工作了。该位由SET_FEATURE和CLEAR_FEATURE命令配置。
+                                        pEP0_DataBuf[0] = 0x01; // Returning D0 is 1, indicating that the endpoint has stopped working.This bit is configured by the SET_FEATURE and CLEAR_FEATURE commands.
                                     }
                                     break;
 
-                                case 0x03:      //判断_TOG和_R_RES三位，若处于STALL状态，进if语句
+                                case 0x03:      // Judge the three digits _TOG and _R_RES, if in STALL state, enter the if statement
                                     if( (R8_UEP3_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL )
                                     {
                                         pEP0_DataBuf[0] = 0x01;
                                     }
                                     break;
-                                case 0x85:      //判断_TOG和_T_RES三位，若处于STALL状态，进if语句
+                                case 0x85:      // Judgment _TOG and _T_RES, if in STALL state, enter if statement
                                     if( (R8_UEP5_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL )
                                     {
-                                        pEP0_DataBuf[0] = 0x01; //返回D0为1，表示端点被停止工作了。该位由SET_FEATURE和CLEAR_FEATURE命令配置。
+                                        pEP0_DataBuf[0] = 0x01; // Returning D0 is 1, indicating that the endpoint has stopped working.This bit is configured by the SET_FEATURE and CLEAR_FEATURE commands.
                                     }
                                     break;
 
-                                case 0x05:      //判断_TOG和_R_RES三位，若处于STALL状态，进if语句
+                                case 0x05:      // Judge the three digits _TOG and _R_RES, if in STALL state, enter the if statement
                                     if( (R8_UEP5_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL )
                                     {
                                         pEP0_DataBuf[0] = 0x01;
                                     }
                                     break;
-                                case 0x86:      //判断_TOG和_T_RES三位，若处于STALL状态，进if语句
+                                case 0x86:      // Judgment _TOG and _T_RES, if in STALL state, enter if statement
                                     if( (R8_UEP6_CTRL & (RB_UEP_T_TOG | MASK_UEP_T_RES)) == UEP_T_RES_STALL )
                                     {
-                                        pEP0_DataBuf[0] = 0x01; //返回D0为1，表示端点被停止工作了。该位由SET_FEATURE和CLEAR_FEATURE命令配置。
+                                        pEP0_DataBuf[0] = 0x01; // Returning D0 is 1, indicating that the endpoint has stopped working.This bit is configured by the SET_FEATURE and CLEAR_FEATURE commands.
                                     }
                                     break;
 
-                                case 0x06:      //判断_TOG和_R_RES三位，若处于STALL状态，进if语句
+                                case 0x06:      // Judge the three digits _TOG and _R_RES, if in STALL state, enter the if statement
                                     if( (R8_UEP6_CTRL & (RB_UEP_R_TOG | MASK_UEP_R_RES)) == UEP_R_RES_STALL )
                                     {
                                         pEP0_DataBuf[0] = 0x01;
@@ -1356,22 +1348,22 @@ void USB_IRQ_trans_process( void )
                                     break;
                             }
                         }
-                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) //判断是否为设备状态
+                        else if( (pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_DEVICE ) // Determine whether it is the device status
                         {
                             pEP0_DataBuf[0] = 0x00;
-                            if( USB_SleepStatus&HOST_SET_FEATURE )     //如果设备处于睡眠状态
+                            if( USB_SleepStatus&HOST_SET_FEATURE )     // If the device is sleeping
                             {
-                                pEP0_DataBuf[0] = 0x02;     //最低位D0为0，表示设备由总线供电，为1表示设备自供电。 D1位为1表示支持远程唤醒，为0表示不支持。
+                                pEP0_DataBuf[0] = 0x02;     // The lowest bit D0 is 0, which means the device is powered by the bus, and 1 means the device is powered by the device.A D1 bit of 1 means that remote wake-up is supported, and a 0 means that it is not supported.
                             }
                             else
                             {
                                 pEP0_DataBuf[0] = 0x00;
                             }
                         }
-                        pEP0_DataBuf[1] = 0;    //返回状态信息的格式为16位数，高八位保留为0
+                        pEP0_DataBuf[1] = 0;    // The format of the return status information is 16 digits, and the high eight digits are reserved as 0
                         if( SetupReqLen >= 2 )
                         {
-                            SetupReqLen = 2;    //将数据阶段的字节数置2。因为待传数据只有2个字节
+                            SetupReqLen = 2;    // Set the number of bytes in the data stage by 2.Because there are only 2 bytes of data to be transferred
                         }
                         break;
 
@@ -1380,7 +1372,7 @@ void USB_IRQ_trans_process( void )
                         break;
                 }
             }
-            if( errflag == 0xff ) // 错误或不支持
+            if( errflag == 0xff ) // Error or not supported
             {
                 //                  SetupReqCode = 0xFF;
                 R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL; // STALL
@@ -1391,37 +1383,37 @@ void USB_IRQ_trans_process( void )
             }
             else
             {
-                if( chtype & 0x80 )   // 上传。最高位为1，数据传输方向为设备向主机传输。
+                if( chtype & 0x80 )   // Upload.The highest bit is 1, and the data transmission direction is the transmission of the device to the host.
                 {
                     len = (SetupReqLen > DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
                     SetupReqLen -= len;
                 }
                 else
-                    len = 0;        // 下传。最高位为0，数据传输方向为主机向设备传输。
+                    len = 0;        // Download.The highest bit is 0, and the data transmission direction is the transmission of the host to the device.
                 R8_UEP0_T_LEN = len;
-                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK;     // 默认数据包是DATA1
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK;     // The default packet is DATA1
             }
 
-            R8_USB_INT_FG = RB_UIF_TRANSFER;    //写1清中断标识
+            R8_USB_INT_FG = RB_UIF_TRANSFER;    // Write 1 clear interrupt flag
         }
     }
 
-    else if( intflag & RB_UIF_BUS_RST )   //判断_INT_FG中的总线复位标志位，为1触发
+    else if( intflag & RB_UIF_BUS_RST )   // Determine the bus reset flag bit in _INT_FG, triggered by 1.
     {
         USB_READY_FLAG = 1;
         tmos_stop_task(tran_taskID, SBP_ENTER_SLEEP_EVT);
-        R8_USB_DEV_AD = 0;      //设备地址写成0，待主机重新分配给设备一个新地址
-        R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;   //把端点0的控制寄存器，写成：接收响应响应ACK表示正常收到，发送响应NAK表示没有数据要返回
+        R8_USB_DEV_AD = 0;      // The device address is written as 0, and the host will reassign a new address to the device.
+        R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;   // Write the control register of endpoint 0 as: the reception response ACK means normal reception, and the transmission response NAK means no data to be returned.
         R8_UEP1_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
         R8_UEP2_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
         R8_UEP3_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
         R8_UEP5_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
         R8_UEP6_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-        R8_USB_INT_FG = RB_UIF_BUS_RST; //写1清中断标识
+        R8_USB_INT_FG = RB_UIF_BUS_RST; // Write 1 clear interrupt flag
     }
-    else if( intflag & RB_UIF_SUSPEND )   //判断_INT_FG中的总线挂起或唤醒事件中断标志位。挂起和唤醒都会触发此中断
+    else if( intflag & RB_UIF_SUSPEND )   // Determines the bus suspend or wake-up event interrupt flag in _INT_FG.Both hang and wake up trigger this interrupt
     {
-        if( R8_USB_MIS_ST & RB_UMS_SUSPEND )  //取得杂项状态寄存器中的挂起状态位，为1表示USB总线处于挂起态，为0表示总线处于非挂起态
+        if( R8_USB_MIS_ST & RB_UMS_SUSPEND )  // Get the suspend status bit in the miscellaneous status register. It is 1 that indicates that the USB bus is in a suspended state, and it is 0 that indicates that the bus is in a non-hanged state.
         {
             USB_READY_FLAG = 0;
             USB_SleepStatus |= HOST_SET_SUSPEND;
@@ -1432,8 +1424,8 @@ void USB_IRQ_trans_process( void )
 #if CONFIG_USB_DEBUG
             PRINT( "Ready_Sleep = %x\n", USB_SleepStatus );
 #endif
-        } // 挂起     //当设备处于空闲状态超过3ms，主机会要求设备挂起（类似于电脑休眠）
-        else    //挂起或唤醒中断被触发，又没有被判断为挂起
+        } // Hang // When the device is idle for more than 3ms, the host requires the device to hang (similar to computer hibernation)
+        else    // The suspend or wake-up interrupt is triggered and is not judged to be suspended
         {
             USB_READY_FLAG = 1;
             USB_SleepStatus &= ~HOST_SET_SUSPEND;
@@ -1442,31 +1434,30 @@ void USB_IRQ_trans_process( void )
 #if CONFIG_USB_DEBUG
             PRINT( "Ready_WeakUp = %x\n", USB_SleepStatus );
 #endif
-        } // 唤醒
-        R8_USB_INT_FG = RB_UIF_SUSPEND; //写1清中断标志
+        } // wake
+        R8_USB_INT_FG = RB_UIF_SUSPEND; // Write 1 clear interrupt sign
     }
     else
     {
-        R8_USB_INT_FG = intflag;    //_INT_FG中没有中断标识，再把原值写回原来的寄存器
+        R8_USB_INT_FG = intflag;    // There is no interrupt flag in _INT_FG, and then write the original value back to the original register
     }
 }
 
-/*********************************************************************
- * @fn      USB_IRQHandler
- *
- * @brief   USB中断函数
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn USB_IRQHandler
+*
+* @brief USB interrupt function
+*
+* @return none */
 __attribute__((interrupt("WCH-Interrupt-fast")))
 __attribute__((section(".highcode")))
-void USB_IRQHandler( void ) /* USB中断服务程序,使用寄存器组1 */
+void USB_IRQHandler( void ) /* USB interrupt service program, use register group 1 */
 {
-    intflag = R8_USB_INT_FG;        //取得中断标识寄存器的值
+    intflag = R8_USB_INT_FG;        // Get the value of the interrupt identification register
 
-    if( intflag & RB_UIF_TRANSFER )   //判断_INT_FG中的USB传输完成中断标志位。若有传输完成中断了，进if语句
+    if( intflag & RB_UIF_TRANSFER )   // Determines the USB transmission completion interrupt flag in _INT_FG.If the transmission is interrupted, enter the if statement
     {
-        if( R8_USB_INT_ST & RB_UIS_SETUP_ACT ) // Setup包处理
+        if( R8_USB_INT_ST & RB_UIS_SETUP_ACT ) // Setup package processing
         {
             R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
         }

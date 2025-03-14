@@ -12,20 +12,19 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      ADC_DataCalib_Rough
- *
- * @brief   采样数据粗调,获取偏差值,必须先配置ADC后调用此函数获取校准值
- *
- * @param   none
- *
- * @return  偏差
- */
+/* ***************************************************************************
+* @fn ADC_DataCalib_Rough
+*
+* @brief sample data to roughly tune, get the deviation value, you must first configure the ADC and then call this function to get the calibration value
+*
+* @param none
+*
+* @return deviation */
 signed short ADC_DataCalib_Rough(void) // Sampling data roughly tuned to obtain deviation value
 {
     uint16_t i;
     uint32_t sum = 0;
-    uint8_t  ch = 0;   // 备份通道
+    uint8_t  ch = 0;   // Backup channel
     uint8_t  cfg = 0;   // Backup
 
     ch = R8_ADC_CHANNEL;
@@ -144,15 +143,14 @@ void TouchKey_ChSampInit(void)
     R8_TKEY_CFG |= RB_TKEY_PWR_ON;
 }
 
-/*********************************************************************
- * @fn      ADC_ExcutSingleConver
- *
- * @brief   ADC执行单次转换
- *
- * @param   none
- *
- * @return  ADC转换后的数据
- */
+/* ***************************************************************************
+* @fn ADC_ExcutSingleConver
+*
+* @brief ADC performs a single conversion
+*
+* @param none
+*
+* @return ADC converted data */
 uint16_t ADC_ExcutSingleConver(void)
 {
     R8_ADC_CONVERT |= RB_ADC_START;

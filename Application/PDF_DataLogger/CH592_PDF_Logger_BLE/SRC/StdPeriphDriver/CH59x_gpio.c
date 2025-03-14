@@ -125,12 +125,12 @@ void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
             R32_PA_CLR |= pin;
             break;
 
-        case GPIO_ITMode_HighLevel: // 高电平触发
+        case GPIO_ITMode_HighLevel: // High level trigger
             R16_PA_INT_MODE &= ~pin;
             R32_PA_OUT |= pin;
             break;
 
-        case GPIO_ITMode_FallEdge: // 下降沿触发
+        case GPIO_ITMode_FallEdge: // Falling edge trigger
             R16_PA_INT_MODE |= pin;
             R32_PA_CLR |= pin;
             break;
@@ -147,16 +147,15 @@ void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
     R16_PA_INT_EN |= pin;
 }
 
-/*********************************************************************
- * @fn      GPIOB_ITModeCfg
- *
- * @brief   GPIOB引脚中断模式配置
- *
- * @param   pin     - PB0-PB23
- * @param   mode    - 触发类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOB_ITModeCfg
+*
+* @brief GPIOB pin interrupt mode configuration
+*
+* @param pin - PB0-PB23
+* @param mode - Trigger type
+*
+* @return none */
 void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
 {
     uint32_t Pin = pin | ((pin & (GPIO_Pin_22 | GPIO_Pin_23)) >> 14);
@@ -167,17 +166,17 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
             R32_PB_CLR |= pin;
             break;
 
-        case GPIO_ITMode_HighLevel: // 高电平触发
+        case GPIO_ITMode_HighLevel: // High level trigger
             R16_PB_INT_MODE &= ~Pin;
             R32_PB_OUT |= pin;
             break;
 
-        case GPIO_ITMode_FallEdge: // 下降沿触发
+        case GPIO_ITMode_FallEdge: // Falling edge trigger
             R16_PB_INT_MODE |= Pin;
             R32_PB_CLR |= pin;
             break;
 
-        case GPIO_ITMode_RiseEdge: // 上升沿触发
+        case GPIO_ITMode_RiseEdge: // Rising edge trigger
             R16_PB_INT_MODE |= Pin;
             R32_PB_OUT |= pin;
             break;
@@ -189,30 +188,29 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
     R16_PB_INT_EN |= Pin;
 }
 
-/*********************************************************************
- * @fn      GPIOPinRemap
- *
- * @brief   外设功能引脚映射
- *
- * @param   s       - 是否使能映射
- * @param   perph   - RB_RF_ANT_SW_EN -  RF antenna switch control output on PA4/PA5/PA12/PA13/PA14/PA15
- *                    RB_PIN_U0_INV -  RXD0/RXD0_/TXD0/TXD0_ invert input/output
- *                    RB_PIN_INTX   -  INTX: INT24/INT25 PB8/PB9 -> INT24_/INT25_ PB22/PB23
- *                    RB_PIN_MODEM  -  MODEM: PA6/PA7 -> PB12/PB13
- *                    RB_PIN_I2C    -  I2C: PB14/PB15 -> PB14/PB15
- *                    RB_PIN_PWMX   -  PWMX: PA12/PA13 -> PA6/PA7
- *                    RB_PIN_SPI0   -  SPI0:  PA12/PA13/PA14/PA15 -> PB12/PB13/PB14/PB15
- *                    RB_PIN_UART3  -  UART3: PA4/PA5 ->  PA4/PA5
- *                    RB_PIN_UART2  -  UART2: PB22/PB23 ->  PA6/PA7
- *                    RB_PIN_UART1  -  UART1: PA8/PA9 ->  PB12/PB13
- *                    RB_PIN_UART0  -  UART0: PB4/PB7 ->  PA15/PA14
- *                    RB_PIN_TMR3   -  TMR2:  PB22 ->  PB22
- *                    RB_PIN_TMR2   -  TMR2:  PA11 ->  PB11
- *                    RB_PIN_TMR1   -  TMR1:  PA10 ->  PB10
- *                    RB_PIN_TMR0   -  TMR0:  PA9 ->  PB23
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOPinRemap
+*
+* @brief Peripheral Function Pin Mapping
+*
+* @param s - Whether to enable mapping
+* @param perph - RB_RF_ANT_SW_EN - RF antenna switch control output on PA4/PA5/PA12/PA13/PA14/PA15
+* RB_PIN_U0_INV - RXD0/RXD0_/TXD0/TXD0_ invert input/output
+* RB_PIN_INTX - INTX: INT24/INT25 PB8/PB9 -> INT24_/INT25_ PB22/PB23
+* RB_PIN_MODEM - MODEM: PA6/PA7 -> PB12/PB13
+* RB_PIN_I2C - I2C: PB14/PB15 -> PB14/PB15
+* RB_PIN_PWMX - PWMX: PA12/PA13 -> PA6/PA7
+* RB_PIN_SPI0 - SPI0: PA12/PA13/PA14/PA15 -> PB12/PB13/PB14/PB15
+* RB_PIN_UART3 - UART3: PA4/PA5 -> PA4/PA5
+* RB_PIN_UART2 - UART2: PB22/PB23 -> PA6/PA7
+* RB_PIN_UART1 - UART1: PA8/PA9 -> PB12/PB13
+* RB_PIN_UART0 - UART0: PB4/PB7 -> PA15/PA14
+* RB_PIN_TMR3 - TMR2: PB22 -> PB22
+* RB_PIN_TMR2 - TMR2: PA11 -> PB11
+* RB_PIN_TMR1 - TMR1: PA10 -> PB10
+* RB_PIN_TMR0 - TMR0: PA9 -> PB23
+*
+* @return none */
 void GPIOPinRemap(FunctionalState s, uint16_t perph)
 {
     if(s)

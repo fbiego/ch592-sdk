@@ -59,18 +59,16 @@ extern uint16_t FlashSectorCount;
  * GLOBAL FUNCTIONS
  */
 
-/**
- * @brief   硬件初始化
- */
+/* *
+* @brief hardware initialization */
 extern void HAL_Init(void);
 
-/**
- * @brief   硬件层事务处理
- *
- * @param   task_id - The TMOS assigned task ID.
- * @param   events - events to process.  This is a bit map and can
- *                   contain more than one event.
- */
+/* *
+* @brief   硬件层事务处理
+*
+* @param   task_id - The TMOS assigned task ID.
+* @param   events - events to process.  This is a bit map and can
+*                   contain more than one event. */
 extern tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events);
 
 /**
@@ -85,9 +83,8 @@ extern void CH59x_BLEInit(void);
  */
 extern uint16_t HAL_GetInterTempValue(void);
 
-/**
- * @brief   内部32k校准
- */
+/* *
+* @brief internal 32k calibration */
 extern void Lib_Calibration_LSI(void);
 
 /*********************************************************************

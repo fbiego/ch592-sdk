@@ -82,7 +82,7 @@ uint8_t UserOptionByteConfig(FunctionalState RESET_EN, FunctionalState BOOT_PIN,
             s &= RESET_Disable;
 
         /* bit[7:0]-bit[31-24] */
-        s |= ((~(s << 24)) & 0xFF000000); //高8位 配置信息取反；
+        s |= ((~(s << 24)) & 0xFF000000); // High 8 bits configuration information inverted;
 
         if(BOOT_PIN == ENABLE)
             s |= BOOT_PIN_PB22;
@@ -126,11 +126,11 @@ uint8_t UserOptionByteClose_SWD(void)
     {
         FLASH_EEPROM_CMD(CMD_GET_ROM_INFO, 0x7EFFC, &s, 4);
 
-        s &= ~((1 << 4) | (1 << 7)); //禁用调试功能， 禁用SPI读写FLASH
+        s &= ~((1 << 4) | (1 << 7)); // Disable debugging function, disable SPI read and write FLASH
 
         /* bit[7:0]-bit[31-24] */
         s &= 0x00FFFFFF;
-        s |= ((~(s << 24)) & 0xFF000000); //高8位 配置信息取反；
+        s |= ((~(s << 24)) & 0xFF000000); // High 8 bits configuration information inverted;
 
         /*Write user option byte*/
         FLASH_ROM_WRITE(0x14, &s, 4);

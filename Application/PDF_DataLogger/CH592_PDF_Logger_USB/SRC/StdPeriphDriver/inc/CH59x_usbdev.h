@@ -17,14 +17,14 @@
 extern "C" {
 #endif
 
-/* HID类请求 */
+/* HID class request */
 #define DEF_USB_GET_IDLE           0x02                                         /* get idle for key or mouse */
 #define DEF_USB_GET_PROTOCOL       0x03                                         /* get protocol for bios type */
 #define DEF_USB_SET_REPORT         0x09                                         /* set report for key */
 #define DEF_USB_SET_IDLE           0x0A                                         /* set idle for key or mouse */
 #define DEF_USB_SET_PROTOCOL       0x0B                                         /* set protocol for bios type */
 
-/* 以下缓存区是USB模块收发使用的数据缓冲区，总共9个通道（9块缓存），用户可根据实际使用的通道数定义相应缓存区 */
+/* The following cache area is the data buffer used by USB module to send and receive, with a total of 9 channels (9 caches). Users can define the corresponding cache area based on the actual number of channels used. */
 extern uint8_t *pEP0_RAM_Addr; //ep0(64)+ep4_out(64)+ep4_in(64)
 extern uint8_t *pEP1_RAM_Addr; //ep1_out(64)+ep1_in(64)
 extern uint8_t *pEP2_RAM_Addr; //ep2_out(64)+ep2_in(64)
@@ -41,42 +41,36 @@ extern uint8_t *pEP3_RAM_Addr; //ep3_out(64)+ep3_in(64)
 #define pEP4_OUT_DataBuf      (pEP0_RAM_Addr + 64)
 #define pEP4_IN_DataBuf       (pEP0_RAM_Addr + 128)
 
-/**
- * @brief   USB设备功能初始化，4个端点，8个通道。
- */
+/* *
+* @brief USB device function initialization, 4 endpoints, 8 channels. */
 void USB_DeviceInit(void);
 
-/**
- * @brief   USB设备应答传输处理
- */
+/* *
+* @brief USB device reply transmission processing */
 void USB_DevTransProcess(void);
 
-/**
- * @brief   端点1下传数据处理
- *
- * @param   l   - 待处理数据长度(<64B)
- */
+/* *
+* @brief endpoint 1 download data processing
+*
+* @param l - Pending data length (<64B) */
 void DevEP1_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点2下传数据处理
- *
- * @param   l   - 待处理数据长度(<64B)
- */
+/* *
+* @brief endpoint 2 download data processing
+*
+* @param l - Pending data length (<64B) */
 void DevEP2_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点3下传数据处理
- *
- * @param   l   - 待处理数据长度(<64B)
- */
+/* *
+* @brief endpoint 3 download data processing
+*
+* @param l - Pending data length (<64B) */
 void DevEP3_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点4下传数据处理
- *
- * @param   l   - 待处理数据长度(<64B)
- */
+/* *
+* @brief endpoint 4 download data processing
+*
+* @param l - Pending data length (<64B) */
 void DevEP4_OUT_Deal(uint8_t l);
 
 /**
@@ -93,18 +87,16 @@ void DevEP1_IN_Deal(uint8_t l);
  */
 void DevEP2_IN_Deal(uint8_t l);
 
-/**
- * @brief   端点3数据上传
- *
- * @param   l   - 上传数据长度(<64B)
- */
+/* *
+* @brief Endpoint 3 data upload
+*
+* @param l - Upload data length (<64B) */
 void DevEP3_IN_Deal(uint8_t l);
 
-/**
- * @brief   端点4数据上传
- *
- * @param   l   - 上传数据长度(<64B)
- */
+/* *
+* @brief Endpoint 4 data upload
+*
+* @param l - Upload data length (<64B) */
 void DevEP4_IN_Deal(uint8_t l);
 
 /**
@@ -121,23 +113,20 @@ void DevEP4_IN_Deal(uint8_t l);
  */
 #define EP2_GetINSta()    (R8_UEP2_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   查询端点3是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 3 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP3_GetINSta()    (R8_UEP3_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   查询端点4是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 4 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP4_GetINSta()    (R8_UEP4_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   关闭USB上拉电阻
- */
+/* *
+* @brief Turn off USB pull-up resistor */
 #define USB_DisablePin()  (R16_PIN_ANALOG_IE &= ~(RB_PIN_USB_IE | RB_PIN_USB_DP_PU))
 
 /**

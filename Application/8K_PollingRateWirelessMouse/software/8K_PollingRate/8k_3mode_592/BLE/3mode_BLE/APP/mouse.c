@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "peripheral.h"
 #include "mouse.h"
 
@@ -29,30 +29,30 @@
 #define KEY_SCAN_DIV    1
 #define WHEEL_DIV       3
 
-// 3分钟一档睡眠，30分钟二档睡眠,未连接状态，30s进入深度睡眠
+// 3 minutes of sleep, 30 minutes of sleep, unconnected state, enter deep sleep in 30 seconds
 #define IDEL_SLEEP_TIMEOUT              1600*10
 #define DEEP_SLEEP_TIMEOUT              1600*60*3
 #define IDEL_DEEP_SLEEP_TIMEOUT         1600*30
 
-// 灯闪烁30s，频率为2Hz，配对30s超时，
+// The light flashes for 30s, the frequency is 2Hz, the pairing timeout is 30s,
 #define PAIRING_LED_BLINK_INTERVAL            1600*1/4
 #define PAIRING_LED_BLINK_TIMEOUT             1600*30
 
-// 如果BLE或者2.4G断开连接，闪烁30s，频率1Hz,则30s后关闭所有背光，进入低功耗Sleep休眠
+// If BLE or 2.4G is disconnected, flashes for 30s, and the frequency is 1Hz, then turn off all backlights after 30s and enter low-power Sleep sleep
 #define DISCONNECT_LED_BLINK_INTERVAL            1600*1/2
 #define DISCONNECT_LED_BLINK_TIMEOUT             1600*30
 
-// RGB指示常量后3秒关闭，省电
+// RGB indicator constant is turned off 3 seconds after , saving power
 #define RGB_LED_OFF_TIMEOUT             1600*3
 
 volatile uint8_t mouse_scan_flag=0;
 
 uint8_t work_mode = MODE_USB;
 
-#define MOUSE_DATA_LEN       8   // 1B命令码+1B按键+4B移动+1B滚轮+1B横向滚轮
+#define MOUSE_DATA_LEN       8   // 1B command code + 1B button + 4B movement + 1B roller + 1B horizontal roller
 uint8_t mouse_data[MOUSE_DATA_LEN]={CMD_MOUSE,0,0,0,0,0,0};
 
-#define KEY_SCAN_FILTER_COUNT_MAX       1   // 0表示但单次采样即输出，n表示n+1次采样相等才输出键值
+#define KEY_SCAN_FILTER_COUNT_MAX       1   // 0 means but a single sampling is output, n means n + 1 sampling is equal to output key value
 
 #define KEY_DETECTE_DELAY_US        5
 #define KEY_DETECTE_DELAY()      DelayUs(KEY_DETECTE_DELAY_US)
@@ -63,7 +63,7 @@ uint8_t mouse_data[MOUSE_DATA_LEN]={CMD_MOUSE,0,0,0,0,0,0};
 #define TABLE_IDX_SW_BLE        (3)
 #define TABLE_IDX_SW_24G        (2)
 
-// 长按按键个数
+// Press and hold the number of buttons
 #define KEY_TIMEOUT_NUM        1
 
 const uint8_t KEY_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
@@ -76,7 +76,7 @@ const uint8_t KEY_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
           0x01, 0x02, 0xE4, 0xE3
     };
 
-// 需要长按计时的按键
+// Need to hold the timing button long
 const uint8_t KEY_TIMER_TABLE[KEY_TABLE_R*KEY_TABLE_C]=
     {
         /* R0    R1       */
@@ -96,15 +96,15 @@ const uint32_t KEY_R_INDEX[KEY_TABLE_R]=
         KEY_R_0, KEY_R_1, KEY_R_2, KEY_R_3
     };
 
-//长按计时列表
+// Long press the timing list
 uint32_t key_timer_list[KEY_TIMEOUT_NUM]={0};
-//长按超时对应按键
+// Press and hold the corresponding button for timeout
 const uint8_t KEY_TIMEOUT_TABLE[KEY_TIMEOUT_NUM]=
     {
   /* C   DPI  */
         0xF0
     };
-//长按超时列表(s)
+// Long press and timeout list (s)
 const uint8_t KEY_TIMEOUT_LIST[KEY_TIMEOUT_NUM]=
     {
   /* C  DPI*/
@@ -120,8 +120,8 @@ uint8_t key_scan_filter_count_max=KEY_SCAN_FILTER_COUNT_MAX;
 
 uint32_t key_press_time=0;
 
-volatile uint8_t idel_sleep_flag=0; // 一档睡眠
-volatile uint8_t deep_sleep_flag=0; // 二档睡眠
+volatile uint8_t idel_sleep_flag=0; // One-stage sleep
+volatile uint8_t deep_sleep_flag=0; // Second-level sleep
 volatile uint8_t enter_sleep_flag=0; //
 
 uint8_t mouse_taskID=0;
@@ -130,7 +130,7 @@ uint8_t vbat_info=0;
 
 uint8_t led_blink_range=LED_BLINK_ALL;
 
-signed short RoughCalib_Value = 0; // ADC粗调偏差值
+signed short RoughCalib_Value = 0; // ADC coarse adjustment deviation value
 
 connect_status_t connect_state=CON_IDEL;
 
@@ -155,16 +155,15 @@ const uint8_t DPI_VALUE_RGB[DPI_MAX][RGB_MAX_IDX]=
 
 uint8_t mouse_get_batt_info(void);
 void mouse_motion_scan(void);
-/*********************************************************************
- * @fn      mouse_process_event
- *
- * @brief   mouse_process_event 事件处理
- *
- * @param   task_id - 任务ID
- * @param   events  - 事件标志
- *
- * @return  未完成事件
- */
+/* ***************************************************************************
+* @fn mouse_process_event
+*
+* @brief mouse_process_event event processing
+*
+* @param task_id - Task ID
+* @param events - Event flags
+*
+* @return Unfinished Event */
 uint16_t mouse_process_event(uint8_t task_id, uint16_t events)
 {
 
@@ -303,19 +302,19 @@ void peripheral_enter_sleep()
 //    PRINT("> %x %x %x\n",need_reset_bit,KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3|KEY_R_4|KEY_R_5
 //        |KEY_R_6|KEY_R_7|KEY_R_8|KEY_R_9|KEY_R_10|KEY_R_11|KEY_R_12
 //        |KEY_R_13|KEY_R_14|KEY_R_15|KEY_R_16|KEY_R_17,GPIOA_ReadPortPin(KEY_C_0|KEY_C_1|KEY_C_2|KEY_C_3|KEY_C_4|KEY_C_5));
-    // 由于切换模式开关挂载在按键扫描下，所以KEY_R_14相关的其余四个按键不支持唤醒
+    // Since the switch mode switch is mounted under key scanning, the other four keys related to KEY_R_14 do not support wake-up
     if(!need_reset_bit)
     {
         PRINT("ERR \n");
     }
     GPIOA_ResetBits(need_reset_bit);
-    /* 配置唤醒源为 GPIO _ */
+    /* Configure the wakeup source as GPIO_ */
     GPIOA_ClearITFlagBit( EC_A|EC_B|SPI_MOTION);
     GPIOB_ClearITFlagBit( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3);
 
     GPIOA_ITModeCfg( SPI_MOTION, GPIO_ITMode_LowLevel );
-//    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3, GPIO_ITMode_LowLevel ); // 下降沿唤醒
-    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2, GPIO_ITMode_LowLevel ); // 下降沿唤醒
+// GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2|KEY_R_3, GPIO_ITMode_LowLevel); // Wake up on the falling edge
+    GPIOB_ITModeCfg( KEY_R_0|KEY_R_1|KEY_R_2, GPIO_ITMode_LowLevel ); // Wake up on the falling edge
     if(EC_A_ST)
         GPIOA_ITModeCfg( EC_A, GPIO_ITMode_LowLevel );
     else
@@ -357,16 +356,15 @@ void peripheral_enter_sleep()
     PWR_PeriphWakeUpCfg( ENABLE, RB_SLP_GPIO_WAKE, Long_Delay );
 }
 
-/*******************************************************************************
- * @fn      peripheral_exit_sleep
- *
- * @brief   非按键唤醒，可能是收到了上位机数据唤醒
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn peripheral_exit_sleep
+*
+* @brief Not wake up with key press, it may be that the data wakeup of the host computer is received
+*
+* @return None. */
 void peripheral_exit_sleep()
 {
-    // 关中断
+    // Guanzhongduo
     access_weakup();
     idel_sleep_flag = FALSE;
     deep_sleep_flag = FALSE;
@@ -379,13 +377,12 @@ void peripheral_exit_sleep()
     PRINT("exit\n");
 }
 
-/*********************************************************************
- * @fn      peripheral_pairing_cb
- *
- * @brief   配对新设备，2HZ快速闪烁
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn peripheral_pairing_cb
+*
+* @brief pairing new device, 2HZ flashes quickly
+*
+* @return none */
 void peripheral_pairing_cb()
 {
     connect_state = CON_NEW_PAIRING;
@@ -399,13 +396,12 @@ void peripheral_pairing_cb()
     }
 }
 
-/*********************************************************************
- * @fn      peripheral_connecting_cb
- *
- * @brief   广播等待连接中。1Hz闪烁
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn peripheral_connecting_cb
+*
+* @brief The broadcast is waiting for the connection.1Hz flashing
+*
+* @return none */
 void peripheral_connecting_cb()
 {
     connect_state = CON_CONNECTING;
@@ -419,13 +415,12 @@ void peripheral_connecting_cb()
     }
 }
 
-/*********************************************************************
- * @fn      peripheral_disconnected_cb
- *
- * @brief   如果BLE或者2.4G断开连接，数字键这一行（对应R1这行）闪烁30s，频率1Hz，则30s后关闭所有背光，进入低功耗Sleep休眠。
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn peripheral_disconnected_cb
+*
+* @brief If BLE or 2.4G is disconnected, the line of the numeric keys (corresponding to the line of R1) flashes for 30s and the frequency is 1Hz. Then, after 30s, all backlights will be turned off and low-power Sleep sleep will be entered.
+*
+* @return none */
 void peripheral_disconnected_cb()
 {
     connect_state = CON_IDEL;
@@ -469,13 +464,12 @@ void peripheral_pilot_led_receive(uint8_t led)
 }
 
 
-/*********************************************************************
- * @fn      GPIOA_IRQHandler
- *
- * @brief   GPIOA中断函数,说明被唤醒了
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOA_IRQHandler
+*
+* @brief GPIOA interrupt function, indicating that it has been awakened
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void GPIOA_IRQHandler( void )
@@ -483,18 +477,17 @@ void GPIOA_IRQHandler( void )
     PRINT("AQ %x\n",R16_PA_INT_IF);
     GPIOA_ClearITFlagBit( 0xFFFF );
     mouse_scan_flag = 1;
-    // 停止睡眠
+    // Stop sleeping
     R16_PA_INT_EN = 0;
     R16_PB_INT_EN = 0;
 }
 
-/*********************************************************************
- * @fn      GPIOB_IRQHandler
- *
- * @brief   GPIOB中断函数,说明被唤醒了
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOB_IRQHandler
+*
+* @brief GPIOB interrupt function, indicating that it has been awakened
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void GPIOB_IRQHandler( void )
@@ -502,7 +495,7 @@ void GPIOB_IRQHandler( void )
     PRINT("BQ %x\n",R16_PB_INT_IF);
     GPIOB_ClearITFlagBit( 0xFFFF );
     mouse_scan_flag = 1;
-    // 停止睡眠
+    // Stop sleeping
     R16_PA_INT_EN = 0;
     R16_PB_INT_EN = 0;
 }
@@ -526,10 +519,10 @@ void mouse_init()
 
     paw3395_init();
     GPIOA_ResetBits(SPI_CS);
-    paw3395_write_byte(PAW_RUN_DOWNSHIFT,0xED);//3s 进rest1
+    paw3395_write_byte(PAW_RUN_DOWNSHIFT,0xED);// 3S è� ›Rest1
     paw3395_write_byte(PAW_REST_DOWNSHIFT_MULT,0x77);
-    paw3395_write_byte(PAW_REST1_DOWNSHIFT,22);//57s 进rest2 223
-    paw3395_write_byte(PAW_REST2_DOWNSHIFT,68);//29min 进rest3
+    paw3395_write_byte(PAW_REST1_DOWNSHIFT,22);// 57s èiate rest2 223
+    paw3395_write_byte(PAW_REST2_DOWNSHIFT,68);// 29Min èiate rest3
     paw3395_write_byte(PAW_RESOLUTION_X_LOW, DPI_VALUE[nvs_flash_info.dpi]&0xFF);
     paw3395_write_byte(PAW_RESOLUTION_X_HIGH, (DPI_VALUE[nvs_flash_info.dpi]&0xFF00)>>8);
     paw3395_write_byte(PAW_RESOLUTION_Y_LOW, DPI_VALUE[nvs_flash_info.dpi]&0xFF);
@@ -547,11 +540,11 @@ void mouse_init()
     peripheral_sleep_update();
 
     ADC_ExtSingleChSampInit(SampleFreq_3_2, ADC_PGA_0);
-    RoughCalib_Value = ADC_DataCalib_Rough(); // 用于计算ADC内部偏差，记录到全局变量 RoughCalib_Value中
+    RoughCalib_Value = ADC_DataCalib_Rough(); // Used to calculate the internal deviation of the ADC and record it in the global variable RoughCalib_Value
     PRINT("ADC RC =%d \n", RoughCalib_Value);
 
     PWMX_CLKCfg(4);                                    // cycle = 4/Fsys
-    PWMX_CycleCfg(PWMX_Cycle_255);                     // 周期 = 255*cycle
+    PWMX_CycleCfg(PWMX_Cycle_255);                     // Cycle = 255*cycle
     PWMX_ACTOUT(VDR_PWM_R, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_R_IDX], Low_Level, ENABLE);
     PWMX_ACTOUT(VDR_PWM_G, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_G_IDX], Low_Level, ENABLE);
     PWMX_ACTOUT(VDR_PWM_B, DPI_VALUE_RGB[nvs_flash_info.dpi][RGB_B_IDX], Low_Level, ENABLE);
@@ -620,13 +613,12 @@ uint8_t mouse_read_xy(uint8_t *pX, uint8_t *pY)
     return 0;
 }
 
-/*********************************************************************
- * @fn      mouse_key_scan
- *
- * @brief   mouse_key_scan
- *
- * @return  是否有按键变化
- */
+/* ***************************************************************************
+* @fn mouse_key_scan
+*
+* @brief mouse_key_scan
+*
+* @return Is there any change in the key */
 __HIGH_CODE
 uint8_t mouse_key_scan(uint8_t *data)
 {
@@ -636,7 +628,7 @@ uint8_t mouse_key_scan(uint8_t *data)
     key_press_time++;
     for(i=0; i<KEY_TABLE_C; i++)
     {
-        if((idel_sleep_flag||deep_sleep_flag)&&(KEY_C_INDEX[i]==KEY_C_0))   // 中键和拨码开关不支持唤醒，添加判断防止按键检测强制唤醒
+        if((idel_sleep_flag||deep_sleep_flag)&&(KEY_C_INDEX[i]==KEY_C_0))   // The middle key and dial switch do not support wakeup. Add judgment to prevent the key detection from force wakeup.
         {
             continue;
         }
@@ -658,7 +650,7 @@ uint8_t mouse_key_scan(uint8_t *data)
         }
         GPIOA_SetBits(KEY_C_0|KEY_C_1);
     }
-    // 过滤
+    // filter
     if(key_scan_filter_count >= key_scan_filter_count_max)
     {
         key_scan_filter_count = 0;
@@ -686,11 +678,11 @@ uint8_t mouse_key_scan(uint8_t *data)
         key_scan_filter_count++;
         return ret;
     }
-    // 处理数据
+    // Processing data
     if(!tmos_memcmp(key_data_scan_old, key_data_scan_new, KEY_TABLE_R*KEY_TABLE_C))
     {
         tmos_memcpy(key_data_scan_old, key_data_scan_new, KEY_TABLE_R*KEY_TABLE_C);
-        // 先检查当前模式
+        // Check the current mode first
         if(key_data_scan_new[TABLE_IDX_SW_BLE])
         {
             // SW_BLE
@@ -723,37 +715,37 @@ uint8_t mouse_key_scan(uint8_t *data)
 
         for(i=0; i<KEY_TABLE_R*KEY_TABLE_C; i++)
         {
-            if(key_data_scan_new[i] < key_data_scan_byte[i])    // 筛选标准键盘按键
+            if(key_data_scan_new[i] < key_data_scan_byte[i])    // Filter standard keyboard keys
             {
-                //释放的按键
+                // Released keys
                 if(key_data_scan_byte[i]<0xE0)
                 {
-                    // 左中右三个按键
+                    // Three buttons on the left, center and right
                     data[1] &= ~key_data_scan_byte[i];
                     ret = 1;
                 }
                 else if(key_data_scan_byte[i]<0xF0)
                 {
-                    // 侧边两按键
+                    // Two side buttons
                     data[1] &= ~(1<<(key_data_scan_byte[i]&0x0F));
                     ret = 1;
                 }
                 else {
-                    //DPI 松开
-                    // 不考虑循环一轮的情况，太长了
+                    // DPI release
+                    // It's too long if you don't consider the cycle
                     if(KEY_TIMER_TABLE[i] )
                     {
-                        // 若列表内值为0则表示已经进了超时了，不触发松开
+                        // If the value in the list is 0, it means that the timeout has entered and the release does not trigger.
                         if(key_timer_list[KEY_TIMER_TABLE[i]-1])
                         {
                             key_timer_list[KEY_TIMER_TABLE[i]-1] = 0;
-                            //短按松开
+                            // Short press to release
                             key_release(key_data_scan_byte[i]);
                         }
                     }
                     else
                     {
-                        //短按松开
+                        // Short press to release
                         key_release(key_data_scan_byte[i]);
                     }
                 }
@@ -761,40 +753,40 @@ uint8_t mouse_key_scan(uint8_t *data)
             }
             else if((key_data_scan_new[i] == key_data_scan_byte[i]) && key_data_scan_new[i])
             {
-                //未释放的按键，添加到按键列表
+                // Unreleased keys, added to the key list
                 if(key_data_scan_byte[i]<0xE0)
                 {
-                    // 左中右三个按键
+                    // Three buttons on the left, center and right
                     data[1] |= key_data_scan_new[i];
                 }
                 else if(key_data_scan_byte[i]<0xF0)
                 {
-                    // 侧边两按键 这里演示标准前进后退，如果需要自定义可以动态修改
+                    // Two side buttons here demonstrate the standard forward and backward. If you need to customize, you can dynamically modify it.
                     data[1] |= 1<<(key_data_scan_new[i]&0x0F);
                 }
                 else {
-                    //DPI 保持
+                    // DPI Keep
                 }
                 key_data_scan_new[i] = 0;
             }
             else if(key_data_scan_new[i])
             {
-                // 到这里说明此按键为新按下，添加到列表
+                // Here, this button is new and added to the list
                 if(key_data_scan_new[i]<0xE0)
                 {
-                    // 左中右三个按键
+                    // Three buttons on the left, center and right
                     data[1] |= key_data_scan_new[i];
                     ret = 1;
                 }
                 else if(key_data_scan_new[i]<0xF0)
                 {
-                    // 侧边两按键 这里演示标准前进后退，如果需要自定义可以动态修改
+                    // Two side buttons here demonstrate the standard forward and backward. If you need to customize, you can dynamically modify it.
                     data[1] |= 1<<(key_data_scan_new[i]&0x0F);
                     ret = 1;
                 }
                 else {
-                    //DPI 按下
-                    // 触发长按计时器
+                    // DPI Press
+                    // Trigger the long press timer
                     if(KEY_TIMER_TABLE[i])
                     {
                         key_timer_list[KEY_TIMER_TABLE[i]-1] = key_press_time;
@@ -804,7 +796,7 @@ uint8_t mouse_key_scan(uint8_t *data)
             }
         }
     }
-    // 长按计时筛选
+    // Long press and time filter
     for(i=0; i<KEY_TIMEOUT_NUM; i++)
     {
         if(key_timer_list[i])
@@ -821,13 +813,12 @@ uint8_t mouse_key_scan(uint8_t *data)
 
 extern uint32_t gErrCount;
 extern uint32_t gTxCount;
-/*********************************************************************
- * @fn      mouse_motion_scan
- *
- * @brief   模拟鼠标正方形轨迹
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mouse_motion_scan
+*
+* @brief simulates mouse square track
+*
+* @return none */
 __HIGH_CODE
 void mouse_motion_scan(void)
 {
@@ -932,14 +923,14 @@ void key_press_timeout(uint8_t key)
     PRINT("p t %x\n",key);
     if(key == 0xF0) //DPI
     {
-        //进入配对
+        // Enter pairing
         if(work_mode==MODE_BT)
         {
             access_pairing_process(CTL_MODE_BLE_1);
         }
         else if(work_mode==MODE_2_4G)
         {
-            //长按3s后进入2.4G配对状态
+            // After long pressing for 3 seconds, enter the 2.4G pairing state
             nvs_flash_info.rf_device_id = RF_ROLE_ID_INVALD;
             tmos_memset(nvs_flash_info.peer_mac, 0, 6);
             nvs_flash_store();
@@ -960,7 +951,7 @@ void key_release(uint8_t key)
 //    PRINT("r %x\n",key);
     if(key == 0xF0) //DPI
     {
-        //切换DPI
+        // Switch DPI
         nvs_flash_info.dpi++;
         nvs_flash_info.dpi %= DPI_MAX;
         nvs_flash_store();
@@ -977,45 +968,44 @@ void key_release(uint8_t key)
 }
 
 
-/*********************************************************************
- * @fn      mouse_get_batt_info
- *
- * @brief   电源信息
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn mouse_get_batt_info
+*
+* @brief Power Information
+*
+* @return none */
 uint8_t mouse_get_batt_info()
 {
     uint16_t adcBuff[4];
-    uint8_t ret;                                   //电量百分比
-    uint8_t powerper;                                   //电量百分比
-    static uint8_t lastper=0;                                   //上次电量百分比
-    static uint8_t lastper_1=0;                                   //上2次电量百分比
-    static uint8_t lastper_2=0;                                   //上3次电量百分比
-    static uint8_t lastper_3=0;                                   //上4次电量百分比
+    uint8_t ret;                                   // Power percentage
+    uint8_t powerper;                                   // Power percentage
+    static uint8_t lastper=0;                                   // Last battery percentage
+    static uint8_t lastper_1=0;                                   // The percentage of battery power in the last 2 times
+    static uint8_t lastper_2=0;                                   // The percentage of battery power in the last 3 times
+    static uint8_t lastper_3=0;                                   // The percentage of battery power in the last 4 times
 
-                                                        //ADC采样通道需要和ADC引脚对应
-    GPIOA_ModeCfg( VBAT_ADC_PIN, GPIO_ModeIN_Floating );  //浮空输入模式
+                                                        // The ADC sampling channel needs to correspond to the ADC pin
+    GPIOA_ModeCfg( VBAT_ADC_PIN, GPIO_ModeIN_Floating );  // Floating input mode
     ADC_ChannelCfg( VBAT_ADC_CHANNAL );
 
     ADC_ExtSingleChSampInit( SampleFreq_3_2, ADC_PGA_0 );
     for(uint8_t i = 0; i < 4; i++)
     {
-        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // 连续采样
+        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // Continuous sampling
     }
     for(uint8_t i = 0; i < 4; i++)
     {
-        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // 连续采样
+        adcBuff[i] = ADC_ExcutSingleConver() + RoughCalib_Value; // Continuous sampling
     }
 
-//    PRINT("电压： %d %d %d %d\n",adcBuff[0],adcBuff[1],adcBuff[2],adcBuff[3]);
+// Prints ("Voltage: 1. D% The% K" a Advertult [1], AdCBuff [3]);
     adcBuff[0] = (adcBuff[0]+adcBuff[1]+adcBuff[2]+adcBuff[3]+2)/4;
 
-    adcBuff[0] = (uint32_t)adcBuff[0] * 1050 / 2048;                        //测量点电压
-//    PRINT("电阻电压： %d\n",adcBuff[0]);
+    adcBuff[0] = (uint32_t)adcBuff[0] * 1050 / 2048;                        // Measurement point voltage
+// PRINT("Resistance voltage: %d\n",adcBuff[0]);
 
-    //电池电压
-    adcBuff[0] = (uint32_t)adcBuff[0] * 3 / 1;                           //电池电压
+    // Battery voltage
+    adcBuff[0] = (uint32_t)adcBuff[0] * 3 / 1;                           // Battery voltage
     PRINT("电池电压： %d\n",adcBuff[0]);
     if( adcBuff[0] <= 3000 )
     {
@@ -1064,19 +1054,18 @@ uint8_t mouse_get_batt_info()
     lastper_2 = lastper_1;
     lastper_1 = lastper;
     lastper = powerper;
-//    PRINT("池子： %d %d %d %d %d\n",lastper_3,lastper_2,lastper_1,lastper,powerper);
-//    PRINT("电量： %d\n",ret);
+// %d %d %d %d\n,
+// PRINT("Power: %d\n",ret);
 
     return ret;
 }
 
-/*********************************************************************
- * @fn      TMR0_IRQHandler
- *
- * @brief   TMR0_IRQHandler 发送时间等于 200us+8us+发送长度*4us
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR0_IRQHandler
+*
+* @brief TMR0_IRQHandler The sending time is equal to 200us+8us+send length*4us
+*
+* @return none */
 __INTERRUPT
 __HIGH_CODE
 void TMR0_IRQHandler(void)

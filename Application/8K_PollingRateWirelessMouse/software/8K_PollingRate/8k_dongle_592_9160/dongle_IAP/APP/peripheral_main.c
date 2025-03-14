@@ -40,16 +40,16 @@ void SwitchImageFlag(uint8_t new_flag)
     uint16_t i;
     uint32_t ver_flag;
 
-    /* 读取第一块 */
+    /* Read the first block */
     EEPROM_READ(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 
-    /* 擦除第一块 */
+    /* Erase the first piece */
     EEPROM_ERASE(OTA_DATAFLASH_ADD, EEPROM_PAGE_SIZE);
 
     /* Update Image Information */
     block_buf[0] = new_flag;
 
-    /* 编程DataFlash */
+    /* Programming DataFlash */
     EEPROM_WRITE(OTA_DATAFLASH_ADD, (uint32_t *)&block_buf[0], 4);
 }
 

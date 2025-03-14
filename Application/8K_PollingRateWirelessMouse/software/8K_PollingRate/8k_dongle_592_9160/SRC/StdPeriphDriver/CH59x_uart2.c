@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      UART2_DefInit
- *
- * @brief   串口默认初始化配置
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART2_DefInit
+*
+* @brief The default initialization configuration of the serial port
+*
+* @param none
+*
+* @return none */
 void UART2_DefInit(void)
 {
     UART2_BaudRateCfg(115200);
@@ -30,15 +29,14 @@ void UART2_DefInit(void)
     R8_UART2_DIV = 1;
 }
 
-/*********************************************************************
- * @fn      UART2_BaudRateCfg
- *
- * @brief   串口波特率配置
- *
- * @param   baudrate    - 波特率
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART2_BaudRateCfg
+*
+* @brief Serial port baud rate configuration
+*
+* @param baudrate - baudrate
+*
+* @return none */
 void UART2_BaudRateCfg(uint32_t baudrate)
 {
     uint32_t x;

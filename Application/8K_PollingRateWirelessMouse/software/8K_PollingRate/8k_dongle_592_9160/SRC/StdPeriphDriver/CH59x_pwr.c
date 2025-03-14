@@ -83,16 +83,15 @@ void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      PWR_PeriphClkCfg
- *
- * @brief   外设时钟控制位
- *
- * @param   s       - 是否打开对应外设时钟
- * @param   perph   - please refer to Peripher CLK control bit define
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_PeriphClkCfg
+*
+* @brief Peripheral clock control bit
+*
+* @param s - Whether to turn on the corresponding peripheral clock
+* @param perph - please refer to Peripher CLK control bit define
+*
+* @return none */
 void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
 {
     uint32_t sleep_ctrl = R32_SLEEP_CONTROL;
@@ -111,21 +110,20 @@ void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      PWR_PeriphWakeUpCfg
- *
- * @brief   睡眠唤醒源配置
- *
- * @param   s       - 是否打开此外设睡眠唤醒功能
- * @param   perph   - 需要设置的唤醒源
- *                    RB_SLP_USB_WAKE   -  USB 为唤醒源
- *                    RB_SLP_RTC_WAKE   -  RTC 为唤醒源
- *                    RB_SLP_GPIO_WAKE  -  GPIO 为唤醒源
- *                    RB_SLP_BAT_WAKE   -  BAT 为唤醒源
- * @param   mode    - refer to WakeUP_ModeypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_PeriphWakeUpCfg
+*
+* @brief Sleep wake source configuration
+*
+* @param s - Whether to turn on the sleep wake-up function of this peripheral
+* @param perph - Wake source that needs to be set
+* RB_SLP_USB_WAKE - USB is the wake-up source
+* RB_SLP_RTC_WAKE - RTC is the wake-up source
+* RB_SLP_GPIO_WAKE - GPIO is the wake-up source
+* RB_SLP_BAT_WAKE - BAT is the wake-up source
+* @param mode - refer to WakeUP_ModeypeDef
+*
+* @return none */
 void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode)
 {
     uint8_t m;
@@ -244,7 +242,7 @@ void LowPower_Halt(void)
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
-    R8_FLASH_CTRL = 0x04; //flash关闭
+    R8_FLASH_CTRL = 0x04; // flash close
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
@@ -254,7 +252,7 @@ void LowPower_Halt(void)
     }
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // 关闭电压监控
+    R8_BAT_DET_CTRL = 0; // Turn off voltage monitoring
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;

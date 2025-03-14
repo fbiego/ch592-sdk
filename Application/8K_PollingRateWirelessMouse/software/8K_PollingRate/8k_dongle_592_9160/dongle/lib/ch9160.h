@@ -18,7 +18,7 @@
 "C" {
 #endif
 
-// ACCESS_CMD超时10ms
+// ACCESS_CMD timeout 10ms
 #define ACCESS_CMD_TIMEOUT      16
 
 // ACCESS_STATE
@@ -34,7 +34,7 @@
 #define CHK_DATA                0x55
 #define CHK_ACK                 0xAA
 
-// 基本数据
+// Basic data
 #define CMD_CHK_CONNECT         0x01
 #define CMD_GET_INFO            0x02
 #define CMD_SET_INFO            0x03
@@ -68,147 +68,133 @@ extern const uint8_t VER_CH9160_LIB[];
 
 typedef void (*access_cmd_cb_t)(uint8_t state, uint8_t cmd, uint8_t *pData, uint16_t len);
 
-/**
- * @brief   注册接入层命令接收回调
- *
- * @param   cb - 回调函数
- */
+/* *
+* @brief Register the access layer command to receive callbacks
+*
+* @param cb - callback function */
 void access_register_cmd_cb(access_cmd_cb_t cb);
 
-/**
- * @brief   检查USB连接状态
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Check USB connection status
+*
+* @return @ACCESS_STATE. */
 uint8_t access_chk_connect(void);
 
-/**
- * @brief   检查USB连接状态
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Check USB connection status
+*
+* @return @ACCESS_STATE. */
 uint8_t access_get_info(void);
 
-/**
- * @brief   设置USB
- *
- * @param   usb_enable  : 1 - 使能USB; 0 - 关闭USB
- *          io_dir      : IO方向 0表示输入; 1表示输出
- *          io_pin      : IO电平 0表示低电平; 1表示高电平
- *          endpx_size  : 0~9对应端点长度为2的0~9次幂，比如2对应长度为4，6对应长度为64，9对应长度为512
- *          sleep_off   : 2 - USB深度睡眠; 1 - 关闭USB睡眠; 0 - USB浅睡眠
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Setting USB
+*
+* @param usb_enable : 1 - Enable USB; 0 - Turn off USB
+* io_dir: IO direction 0 means input; 1 means output
+* io_pin: IO level 0 means low level; 1 means high level
+* endpx_size: 0~9 corresponds to the power of 0~9 with the endpoint length 2, for example, 2 corresponds to the length 4, 6 corresponds to the length 64, 9 corresponds to the length 512
+* sleep_off : 2 - USB deep sleep; 1 - Turn off USB sleep; 0 - USB light sleep
+*
+* @return @ACCESS_STATE. */
 uint8_t access_set_info(uint8_t usb_enable, uint8_t io_dir, uint8_t io_pin,
     uint8_t endp1_size, uint8_t endp2_size, uint8_t endp3_size, uint8_t endp4_size, uint8_t sleep_off);
 
-/**
- * @brief   获取USB描述符
- *
- * @param   desc_type   : 0x00    USB设备描述符
- *                        0x01    USB配置描述符
- *                        0x02    USB HID1报表描述符
- *                        0x03    USB HID2报表描述符
- *                        0x04    USB HID3报表描述符
- *                        0x05    USB HID4报表描述符
- *                        0x06    USB HID5报表描述符
- *                        0x07    USB字符串0(语言)描述符
- *                        0x08    USB字符串1(厂商)描述符
- *                        0x09    USB字符串2(产品)描述符
- *                        0x0A    USB字符串3(序列号)描述符
- *                        0x0B    USB字符串4描述符
- *          offset      : USB描述符偏移地址
- *          length      : USB描述符数据长度
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Get USB descriptor
+*
+* @param desc_type : 0x00 USB device descriptor
+* 0x01 USB configuration descriptor
+* 0x02 USB HID1 report descriptor
+* 0x03 USB HID2 report descriptor
+* 0x04 USB HID3 report descriptor
+* 0x05 USB HID4 report descriptor
+* 0x06 USB HID5 report descriptor
+* 0x07 USB string 0 (language) descriptor
+* 0x08 USB string 1 (manufacturer) descriptor
+* 0x09 USB string 2 (product) descriptor
+* 0x0A USB string 3 (serial number) descriptor
+* 0x0B USB string 4 descriptor
+* offset: USB descriptor offset address
+* length: USB descriptor data length
+*
+* @return @ACCESS_STATE. */
 uint8_t access_get_usb_desc(uint8_t desc_type, uint16_t offset, uint16_t length);
 
-/**
- * @brief   设置USB描述符
- *
- * @param   desc_type   : 0x00    USB设备描述符
- *                        0x01    USB配置描述符
- *                        0x02    USB HID1报表描述符
- *                        0x03    USB HID2报表描述符
- *                        0x04    USB HID3报表描述符
- *                        0x05    USB HID4报表描述符
- *                        0x06    USB HID5报表描述符
- *                        0x07    USB字符串0(语言)描述符
- *                        0x08    USB字符串1(厂商)描述符
- *                        0x09    USB字符串2(产品)描述符
- *                        0x0A    USB字符串3(序列号)描述符
- *                        0x0B    USB字符串4描述符
- *          offset      : USB描述符偏移地址
- *          length      : USB描述符数据长度
- *          pData       : USB描述符数据
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Setting USB descriptor
+*
+* @param desc_type : 0x00 USB device descriptor
+* 0x01 USB configuration descriptor
+* 0x02 USB HID1 report descriptor
+* 0x03 USB HID2 report descriptor
+* 0x04 USB HID3 report descriptor
+* 0x05 USB HID4 report descriptor
+* 0x06 USB HID5 report descriptor
+* 0x07 USB string 0 (language) descriptor
+* 0x08 USB string 1 (manufacturer) descriptor
+* 0x09 USB string 2 (product) descriptor
+* 0x0A USB string 3 (serial number) descriptor
+* 0x0B USB string 4 descriptor
+* offset: USB descriptor offset address
+* length: USB descriptor data length
+* pData: USB descriptor data
+*
+* @return @ACCESS_STATE. */
 uint8_t access_set_usb_desc(uint8_t desc_type, uint16_t offset, uint16_t length, uint8_t *pData);
 
-/**
- * @brief   指定端点发送数据，发送后需等待收到应答后再发送新的数据
- *
- * @param   endp    : 端点号，支持1~4
- *          pData   : 数据指针
- *          length  : 数据长度
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief The specified endpoint sends data. After sending, you need to wait for a reply to send new data.
+*
+* @param endp: Endpoint number, supports 1~4
+* pData: Data pointer
+* length: data length
+*
+* @return @ACCESS_STATE. */
 uint8_t access_send_endp_data( uint8_t endp, uint8_t *pData, uint16_t length);
 
-/**
- * @brief   指定端点发送数据，无需等待应答
- *
- * @param   endp    : 端点号，支持1~4
- *          pData   : 数据指针
- *          length  : 数据长度
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Specifies the endpoint to send data without waiting for a reply
+*
+* @param endp: Endpoint number, supports 1~4
+* pData: Data pointer
+* length: data length
+*
+* @return @ACCESS_STATE. */
 uint8_t access_send_endp_data_without_ack( uint8_t endp, uint8_t *pData, uint16_t length);
 
-/**
- * @brief   复位USB
- *
- * @param   reset_type :  0x00：芯片整体复位
- *                        0x01：芯片仅USB复位
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Reset USB
+*
+* @param reset_type : 0x00: Overall chip reset
+* 0x01: Chip USB reset only
+*
+* @return @ACCESS_STATE. */
 uint8_t access_usb_reset(uint8_t reset_type);
 
-/**
- * @brief   收到USB主动上报的命令后需要发送应答
- *
- * @param   cmd :  接收到的USB主动上报的命令码
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief You need to send a reply after receiving the command actively reported by USB
+*
+* @param cmd: The received command code that is actively reported by USB
+*
+* @return @ACCESS_STATE. */
 uint8_t access_send_ack(uint8_t cmd);
 
-/**
- * @brief   USB数据处理
- */
+/* *
+* @brief USB data processing */
 void trans_process(void);
 
-/**
- * @brief   重传上一包发送给USB的数据
- *
- * @return  @ACCESS_STATE.
- */
+/* *
+* @brief Retransmit the data sent to USB from the previous packet
+*
+* @return @ACCESS_STATE. */
 uint8_t trans_retran_last_data(void );
 
-/**
- * @brief   接入层初始化
- */
+/* *
+* @brief access layer initialization */
 void access_Init( void );
 
-/**
- * @brief   CH9160初始化
- */
+/* *
+* @brief CH9160 Initialization */
 void ch9160_Init( void );
 
 

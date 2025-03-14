@@ -182,21 +182,20 @@ void TMR3_IRQHandler(void) // TMR3
     }
 }
 
-/*******************************************************************************
- * @fn          HAL_Time0Init
- *
- * @brief       系统定时器初始化
- *
- * input parameters
- *
- * @param       None.
- *
- * output parameters
- *
- * @param       None.
- *
- * @return      None.
- */
+/* *********************************************************************************************
+* @fn HAL_Time0Init
+*
+* @brief System timer initialization
+*
+* input parameters
+*
+* @param None.
+*
+* output parameters
+*
+* @param None.
+*
+* @return None. */
 void HAL_TimeInit( void )
 {
     tmosTimeConfig_t conf;
@@ -217,7 +216,7 @@ void HAL_TimeInit( void )
   SysTick_Config(0xFFFFFFFF);
   PFIC_DisableIRQ(SysTick_IRQn);
 
-  // tmos时间相关配置
+  // tmos time-related configuration
   conf.ClockAccuracy = 500;
   conf.ClockFrequency = CAB_LSIFQ;
   conf.ClockMaxCount = RTC_MAX_COUNT;

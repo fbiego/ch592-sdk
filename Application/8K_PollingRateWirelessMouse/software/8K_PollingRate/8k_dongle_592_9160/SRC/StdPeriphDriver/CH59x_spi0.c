@@ -26,7 +26,7 @@ void SPI0_MasterDefInit(void)
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
     R8_SPI0_CTRL_MOD = RB_SPI_MOSI_OE | RB_SPI_SCK_OE;
     R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;     // Access BUFFER/FIFO to automatically clear the IF_BYTE_END flag
-    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // 不启动DMA方式
+    R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE; // Don't start DMA mode
 }
 
 /* ***************************************************************************
@@ -83,15 +83,14 @@ void SPI0_DataMode(ModeBitOrderTypeDef m)
     }
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterSendByte
- *
- * @brief   发送单字节 (buffer)
- *
- * @param   d       - 发送字节
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_MasterSendByte
+*
+* @brief Send a single byte (buffer)
+*
+* @param d - Send bytes
+*
+* @return none */
 void SPI0_MasterSendByte(uint8_t d)
 {
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR;
@@ -141,7 +140,7 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len)
             sendlen--;
         }
     }
-    while(R8_SPI0_FIFO_COUNT != 0); // 等待FIFO中的数据全部发送完成
+    while(R8_SPI0_FIFO_COUNT != 0); // Wait for all data in FIFO to be sent to complete
 }
 
 /* ***************************************************************************
@@ -214,13 +213,12 @@ void SPI0_MasterDMARecv(uint8_t *pbuf, uint16_t len)
     R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE;
 }
 
-/*********************************************************************
- * @fn      SPI0_SlaveInit
- *
- * @brief   设备模式默认初始化，建议设置MISO的GPIO对应为输入模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_SlaveInit
+*
+* @brief The device mode is initialized by default. It is recommended to set the GPIO of MISO to the input mode.
+*
+* @return none */
 void SPI0_SlaveInit(void)
 {
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
@@ -256,16 +254,15 @@ void SPI0_SlaveSendByte(uint8_t d)
     while(R8_SPI0_FIFO_COUNT != 0); // Wait for the sending to complete
 }
 
-/*********************************************************************
- * @fn      SPI0_SlaveRecv
- *
- * @brief   从机模式，接收多字节数据
- *
- * @param   pbuf    - 接收收数据存放起始地址
- * @param   len     - 请求接收数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_SlaveRecv
+*
+* @brief slave mode, receive multibyte data
+*
+* @param pbuf - Start address for receiving and receiving data storage
+* @param len - Request received data length
+*
+* @return none */
 __HIGH_CODE
 void SPI0_SlaveRecv(uint8_t *pbuf, uint16_t len)
 {

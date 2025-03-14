@@ -24,23 +24,23 @@ extern "C" {
  */
 typedef enum
 {
-    CH_EXTIN_0 = 0,   // ADC 外部模拟通道 0
-    CH_EXTIN_1,       // ADC 外部模拟通道 1
-    CH_EXTIN_2,       // ADC 外部模拟通道 2
-    CH_EXTIN_3,       // ADC 外部模拟通道 3
-    CH_EXTIN_4,       // ADC 外部模拟通道 4
-    CH_EXTIN_5,       // ADC 外部模拟通道 5
-    CH_EXTIN_6,       // ADC 外部模拟通道 6
-    CH_EXTIN_7,       // ADC 外部模拟通道 7
-    CH_EXTIN_8,       // ADC 外部模拟通道 8
-    CH_EXTIN_9,       // ADC 外部模拟通道 9
-    CH_EXTIN_10,      // ADC 外部模拟通道 10
-    CH_EXTIN_11,      // ADC 外部模拟通道 11
-    CH_EXTIN_12,      // ADC 外部模拟通道 12
+    CH_EXTIN_0 = 0,   // ADC external analog channel 0
+    CH_EXTIN_1,       // ADC External Analog Channel 1
+    CH_EXTIN_2,       // ADC External Analog Channel 2
+    CH_EXTIN_3,       // ADC External Analog Channel 3
+    CH_EXTIN_4,       // ADC External Analog Channel 4
+    CH_EXTIN_5,       // ADC External Analog Channel 5
+    CH_EXTIN_6,       // ADC External Analog Channel 6
+    CH_EXTIN_7,       // ADC External Analog Channel 7
+    CH_EXTIN_8,       // ADC External Analog Channel 8
+    CH_EXTIN_9,       // ADC External Analog Channel 9
+    CH_EXTIN_10,      // ADC External Analog Channel 10
+    CH_EXTIN_11,      // ADC External Analog Channel 11
+    CH_EXTIN_12,      // ADC External Analog Channel 12
     CH_EXTIN_13,      // ADC 外部模拟通道 13
 
-    CH_INTE_VBAT = 14,  // ADC 内部电池检测通道
-    CH_INTE_VTEMP = 15, // ADC 内部温度传感器检测通道
+    CH_INTE_VBAT = 14,  // ADC internal battery detection channel
+    CH_INTE_VTEMP = 15, // ADC internal temperature sensor detection channel
 
 } ADC_SingleChannelTypeDef;
 
@@ -49,8 +49,8 @@ typedef enum
  */
 typedef enum
 {
-    CH_DIFF_0_2 = 0, // ADC 差分通道 #0-#2
-    CH_DIFF_1_3,     // ADC 差分通道 #1-#3
+    CH_DIFF_0_2 = 0, // ADC Differential Channel #0-#2
+    CH_DIFF_1_3,     // ADC Differential Channel #1-#3
 
 } ADC_DiffChannelTypeDef;
 
@@ -59,10 +59,10 @@ typedef enum
  */
 typedef enum
 {
-    SampleFreq_3_2 = 0, // 3.2M 采样频率
-    SampleFreq_8,       // 8M 采样频率
-    SampleFreq_5_33,    // 5.33M 采样频率
-    SampleFreq_4,       // 4M 采样频率
+    SampleFreq_3_2 = 0, // 3.2M sampling frequency
+    SampleFreq_8,       // 8M sampling frequency
+    SampleFreq_5_33,    // 5.33M sampling frequency
+    SampleFreq_4,       // 4M sampling frequency
 } ADC_SampClkTypeDef;
 
 /**
@@ -71,13 +71,13 @@ typedef enum
 typedef enum
 {
     ADC_PGA_1_4 = 0,    // -12dB, 1/4倍
-    ADC_PGA_1_2,        // -6dB, 1/2倍
-    ADC_PGA_0,          // 0dB, 1倍，无增益
-    ADC_PGA_2,          // 6dB, 2倍
+    ADC_PGA_1_2,        // -6dB, 1/2 times
+    ADC_PGA_0,          // 0dB, ​​1 times, no gain
+    ADC_PGA_2,          // 6dB, 2x
     ADC_PGA_2_ = 0x10,  // 6dB, 2倍
-    ADC_PGA_4,          // 12dB, 4倍
-    ADC_PGA_8,          // 18dB, 8倍
-    ADC_PGA_16,         // 24dB, 16倍
+    ADC_PGA_4,          // 12dB, 4 times
+    ADC_PGA_8,          // 18dB, 8 times
+    ADC_PGA_16,         // 24dB, 16 times
 } ADC_SignalPGATypeDef;
 
 /**
@@ -86,22 +86,20 @@ typedef enum
 typedef enum
 {
     ADC_Mode_Single = 0, // 单次模式
-    ADC_Mode_LOOP,       // 循环模式
+    ADC_Mode_LOOP,       // Loop mode
 } ADC_DMAModeTypeDef;
 
 
-/**
- * @brief   设置 ADC 采样通道
- *
- * @param   d   - refer to ADC_SingleChannelTypeDef
- */
+/* *
+* @brief Setting the ADC sampling channel
+*
+* @param d - refer to ADC_SingleChannelTypeDef */
 #define ADC_ChannelCfg(d)      (R8_ADC_CHANNEL = d)
 
-/**
- * @brief   设置 ADC 采样时钟
- *
- * @param   d   - refer to ADC_SampClkTypeDef
- */
+/* *
+* @brief Set the ADC sampling clock
+*
+* @param d - refer to ADC_SampClkTypeDef */
 #define ADC_SampClkCfg(d)      (R8_ADC_CFG = R8_ADC_CFG & (~RB_ADC_CLK_DIV) | (d << 6))
 
 /**
@@ -111,32 +109,28 @@ typedef enum
  */
 #define ADC_PGACfg(d)          (R8_ADC_CFG = R8_ADC_CFG & (~RB_ADC_PGA_GAIN) | (d << 4))
 
-/**
- * @brief   设置内部温度传感器校准值
- *
- * @param   d   - 校准值
- */
+/* *
+* @brief Set the internal temperature sensor calibration value
+*
+* @param d - calibration value */
 #define ADC_TempCalibCfg(d)    (R8_TEM_SENSOR = R8_TEM_SENSOR & (~RB_TEM_SEN_CALIB) | d)
 
-/**
- * @brief   外部信号单通道采样初始化
- *
- * @param   sp  - refer to ADC_SampClkTypeDef
- * @param   ga  - refer to ADC_SignalPGATypeDef
- */
+/* *
+* @brief External signal single channel sampling initialization
+*
+* @param sp - refer to ADC_SampClkTypeDef
+* @param ga - refer to ADC_SignalPGATypeDef */
 void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga);
 
-/**
- * @brief   外部信号差分通道采样初始化
- *
- * @param   sp  - refer to ADC_SampClkTypeDef
- * @param   ga  - refer to ADC_SignalPGATypeDef
- */
+/* *
+* @brief External signal differential channel sampling initialization
+*
+* @param sp - refer to ADC_SampClkTypeDef
+* @param ga - refer to ADC_SignalPGATypeDef */
 void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga);
 
-/**
- * @brief   触摸按键通道采样初始化
- */
+/* *
+* @brief Touch key channel sampling initialization */
 void TouchKey_ChSampInit(void);
 
 /**
@@ -144,9 +138,8 @@ void TouchKey_ChSampInit(void);
  */
 #define TouchKey_DisableTSPower()    (R8_TKEY_CFG &= ~RB_TKEY_PWR_ON)
 
-/**
- * @brief   内置温度传感器采样初始化
- */
+/* *
+* @brief Built-in temperature sensor sampling initialization */
 void ADC_InterTSSampInit(void);
 
 /**
@@ -159,28 +152,25 @@ void ADC_InterTSSampInit(void);
  */
 void ADC_InterBATSampInit(void);
 
-/**
- * @brief   ADC执行单次转换
- *
- * @return  ADC转换后的数据
- */
+/* *
+* @brief ADC performs a single conversion
+*
+* @return ADC converted data */
 uint16_t ADC_ExcutSingleConver(void);
 
-/**
- * @brief   采样数据粗调,获取偏差值,必须先配置ADC后调用此函数获取校准值
- *
- * @return  偏差
- */
+/* *
+* @brief sample data to roughly tune, get the deviation value, you must first configure the ADC and then call this function to get the calibration value
+*
+* @return deviation */
 signed short ADC_DataCalib_Rough(void);
 
-/**
- * @brief   TouchKey转换后数据
- *
- * @param   charg   - Touchkey充电时间,5bits有效, t=charg*Tadc
- * @param   disch   - Touchkey放电时间,3bits有效, t=disch*Tadc
- *
- * @return  当前TouchKey等效数据
- */
+/* *
+* @brief TouchKey converted data
+*
+* @param charg - Touchkey charging time, 5bits valid, t=charg*Tadc
+* @param disch - Touchkey discharge time, 3bits valid, t=disch*Tadc
+*
+* @return Current TouchKey equivalent data */
 uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch);
 
 /**
@@ -190,14 +180,13 @@ uint16_t TouchKey_ExcutSingleConver(uint8_t charg, uint8_t disch);
  */
 void ADC_AutoConverCycle(uint8_t cycle);
 
-/**
- * @brief   配置DMA功能
- *
- * @param   s           - 是否打开DMA功能
- * @param   startAddr   - DMA 起始地址
- * @param   endAddr     - DMA 结束地址
- * @param   m           - 配置DMA模式
- */
+/* *
+* @brief Configure DMA function
+*
+* @param s - Whether to turn on the DMA function
+* @param startAddr - DMA Start Address
+* @param endAddr - DMA end address
+* @param m - Configure DMA mode */
 void ADC_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, ADC_DMAModeTypeDef m);
 
 /**
@@ -216,9 +205,8 @@ int adc_to_temperature_celsius(uint16_t adc_val);
  */
 #define ADC_ReadConverValue()     (R16_ADC_DATA)
 
-/**
- * @brief   ADC执行单次转换
- */
+/* *
+* @brief ADC performs a single conversion */
 #define ADC_StartUp()             (R8_ADC_CONVERT = RB_ADC_START)
 
 /**
@@ -226,9 +214,8 @@ int adc_to_temperature_celsius(uint16_t adc_val);
  */
 #define ADC_GetITStatus()         (R8_ADC_INT_FLAG & RB_ADC_IF_EOC)
 
-/**
- * @brief   清除ADC中断标志
- */
+/* *
+* @brief Clear ADC interrupt flag */
 #define ADC_ClearITFlag()         (R8_ADC_CONVERT = 0)
 
 /**
@@ -236,29 +223,24 @@ int adc_to_temperature_celsius(uint16_t adc_val);
  */
 #define ADC_GetDMAStatus()        (R8_ADC_DMA_IF & RB_ADC_IF_DMA_END)
 
-/**
- * @brief   清除ADC DMA完成标志
- */
+/* *
+* @brief Clear ADC DMA completion flag */
 #define ADC_ClearDMAFlag()        (R8_ADC_DMA_IF |= RB_ADC_IF_DMA_END)
 
-/**
- * @brief   开启定时间隔自动连续 ADC
- */
+/* *
+* @brief Turn on the automatic continuous ADC at a fixed time interval */
 #define ADC_StartAutoDMA()        (R8_ADC_CTRL_DMA |= RB_ADC_AUTO_EN)
 
-/**
- * @brief   停止定时间隔自动连续 ADC
- */
+/* *
+* @brief Stop the time interval automatically continuous ADC */
 #define ADC_StopAutoDMA()         (R8_ADC_CTRL_DMA &= ~RB_ADC_AUTO_EN)
 
-/**
- * @brief   开启连续转换 ADC
- */
+/* *
+* @brief Enable continuous conversion ADC */
 #define ADC_StartContDMA()        (R8_ADC_CTRL_DMA |= RB_ADC_CONT_EN)
 
-/**
- * @brief   停止连续转换 ADC
- */
+/* *
+* @brief Stop continuous conversion ADC */
 #define ADC_StopContDMA()         (R8_ADC_CTRL_DMA &= ~RB_ADC_CONT_EN)
 
 /**
@@ -266,14 +248,12 @@ int adc_to_temperature_celsius(uint16_t adc_val);
  */
 #define TouchKey_GetITStatus()    (R8_ADC_INT_FLAG & RB_ADC_IF_EOC)
 
-/**
- * @brief   清除TouchKey中断标志
- */
+/* *
+* @brief Clear TouchKey interrupt flag */
 #define TouchKey_ClearITFlag()    (R8_TKEY_CTRL |= RB_TKEY_PWR_ON)
 
-/**
- * @brief   关闭ADC电源
- */
+/* *
+* @brief Turn off the ADC */
 #define ADC_DisablePower()        (R8_ADC_CFG &= ~RB_ADC_POWER_ON)
 
 #ifdef __cplusplus
