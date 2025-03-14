@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : SLEEP.c
-* Author             : WCH
-* Version            : V1.2
-* Date               : 2022/01/18
-* Description        : 睡眠配置及其初始化
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: SLEEP.c
+* Author: WCH
+* Version: V1.2
+* Date: 2022/01/18
+* Description: Sleep configuration and initialization
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 /******************************************************************************/
 /* The header file contains */

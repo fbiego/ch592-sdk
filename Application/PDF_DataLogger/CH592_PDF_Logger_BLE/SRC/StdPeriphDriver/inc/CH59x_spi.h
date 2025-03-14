@@ -75,12 +75,11 @@ void SPI0_MasterSendByte(uint8_t d);
 * @param none */
 uint8_t SPI0_MasterRecvByte(void);
 
-/**
- * @brief   使用FIFO连续发送多字节
- *
- * @param   pbuf    - 待发送的数据内容首地址
- * @param   len     - 请求发送的数据长度，最大4095
- */
+/* *
+* @brief sends multibytes continuously using FIFO
+*
+* @param pbuf - The first address of the data content to be sent
+* @param len - The length of the data requested to send, maximum 4095 */
 void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len);
 
 /* *

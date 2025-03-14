@@ -79,7 +79,7 @@ typedef struct
 
 extern _RootHubDev   ThisUsbDev;
 extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
-extern uint8_t       UsbDevEndp0Size;             // USB设备的端点0的最大包尺寸 */
+extern uint8_t       UsbDevEndp0Size;             // Maximum package size for endpoint 0 of USB device */
 extern uint8_t       FoundNewDev;
 
 extern uint8_t *pHOST_RX_RAM_Addr;

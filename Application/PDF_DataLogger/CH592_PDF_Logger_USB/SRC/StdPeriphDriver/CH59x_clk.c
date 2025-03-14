@@ -408,15 +408,14 @@ void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint1
     *ps = t % 60;
 }
 
-/*********************************************************************
- * @fn      RTC_SetCycle32k
- *
- * @brief   基于LSE/LSI时钟，配置当前RTC 周期数
- *
- * @param   cyc     - 配置周期计数初值，MAX_CYC = 0xA8BFFFFF = 2831155199
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RTC_SetCycle32k
+*
+* @brief Configure the current number of RTC cycles based on the LSE/LSI clock
+*
+* @param cyc - Configure the initial value of the cycle count, MAX_CYC = 0xA8BFFFF = 2831155199
+*
+* @return none */
 void RTC_SetCycle32k(uint32_t cyc)
 {
     volatile uint8_t clk_pin;

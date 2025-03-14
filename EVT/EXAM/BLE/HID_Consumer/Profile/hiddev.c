@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : hiddev.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2018/12/10
-* Description        : HID 设备任务处理程序
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : hiddendev.c
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/10
+* Description: HID device task handler
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

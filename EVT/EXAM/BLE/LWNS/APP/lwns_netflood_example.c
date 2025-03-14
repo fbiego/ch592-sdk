@@ -42,13 +42,13 @@ void lwns_netflood_process_init(void);
 
 static lwns_netflood_controller netflood; // Network flood control structure
 
-/* ***************************************************************************
-* @fn      netflood_recv
+/* ***************************************************************************************
+* @fn netflood_recv
 *
-* @brief   lwns netflood接收回调函数
+* @brief lwns netflood receives callback function
 *
 * @param ptr - The netflood control structure pointer to which the data received this time belongs.
-* @param from - The address pointer of the previous jump forwarder of the data received this time.
+* @param from - The address pointer of the previous jump forward of the data received this time.
 * @param originator - The sender address pointer of the data received this time.
 * @param hops - The number of hops experienced by the data received this time from the sender to this node.
 *

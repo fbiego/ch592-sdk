@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : iap.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2022/03/15
-* Description        : UART IAP例程
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : iap.c
+* Author: WCH
+* Version: V1.0
+* Date: 2022/03/15
+* Description: UART IAP routine
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 #include "iap.h"
 
 /* Update permissions must be erased first, and the erase address must be consistent with the corresponding address of the APP before the update permission can be granted */

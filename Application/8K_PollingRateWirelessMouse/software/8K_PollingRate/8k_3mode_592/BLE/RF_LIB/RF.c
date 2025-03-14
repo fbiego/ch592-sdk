@@ -70,20 +70,20 @@ void RTC_SetTignTime(uint32_t time)
     sys_safe_access_disable();
 }
 
-/* ******************************************************************************
-* @fn          RTC_IRQHandler
+/* *********************************************************************************************
+* @fn RTC_IRQHandler
 *
-* @brief       RTC中断处理
+* @brief RTC interrupt handling
 *
 * input parameters
 *
-* @param       None.
+* @param None.
 *
 * output parameters
 *
-* @param       None.
+* @param None.
 *
-* @return      None. */
+* @return None. */
 __INTERRUPT
 __HIGH_CODE
 void RTC_IRQHandler( void )

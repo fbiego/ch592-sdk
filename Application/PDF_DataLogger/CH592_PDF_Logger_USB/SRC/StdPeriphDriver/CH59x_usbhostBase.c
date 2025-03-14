@@ -29,7 +29,7 @@ __attribute__((aligned(4))) const uint8_t SetupGetDevDescr[] = {USB_REQ_TYP_IN, 
 /* Get the configuration descriptor */
 __attribute__((aligned(4))) const uint8_t SetupGetCfgDescr[] = {USB_REQ_TYP_IN, USB_GET_DESCRIPTOR, 0x00,
                                                                 USB_DESCR_TYP_CONFIG, 0x00, 0x00, 0x04, 0x00};
-/*设置USB地址*/
+/* Setting up the USB address */
 __attribute__((aligned(4))) const uint8_t SetupSetUsbAddr[] = {USB_REQ_TYP_OUT, USB_SET_ADDRESS, USB_DEVICE_ADDR, 0x00,
                                                                0x00, 0x00, 0x00, 0x00};
 /* Set up USB configuration */

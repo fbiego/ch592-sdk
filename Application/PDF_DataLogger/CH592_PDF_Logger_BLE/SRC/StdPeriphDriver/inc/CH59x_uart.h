@@ -27,7 +27,7 @@ extern "C" {
 
 #define STA_TXFIFO_EMP    RB_LSR_TX_FIFO_EMP  // The current sending FIFO is empty, and the sending data can be continued to be filled.
 #define STA_TXALL_EMP     RB_LSR_TX_ALL_EMP   // All currently sent data are sent
-#define STA_RECV_DATA     RB_LSR_DATA_RDY     // 当前有接收到数据
+#define STA_RECV_DATA     RB_LSR_DATA_RDY     // Data is currently received
 
 /**
  * @brief  Configuration UART TrigByte num

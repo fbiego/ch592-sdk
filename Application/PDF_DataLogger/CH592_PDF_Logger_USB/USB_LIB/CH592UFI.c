@@ -178,7 +178,7 @@ UINT8 CHRV3DiskConnect(void)
     ums = UHUB_MIS_STAT;
     devaddr = UHUB_DEV_ADDR;
     if(devaddr == USB_DEVICE_ADDR)
-    {   /* 内置Root-HUB下的USB设备 */
+    {   /* USB devices built-in Root-HUB */
         // if (UHUB_HOST_CTRL & RB_UH_PORT_EN ) { /* The USB device under built-in Root-HUB exists and is not plugged in */
         if(ums & bUMS_ATTACH)
         {   /* The USB device under built-in Root-HUB exists */
@@ -203,7 +203,7 @@ UINT8 CHRV3DiskConnect(void)
     }
   #ifndef FOR_ROOT_UDISK_ONLY
     else if(devaddr > 0x10 && devaddr <= 0x14)
-    {   /* 外部HUB的端口下的USB设备 */
+    {   /* USB devices under the port of external HUB */
         // if (UHUB_HOST_CTRL & RB_UH_PORT_EN ) { /* The external HUB under the built-in Root-HUB exists and is not plugged and unplugged */
         if(ums & bUMS_ATTACH)
         {   /* The USB device under built-in Root-HUB exists */

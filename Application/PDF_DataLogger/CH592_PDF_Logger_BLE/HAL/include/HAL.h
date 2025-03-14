@@ -64,11 +64,11 @@ extern uint16_t FlashSectorCount;
 extern void HAL_Init(void);
 
 /* *
-* @brief   硬件层事务处理
+* @brief Hardware layer transaction processing
 *
-* @param   task_id - The TMOS assigned task ID.
-* @param   events - events to process.  This is a bit map and can
-*                   contain more than one event. */
+* @param task_id - The TMOS assigned task ID.
+* @param events - events to process. This is a bit map and can
+* contains more than one event. */
 extern tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events);
 
 /* *

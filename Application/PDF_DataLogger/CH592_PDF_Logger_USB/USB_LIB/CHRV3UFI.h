@@ -112,7 +112,7 @@ typedef FAT_DIR_INFO *PX_FAT_DIR_INFO;
 #define ATTR_LONG_NAME			( ATTR_READ_ONLY | ATTR_HIDDEN | ATTR_SYSTEM | ATTR_VOLUME_ID )
 /* File properties UINT8 */
 /* bit0 bit1 bit2 bit3 bit4 bit5 bit6 bit7 */
-/*  只   隐   系   卷   目   存   未定义   */
+/* Only hidden volumes are stored Undefined */
 /* Reading and hiding record files */
 /* File time UINT16 */
 /* Time = (Hour<<11) + (Minute<<5) + (Second>>1) */
@@ -194,14 +194,14 @@ typedef union _CMD_PARAM {
 	} ByteLocate;						/* CMD_ByteLocate, moves the current file pointer in bytes */
 	struct {
 		UINT16	mByteCount;				/* Input parameters: The number of bytes to be read, return: The number of bytes actually read */
-		PUINT8	mByteBuffer;			/* 输入参数: 指向存放读出数据块的缓冲区 */
+		PUINT8	mByteBuffer;			/* Input parameters: Point to the buffer where the read data block is stored */
 		UINT16	mActCnt;
 	} ByteRead;							/* CMD_ByteRead, reads data blocks from the current file in units of bytes */
 	struct {
 		UINT16	mByteCount;				/* Input parameters: The number of bytes to be written, return: The number of bytes actually written */
 		PUINT8	mByteBuffer;			/* Input parameters: Point to the buffer where the read data block is stored */
 		UINT16	mActCnt;
-	} ByteWrite;						/* CMD_ByteWrite, 以字节为单位向当前文件写入数据块 */
+	} ByteWrite;						/* CMD_ByteWrite, writes data blocks to the current file in units of bytes */
 	struct {
 		UINT8	mSaveVariable;			/* Input parameters: If it is 0, the variables of a single USB disk will be restored. If it is 0x80, the variables of multiple USB disks will be restored. If it is other values, the variables will be backed up/save. */
 		UINT8	mReserved[3];
@@ -327,7 +327,7 @@ extern	void	mDelaymS( UINT16 n );		// Delay in mS
 extern	UINT8	USBHostTransact( UINT8 endp_pid, UINT8 tog, UINT32 timeout );	// CHRV3 transmits transactions, input destination endpoint address/PID token, synchronization flag, NAK retry time, return 0 successful, timeout/error retry
 extern	UINT8	HostCtrlTransfer( PUINT8 DataBuf, PUINT8 RetLen );	// Execute control transmission, 8-byte request code in pSetupReq, DataBuf is an optional sending and receiving buffer, and the actual sending and receiving length is returned in the variable pointed to by ReqLen.
 // extern void CopySetupReqPkg( PCCHAR pReqPkt ); // Copy control transfer request packet
-//extern	UINT8	CtrlGetDeviceDescrTB( void );  // 获取设备描述符,返回在TxBuffer中
+// extern UINT8 CtrlGetDeviceDescrTB( void ); // Get the device descriptor and return it in TxBuffer
 extern	UINT8	CtrlGetConfigDescrTB( void );  // Get the configuration descriptor, return it in TxBuffer
 // extern UINT8 CtrlSetUsbAddress(UINT8 addr); // Set the USB device address
 extern	UINT8	CtrlSetUsbConfig( UINT8 cfg );  // Set up USB device configuration

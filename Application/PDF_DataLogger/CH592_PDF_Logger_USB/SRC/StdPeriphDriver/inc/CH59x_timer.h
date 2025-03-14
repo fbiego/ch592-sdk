@@ -97,10 +97,10 @@ void TMR0_EXTSingleCounterInit(CapModeTypeDef cap);
 #define TMR0_PWMCycleCfg(cyc)         (R32_TMR0_CNT_END = cyc)
 
 /* *
-* @brief   PWM 输出初始化
+* @brief PWM output initialization
 *
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param ts - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
 void TMR0_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts);
 
 /* *
@@ -205,10 +205,10 @@ void TMR1_EXTSingleCounterInit(CapModeTypeDef cap);
 #define TMR1_PWMCycleCfg(cyc)         (R32_TMR1_CNT_END = cyc)
 
 /* *
-* @brief   PWM 输出初始化
+* @brief PWM output initialization
 *
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param ts - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
 void TMR1_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts);
 
 /* *
@@ -322,10 +322,10 @@ void TMR2_EXTSingleCounterInit(CapModeTypeDef cap);
 #define TMR2_PWMCycleCfg(cyc)         (R32_TMR2_CNT_END = cyc)
 
 /* *
-* @brief   PWM 输出初始化
+* @brief PWM output initialization
 *
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param ts - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
 void TMR2_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts);
 
 /* *
@@ -439,10 +439,10 @@ void TMR3_EXTSingleCounterInit(CapModeTypeDef cap);
 #define TMR3_PWMCycleCfg(cyc)         (R32_TMR3_CNT_END = cyc)
 
 /* *
-* @brief   PWM 输出初始化
+* @brief PWM output initialization
 *
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param ts - set pwm repeat times, refer to PWM_RepeatTsTypeDef */
 void TMR3_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts);
 
 /* *

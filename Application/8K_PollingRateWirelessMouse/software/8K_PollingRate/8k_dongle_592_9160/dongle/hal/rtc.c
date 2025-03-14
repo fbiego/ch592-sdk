@@ -40,20 +40,20 @@ void RTC_SetTignTime(uint32_t time)
 }
 
 
-/* ******************************************************************************
-* @fn          RTC_IRQHandler
+/* *********************************************************************************************
+* @fn RTC_IRQHandler
 *
-* @brief       RTC中断处理
+* @brief RTC interrupt handling
 *
 * input parameters
 *
-* @param       None.
+* @param None.
 *
 * output parameters
 *
-* @param       None.
+* @param None.
 *
-* @return      None. */
+* @return None. */
 __HIGH_CODE
 static uint32_t SYS_GetClockValue(void)
 {

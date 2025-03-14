@@ -165,16 +165,16 @@ void CH59x_BLEInit(void)
     }
 }
 
-/* ******************************************************************************
-* @fn      HAL_ProcessEvent
+/* *********************************************************************************************
+* @fn HAL_ProcessEvent
 *
-* @brief   硬件层事务处理
+* @brief Hardware layer transaction processing
 *
-* @param   task_id - The TMOS assigned task ID.
-* @param   events  - events to process.  This is a bit map and can
-*                      contain more than one event.
+* @param task_id - The TMOS assigned task ID.
+* @param events - events to process. This is a bit map and can
+* contains more than one event.
 *
-* @return  events. */
+* @return events. */
 tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events)
 {
     uint8_t *msgPtr;

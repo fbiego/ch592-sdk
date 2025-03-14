@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : heartrateservice.C
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2018/12/11
-* Description        : 心率服务
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : hearttateservice.C
+* Author: WCH
+* Version: V1.0
+* Date: 2018/12/11
+* Description: Heart rate service
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 /*********************************************************************
  * INCLUDES

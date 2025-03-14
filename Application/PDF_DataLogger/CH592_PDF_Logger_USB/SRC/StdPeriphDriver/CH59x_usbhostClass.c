@@ -317,7 +317,7 @@ uint8_t InitRootDevice(void)
                     }
                 }
                 else
-                {                              // 可以进一步分析
+                {                              // Further analysis can be done
                     s = CtrlSetUsbConfig(cfg); // Set up USB device configuration
                     if(s == ERR_SUCCESS)
                     {

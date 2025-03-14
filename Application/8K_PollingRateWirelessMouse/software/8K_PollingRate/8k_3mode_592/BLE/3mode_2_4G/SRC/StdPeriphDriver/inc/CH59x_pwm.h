@@ -118,21 +118,21 @@ void PWMX_16bit_CycleCfg(uint16_t cyc);
 #define PWM11_ActDataWidth(d)    (R8_PWM11_DATA = d)
 
 /* *
-* @brief   PWM4-PWM11通道输出波形配置
+* @brief PWM4-PWM11 channel output waveform configuration
 *
-* @param   ch      - select channel of pwm, refer to channel of PWM define
-* @param   da      - effective pulse width
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   s       - control pwmx function, ENABLE or DISABLE */
+* @param ch - select channel of pwm, refer to channel of PWM define
+* @param da - effective pulse width
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param s - control pwmx function, ENABLE or DISABLE */
 void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s);
 
 /* *
-* @brief   PWM4-PWM9 通道16位输出波形配置
+* @brief PWM4-PWM9 channel 16-bit output waveform configuration
 *
-* @param   ch      - select channel of pwm, refer to channel of PWM define
-* @param   da      - effective pulse width
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   s       - control pwmx function, ENABLE or DISABLE */
+* @param ch - select channel of pwm, refer to channel of PWM define
+* @param da - effective pulse width
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param s - control pwmx function, ENABLE or DISABLE */
 void PWMX_16bit_ACTOUT(uint8_t ch, uint16_t da, PWMX_PolarTypeDef pr, FunctionalState s);
 
 /* *

@@ -89,12 +89,11 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len);
 * @param len - The length of data to be received, maximum of 4095 */
 void SPI0_MasterRecv(uint8_t *pbuf, uint16_t len);
 
-/**
- * @brief   DMA方式连续发送数据
- *
- * @param   pbuf    - 待发送数据起始地址,需要四字节对其
- * @param   len     - 待发送数据长度
- */
+/* *
+* @brief data is sent continuously in DMA mode
+*
+* @param pbuf - The starting address of data to be sent, four bytes are required to
+* @param len - length of data to be sent */
 void SPI0_MasterDMATrans(uint8_t *pbuf, uint16_t len);
 
 /* *

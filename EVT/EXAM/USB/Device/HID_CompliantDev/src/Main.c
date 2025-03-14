@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : Main.c
-* Author             : WCH
-* Version            : V1.1
-* Date               : 2022/01/25
-* Description        : 模拟兼容HID设备
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: Main.c
+* Author: WCH
+* Version: V1.1
+* Date: 2022/01/25
+* Description: Simulate compatible HID devices
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 #include "CH59x_common.h"
 

@@ -98,15 +98,14 @@ void SPI0_MasterSendByte(uint8_t d)
     while(!(R8_SPI0_INT_FLAG & RB_SPI_FREE));
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterRecvByte
- *
- * @brief   接收单字节 (buffer)
- *
- * @param   none
- *
- * @return  接收到的字节
- */
+/* ***************************************************************************
+* @fn SPI0_MasterRecvByte
+*
+* @brief Receive single byte (buffer)
+*
+* @param none
+*
+* @return Received bytes */
 uint8_t SPI0_MasterRecvByte(void)
 {
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR;
