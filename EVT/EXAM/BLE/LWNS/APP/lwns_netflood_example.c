@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : lwns_netflood_example.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2021/07/12
-* Description        : netflood，网络泛洪传输例子
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: lwns_netflood_example.c
+* Author: WCH
+* Version: V1.0
+* Date: 2021/07/12
+* Description: netflood, network flood transmission example
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 #include "lwns_netflood_example.h"
 
 // Each file has a separate debug print switch, setting 0 can prohibit internal printing of this file.

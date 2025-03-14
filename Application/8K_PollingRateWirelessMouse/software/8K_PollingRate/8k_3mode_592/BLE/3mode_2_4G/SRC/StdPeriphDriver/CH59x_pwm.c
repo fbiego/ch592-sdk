@@ -67,17 +67,17 @@ void PWMX_16bit_CycleCfg(uint16_t cyc)
     R32_PWM_REG_CYCLE = cyc;
 }
 
-/* ********************************************************************
-* @fn      PWMX_16bit_ACTOUT
+/* ***************************************************************************
+* @fn PWMX_16bit_ACTOUT
 *
-* @brief   PWM4-PWM9 通道16位输出波形配置
+* @brief PWM4-PWM9 channel 16-bit output waveform configuration
 *
-* @param   ch      - select channel of pwm, refer to channel of PWM define
-* @param   da      - effective pulse width
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   s       - control pwmx function, ENABLE or DISABLE
+* @param ch - select channel of pwm, refer to channel of PWM define
+* @param da - effective pulse width
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param s - control pwmx function, ENABLE or DISABLE
 *
-* @return  none */
+* @return none */
 void PWMX_16bit_ACTOUT(uint8_t ch, uint16_t da, PWMX_PolarTypeDef pr, FunctionalState s)
 {
     uint8_t i;

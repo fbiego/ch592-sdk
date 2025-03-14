@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : Main.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2020/08/06
-* Description        : 串口1收发演示
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: Main.c
+* Author: WCH
+* Version: V1.0
+* Date: 2020/08/06
+* Description: Serial port 1 sending and receiving demonstration
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 #include "CH59x_common.h"
 

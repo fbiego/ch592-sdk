@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : ota.h
-* Author             : WCH
-* Version            : V1.10
-* Date               : 2018/12/14
-* Description        : oad相关配置定义
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name : ota.h
+* Author: WCH
+* Version: V1.10
+* Date: 2018/12/14
+* Description: oad-related configuration definition
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 
 /******************************************************************************/
 #ifndef __OTA_H

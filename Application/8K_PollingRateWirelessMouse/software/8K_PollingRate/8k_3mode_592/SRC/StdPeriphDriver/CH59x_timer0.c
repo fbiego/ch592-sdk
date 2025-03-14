@@ -41,15 +41,15 @@ void TMR0_EXTSingleCounterInit(CapModeTypeDef cap)
     R8_TMR0_CTRL_MOD = RB_TMR_COUNT_EN | RB_TMR_CAP_COUNT | RB_TMR_MODE_IN | (cap << 6);
 }
 
-/* ********************************************************************
-* @fn      TMR0_PWMInit
+/* ***************************************************************************
+* @fn TMR0_PWMInit
 *
-* @brief   PWM 输出初始化
+* @brief PWM output initialization
 *
-* @param   pr      - select wave polar, refer to PWMX_PolarTypeDef
-* @param   ts      - set pwm repeat times, refer to PWM_RepeatTsTypeDef
+* @param pr - select wave polar, refer to PWMX_PolarTypeDef
+* @param ts - set pwm repeat times, refer to PWM_RepeatTsTypeDef
 *
-* @return  none */
+* @return none */
 void TMR0_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts)
 {
     R8_TMR0_CTRL_MOD = RB_TMR_ALL_CLEAR;

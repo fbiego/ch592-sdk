@@ -1,14 +1,14 @@
-/* ********************************* (C) COPYRIGHT *******************************
-* File Name          : lwns_adapter_blemesh_mac.c
-* Author             : WCH
-* Version            : V1.0
-* Date               : 2021/06/20
-* Description        : lwns适配器，模拟ble sig mesh的mac协议
-*********************************************************************************
+/* ********************************* (C) COPYRIGHT ***************************
+* File Name: lwns_adapter_blemesh_mac.c
+* Author: WCH
+* Version: V1.0
+* Date: 2021/06/20
+* Description: lwns adapter, emulates ble sig mesh's mac protocol
+************************************************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 * Attention: This software (modified or not) and binary are used for
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
-****************************************************************************** */
+********************************************************************************************* */
 #include "lwns_adapter_blemesh_mac.h"
 #include "lwns_sec.h"
 
