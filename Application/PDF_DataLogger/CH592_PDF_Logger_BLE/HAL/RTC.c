@@ -109,7 +109,7 @@ void HAL_TimeInit(void)
                  (uint16_t)DeviceInfo.StartTime.Day,
                  (uint16_t)DeviceInfo.StartTime.Hour,
                  (uint16_t)DeviceInfo.StartTime.Minute,
-                 (uint16_t)DeviceInfo.StartTime.Second); //RTC时钟初始化当前时间
+                 (uint16_t)DeviceInfo.StartTime.Second); // RTC clock initialization current time
 
     tmos_memset( &conf, 0, sizeof(bleClockConfig_t) );
     conf.ClockAccuracy = CLK_OSC32K ? 1000 : 50;

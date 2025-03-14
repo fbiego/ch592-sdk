@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      LClk32K_Select
- *
- * @brief   32K 低频时钟来源
- *
- * @param   hc  - 选择32K使用内部还是外部
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LClk32K_Select
+*
+* @brief 32K low frequency clock source
+*
+* @param hc - Choose 32K to use internal or external
+*
+* @return none */
 void LClk32K_Select(LClk32KTypeDef hc)
 {
     uint8_t cfg = R8_CK32K_CONFIG;
@@ -120,15 +119,14 @@ void HSECFG_Capacitance(HSECapTypeDef c)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      LSECFG_Current
- *
- * @brief   LSE晶体 偏置电流配置
- *
- * @param   c   - 70%,100%,140%,200%
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LSECFG_Current
+*
+* @brief LSE crystal Bias current configuration
+*
+* @param c - 70%, 100%, 140%, 200%
+*
+* @return none */
 void LSECFG_Current(LSECurrentTypeDef c)
 {
     uint8_t x32K_c;
@@ -190,7 +188,7 @@ void Calibration_LSI(Cali_LevelTypeDef cali_Lv)
     R8_XT32K_TUNE |= 1;
     sys_safe_access_disable();
 
-    // 粗调
+    // Coarse adjustment
     sys_safe_access_enable();
     R8_OSC_CAL_CTRL &= ~RB_OSC_CNT_TOTAL;
     R8_OSC_CAL_CTRL |= 1;
@@ -494,15 +492,14 @@ void RTC_TRIGFunCfg(uint32_t cyc)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      RTC_ModeFunDisable
- *
- * @brief   RTC 模式功能关闭
- *
- * @param   m   - 需要关闭的当前模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RTC_ModeFunDisable
+*
+* @brief RTC mode function is turned off
+*
+* @param m - Current mode that needs to be turned off
+*
+* @return none */
 void RTC_ModeFunDisable(RTC_MODETypeDef m)
 {
     uint8_t i = 0;

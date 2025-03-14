@@ -46,10 +46,10 @@ typedef enum
     PWMX_Cycle_256 = 0, // 256 PWMX cycles
     PWMX_Cycle_255,     // 255 PWMX cycles
     PWMX_Cycle_128,     // 128 PWMX cycles
-    PWMX_Cycle_127,     // 127 个PWMX周期
-    PWMX_Cycle_64,      // 64 个PWMX周期
+    PWMX_Cycle_127,     // 127 PWMX cycles
+    PWMX_Cycle_64,      // 64 PWMX cycles
     PWMX_Cycle_63,      // 63 PWMX cycles
-    PWMX_Cycle_32,      // 32 个PWMX周期
+    PWMX_Cycle_32,      // 32 PWMX cycles
     PWMX_Cycle_31,      // 31 PWMX cycles
 } PWMX_CycleTypeDef;
 
@@ -122,16 +122,15 @@ void PWMX_CycleCfg(PWMX_CycleTypeDef cyc);
 * @param   s       - control pwmx function, ENABLE or DISABLE */
 void PWMX_ACTOUT(uint8_t ch, uint8_t da, PWMX_PolarTypeDef pr, FunctionalState s);
 
-/**
- * @brief   PWM 交替输出模式配置
- *
- * @param   ch      - select group of PWM alternate output
- *                    RB_PWM4_5_STAG_EN     -  PWM4 和 PWM5 通道交替输出
- *                    RB_PWM6_7_STAG_EN     -  PWM6 和 PWM7 通道交替输出
- *                    RB_PWM8_9_STAG_EN     -  PWM8 和 PWM9 通道交替输出
- *                    RB_PWM10_11_STAG_EN   -  PWM10 和 PWM11 通道交替输出
- * @param   s       - control pwmx function, ENABLE or DISABLE
- */
+/* *
+* @brief PWM Alternating Output Mode Configuration
+*
+* @param ch - select group of PWM alternate output
+* RB_PWM4_5_STAG_EN - Alternate output of PWM4 and PWM5 channels
+* RB_PWM6_7_STAG_EN - Alternate output of PWM6 and PWM7 channels
+* RB_PWM8_9_STAG_EN - Alternate output of PWM8 and PWM9 channels
+* RB_PWM10_11_STAG_EN - Alternate output of PWM10 and PWM11 channels
+* @param s - control pwmx function, ENABLE or DISABLE */
 void PWMX_AlterOutCfg(uint8_t ch, FunctionalState s);
 
 #ifdef __cplusplus

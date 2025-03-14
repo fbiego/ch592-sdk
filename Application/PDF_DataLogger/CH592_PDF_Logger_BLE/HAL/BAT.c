@@ -7,7 +7,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 
 //#define CONFIG_BAT_DEBUG
@@ -21,7 +21,7 @@
  *                                        GLOBAL VARIABLES
  **************************************************************************************************/
 static signed short RoughCalib_Value = 0;    // ADC coarse adjustment deviation value
-//uint8 BatVolStartFlg = 0; //电池电压获取开始
+// uint8 BatVolStartFlg = 0; //Battery voltage acquisition starts
 
 /**************************************************************************************************
  *                                          FUNCTIONS

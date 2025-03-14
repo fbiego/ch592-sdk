@@ -33,8 +33,8 @@ extern "C" {
 #define ERR_USB_BUF_OVER       0x17  /* The data transmitted by USB is incorrect or there is too much data and the buffer overflows */
 #define ERR_USB_DISK_ERR       0x1F  /* The USB memory operation failed. During initialization, the USB memory may not be supported. During read and write operations, the disk may be damaged or disconnected. */
 #define ERR_USB_TRANSFER       0x20  /* NAK/STALL and more error codes are in 0x20~0x2F */
-#define ERR_USB_UNSUPPORT      0xFB  /* 不支持的USB设备*/
-#define ERR_USB_UNKNOWN        0xFE  /* 设备操作出错*/
+#define ERR_USB_UNSUPPORT      0xFB  /* Unsupported USB devices */
+#define ERR_USB_UNKNOWN        0xFE  /* Equipment operation error */
 #define ERR_AOA_PROTOCOL       0x41  /* There was an error in the protocol version */
 
 /* USB device related information table, support up to 1 device */
@@ -58,19 +58,19 @@ typedef struct
 {
     uint8_t  DeviceStatus;  // Device status, 0-No device, 1-There is a device but has not been initialized yet, 2-There is a device but the initialization enumeration failed, 3-There is a device and the initialization enumeration is successful
     uint8_t  DeviceAddress; // The USB address assigned by the device
-    uint8_t  DeviceSpeed;   // 0为低速,非0为全速
-    uint8_t  DeviceType;    // 设备类型
+    uint8_t  DeviceSpeed;   // 0 is low speed, non-0 is full speed
+    uint8_t  DeviceType;    // Equipment Type
     uint16_t DeviceVID;
     uint16_t DevicePID;
-    uint8_t  GpVar[4];     // 通用变量，存放端点
-    uint8_t  GpHUBPortNum; // 通用变量,如果是HUB，表示HUB端口数
+    uint8_t  GpVar[4];     // Common variables, storing endpoints
+    uint8_t  GpHUBPortNum; // General variable, if it is HUB, it indicates the number of HUB ports
 } _RootHubDev;
 
 typedef struct
 {
     UINT8  DeviceStatus;  // Device status, 0-No device, 1-There is a device but has not been initialized yet, 2-There is a device but the initialization enumeration failed, 3-There is a device and the initialization enumeration is successful
     UINT8  DeviceAddress; // The USB address assigned by the device
-    UINT8  DeviceSpeed;   // 0为低速,非0为全速
+    UINT8  DeviceSpeed;   // 0 is low speed, non-0 is full speed
     UINT8  DeviceType;    // Equipment Type
     UINT16 DeviceVID;
     UINT16 DevicePID;
@@ -78,7 +78,7 @@ typedef struct
 } _DevOnHubPort;     // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
 
 extern _RootHubDev   ThisUsbDev;
-extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // 假定:不超过1个外部HUB,每个外部HUB不超过HUB_MAX_PORTS个端口(多了不管)
+extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
 extern uint8_t       UsbDevEndp0Size;             // Maximum package size for endpoint 0 of USB device */
 extern uint8_t       FoundNewDev;
 
@@ -100,16 +100,16 @@ extern uint8_t U2Com_Buffer[];
 
 /* The following is the USB host request package */
 extern const uint8_t SetupGetDevDescr[];     // Get device descriptor*/
-extern const uint8_t SetupGetCfgDescr[];     // 获取配置描述符*/
+extern const uint8_t SetupGetCfgDescr[];     // Get the configuration descriptor*/
 extern const uint8_t SetupSetUsbAddr[];      // Set USB address*/
-extern const uint8_t SetupSetUsbConfig[];    // 设置USB配置*/
-extern const uint8_t SetupSetUsbInterface[]; // 设置USB接口配置*/
+extern const uint8_t SetupSetUsbConfig[];    // Setting up USB configuration*/
+extern const uint8_t SetupSetUsbInterface[]; // Set USB interface configuration*/
 extern const uint8_t SetupClrEndpStall[];    // Clear endpoint STALL*/
 
-extern const uint8_t SetupGetU2DevDescr[];    // 获取设备描述符*/
-extern const uint8_t SetupGetU2CfgDescr[];    // 获取配置描述符*/
+extern const uint8_t SetupGetU2DevDescr[];    // Get device descriptor*/
+extern const uint8_t SetupGetU2CfgDescr[];    // Get the configuration descriptor*/
 extern const uint8_t SetupSetUsb2Addr[];      // Set USB address*/
-extern const uint8_t SetupSetUsb2Config[];    // 设置USB配置*/
+extern const uint8_t SetupSetUsb2Config[];    // Setting up USB configuration*/
 extern const uint8_t SetupSetUsb2Interface[]; // Set USB interface configuration*/
 extern const uint8_t SetupClrU2EndpStall[];   // Clear endpoint STALL*/
 
@@ -117,12 +117,11 @@ extern const uint8_t SetupClrU2EndpStall[];   // Clear endpoint STALL*/
 * @brief Close the ROOT-HUB port, in fact, the hardware has been automatically closed, here is just clearing some structural states */
 void DisableRootHubPort(void);
 
-/**
- * @brief   分析ROOT-HUB状态,处理ROOT-HUB端口的设备插拔事件
- *          如果设备拔出,函数中调用DisableRootHubPort()函数,将端口关闭,插入事件,置相应端口的状态位
- *
- * @return  返回ERR_SUCCESS为没有情况,返回ERR_USB_CONNECT为检测到新连接,返回ERR_USB_DISCON为检测到断开
- */
+/* *
+* @brief analyzes the ROOT-HUB status and handles the device plug-in and unplugging events of the ROOT-HUB port
+* If the device is unplugged, the DisableRootHubPort() function is called in the function to close the port, insert the event, and set the status bit of the corresponding port.
+*
+* @return Return ERR_SUCCESS is no situation, return ERR_USB_CONNECT is a new connection is detected, return ERR_USB_DISCON is a disconnection is detected */
 uint8_t AnalyzeRootHub(void);
 
 /* *
@@ -167,15 +166,14 @@ uint8_t WaitUSB_Interrupt(void);
 * ERR_SUCCESS Transmission Completed */
 uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout);
 
-/**
- * @brief   执行控制传输,8字节请求码在pSetupReq中,DataBuf为可选的收发缓冲区
- *
- * @param   DataBuf     - 如果需要接收和发送数据,那么DataBuf需指向有效缓冲区用于存放后续数据
- * @param   RetLen      - 实际成功收发的总长度保存在RetLen指向的字节变量中
- *
- * @return  ERR_USB_BUF_OVER    IN状态阶段出错
- *          ERR_SUCCESS         数据交换成功
- */
+/* *
+* @brief executes control transmission, 8 byte request code in pSetupReq, DataBuf is an optional sending and receiving buffer
+*
+* @param DataBuf - If you need to receive and send data, then DataBuf needs to point to a valid buffer to store subsequent data
+* @param RetLen - The total length of the actual successful sending and receiving is saved in the byte variable pointed to by RetLen
+*
+* @return ERR_USB_BUF_OVER IN status stage error
+* ERR_SUCCESS Data exchange was successful */
 uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen);
 
 /* *
@@ -184,12 +182,11 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen);
 * @param pReqPkt - Control request packet address */
 void CopySetupReqPkg(const uint8_t *pReqPkt);
 
-/**
- * @brief   获取设备描述符,返回在 pHOST_TX_RAM_Addr 中
- *
- * @return  ERR_USB_BUF_OVER    描述符长度错误
- *          ERR_SUCCESS         成功
- */
+/* *
+* @brief Get the device descriptor, return it in pHOST_TX_RAM_Addr
+*
+* @return ERR_USB_BUF_OVER Descriptor length error
+* ERR_SUCCESS Success */
 uint8_t CtrlGetDeviceDescr(void);
 
 /* *
@@ -207,13 +204,12 @@ uint8_t CtrlGetConfigDescr(void);
 * @return ERR_SUCCESS Success */
 uint8_t CtrlSetUsbAddress(uint8_t addr);
 
-/**
- * @brief   设置USB设备配置
- *
- * @param   cfg     - 配置值
- *
- * @return  ERR_SUCCESS     成功
- */
+/* *
+* @brief Setting USB device configuration
+*
+* @param cfg - Configuration value
+*
+* @return ERR_SUCCESS Success */
 uint8_t CtrlSetUsbConfig(uint8_t cfg);
 
 /* *
@@ -235,32 +231,29 @@ uint8_t CtrlSetUsbIntercace(uint8_t cfg);
 /* *
 * @brief USB host function initialization */
 void USB_HostInit(void);
-uint8_t EnumAllHubPort(void);// 枚举所有ROOT-HUB端口下外部HUB后的二级USB设备
-void SelectHubPort(uint8_t HubPortIndex); // HubPortIndex=0选择操作指定的ROOT-HUB端口,否则选择操作指定的ROOT-HUB端口的外部HUB的指定端口
+uint8_t EnumAllHubPort(void);// Enumerate all secondary USB devices after external HUB under ROOT-HUB ports
+void SelectHubPort(uint8_t HubPortIndex); // HubPortIndex=0 Select the ROOT-HUB port specified by the operation, otherwise select the specified port of the external HUB of the ROOT-HUB port specified by the operation.
 uint16_t SearchTypeDevice(uint8_t type); // Search for the port number of the device of the specified type on each port of ROOT-HUB and external HUB. If the output port number is 0xFFFF, no search is found.
-uint8_t SETorOFFNumLock(uint8_t *buf); // NumLock的点灯判断
+uint8_t SETorOFFNumLock(uint8_t *buf); // NumLock's lighting judgment
 
 /*************************************************************/
 
-/**
- * @brief   初始化指定ROOT-HUB端口的USB设备
- *
- * @return  错误码
- */
+/* *
+* @brief Initialize the USB device with the specified ROOT-HUB port
+*
+* @return Error code */
 uint8_t InitRootDevice(void);
 
-/**
- * @brief   获取HID设备报表描述符,返回在TxBuffer中
- *
- * @return  错误码
- */
+/* *
+* @brief Get the HID device report descriptor, return it in TxBuffer
+*
+* @return Error code */
 uint8_t CtrlGetHIDDeviceReport(uint8_t infc);
 
-/**
- * @brief   获取HUB描述符,返回在Com_Buffer中
- *
- * @return  错误码
- */
+/* *
+* @brief Get the HUB descriptor, return it in Com_Buffer
+*
+* @return Error code */
 uint8_t CtrlGetHubDescr(void);
 
 /* *

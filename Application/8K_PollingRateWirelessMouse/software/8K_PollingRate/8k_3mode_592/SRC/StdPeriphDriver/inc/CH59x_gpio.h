@@ -65,7 +65,7 @@ typedef enum
 typedef enum
 {
     GPIO_ITMode_LowLevel,  // Low level trigger
-    GPIO_ITMode_HighLevel, //高电平触发
+    GPIO_ITMode_HighLevel, // High level trigger
     GPIO_ITMode_FallEdge,  // Falling edge trigger
     GPIO_ITMode_RiseEdge,  // Rising edge trigger
 
@@ -91,11 +91,10 @@ void GPIOB_ModeCfg(uint32_t pin, GPIOModeTypeDef mode);
 * @param pin - PA0-PA15 */
 #define GPIOA_ResetBits(pin)      (R32_PA_CLR |= pin)
 
-/**
- * @brief   GPIOA端口引脚输出置高
- *
- * @param   pin     - PA0-PA15
- */
+/* *
+* @brief GPIOA port pin output set high
+*
+* @param pin - PA0-PA15 */
 #define GPIOA_SetBits(pin)        (R32_PA_OUT |= pin)
 
 /* *

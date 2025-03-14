@@ -55,9 +55,8 @@ typedef enum
 
 } HSECurrentTypeDef;
 
-/**
- * @brief  32M晶振内部电容挡位
- */
+/* *
+* @brief 32M crystal oscillator internal capacitor gear */
 typedef enum
 {
     HSECap_10p = 0,
@@ -82,9 +81,8 @@ typedef enum
 
 } LSECurrentTypeDef;
 
-/**
- * @brief  32K晶振内部电容挡位
- */
+/* *
+* @brief 32K crystal oscillator internal capacitor gear */
 typedef enum
 {
     LSECap_2p = 0,
@@ -124,9 +122,9 @@ typedef enum
 {
     Period_0_125_S = 0, // 0.125s cycle
     Period_0_25_S,      // 0.25s cycle
-    Period_0_5_S,       // 0.5s 周期
+    Period_0_5_S,       // 0.5s cycle
     Period_1_S,         // 1s cycle
-    Period_2_S,         // 2s 周期
+    Period_2_S,         // 2s cycle
     Period_4_S,         // 4s cycle
     Period_8_S,         // 8s cycle
     Period_16_S,        // 16s cycle
@@ -137,7 +135,7 @@ typedef enum
  */
 typedef enum
 {
-    RTC_TRIG_EVENT = 0, // RTC 触发事件
+    RTC_TRIG_EVENT = 0, // RTC trigger event
     RTC_TMR_EVENT,      // RTC periodic timing events
 
 } RTC_EVENTTypeDef;
@@ -148,13 +146,13 @@ typedef enum
 typedef enum
 {
     RTC_TRIG_MODE = 0, // RTC Trigger Mode
-    RTC_TMR_MODE,      // RTC 周期定时模式
+    RTC_TMR_MODE,      // RTC periodic timing mode
 
 } RTC_MODETypeDef;
 
 typedef enum
 {
-    /* 校准精度越高，耗时越长 */
+    /* The higher the calibration accuracy, the longer the time it takes */
     Level_32 = 3, // Time taken 1.2ms 1000ppm (32M main frequency) 1100ppm (60M main frequency)
     Level_64,     // Time 2.2ms 800ppm (32M main frequency) 1000ppm (60M main frequency)
     Level_128,    // Time 4.2ms 600ppm (32M main frequency) 800ppm (60M main frequency)
@@ -173,11 +171,10 @@ void LClk32K_Select(LClk32KTypeDef hc);
 * @param c - 75%, 100%, 125%, 150% */
 void HSECFG_Current(HSECurrentTypeDef c);
 
-/**
- * @brief   HSE晶体 负载电容配置
- *
- * @param   c   - refer to HSECapTypeDef
- */
+/* *
+* @brief HSE crystal Load capacitor configuration
+*
+* @param c - refer to HSECapTypeDef */
 void HSECFG_Capacitance(HSECapTypeDef c);
 
 /* *
@@ -216,11 +213,10 @@ void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, 
 * @param ps - the seconds obtained, MAX_S = 59 */
 void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint16_t *pm, uint16_t *ps);
 
-/**
- * @brief   基于LSE/LSI时钟，配置当前RTC 周期数
- *
- * @param   cyc     - 配置周期计数初值，MAX_CYC = 0xA8BFFFFF = 2831155199
- */
+/* *
+* @brief Configure the current number of RTC cycles based on the LSE/LSI clock
+*
+* @param cyc - Configure the initial value of the cycle count, MAX_CYC = 0xA8BFFFF = 2831155199 */
 void RTC_SetCycle32k(uint32_t cyc);
 
 /* *

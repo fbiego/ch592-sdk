@@ -26,9 +26,8 @@ extern "C" {
  * FUNCTIONS
  */
 
-/**
- * @brief   配置睡眠唤醒的方式   - RTC唤醒，触发模式
- */
+/* *
+* @brief Configure sleep wake-up mode - RTC wake-up, trigger mode */
 extern void HAL_SleepInit(void);
 
 /* *

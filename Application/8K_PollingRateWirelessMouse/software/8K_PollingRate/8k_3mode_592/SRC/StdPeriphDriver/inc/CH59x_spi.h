@@ -44,7 +44,7 @@ typedef enum
 typedef enum
 {
     Mode_DataStream = 0, // Data flow mode
-    Mose_FirstCmd,       // 首字节命令模式
+    Mose_FirstCmd,       // First-byte command mode
 } Slave_ModeTypeDef;
 
 /* *
@@ -75,12 +75,11 @@ void SPI0_MasterSendByte(uint8_t d);
 * @param none */
 uint8_t SPI0_MasterRecvByte(void);
 
-/**
- * @brief   使用FIFO连续发送多字节
- *
- * @param   pbuf    - 待发送的数据内容首地址
- * @param   len     - 请求发送的数据长度，最大4095
- */
+/* *
+* @brief sends multibytes continuously using FIFO
+*
+* @param pbuf - The first address of the data content to be sent
+* @param len - The length of the data requested to send, maximum 4095 */
 void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len);
 
 /* *
@@ -143,12 +142,11 @@ uint8_t SPI0_SlaveRecvByte(void);
 * @param len - The length of the data requested to send, maximum 4095 */
 void SPI0_SlaveTrans(uint8_t *pbuf, uint16_t len);
 
-/**
- * @brief   从机模式，接收多字节数据
- *
- * @param   pbuf    - 接收收数据存放起始地址
- * @param   len     - 请求接收数据长度
- */
+/* *
+* @brief slave mode, receive multibyte data
+*
+* @param pbuf - Start address for receiving and receiving data storage
+* @param len - Request received data length */
 void SPI0_SlaveRecv(uint8_t *pbuf, uint16_t len);
 
 /* *

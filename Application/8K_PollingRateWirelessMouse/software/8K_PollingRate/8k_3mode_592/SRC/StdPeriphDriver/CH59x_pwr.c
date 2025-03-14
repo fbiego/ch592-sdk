@@ -254,7 +254,7 @@ void LowPower_Halt(void)
     uint8_t x32Kpw, x32Mpw;
 
     FLASH_ROM_SW_RESET();
-    R8_FLASH_CTRL = 0x04; //flash关闭
+    R8_FLASH_CTRL = 0x04; // flash close
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
@@ -303,7 +303,7 @@ void LowPower_Sleep(uint16_t rm)
 
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
 
     sys_safe_access_enable();

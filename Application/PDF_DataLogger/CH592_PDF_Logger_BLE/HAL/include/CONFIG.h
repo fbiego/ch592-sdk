@@ -120,7 +120,7 @@ CENTRAL_MAX_CONNECTION - Up to how many host roles can be used at the same time 
 #define BLE_SNV_NUM                         1
 #endif
 #ifndef CLK_OSC32K
-#define CLK_OSC32K                          1   // 该项请勿在此修改，必须在工程配置里的预处理中修改，如包含主机角色必须使用外部32K
+#define CLK_OSC32K                          1   // Do not modify this item here. It must be modified in preprocessing in the project configuration. If the host role is included, it must use external 32K.
 #endif
 #ifndef BLE_MEMHEAP_SIZE
 #define BLE_MEMHEAP_SIZE                    (1024*6)

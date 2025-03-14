@@ -23,7 +23,7 @@
 void UART1_DefInit(void)
 {
     UART1_BaudRateCfg(115200);
-    R8_UART1_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN; // FIFO打开，触发点4字节
+    R8_UART1_FCR = (2 << 6) | RB_FCR_TX_FIFO_CLR | RB_FCR_RX_FIFO_CLR | RB_FCR_FIFO_EN; // FIFO is turned on, trigger point 4 bytes
     R8_UART1_LCR = RB_LCR_WORD_SZ;
     R8_UART1_IER = RB_IER_TXD_EN;
     R8_UART1_DIV = 1;
@@ -98,16 +98,15 @@ void UART1_Reset(void)
     R8_UART1_IER = RB_IER_RESET;
 }
 
-/*********************************************************************
- * @fn      UART1_SendString
- *
- * @brief   串口多字节发送
- *
- * @param   buf     - 待发送的数据内容首地址
- * @param   l       - 待发送的数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART1_SendString
+*
+* @brief Serial port multibyte send
+*
+* @param buf - The first address of the data content to be sent
+* @param l - length of data to be sent
+*
+* @return none */
 void UART1_SendString(uint8_t *buf, uint16_t l)
 {
     uint16_t len = l;

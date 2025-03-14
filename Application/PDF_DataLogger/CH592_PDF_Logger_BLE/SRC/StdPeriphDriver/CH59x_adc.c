@@ -25,12 +25,12 @@ signed short ADC_DataCalib_Rough(void) // Sampling data roughly tuned to obtain 
     uint16_t i;
     uint32_t sum = 0;
     uint8_t  ch = 0;   // Backup channel
-    uint8_t  cfg = 0;   // 备份
+    uint8_t  cfg = 0;   // Backup
 
     ch = R8_ADC_CHANNEL;
     cfg = R8_ADC_CFG;
 
-    R8_ADC_CFG |= RB_ADC_OFS_TEST; // 进入测试模式
+    R8_ADC_CFG |= RB_ADC_OFS_TEST; // Enter test mode
     R8_ADC_CFG &= ~RB_ADC_DIFF_EN; // Close the difference
 
     R8_ADC_CONVERT |= RB_ADC_START;
@@ -72,16 +72,15 @@ void ADC_ExtSingleChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
     }
 }
 
-/*********************************************************************
- * @fn      ADC_ExtDiffChSampInit
- *
- * @brief   外部信号差分通道采样初始化
- *
- * @param   sp  - refer to ADC_SampClkTypeDef
- * @param   ga  - refer to ADC_SignalPGATypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_ExtDiffChSampInit
+*
+* @brief External signal differential channel sampling initialization
+*
+* @param sp - refer to ADC_SampClkTypeDef
+* @param ga - refer to ADC_SignalPGATypeDef
+*
+* @return none */
 void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;
@@ -96,15 +95,14 @@ void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga)
     }
 }
 
-/*********************************************************************
- * @fn      ADC_InterTSSampInit
- *
- * @brief   内置温度传感器采样初始化
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_InterTSSampInit
+*
+* @brief Built-in temperature sensor sampling initialization
+*
+* @param none
+*
+* @return none */
 void ADC_InterTSSampInit(void)
 {
     R8_TKEY_CFG &= ~RB_TKEY_PWR_ON;

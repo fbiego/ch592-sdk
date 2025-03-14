@@ -46,15 +46,14 @@ void UART3_BaudRateCfg(uint32_t baudrate)
     R16_UART3_DL = (uint16_t)x;
 }
 
-/*********************************************************************
- * @fn      UART3_ByteTrigCfg
- *
- * @brief   串口字节触发中断配置
- *
- * @param   b       - 触发字节数 refer to UARTByteTRIGTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART3_ByteTrigCfg
+*
+* @brief Serial port byte trigger interrupt configuration
+*
+* @param b - trigger byte count refer to UARTByteTRIGTypeDef
+*
+* @return none */
 void UART3_ByteTrigCfg(UARTByteTRIGTypeDef b)
 {
     R8_UART3_FCR = (R8_UART3_FCR & ~RB_FCR_FIFO_TRIG) | (b << 6);
@@ -86,15 +85,14 @@ void UART3_INTCfg(FunctionalState s, uint8_t i)
     }
 }
 
-/*********************************************************************
- * @fn      UART3_Reset
- *
- * @brief   串口软件复位
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART3_Reset
+*
+* @brief serial port software reset
+*
+* @param none
+*
+* @return none */
 void UART3_Reset(void)
 {
     R8_UART3_IER = RB_IER_RESET;

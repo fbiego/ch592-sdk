@@ -90,12 +90,11 @@ typedef enum
 * @param s - Whether to turn on DCDC power */
 void PWR_DCDCCfg(FunctionalState s);
 
-/**
- * @brief   可控单元模块的电源控制
- *
- * @param   s       - 是否打开电源
- * @param   unit    - please refer to unit of controllable power supply
- */
+/* *
+* @brief Power control of controllable unit module
+*
+* @param s - Whether to power on
+* @param unit - please refer to unit of controlled power supply */
 void PWR_UnitModCfg(FunctionalState s, uint8_t unit);
 
 /* *

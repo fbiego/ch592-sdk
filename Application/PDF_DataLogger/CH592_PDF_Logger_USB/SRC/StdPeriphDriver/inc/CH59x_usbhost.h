@@ -22,18 +22,18 @@ extern "C" {
   /* Do not use the USB disk file system library or USB disk mount the USB hub, you need to close the following definition */
     #define FOR_ROOT_UDISK_ONLY
   #endif
-  /* 使用U盘文件系统库，需要开启下面定义, 不使用请关闭 */
+  /* Use the USB disk file system library, you need to enable the following definition. Please close if you do not use it. */
   #define DISK_BASE_BUF_LEN    512  /* The default disk data buffer size is 512 bytes. It is recommended to select USB disks with 2048 or even 4096 to support certain large sectors. If 0 is, the buffer is prohibited from being defined in the .H file and specified by the application in pDISK_BASE_BUF. */
 #endif
 
 // Each subroutine returns status code
 #define ERR_SUCCESS            0x00  // Operation is successful
-#define ERR_USB_CONNECT        0x15  /* 检测到USB设备连接事件,已经连接 */
-#define ERR_USB_DISCON         0x16  /* 检测到USB设备断开事件,已经断开 */
+#define ERR_USB_CONNECT        0x15  /* USB device connection event was detected and connected */
+#define ERR_USB_DISCON         0x16  /* The USB device disconnection event was detected and it has been disconnected */
 #define ERR_USB_BUF_OVER       0x17  /* The data transmitted by USB is incorrect or there is too much data and the buffer overflows */
 #define ERR_USB_DISK_ERR       0x1F  /* The USB memory operation failed. During initialization, the USB memory may not be supported. During read and write operations, the disk may be damaged or disconnected. */
 #define ERR_USB_TRANSFER       0x20  /* NAK/STALL and more error codes are in 0x20~0x2F */
-#define ERR_USB_UNSUPPORT      0xFB  /* 不支持的USB设备*/
+#define ERR_USB_UNSUPPORT      0xFB  /* Unsupported USB devices */
 #define ERR_USB_UNKNOWN        0xFE  /* Equipment operation error */
 #define ERR_AOA_PROTOCOL       0x41  /* There was an error in the protocol version */
 
@@ -58,8 +58,8 @@ typedef struct
 {
     uint8_t  DeviceStatus;  // Device status, 0-No device, 1-There is a device but has not been initialized yet, 2-There is a device but the initialization enumeration failed, 3-There is a device and the initialization enumeration is successful
     uint8_t  DeviceAddress; // The USB address assigned by the device
-    uint8_t  DeviceSpeed;   // 0为低速,非0为全速
-    uint8_t  DeviceType;    // 设备类型
+    uint8_t  DeviceSpeed;   // 0 is low speed, non-0 is full speed
+    uint8_t  DeviceType;    // Equipment Type
     uint16_t DeviceVID;
     uint16_t DevicePID;
     uint8_t  GpVar[4];     // Common variables, storing endpoints
@@ -74,11 +74,11 @@ typedef struct
     UINT8  DeviceType;    // Equipment Type
     UINT16 DeviceVID;
     UINT16 DevicePID;
-    UINT8  GpVar[4]; // 通用变量
+    UINT8  GpVar[4]; // General variables
 } _DevOnHubPort;     // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
 
 extern _RootHubDev   ThisUsbDev;
-extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // 假定:不超过1个外部HUB,每个外部HUB不超过HUB_MAX_PORTS个端口(多了不管)
+extern _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
 extern uint8_t       UsbDevEndp0Size;             // Maximum package size for endpoint 0 of USB device */
 extern uint8_t       FoundNewDev;
 
@@ -87,7 +87,7 @@ extern uint8_t *pHOST_TX_RAM_Addr;
 
 extern _RootHubDev   ThisUsb2Dev;
 extern _DevOnHubPort DevOnU2HubPort[HUB_MAX_PORTS]; // Assuming: no more than 1 external HUB, each external HUB does not exceed HUB_MAX_PORTS ports (no matter if there are too many)
-extern uint8_t       Usb2DevEndp0Size;              // USB设备的端点0的最大包尺寸 */
+extern uint8_t       Usb2DevEndp0Size;              // Maximum package size for endpoint 0 of USB device */
 extern uint8_t       FoundNewU2Dev;
 
 extern uint8_t *pU2HOST_RX_RAM_Addr;
@@ -99,19 +99,19 @@ extern uint8_t Com_Buffer[];
 extern uint8_t U2Com_Buffer[];
 
 /* The following is the USB host request package */
-extern const uint8_t SetupGetDevDescr[];     // 获取设备描述符*/
+extern const uint8_t SetupGetDevDescr[];     // Get device descriptor*/
 extern const uint8_t SetupGetCfgDescr[];     // Get the configuration descriptor*/
-extern const uint8_t SetupSetUsbAddr[];      // 设置USB地址*/
+extern const uint8_t SetupSetUsbAddr[];      // Set USB address*/
 extern const uint8_t SetupSetUsbConfig[];    // Setting up USB configuration*/
 extern const uint8_t SetupSetUsbInterface[]; // Set USB interface configuration*/
 extern const uint8_t SetupClrEndpStall[];    // Clear endpoint STALL*/
 
-extern const uint8_t SetupGetU2DevDescr[];    // 获取设备描述符*/
-extern const uint8_t SetupGetU2CfgDescr[];    // 获取配置描述符*/
-extern const uint8_t SetupSetUsb2Addr[];      // 设置USB地址*/
-extern const uint8_t SetupSetUsb2Config[];    // 设置USB配置*/
+extern const uint8_t SetupGetU2DevDescr[];    // Get device descriptor*/
+extern const uint8_t SetupGetU2CfgDescr[];    // Get the configuration descriptor*/
+extern const uint8_t SetupSetUsb2Addr[];      // Set USB address*/
+extern const uint8_t SetupSetUsb2Config[];    // Setting up USB configuration*/
 extern const uint8_t SetupSetUsb2Interface[]; // Set USB interface configuration*/
-extern const uint8_t SetupClrU2EndpStall[];   // 清除端点STALL*/
+extern const uint8_t SetupClrU2EndpStall[];   // Clear endpoint STALL*/
 
 /* *
 * @brief Close the ROOT-HUB port, in fact, the hardware has been automatically closed, here is just clearing some structural states */
@@ -152,19 +152,18 @@ uint8_t EnableRootHubPort(void);
 * @return Return ERR_SUCCESS Data received or sent successfully, Return ERR_USB_UNKNOWN Data received or sent failed */
 uint8_t WaitUSB_Interrupt(void);
 
-/**
- * @brief   传输事务,输入目的端点地址/PID令牌,同步标志,以20uS为单位的NAK重试总时间(0则不重试,0xFFFF无限重试),返回0成功,超时/出错重试
- *          本子程序着重于易理解,而在实际应用中,为了提供运行速度,应该对本子程序代码进行优化
- *
- * @param   endp_pid    - 令牌和地址, 高4位是token_pid令牌, 低4位是端点地址
- * @param   tog         - 同步标志
- * @param   timeout     - 超时时间
- *
- * @return  ERR_USB_UNKNOWN 超时，可能硬件异常
- *          ERR_USB_DISCON  设备断开
- *          ERR_USB_CONNECT 设备连接
- *          ERR_SUCCESS     传输完成
- */
+/* *
+* @brief Transfer transactions, enter the destination endpoint address/PID token, synchronization flag, total time for NAK retry in units of 20uS (no retry if 0 is not retry, 0xFFFFF infinite retry), return 0 successful, timeout/error retry
+* This subprogram focuses on easy understanding, but in actual applications, in order to provide running speed, the subprogram code should be optimized.
+*
+* @param endp_pid - token and address, the upper 4 bits are token_pid token, the lower 4 bits are endpoint address
+* @param tog - Synchronize flag
+* @param timeout - Timeout
+*
+* @return ERR_USB_UNKNOWN Timeout, possible hardware exception
+* ERR_USB_DISCON The device is disconnected
+* ERR_USB_CONNECT device connection
+* ERR_SUCCESS Transmission Completed */
 uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout);
 
 /* *
@@ -183,12 +182,11 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen);
 * @param pReqPkt - Control request packet address */
 void CopySetupReqPkg(const uint8_t *pReqPkt);
 
-/**
- * @brief   获取设备描述符,返回在 pHOST_TX_RAM_Addr 中
- *
- * @return  ERR_USB_BUF_OVER    描述符长度错误
- *          ERR_SUCCESS         成功
- */
+/* *
+* @brief Get the device descriptor, return it in pHOST_TX_RAM_Addr
+*
+* @return ERR_USB_BUF_OVER Descriptor length error
+* ERR_SUCCESS Success */
 uint8_t CtrlGetDeviceDescr(void);
 
 /* *
@@ -214,13 +212,12 @@ uint8_t CtrlSetUsbAddress(uint8_t addr);
 * @return ERR_SUCCESS Success */
 uint8_t CtrlSetUsbConfig(uint8_t cfg);
 
-/**
- * @brief   清除端点STALL
- *
- * @param   endp    - 端点地址
- *
- * @return  ERR_SUCCESS     成功
- */
+/* *
+* @brief Clear endpoint STALL
+*
+* @param endp - endpoint address
+*
+* @return ERR_SUCCESS Success */
 uint8_t CtrlClearEndpStall(uint8_t endp);
 
 /* *
@@ -231,11 +228,10 @@ uint8_t CtrlClearEndpStall(uint8_t endp);
 * @return ERR_SUCCESS Success */
 uint8_t CtrlSetUsbIntercace(uint8_t cfg);
 
-/**
- * @brief   USB主机功能初始化
- */
+/* *
+* @brief USB host function initialization */
 void USB_HostInit(void);
-uint8_t EnumAllHubPort(void);// 枚举所有ROOT-HUB端口下外部HUB后的二级USB设备
+uint8_t EnumAllHubPort(void);// Enumerate all secondary USB devices after external HUB under ROOT-HUB ports
 void SelectHubPort(uint8_t HubPortIndex); // HubPortIndex=0 Select the ROOT-HUB port specified by the operation, otherwise select the specified port of the external HUB of the ROOT-HUB port specified by the operation.
 uint16_t SearchTypeDevice(uint8_t type); // Search for the port number of the device of the specified type on each port of ROOT-HUB and external HUB. If the output port number is 0xFFFF, no search is found.
 uint8_t SETorOFFNumLock(uint8_t *buf); // NumLock's lighting judgment

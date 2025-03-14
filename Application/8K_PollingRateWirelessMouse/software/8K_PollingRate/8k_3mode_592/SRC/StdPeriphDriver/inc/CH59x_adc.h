@@ -33,14 +33,14 @@ typedef enum
     CH_EXTIN_6,       // ADC External Analog Channel 6
     CH_EXTIN_7,       // ADC External Analog Channel 7
     CH_EXTIN_8,       // ADC External Analog Channel 8
-    CH_EXTIN_9,       // ADC 外部模拟通道 9
+    CH_EXTIN_9,       // ADC External Analog Channel 9
     CH_EXTIN_10,      // ADC External Analog Channel 10
-    CH_EXTIN_11,      // ADC 外部模拟通道 11
+    CH_EXTIN_11,      // ADC External Analog Channel 11
     CH_EXTIN_12,      // ADC External Analog Channel 12
     CH_EXTIN_13,      // ADC External Analog Channel 13
 
     CH_INTE_VBAT = 14,  // ADC internal battery detection channel
-    CH_INTE_VTEMP = 15, // ADC 内部温度传感器检测通道
+    CH_INTE_VTEMP = 15, // ADC internal temperature sensor detection channel
 
 } ADC_SingleChannelTypeDef;
 
@@ -70,7 +70,7 @@ typedef enum
  */
 typedef enum
 {
-    ADC_PGA_1_4 = 0,    // -12dB, 1/4倍
+    ADC_PGA_1_4 = 0,    // -12dB, 1/4 times
     ADC_PGA_1_2,        // -6dB, 1/2 times
     ADC_PGA_0,          // 0dB, ​​1 times, no gain
     ADC_PGA_2,          // 6dB, 2x
@@ -132,30 +132,26 @@ void ADC_ExtDiffChSampInit(ADC_SampClkTypeDef sp, ADC_SignalPGATypeDef ga);
 * @brief Touch key channel sampling initialization */
 void TouchKey_ChSampInit(void);
 
-/**
- * @brief   关闭TouchKey电源
- */
+/* *
+* @brief Turn off TouchKey power */
 #define TouchKey_DisableTSPower()    (R8_TKEY_CFG &= ~RB_TKEY_PWR_ON)
 
-/**
- * @brief   内置温度传感器采样初始化
- */
+/* *
+* @brief Built-in temperature sensor sampling initialization */
 void ADC_InterTSSampInit(void);
 
-/**
- * @brief   关闭温度传感器电源
- */
+/* *
+* @brief Turn off the temperature sensor */
 #define ADC_DisableTSPower()    (R8_TEM_SENSOR = 0)
 
 /* *
 * @brief Built-in battery voltage sampling initialization */
 void ADC_InterBATSampInit(void);
 
-/**
- * @brief   ADC执行单次转换
- *
- * @return  ADC转换后的数据
- */
+/* *
+* @brief ADC performs a single conversion
+*
+* @return ADC converted data */
 uint16_t ADC_ExcutSingleConver(void);
 
 /* *
@@ -243,9 +239,8 @@ int adc_to_temperature_celsius(uint16_t adc_val);
 * @brief Get TouchKey interrupt status */
 #define TouchKey_GetITStatus()    (R8_ADC_INT_FLAG & RB_ADC_IF_EOC)
 
-/**
- * @brief   清除TouchKey中断标志
- */
+/* *
+* @brief Clear TouchKey interrupt flag */
 #define TouchKey_ClearITFlag()    (R8_TKEY_CTRL |= RB_TKEY_PWR_ON)
 
 /* *

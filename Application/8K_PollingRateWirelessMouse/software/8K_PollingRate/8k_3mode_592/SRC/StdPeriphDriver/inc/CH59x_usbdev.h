@@ -73,11 +73,10 @@ void DevEP3_OUT_Deal(uint8_t l);
 * @param l - Pending data length (<64B) */
 void DevEP4_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点1数据上传
- *
- * @param   l   - 上传数据长度(<64B)
- */
+/* *
+* @brief Endpoint 1 data upload
+*
+* @param l - Upload data length (<64B) */
 void DevEP1_IN_Deal(uint8_t l);
 
 /* *
@@ -110,18 +109,16 @@ void DevEP4_IN_Deal(uint8_t l);
 * @return 0-not completed (!0)-completed */
 #define EP2_GetINSta()    (R8_UEP2_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   查询端点3是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 3 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP3_GetINSta()    (R8_UEP3_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   查询端点4是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 4 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP4_GetINSta()    (R8_UEP4_CTRL & UEP_T_RES_NAK)
 
 /* *

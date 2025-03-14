@@ -120,15 +120,14 @@ void HSECFG_Capacitance(HSECapTypeDef c)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      LSECFG_Current
- *
- * @brief   LSE晶体 偏置电流配置
- *
- * @param   c   - 70%,100%,140%,200%
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LSECFG_Current
+*
+* @brief LSE crystal Bias current configuration
+*
+* @param c - 70%, 100%, 140%, 200%
+*
+* @return none */
 void LSECFG_Current(LSECurrentTypeDef c)
 {
     uint8_t x32K_c;

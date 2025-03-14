@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      PWR_DCDCCfg
- *
- * @brief   启用内部DC/DC电源，用于节约系统功耗
- *
- * @param   s       - 是否打开DCDC电源
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_DCDCCfg
+*
+* @brief Enable internal DC/DC power supply to save system power consumption
+*
+* @param s - Whether to turn on DCDC power
+*
+* @return none */
 void PWR_DCDCCfg(FunctionalState s)
 {
     uint16_t adj = R16_AUX_POWER_ADJ;
@@ -84,16 +83,15 @@ void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      PWR_PeriphClkCfg
- *
- * @brief   外设时钟控制位
- *
- * @param   s       - 是否打开对应外设时钟
- * @param   perph   - please refer to Peripher CLK control bit define
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_PeriphClkCfg
+*
+* @brief Peripheral clock control bit
+*
+* @param s - Whether to turn on the corresponding peripheral clock
+* @param perph - please refer to Peripher CLK control bit define
+*
+* @return none */
 void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph)
 {
     uint32_t sleep_ctrl = R32_SLEEP_CONTROL;
@@ -247,14 +245,14 @@ void LowPower_Halt(void)
     R8_FLASH_CTRL = 0x04; // flash close
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    {                                    // More than 500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
     }
 
     sys_safe_access_enable();
-    R8_BAT_DET_CTRL = 0; // 关闭电压监控
+    R8_BAT_DET_CTRL = 0; // Turn off voltage monitoring
     sys_safe_access_disable();
     sys_safe_access_enable();
     R8_XT32K_TUNE = x32Kpw;
@@ -298,7 +296,7 @@ void LowPower_Sleep(uint16_t rm)
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    {                                    // More than 500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
     }
 
@@ -369,7 +367,7 @@ void LowPower_Shutdown(uint16_t rm)
     x32Mpw = R8_XT32M_TUNE;
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
-    {                                    // 超过500ms
+    {                                    // More than 500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
     }
 

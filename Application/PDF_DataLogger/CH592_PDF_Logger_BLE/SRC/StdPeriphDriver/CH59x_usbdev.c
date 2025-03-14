@@ -27,7 +27,7 @@ uint8_t *pEP3_RAM_Addr;
 * @return none */
 void USB_DeviceInit(void)
 {
-    R8_USB_CTRL = 0x00; // 先设定模式,取消 RB_UC_CLR_ALL
+    R8_USB_CTRL = 0x00; // Set the mode first, cancel RB_UC_CLR_ALL
 
     R8_UEP4_1_MOD = RB_UEP4_RX_EN | RB_UEP4_TX_EN | RB_UEP1_RX_EN | RB_UEP1_TX_EN; // Endpoint 4 OUT+IN, Endpoint 1 OUT+IN
     R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP2_TX_EN | RB_UEP3_RX_EN | RB_UEP3_TX_EN; // Endpoint 2 OUT+IN, Endpoint 3 OUT+IN

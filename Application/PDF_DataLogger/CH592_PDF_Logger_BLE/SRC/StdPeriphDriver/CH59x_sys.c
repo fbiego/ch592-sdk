@@ -67,26 +67,25 @@ void SetSysClock(SYS_CLKTypeDef sc)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      GetSysClock
- *
- * @brief   获取当前系统时钟
- *
- * @param   none
- *
- * @return  Hz
- */
+/* ***************************************************************************
+* @fn GetSysClock
+*
+* @brief Get the current system clock
+*
+* @param none
+*
+* @return Hz */
 uint32_t GetSysClock(void)
 {
     uint16_t rev;
 
     rev = R32_CLK_SYS_CFG & 0xff;
     if((rev & 0x40) == (0 << 6))
-    { // 32M进行分频
+    { // 32M for frequency division
         return (32000000 / (rev & 0x1f));
     }
     else if((rev & RB_CLK_SYS_MOD) == (1 << 6))
-    { // PLL进行分频
+    { // PLL for frequency division
         return (480000000 / (rev & 0x1f));
     }
     else
@@ -132,15 +131,14 @@ void SYS_ResetExecute(void)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      SYS_DisableAllIrq
- *
- * @brief   关闭所有中断，并保留当前中断值
- *
- * @param   pirqv   - 当前保留中断值
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SYS_DisableAllIrq
+*
+* @brief Close all interrupts and keep the current interrupt value
+*
+* @param pirqv - Currently reserved interrupt value
+*
+* @return none */
 void SYS_DisableAllIrq(uint32_t *pirqv)
 {
     *pirqv = (PFIC->ISR[0] >> 8) | (PFIC->ISR[1] << 24);
@@ -162,15 +160,14 @@ void SYS_RecoverIrq(uint32_t irq_status)
     PFIC->IENR[1] = (irq_status >> 24);
 }
 
-/*********************************************************************
- * @fn      SYS_GetSysTickCnt
- *
- * @brief   获取当前系统(SYSTICK)计数值
- *
- * @param   none
- *
- * @return  当前计数值
- */
+/* ***************************************************************************
+* @fn SYS_GetSysTickCnt
+*
+* @brief Get the current system (SYSTICK) count value
+*
+* @param none
+*
+* @return Current count value */
 uint32_t SYS_GetSysTickCnt(void)
 {
     uint32_t val;
@@ -341,10 +338,10 @@ int _write(int fd, char *buf, int size)
     for(i = 0; i < size; i++)
     {
 #if DEBUG == Debug_UART0
-        while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
-        R8_UART0_THR = *buf++; /* 发送数据 */
+        while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* Wait for data to be sent */
+        R8_UART0_THR = *buf++; /* Send data */
 #elif DEBUG == Debug_UART1
-        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
+        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* Wait for data to be sent */
         R8_UART1_THR = *buf++; /* Send data */
 #elif DEBUG == Debug_UART2
         while(R8_UART2_TFC == UART_FIFO_SIZE);                  /* Wait for data to be sent */

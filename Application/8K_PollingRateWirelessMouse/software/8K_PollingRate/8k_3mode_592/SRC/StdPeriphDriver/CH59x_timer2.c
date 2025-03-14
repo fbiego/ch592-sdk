@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      TMR2_TimerInit
- *
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR2_TimerInit
+*
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864
+*
+* @return none */
 void TMR2_TimerInit(uint32_t t)
 {
     R32_TMR2_CNT_END = t;
@@ -57,15 +56,14 @@ void TMR2_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts)
     R8_TMR2_CTRL_MOD = (pr << 4) | (ts << 6);
 }
 
-/*********************************************************************
- * @fn      TMR2_CapInit
- *
- * @brief   外部信号捕捉功能初始化
- *
- * @param   cap     - select capture mode, refer to CapModeTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR2_CapInit
+*
+* @brief External signal capture function initialization
+*
+* @param cap - select capture mode, refer to CapModeTypeDef
+*
+* @return none */
 void TMR2_CapInit(CapModeTypeDef cap)
 {
     R8_TMR2_CTRL_MOD = RB_TMR_ALL_CLEAR;

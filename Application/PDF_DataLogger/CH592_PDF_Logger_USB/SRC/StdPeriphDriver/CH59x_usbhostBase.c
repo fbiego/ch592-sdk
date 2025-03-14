@@ -23,34 +23,33 @@ _DevOnHubPort DevOnHubPort[HUB_MAX_PORTS]; // Assuming: no more than 1 external 
 uint8_t *pHOST_RX_RAM_Addr;
 uint8_t *pHOST_TX_RAM_Addr;
 
-/*获取设备描述符*/
+/* Get the device descriptor */
 __attribute__((aligned(4))) const uint8_t SetupGetDevDescr[] = {USB_REQ_TYP_IN, USB_GET_DESCRIPTOR, 0x00,
                                                                 USB_DESCR_TYP_DEVICE, 0x00, 0x00, sizeof(USB_DEV_DESCR), 0x00};
-/*获取配置描述符*/
+/* Get the configuration descriptor */
 __attribute__((aligned(4))) const uint8_t SetupGetCfgDescr[] = {USB_REQ_TYP_IN, USB_GET_DESCRIPTOR, 0x00,
                                                                 USB_DESCR_TYP_CONFIG, 0x00, 0x00, 0x04, 0x00};
 /*设置USB地址*/
 __attribute__((aligned(4))) const uint8_t SetupSetUsbAddr[] = {USB_REQ_TYP_OUT, USB_SET_ADDRESS, USB_DEVICE_ADDR, 0x00,
                                                                0x00, 0x00, 0x00, 0x00};
-/*设置USB配置*/
+/* Set up USB configuration */
 __attribute__((aligned(4))) const uint8_t SetupSetUsbConfig[] = {USB_REQ_TYP_OUT, USB_SET_CONFIGURATION, 0x00, 0x00, 0x00,
                                                                  0x00, 0x00, 0x00};
 /* Set up USB interface configuration */
 __attribute__((aligned(4))) const uint8_t SetupSetUsbInterface[] = {USB_REQ_RECIP_INTERF, USB_SET_INTERFACE, 0x00, 0x00,
                                                                     0x00, 0x00, 0x00, 0x00};
-/*清除端点STALL*/
+/* Clear endpoint STALL */
 __attribute__((aligned(4))) const uint8_t SetupClrEndpStall[] = {USB_REQ_TYP_OUT | USB_REQ_RECIP_ENDP, USB_CLEAR_FEATURE,
                                                                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-/*********************************************************************
- * @fn      DisableRootHubPort
- *
- * @brief   关闭ROOT-HUB端口,实际上硬件已经自动关闭,此处只是清除一些结构状态
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn DisableRootHubPort
+*
+* @brief Close the ROOT-HUB port, in fact, the hardware has been automatically closed, here is just clearing some structural states
+*
+* @param none
+*
+* @return none */
 void DisableRootHubPort(void)
 {
 #ifdef FOR_ROOT_UDISK_ONLY
@@ -62,16 +61,15 @@ void DisableRootHubPort(void)
 #endif
 }
 
-/*********************************************************************
- * @fn      AnalyzeRootHub
- *
- * @brief   分析ROOT-HUB状态,处理ROOT-HUB端口的设备插拔事件
- *          如果设备拔出,函数中调用DisableRootHubPort()函数,将端口关闭,插入事件,置相应端口的状态位
- *
- * @param   none
- *
- * @return  返回ERR_SUCCESS为没有情况,返回ERR_USB_CONNECT为检测到新连接,返回ERR_USB_DISCON为检测到断开
- */
+/* ***************************************************************************
+* @fn AnalyzeRootHub
+*
+* @brief analyzes the ROOT-HUB status and handles the device plug-in and unplugging events of the ROOT-HUB port
+* If the device is unplugged, the DisableRootHubPort() function is called in the function to close the port, insert the event, and set the status bit of the corresponding port.
+*
+* @param none
+*
+* @return Return ERR_SUCCESS is no situation, return ERR_USB_CONNECT is a new connection is detected, return ERR_USB_DISCON is a disconnection is detected */
 uint8_t AnalyzeRootHub(void)
 {
     uint8_t s;
@@ -87,7 +85,7 @@ uint8_t AnalyzeRootHub(void)
 #endif
            || (R8_UHOST_CTRL & RB_UH_PORT_EN) == 0x00)
         {                         // The device was detected to be inserted, but it has not been allowed yet, which means it has just been inserted.
-            DisableRootHubPort(); // 关闭端口
+            DisableRootHubPort(); // Close the port
 #ifdef DISK_BASE_BUF_LEN
             CHRV3DiskStatus = DISK_CONNECT;
 #else
@@ -130,62 +128,59 @@ void SetHostUsbAddr(uint8_t addr)
     R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | (addr & MASK_USB_ADDR);
 }
 
-/*********************************************************************
- * @fn      SetUsbSpeed
- *
- * @brief   设置当前USB速度
- *
- * @param   FullSpeed   - USB速度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SetUsbSpeed
+*
+* @brief Set the current USB speed
+*
+* @param FullSpeed ​​- USB speed
+*
+* @return none */
 void SetUsbSpeed(uint8_t FullSpeed)
 {
 #ifndef DISK_BASE_BUF_LEN
     if(FullSpeed) // full speed
     {
-        R8_USB_CTRL &= ~RB_UC_LOW_SPEED;  // 全速
-        R8_UH_SETUP &= ~RB_UH_PRE_PID_EN; // 禁止PRE PID
+        R8_USB_CTRL &= ~RB_UC_LOW_SPEED;  // full speed
+        R8_UH_SETUP &= ~RB_UH_PRE_PID_EN; // Prohibit PRE PID
     }
     else
     {
-        R8_USB_CTRL |= RB_UC_LOW_SPEED; // 低速
+        R8_USB_CTRL |= RB_UC_LOW_SPEED; // Low speed
     }
 #endif
     (void)FullSpeed;
 }
 
-/*********************************************************************
- * @fn      ResetRootHubPort
- *
- * @brief   检测到设备后,复位总线,为枚举设备准备,设置为默认为全速
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ResetRootHubPort
+*
+* @brief After detecting the device, reset the bus, prepare for the enumeration device, and set it to the default full speed
+*
+* @param none
+*
+* @return none */
 void ResetRootHubPort(void)
 {
     UsbDevEndp0Size = DEFAULT_ENDP0_SIZE; // Maximum package size for endpoint 0 of USB device
     SetHostUsbAddr(0x00);
     R8_UHOST_CTRL &= ~RB_UH_PORT_EN;                                      // Turn off the port
     SetUsbSpeed(1);                                                       // Default is full speed
-    R8_UHOST_CTRL = (R8_UHOST_CTRL & ~RB_UH_LOW_SPEED) | RB_UH_BUS_RESET; // 默认为全速,开始复位
+    R8_UHOST_CTRL = (R8_UHOST_CTRL & ~RB_UH_LOW_SPEED) | RB_UH_BUS_RESET; // Default is full speed, start reset
     mDelaymS(15);                                                         // Reset time 10mS to 20mS
-    R8_UHOST_CTRL = R8_UHOST_CTRL & ~RB_UH_BUS_RESET;                     // 结束复位
+    R8_UHOST_CTRL = R8_UHOST_CTRL & ~RB_UH_BUS_RESET;                     // End reset
     mDelayuS(250);
     R8_USB_INT_FG = RB_UIF_DETECT; // Clear interrupt sign
 }
 
-/*********************************************************************
- * @fn      EnableRootHubPort
- *
- * @brief   使能ROOT-HUB端口,相应的bUH_PORT_EN置1开启端口,设备断开可能导致返回失败
- *
- * @param   none
- *
- * @return  返回ERR_SUCCESS为检测到新连接,返回ERR_USB_DISCON为无连接
- */
+/* ***************************************************************************
+* @fn EnableRootHubPort
+*
+* @brief Enable the ROOT-HUB port, and the corresponding bUH_PORT_EN is set to 1 to open the port. The device is disconnected and the return failure may result in the return failure.
+*
+* @param none
+*
+* @return Return ERR_SUCCESS is detected as a new connection, return ERR_USB_DISCON is no connection */
 uint8_t EnableRootHubPort(void)
 {
 #ifdef DISK_BASE_BUF_LEN
@@ -196,7 +191,7 @@ uint8_t EnableRootHubPort(void)
         ThisUsbDev.DeviceStatus = ROOT_DEV_CONNECTED;
 #endif
     if(R8_USB_MIS_ST & RB_UMS_DEV_ATTACH)
-    { // 有设备
+    { // Have equipment
 #ifndef DISK_BASE_BUF_LEN
         if((R8_UHOST_CTRL & RB_UH_PORT_EN) == 0x00)
         { // Not enabled yet
@@ -224,10 +219,10 @@ uint8_t EnableRootHubPort(void)
 * @return None */
 void SelectHubPort(uint8_t HubPortIndex)
 {
-    if(HubPortIndex) // 选择操作指定的ROOT-HUB端口的外部HUB的指定端口
+    if(HubPortIndex) // Select the specified port of the external HUB of the ROOT-HUB port specified by the operation
     {
-        SetHostUsbAddr(DevOnHubPort[HubPortIndex - 1].DeviceAddress); // 设置USB主机当前操作的USB设备地址
-        SetUsbSpeed(DevOnHubPort[HubPortIndex - 1].DeviceSpeed);      // 设置当前USB速度
+        SetHostUsbAddr(DevOnHubPort[HubPortIndex - 1].DeviceAddress); // Set the USB device address of the current operation of the USB host
+        SetUsbSpeed(DevOnHubPort[HubPortIndex - 1].DeviceSpeed);      // Set the current USB speed
         if(DevOnHubPort[HubPortIndex - 1].DeviceSpeed == 0)           // Communication with low-speed USB devices through external HUB requires a pre-ID
         {
             R8_UEP1_CTRL |= RB_UH_PRE_PID_EN; // Enable PRE PID
@@ -299,10 +294,10 @@ uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout)
         }
 
         if(R8_USB_INT_FG & RB_UIF_DETECT)
-        { // USB设备插拔事件
+        { // USB device plug-in event
             // mDelayuS(200); // Wait for the transmission to complete
             R8_USB_INT_FG = RB_UIF_DETECT;
-            s = AnalyzeRootHub(); // 分析ROOT-HUB状态
+            s = AnalyzeRootHub(); // Analyze ROOT-HUB status
 
             if(s == ERR_USB_CONNECT)
                 FoundNewDev = 1;
@@ -314,7 +309,7 @@ uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout)
             if(CHRV3DiskStatus == DISK_CONNECT)
             {
                 return (ERR_USB_CONNECT);
-            } // USB设备连接事件
+            } // USB device connection event
 #else
             if(ThisUsbDev.DeviceStatus == ROOT_DEV_DISCONNECT)
             {
@@ -325,10 +320,10 @@ uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout)
                 return (ERR_USB_CONNECT);
             } // USB device connection event
 #endif
-            mDelayuS(200); // 等待传输完成
+            mDelayuS(200); // Wait for the transfer to complete
         }
 
-        if(R8_USB_INT_FG & RB_UIF_TRANSFER) // 传输完成事件
+        if(R8_USB_INT_FG & RB_UIF_TRANSFER) // Transmission completion event
         {
             if(R8_USB_INT_ST & RB_UIS_TOG_OK)
             {
@@ -369,9 +364,9 @@ uint8_t USBHostTransact(uint8_t endp_pid, uint8_t tog, uint32_t timeout)
                         {
                             return (r | ERR_USB_TRANSFER);
                         }      // Not a timeout/error, unexpected response
-                        break; // 超时重试
+                        break; // Timeout and try again
                     default:
-                        return (ERR_USB_UNKNOWN); // 不可能的情况
+                        return (ERR_USB_UNKNOWN); // Impossible situation
                         break;
                 }
         }
@@ -419,7 +414,7 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
     R8_UH_TX_LEN = 0x01;                                                                             // The default is no data, so the status stage is IN
     RemLen = pSetupReq->wLength;
     PRINT("wLength: %x\n", RemLen);
-    if(RemLen && pBuf) // 需要收发数据
+    if(RemLen && pBuf) // Need to send and receive data
     {
         PRINT("bRequestType: %x\n", pSetupReq->bRequestType);
         if(pSetupReq->bRequestType & USB_REQ_TYP_IN) // æ”¶
@@ -445,7 +440,7 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
                 }
                 if(R8_USB_RX_LEN == 0 || (R8_USB_RX_LEN & (UsbDevEndp0Size - 1)))
                 {
-                    break; // 短包
+                    break; // Short bag
                 }
             }
             R8_UH_TX_LEN = 0x00; // The status phase is OUT
@@ -461,7 +456,7 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
                     pHOST_TX_RAM_Addr[TxCnt] = *pBuf;
                     pBuf++;
                 }
-                s = USBHostTransact(USB_PID_OUT << 4 | 0x00, R8_UH_TX_CTRL, 200000 / 20); // OUT数据
+                s = USBHostTransact(USB_PID_OUT << 4 | 0x00, R8_UH_TX_CTRL, 200000 / 20); // OUT data
                 if(s != ERR_SUCCESS)
                 {
                     return (s);
@@ -473,7 +468,7 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
                 }
             }
             PRINT("Send: %d\n", *pLen);
-            //          R8_UH_TX_LEN = 0x01;                                                     // 状态阶段为IN
+            // R8_UH_TX_LEN = 0x01; // The status stage is IN
         }
     }
     mDelayuS(200);
@@ -488,9 +483,9 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
     }
     if(R8_USB_RX_LEN == 0)
     {
-        return (ERR_SUCCESS); // 状态IN,检查IN状态返回数据长度
+        return (ERR_SUCCESS); // Status IN, check IN status to return data length
     }
-    return (ERR_USB_BUF_OVER); // IN状态阶段错误
+    return (ERR_USB_BUF_OVER); // IN status stage error
 }
 
 /* ***************************************************************************
@@ -501,7 +496,7 @@ uint8_t HostCtrlTransfer(uint8_t *DataBuf, uint8_t *RetLen)
 * @param pReqPkt - Control request packet address
 *
 * @return none */
-void CopySetupReqPkg(const uint8_t *pReqPkt) // 复制控制传输的请求包
+void CopySetupReqPkg(const uint8_t *pReqPkt) // Replication control transfer request packet
 {
     uint8_t i;
     for(i = 0; i != sizeof(USB_SETUP_REQ); i++)
@@ -532,10 +527,10 @@ uint8_t CtrlGetDeviceDescr(void)
     {
         return (s);
     }
-    UsbDevEndp0Size = ((PUSB_DEV_DESCR)Com_Buffer)->bMaxPacketSize0; // 端点0最大包长度,这是简化处理,正常应该先获取前8字节后立即更新UsbDevEndp0Size再继续
+    UsbDevEndp0Size = ((PUSB_DEV_DESCR)Com_Buffer)->bMaxPacketSize0; // Endpoint 0 maximum packet length, this is a simplified process. Normally, you should first get the first 8 bytes and then update UsbDevEndp0Size immediately before continuing
     if(len < ((PUSB_SETUP_REQ)SetupGetDevDescr)->wLength)
     {
-        return (ERR_USB_BUF_OVER); // 描述符长度错误
+        return (ERR_USB_BUF_OVER); // Descriptor length error
     }
     return (ERR_SUCCESS);
 }
@@ -577,21 +572,20 @@ uint8_t CtrlGetConfigDescr(void)
 #ifdef DISK_BASE_BUF_LEN
     if(len > 64)
         len = 64;
-    memcpy(TxBuffer, Com_Buffer, len); //U盘操作时，需要拷贝到TxBuffer
+    memcpy(TxBuffer, Com_Buffer, len); // When operating the USB flash drive, you need to copy it to TxBuffer
 #endif
 
     return (ERR_SUCCESS);
 }
 
-/*********************************************************************
- * @fn      CtrlSetUsbAddress
- *
- * @brief   设置USB设备地址
- *
- * @param   addr    - 设备地址
- *
- * @return  ERR_SUCCESS     成功
- */
+/* ***************************************************************************
+* @fn CtrlSetUsbAddress
+*
+* @brief Set the USB device address
+*
+* @param addr - Device address
+*
+* @return ERR_SUCCESS Success */
 uint8_t CtrlSetUsbAddress(uint8_t addr)
 {
     uint8_t s;
@@ -604,7 +598,7 @@ uint8_t CtrlSetUsbAddress(uint8_t addr)
         return (s);
     }
     SetHostUsbAddr(addr); // Set the USB device address of the current operation of the USB host
-    mDelaymS(10);         // 等待USB设备完成操作
+    mDelaymS(10);         // Wait for the USB device to complete operation
     return (ERR_SUCCESS);
 }
 
@@ -620,18 +614,17 @@ uint8_t CtrlSetUsbConfig(uint8_t cfg)
 {
     CopySetupReqPkg(SetupSetUsbConfig);
     pSetupReq->wValue = cfg;               // USB device configuration
-    return (HostCtrlTransfer(NULL, NULL)); // 执行控制传输
+    return (HostCtrlTransfer(NULL, NULL)); // Perform control transmission
 }
 
-/*********************************************************************
- * @fn      CtrlClearEndpStall
- *
- * @brief   清除端点STALL
- *
- * @param   endp    - 端点地址
- *
- * @return  ERR_SUCCESS     成功
- */
+/* ***************************************************************************
+* @fn CtrlClearEndpStall
+*
+* @brief Clear endpoint STALL
+*
+* @param endp - endpoint address
+*
+* @return ERR_SUCCESS Success */
 uint8_t CtrlClearEndpStall(uint8_t endp)
 {
     CopySetupReqPkg(SetupClrEndpStall); // Clear endpoint error

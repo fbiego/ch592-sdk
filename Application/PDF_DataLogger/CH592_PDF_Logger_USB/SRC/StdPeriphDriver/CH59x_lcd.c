@@ -22,7 +22,7 @@
 ********************************************************************************************* */
 void LCD_Init(LCDDutyTypeDef duty, LCDBiasTypeDef bias)
 {
-    R32_PIN_CONFIG2 = 0xfffeff3f; // 关闭数字输入
+    R32_PIN_CONFIG2 = 0xfffeff3f; // Turn off digital input
     R32_LCD_CMD = 0x1ffff << 8;
     R32_LCD_CMD |= RB_LCD_SYS_EN | RB_LCD_ON |
                    (LCD_CLK_128 << 5)  |

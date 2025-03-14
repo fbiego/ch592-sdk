@@ -27,7 +27,7 @@ extern "C" {
 #define LCD_WriteByte0( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)(d)))          /* Fill in SEG0, SEG1 driver value */
 #define LCD_WriteByte1( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)(d)<<8))       /* Fill in SEG2 and SEG3 driver values */
 #define LCD_WriteByte2( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)(d)<<16))      /* Fill in SEG4 and SEG5 driver values */
-#define LCD_WriteByte3( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)(d)<<24))      /* 填充SEG6,SEG7驱动数值 */
+#define LCD_WriteByte3( d )     (R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)(d)<<24))      /* Fill in SEG6 and SEG7 driver values */
 #define LCD_WriteByte4( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffffff00) | ((UINT32)(d)))          /* Fill in SEG8 and SEG9 driver values */
 #define LCD_WriteByte5( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffff00ff) | ((UINT32)(d)<<8))       /* Fill in SEG10, SEG11 driver values */
 #define LCD_WriteByte6( d )     (R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xff00ffff) | ((UINT32)(d)<<16))      /* Fill in SEG12 and SEG13 driver values */

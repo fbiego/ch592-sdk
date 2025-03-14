@@ -59,20 +59,19 @@ void UART0_ByteTrigCfg(UARTByteTRIGTypeDef b)
     R8_UART0_FCR = (R8_UART0_FCR & ~RB_FCR_FIFO_TRIG) | (b << 6);
 }
 
-/*********************************************************************
- * @fn      UART0_INTCfg
- *
- * @brief   串口中断配置
- *
- * @param   s       - 中断控制状态，是否使能相应中断
- * @param   i       - 中断类型
- *                    RB_IER_MODEM_CHG  - 调制解调器输入状态变化中断使能位（仅 UART0 支持）
- *                    RB_IER_LINE_STAT  - 接收线路状态中断
- *                    RB_IER_THR_EMPTY  - 发送保持寄存器空中断
- *                    RB_IER_RECV_RDY   - 接收数据中断
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART0_INTCfg
+*
+* @brief Serial port interrupt configuration
+*
+* @param s - Interrupt control status, whether corresponding interrupt can be enabled
+* @param i - interrupt type
+* RB_IER_MODEM_CHG - Modem input state change interrupt enable bit (only supported by UART0)
+* RB_IER_LINE_STAT - Receive line status interrupt
+* RB_IER_THR_EMPTY - Send hold register air interrupt
+* RB_IER_RECV_RDY - Received data interrupt
+*
+* @return none */
 void UART0_INTCfg(FunctionalState s, uint8_t i)
 {
     if(s)
@@ -86,15 +85,14 @@ void UART0_INTCfg(FunctionalState s, uint8_t i)
     }
 }
 
-/*********************************************************************
- * @fn      UART0_Reset
- *
- * @brief   串口软件复位
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART0_Reset
+*
+* @brief serial port software reset
+*
+* @param none
+*
+* @return none */
 void UART0_Reset(void)
 {
     R8_UART0_IER = RB_IER_RESET;

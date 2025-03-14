@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      PWMX_CycleCfg
- *
- * @brief   PWM4-PWM11基准时钟配置
- *
- * @param   cyc     - refer to PWMX_CycleTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWMX_CycleCfg
+*
+* @brief PWM4-PWM11 reference clock configuration
+*
+* @param cyc - refer to PWMX_CycleTypeDef
+*
+* @return none */
 void PWMX_CycleCfg(PWMX_CycleTypeDef cyc)
 {
     switch(cyc)

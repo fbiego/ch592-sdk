@@ -121,15 +121,14 @@ void UART2_SendString(uint8_t *buf, uint16_t l)
     }
 }
 
-/*********************************************************************
- * @fn      UART2_RecvString
- *
- * @brief   串口读取多字节
- *
- * @param   buf     - 读取数据存放缓存区首地址
- *
- * @return  读取数据长度
- */
+/* ***************************************************************************
+* @fn UART2_RecvString
+*
+* @brief read multibytes on the serial port
+*
+* @param buf - Read data storage cache area first address
+*
+* @return Read data length */
 uint16_t UART2_RecvString(uint8_t *buf)
 {
     uint16_t len = 0;

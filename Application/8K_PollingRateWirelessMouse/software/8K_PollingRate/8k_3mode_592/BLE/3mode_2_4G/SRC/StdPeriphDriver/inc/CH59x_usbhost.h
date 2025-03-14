@@ -30,7 +30,7 @@ extern "C" {
 #define ERR_SUCCESS            0x00  // Operation is successful
 #define ERR_USB_CONNECT        0x15  /* USB device connection event was detected and connected */
 #define ERR_USB_DISCON         0x16  /* The USB device disconnection event was detected and it has been disconnected */
-#define ERR_USB_BUF_OVER       0x17  /* USB传输的数据有误或者数据太多缓冲区溢出 */
+#define ERR_USB_BUF_OVER       0x17  /* The data transmitted by USB is incorrect or there is too much data and the buffer overflows */
 #define ERR_USB_DISK_ERR       0x1F  /* The USB memory operation failed. During initialization, the USB memory may not be supported. During read and write operations, the disk may be damaged or disconnected. */
 #define ERR_USB_TRANSFER       0x20  /* NAK/STALL and more error codes are in 0x20~0x2F */
 #define ERR_USB_UNSUPPORT      0xFB  /* Unsupported USB devices */
@@ -98,7 +98,7 @@ extern uint8_t *pU2HOST_TX_RAM_Addr;
 extern uint8_t Com_Buffer[];
 extern uint8_t U2Com_Buffer[];
 
-/* 以下为USB主机请求包 */
+/* The following is the USB host request package */
 extern const uint8_t SetupGetDevDescr[];     // Get device descriptor*/
 extern const uint8_t SetupGetCfgDescr[];     // Get the configuration descriptor*/
 extern const uint8_t SetupSetUsbAddr[];      // Set USB address*/

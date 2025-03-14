@@ -37,7 +37,7 @@ typedef enum
     PWM_Times_1 = 0, // PWM valid output repeats 1 times
     PWM_Times_4,     // PWM valid output repeats 4 times
     PWM_Times_8,     // PWM valid output repeats 8 times
-    PWM_Times_16,    // PWM 有效输出重复16次数
+    PWM_Times_16,    // PWM valid output repeats 16 times
 } PWM_RepeatTsTypeDef;
 
 /**
@@ -47,7 +47,7 @@ typedef enum
 {
     CAP_NULL = 0,         // Don't capture & don't count
     Edge_To_Edge,         // Between any edges & count any edges
-    FallEdge_To_FallEdge, // 下降沿到下降沿  & 计数下降沿
+    FallEdge_To_FallEdge, // Falling to Falling Edge & Count Falling Edge
     RiseEdge_To_RiseEdge, // Rising edge to Rising edge & Count rising edge
 } CapModeTypeDef;
 
@@ -78,11 +78,10 @@ void TMR0_TimerInit(uint32_t t);
 * @param cap - Collection count type */
 void TMR0_EXTSingleCounterInit(CapModeTypeDef cap);
 
-/**
- * @brief   设置计数统计溢出大小，最大67108862
- *
- * @param   cyc     - 计数统计溢出大小
- */
+/* *
+* @brief Set count statistics overflow size, maximum 67108862
+*
+* @param cyc - Counting statistics overflow size */
 #define TMR0_CountOverflowCfg(cyc)    (R32_TMR0_CNT_END = (cyc + 2))
 
 /* *
@@ -91,11 +90,10 @@ void TMR0_EXTSingleCounterInit(CapModeTypeDef cap);
 * @return Current count value */
 #define TMR0_GetCurrentCount()        R32_TMR0_COUNT
 
-/**
- * @brief   PWM0 通道输出波形周期配置, 最大67108864
- *
- * @param   cyc     - 输出波形周期
- */
+/* *
+* @brief PWM0 channel output waveform period configuration, maximum 67108864
+*
+* @param cyc - Output waveform period */
 #define TMR0_PWMCycleCfg(cyc)         (R32_TMR0_CNT_END = cyc)
 
 /* *
@@ -129,11 +127,10 @@ void TMR0_CapInit(CapModeTypeDef cap);
 * @return Pulse Data */
 #define TMR0_CAPGetData()        R32_TMR0_FIFO
 
-/**
- * @brief   获取当前已捕获数据个数
- *
- * @return  当前已捕获数据个数
- */
+/* *
+* @brief Get the current number of captured data
+*
+* @return The number of data captured currently */
 #define TMR0_CAPDataCounter()    R8_TMR0_FIFO_COUNT
 
 /* *
@@ -165,11 +162,10 @@ void TMR0_CapInit(CapModeTypeDef cap);
 * @param f - refer to TMR interrupt bit define */
 #define TMR0_ClearITFlag(f)      (R8_TMR0_INT_FLAG = f)
 
-/**
- * @brief   查询中断标志状态
- *
- * @param   f       - refer to TMR interrupt bit define
- */
+/* *
+* @brief query interrupt flag status
+*
+* @param f - refer to TMR interrupt bit define */
 #define TMR0_GetITFlag(f)        (R8_TMR0_INT_FLAG & f)
 
 /* *
@@ -270,19 +266,17 @@ void TMR1_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, DMAModeTypeDef
 * @brief activate TMR1 */
 #define TMR1_Enable()          (R8_TMR1_CTRL_MOD |= RB_TMR_COUNT_EN)
 
-/**
- * @brief   中断配置
- *
- * @param   s       - 使能/关闭
- * @param   f       - refer to TMR interrupt bit define
- */
+/* *
+* @brief interrupt configuration
+*
+* @param s - Enable/Close
+* @param f - refer to TMR interrupt bit define */
 #define TMR1_ITCfg(s, f)       ((s) ? (R8_TMR1_INTER_EN |= f) : (R8_TMR1_INTER_EN &= ~f))
 
-/**
- * @brief   清除中断标志
- *
- * @param   f       - refer to TMR interrupt bit define
- */
+/* *
+* @brief Clear interrupt flag
+*
+* @param f - refer to TMR interrupt bit define */
 #define TMR1_ClearITFlag(f)    (R8_TMR1_INT_FLAG = f)
 
 /* *
@@ -297,11 +291,10 @@ void TMR1_DMACfg(uint8_t s, uint16_t startAddr, uint16_t endAddr, DMAModeTypeDef
 * @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864 */
 void TMR2_TimerInit(uint32_t t);
 
-/**
- * @brief   获取当前定时器值，最大67108864
- *
- * @return  当前定时器值
- */
+/* *
+* @brief Get the current timer value, maximum 67108864
+*
+* @return Current timer value */
 #define TMR2_GetCurrentTimer()    R32_TMR2_COUNT
 
 /* *
@@ -310,11 +303,10 @@ void TMR2_TimerInit(uint32_t t);
 * @param cap - Collection count type */
 void TMR2_EXTSingleCounterInit(CapModeTypeDef cap);
 
-/**
- * @brief   设置计数统计溢出大小，最大67108862
- *
- * @param   cyc     - 计数统计溢出大小
- */
+/* *
+* @brief Set count statistics overflow size, maximum 67108862
+*
+* @param cyc - Counting statistics overflow size */
 #define TMR2_CountOverflowCfg(cyc)    (R32_TMR2_CNT_END = (cyc + 2))
 
 /* *
@@ -342,11 +334,10 @@ void TMR2_PWMInit(PWMX_PolarTypeDef pr, PWM_RepeatTsTypeDef ts);
 * @param d - Effective data pulse width */
 #define TMR2_PWMActDataWidth(d)    (R32_TMR2_FIFO = d)
 
-/**
- * @brief   CAP2 捕捉电平超时配置, 最大33554432
- *
- * @param   cyc     - 捕捉电平超时
- */
+/* *
+* @brief CAP2 Capture level timeout configuration, maximum 33554432
+*
+* @param cyc - Capture level timeout */
 #define TMR2_CAPTimeoutCfg(cyc)    (R32_TMR2_CNT_END = cyc)
 
 /* *
@@ -388,9 +379,8 @@ void TMR2_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, DMAModeTypeDef
 * @brief Close TMR2 */
 #define TMR2_Disable()         (R8_TMR2_CTRL_MOD &= ~RB_TMR_COUNT_EN)
 
-/**
- * @brief   开启 TMR2
- */
+/* *
+* @brief enable TMR2 */
 #define TMR2_Enable()          (R8_TMR2_CTRL_MOD |= RB_TMR_COUNT_EN)
 
 /* *
@@ -418,11 +408,10 @@ void TMR2_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, DMAModeTypeDef
 * @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864 */
 void TMR3_TimerInit(uint32_t t);
 
-/**
- * @brief   获取当前定时器值，最大67108864
- *
- * @return  当前定时器值
- */
+/* *
+* @brief Get the current timer value, maximum 67108864
+*
+* @return Current timer value */
 #define TMR3_GetCurrentTimer()    R32_TMR3_COUNT
 
 /* *
@@ -431,11 +420,10 @@ void TMR3_TimerInit(uint32_t t);
 * @param cap - Collection count type */
 void TMR3_EXTSingleCounterInit(CapModeTypeDef cap);
 
-/**
- * @brief   设置计数统计溢出大小，最大67108862
- *
- * @param   cyc     - 计数统计溢出大小
- */
+/* *
+* @brief Set count statistics overflow size, maximum 67108862
+*
+* @param cyc - Counting statistics overflow size */
 #define TMR3_CountOverflowCfg(cyc)    (R32_TMR3_CNT_END = (cyc + 2))
 
 /* *
@@ -482,11 +470,10 @@ void TMR3_CapInit(CapModeTypeDef cap);
 * @return Pulse Data */
 #define TMR3_CAPGetData()        R32_TMR3_FIFO
 
-/**
- * @brief   获取当前已捕获数据个数
- *
- * @return  当前已捕获数据个数
- */
+/* *
+* @brief Get the current number of captured data
+*
+* @return The number of data captured currently */
 #define TMR3_CAPDataCounter()    R8_TMR3_FIFO_COUNT
 
 /* *
@@ -502,9 +489,8 @@ void TMR3_CapInit(CapModeTypeDef cap);
 * @brief Close TMR3 */
 #define TMR3_Disable()           (R8_TMR3_CTRL_MOD &= ~RB_TMR_COUNT_EN)
 
-/**
- * @brief   开启 TMR3
- */
+/* *
+* @brief enable TMR3 */
 #define TMR3_Enable()            (R8_TMR3_CTRL_MOD |= RB_TMR_COUNT_EN)
 
 /* *
@@ -514,18 +500,16 @@ void TMR3_CapInit(CapModeTypeDef cap);
 * @param f - refer to TMR interrupt bit define */
 #define TMR3_ITCfg(s, f)         ((s) ? (R8_TMR3_INTER_EN |= f) : (R8_TMR3_INTER_EN &= ~f))
 
-/**
- * @brief   清除中断标志
- *
- * @param   f       - refer to TMR interrupt bit define
- */
+/* *
+* @brief Clear interrupt flag
+*
+* @param f - refer to TMR interrupt bit define */
 #define TMR3_ClearITFlag(f)      (R8_TMR3_INT_FLAG = f)
 
-/**
- * @brief   查询中断标志状态
- *
- * @param   f       - refer to TMR interrupt bit define
- */
+/* *
+* @brief query interrupt flag status
+*
+* @param f - refer to TMR interrupt bit define */
 #define TMR3_GetITFlag(f)        (R8_TMR3_INT_FLAG & f)
 
 #ifdef __cplusplus

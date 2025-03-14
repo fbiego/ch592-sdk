@@ -57,11 +57,10 @@ typedef enum
 * @param d - Channel reference clock = d*Tsys */
 #define PWMX_CLKCfg(d)    (R8_PWM_CLOCK_DIV = d)
 
-/**
- * @brief   PWM4-PWM11周期配置
- *
- * @param   cyc - refer to PWMX_CycleTypeDef
- */
+/* *
+* @brief PWM4-PWM11 cycle configuration
+*
+* @param cyc - refer to PWMX_CycleTypeDef */
 void PWMX_CycleCfg(PWMX_CycleTypeDef cyc);
 
 /* *
@@ -82,11 +81,10 @@ void PWMX_16bit_CycleCfg(uint16_t cyc);
 * @param d - Effective data pulse width */
 #define PWM5_ActDataWidth(d)     (R8_PWM5_DATA = d)
 
-/**
- * @brief   设置 PWM6 有效数据脉宽
- *
- * @param   d   - 有效数据脉宽
- */
+/* *
+* @brief Set PWM6 valid data pulse width
+*
+* @param d - Effective data pulse width */
 #define PWM6_ActDataWidth(d)     (R8_PWM6_DATA = d)
 
 /* *

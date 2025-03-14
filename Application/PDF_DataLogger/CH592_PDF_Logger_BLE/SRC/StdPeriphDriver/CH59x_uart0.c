@@ -29,15 +29,14 @@ void UART0_DefInit(void)
     R8_UART0_DIV = 1;
 }
 
-/*********************************************************************
- * @fn      UART0_BaudRateCfg
- *
- * @brief   串口波特率配置
- *
- * @param   baudrate    - 波特率
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART0_BaudRateCfg
+*
+* @brief Serial port baud rate configuration
+*
+* @param baudrate - baudrate
+*
+* @return none */
 void UART0_BaudRateCfg(uint32_t baudrate)
 {
     uint32_t x;

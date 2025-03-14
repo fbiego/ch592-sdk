@@ -59,7 +59,7 @@ typedef enum
 	LCD_CLK_128						// 128Hz
 }LCDSCANCLKTypeDef;
 	 
-/* LCD段式屏驱动初始化配置 */
+/* LCD segment screen driver initialization configuration */
 void LCD_Init(LCDDutyTypeDef duty, LCDBiasTypeDef bias);
 
 #define	LCD_PowerDown()			(R32_LCD_CMD &= ~(RB_LCD_ON | RB_LCD_SYS_EN))		/* LCD function module is turned off */
@@ -75,8 +75,8 @@ void LCD_Init(LCDDutyTypeDef duty, LCDBiasTypeDef bias);
 #define LCD_BiasCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_BIAS) | (d<<2))				/* Configure the bias selection of LCD */
 	 
 #define LCD_WriteData0( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)d))			/* Fill in SEG0 driver value */
-#define LCD_WriteData1( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)d<<8))		/* 填充SEG1驱动数值 */
-#define LCD_WriteData2( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)d<<16))		/* 填充SEG2驱动数值 */
+#define LCD_WriteData1( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)d<<8))		/* Fill in SEG1 driver value */
+#define LCD_WriteData2( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)d<<16))		/* Fill in SEG2 driver values */
 #define LCD_WriteData3( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)d<<24))		/* Fill in SEG3 driver values */
 	 
 #define LCD_WriteData4( d )		(R32_LCD_RAM1 = (R32_LCD_RAM1 & 0xffffff00) | ((UINT32)d))			/* Fill in SEG4 driver values */

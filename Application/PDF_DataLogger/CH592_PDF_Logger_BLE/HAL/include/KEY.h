@@ -32,7 +32,7 @@ extern "C"
 #define HAL_KEY_SW_3        0x04   // key3
 #define HAL_KEY_SW_4        0x08   // key4
 
-/* 按键定义 */
+/* Key definition */
 /* 1 - KEY */
 #define KEY1_BV             BV(8)
 #define KEY2_BV

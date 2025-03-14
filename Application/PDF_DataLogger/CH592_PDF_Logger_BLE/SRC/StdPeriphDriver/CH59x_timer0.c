@@ -27,15 +27,14 @@ void TMR0_TimerInit(uint32_t t)
     R8_TMR0_CTRL_MOD = RB_TMR_COUNT_EN;
 }
 
-/*********************************************************************
- * @fn      TMR0_EXTSingleCounterInit
- *
- * @brief   边沿计数功能初始化
- *
- * @param   cap     - 采集计数类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR0_EXTSingleCounterInit
+*
+* @brief edge counting function initialization
+*
+* @param cap - Collection count type
+*
+* @return none */
 void TMR0_EXTSingleCounterInit(CapModeTypeDef cap)
 {
     R8_TMR0_CTRL_MOD = RB_TMR_ALL_CLEAR;

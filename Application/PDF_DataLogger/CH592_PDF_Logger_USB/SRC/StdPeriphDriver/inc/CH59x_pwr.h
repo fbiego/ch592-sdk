@@ -46,7 +46,7 @@ extern "C" {
 /**
  * @brief  unit of controllable power supply
  */
-#define UNIT_SYS_LSE         RB_CLK_XT32K_PON   // 外部32K 时钟振荡
+#define UNIT_SYS_LSE         RB_CLK_XT32K_PON   // External 32K clock oscillation
 #define UNIT_SYS_LSI         RB_CLK_INT32K_PON  // Internal 32K clock oscillation
 #define UNIT_SYS_HSE         RB_CLK_XT32M_PON   // External 32M clock oscillation
 #define UNIT_SYS_PLL         RB_CLK_PLL_PON     // PLL clock oscillation
@@ -116,12 +116,11 @@ void PWR_PeriphClkCfg(FunctionalState s, uint16_t perph);
 * @param mode - refer to WakeUP_ModeypeDef */
 void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mode);
 
-/**
- * @brief   电源监控
- *
- * @param   s       - 是否打开此功能
- * @param   vl      - refer to VolM_LevelypeDef
- */
+/* *
+* @brief Power Monitoring
+*
+* @param s - Whether to turn on this feature
+* @param vl - refer to VolM_LevelypeDef */
 void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl);
 
 /* *

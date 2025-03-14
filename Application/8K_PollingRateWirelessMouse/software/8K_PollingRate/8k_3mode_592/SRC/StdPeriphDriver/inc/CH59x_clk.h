@@ -126,7 +126,7 @@ typedef enum
     Period_1_S,         // 1s cycle
     Period_2_S,         // 2s cycle
     Period_4_S,         // 4s cycle
-    Period_8_S,         // 8s 周期
+    Period_8_S,         // 8s cycle
     Period_16_S,        // 16s cycle
 } RTC_TMRCycTypeDef;
 

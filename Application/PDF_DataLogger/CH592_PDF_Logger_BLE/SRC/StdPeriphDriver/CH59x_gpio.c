@@ -12,16 +12,15 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      GPIOA_ModeCfg
- *
- * @brief   GPIOA端口引脚模式配置
- *
- * @param   pin     - PA0-PA15
- * @param   mode    - 输入输出类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOA_ModeCfg
+*
+* @brief GPIOA port pin mode configuration
+*
+* @param pin - PA0-PA15
+* @param mode - Input and output type
+*
+* @return none */
 void GPIOA_ModeCfg(uint32_t pin, GPIOModeTypeDef mode)
 {
     switch(mode)
@@ -59,16 +58,15 @@ void GPIOA_ModeCfg(uint32_t pin, GPIOModeTypeDef mode)
     }
 }
 
-/*********************************************************************
- * @fn      GPIOB_ModeCfg
- *
- * @brief   GPIOB端口引脚模式配置
- *
- * @param   pin     - PB0-PB23
- * @param   mode    - 输入输出类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOB_ModeCfg
+*
+* @brief GPIOB port pin mode configuration
+*
+* @param pin - PB0-PB23
+* @param mode - Input and output type
+*
+* @return none */
 void GPIOB_ModeCfg(uint32_t pin, GPIOModeTypeDef mode)
 {
     switch(mode)
@@ -106,21 +104,20 @@ void GPIOB_ModeCfg(uint32_t pin, GPIOModeTypeDef mode)
     }
 }
 
-/*********************************************************************
- * @fn      GPIOA_ITModeCfg
- *
- * @brief   GPIOA引脚中断模式配置
- *
- * @param   pin     - PA0-PA15
- * @param   mode    - 触发类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOA_ITModeCfg
+*
+* @brief GPIOA pin interrupt mode configuration
+*
+* @param pin - PA0-PA15
+* @param mode - Trigger type
+*
+* @return none */
 void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
 {
     switch(mode)
     {
-        case GPIO_ITMode_LowLevel: // 低电平触发
+        case GPIO_ITMode_LowLevel: // Low level trigger
             R16_PA_INT_MODE &= ~pin;
             R32_PA_CLR |= pin;
             break;
@@ -135,7 +132,7 @@ void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
             R32_PA_CLR |= pin;
             break;
 
-        case GPIO_ITMode_RiseEdge: // 上升沿触发
+        case GPIO_ITMode_RiseEdge: // Rising edge trigger
             R16_PA_INT_MODE |= pin;
             R32_PA_OUT |= pin;
             break;
@@ -161,7 +158,7 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
     uint32_t Pin = pin | ((pin & (GPIO_Pin_22 | GPIO_Pin_23)) >> 14);
     switch(mode)
     {
-        case GPIO_ITMode_LowLevel: // 低电平触发
+        case GPIO_ITMode_LowLevel: // Low level trigger
             R16_PB_INT_MODE &= ~Pin;
             R32_PB_CLR |= pin;
             break;
@@ -223,31 +220,30 @@ void GPIOPinRemap(FunctionalState s, uint16_t perph)
     }
 }
 
-/*********************************************************************
- * @fn      GPIOAGPPCfg
- *
- * @brief   模拟外设GPIO引脚功能控制
- *
- * @param   s       -   ENABLE  - 打开模拟外设功能，关闭数字功能
- *                      DISABLE - 启用数字功能，关闭模拟外设功能
- * @param   perph   -   RB_PIN_ADC8_9_IE  - ADC/TKEY 9/8通道
- *                      RB_PIN_ADC6_7_IE  - ADC/TKEY 7/6通道
- *                      RB_PIN_ADC10_IE   - ADC/TKEY 10通道
- *                      RB_PIN_ADC11_IE   - ADC/TKEY 11 通道
- *                      RB_PIN_USB2_DP_PU - USB2 U2D+引脚内部上拉电阻
- *                      RB_PIN_USB2_IE    - USB2引脚
- *                      RB_PIN_USB_DP_PU  - USB UD+引脚内部上拉电阻
- *                      RB_PIN_USB_IE     - USB 引脚
- *                      RB_PIN_ADC0_IE    - ADC/TKEY 0 通道
- *                      RB_PIN_ADC1_IE    - ADC/TKEY 1 通道
- *                      RB_PIN_ADC12_IE   - ADC/TKEY 12 通道
- *                      RB_PIN_ADC13_IE   - ADC/TKEY 13 通道
- *                      RB_PIN_XT32K_IE   - 32KHz晶振LSE引脚
- *                      RB_PIN_ADC2_3_IE  - ADC/TKEY 2/3 通道
- *                      RB_PIN_ADC4_5_IE  - ADC/TKEY 4/5 通道
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn GPIOAGPPCfg
+*
+* @brief Analog peripheral GPIO pin function control
+*
+* @param s - ENABLE - Turn on analog peripheral function and turn off digital function
+* DISABLE - Enable digital function and turn off analog peripheral function
+* @param perph - RB_PIN_ADC8_9_IE - ADC/TKEY 9/8 channel
+* RB_PIN_ADC6_7_IE - ADC/TKEY 7/6 channel
+* RB_PIN_ADC10_IE - ADC/TKEY 10 channel
+* RB_PIN_ADC11_IE - ADC/TKEY 11 channel
+* RB_PIN_USB2_DP_PU - USB2 U2D+ pin internal pull-up resistor
+* RB_PIN_USB2_IE - USB2 pin
+* RB_PIN_USB_DP_PU - USB UD+ pin internal pull-up resistor
+* RB_PIN_USB_IE - USB pin
+* RB_PIN_ADC0_IE - ADC/TKEY 0 Channel
+* RB_PIN_ADC1_IE - ADC/TKEY 1 channel
+* RB_PIN_ADC12_IE - ADC/TKEY 12 channel
+* RB_PIN_ADC13_IE - ADC/TKEY 13 Channel
+* RB_PIN_XT32K_IE - 32KHz crystal oscillator LSE pin
+* RB_PIN_ADC2_3_IE - ADC/TKEY 2/3 Channel
+* RB_PIN_ADC4_5_IE - ADC/TKEY 4/5 Channel
+*
+* @return none */
 void GPIOAGPPCfg(FunctionalState s, uint16_t perph)
 {
     if(s)

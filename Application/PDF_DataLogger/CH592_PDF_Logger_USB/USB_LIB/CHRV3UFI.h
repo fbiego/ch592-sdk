@@ -16,7 +16,7 @@
 
 #define CHRV3_LIB_VER		0x10
 
-//#define DISK_BASE_BUF_LEN		512	/* 默认的磁盘数据缓冲区大小为512字节(可以选择为2048甚至4096以支持某些大扇区的U盘),为0则禁止在本文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
+// #define DISK_BASE_BUF_LEN 512 /* The default disk data buffer size is 512 bytes (can be selected as 2048 or even 4096 to support USB disks with large sectors). If 0 is prohibited from defining buffers in this file and specified by the application in pDISK_BASE_BUF */
 /* If you need to multiplex the disk data buffer to save RAM, then DISK_BASE_BUF_LEN can be defined as 0 to prohibit the definition of buffers in this file. The application will place the buffer start address used with other programs into the pDISK_BASE_BUF variable before calling CHRV3LibInit */
 
 // #define NO_DEFAULT_ACCESS_SECTOR 1 /* The default disk sector reading and writing subroutine is prohibited, and the following is a self-written program instead of it */
@@ -56,21 +56,21 @@ extern "C" {
 /* Code 2XH-3XH is used for communication failure code of USB host mode, and the return of CH375 is imitated by the CHRV3 subroutine. */
 /* Code 1XH is used for the operation status code of USB host mode, and the return of CHRV3 subroutine is simulated by CH375. */
 #ifndef ERR_USB_CONNECT
-#define	ERR_USB_CONNECT_LS		0x13	/* 检测到低速USB设备连接事件 */
+#define	ERR_USB_CONNECT_LS		0x13	/* Low-speed USB device connection event detected */
 #define	ERR_USB_CONNECT			0x15	/* USB device connection event was detected and the disk has been connected */
 #define	ERR_USB_DISCON			0x16	/* The USB device disconnect event was detected and the disk was disconnected */
-#define	ERR_USB_BUF_OVER		0x17	/* USB传输的数据有误或者数据太多缓冲区溢出 */
+#define	ERR_USB_BUF_OVER		0x17	/* The data transmitted by USB is incorrect or there is too much data and the buffer overflows */
 #define	ERR_USB_DISK_ERR		0x1F	/* The USB memory operation failed. During initialization, the USB memory may not be supported. During read and write operations, the disk may be damaged or disconnected. */
-#define	ERR_USB_TRANSFER		0x20	/* NAK/STALL等更多错误码在0x20~0x2F */
+#define	ERR_USB_TRANSFER		0x20	/* NAK/STALL and more error codes are in 0x20~0x2F */
 #endif
 
 /* Disk and file status */
 #define DISK_UNKNOWN			0x00	/* Not initialized yet, unknown state */
-#define DISK_DISCONNECT			0x01	/* 磁盘没有连接或者已经断开 */
-#define DISK_CONNECT			0x02	/* 磁盘已经连接,但是尚未初始化或者无法识别该磁盘 */
+#define DISK_DISCONNECT			0x01	/* The disk is not connected or has been disconnected */
+#define DISK_CONNECT			0x02	/* The disk has been connected, but has not been initialized or the disk cannot be recognized */
 #define DISK_USB_ADDR			0x04	/* The disk has been assigned a USB device address, but the USB and initialization disk have not been configured yet */
-#define DISK_MOUNTED			0x05	/* 磁盘已经初始化成功,但是尚未分析文件系统或者文件系统不支持 */
-#define DISK_READY				0x10	/* 已经分析磁盘的文件系统并且能够支持 */
+#define DISK_MOUNTED			0x05	/* The disk has been initialized successfully, but the file system has not been analyzed yet or the file system does not support it */
+#define DISK_READY				0x10	/* The file system of the disk has been analyzed and can support it */
 #define DISK_OPEN_ROOT			0x12	/* The root directory has been opened, and the sector mode can only read and write the contents of the directory in units of sectors. It must be turned off after use. Note that the root directory of FAT12/FAT16 is a fixed length */
 #define DISK_OPEN_DIR			0x13	/* Subdirectory has been opened, sector mode, and can only read and write the contents of the directory in sectors. */
 #define DISK_OPEN_FILE			0x14	/* Files have been opened, sector mode, and data can be read and written in sector units */
@@ -81,36 +81,36 @@ extern "C" {
 #define DISK_FS_UNKNOWN			0		/* Unknown file system */
 #define DISK_FAT12				1		/* FAT12 file system */
 #define DISK_FAT16				2		/* FAT16 file system */
-#define DISK_FAT32				3		/* FAT32文件系统 */
+#define DISK_FAT32				3		/* FAT32 file system */
 #endif
 
-/* FAT数据区中文件目录信息 */
+/* File directory information in the FAT data area */
 typedef struct _FAT_DIR_INFO {
-	UINT8	DIR_Name[11];				/* 00H,文件名,共11字节,不足处填空格 */
+	UINT8	DIR_Name[11];				/* 00H, file name, 11 bytes in total, fill in the blanks if there are insufficient */
 	UINT8	DIR_Attr;					/* 0BH, file attributes, refer to the instructions below */
 	UINT8	DIR_NTRes;					/* 0CH */
 	UINT8	DIR_CrtTimeTenth;			/* 0DH, the time of file creation, counted in 0.1 seconds */
 	UINT16	DIR_CrtTime;				/* 0EH, the time of file creation */
-	UINT16	DIR_CrtDate;				/* 10H,文件创建的日期 */
-	UINT16	DIR_LstAccDate;				/* 12H,最近一次存取操作的日期 */
+	UINT16	DIR_CrtDate;				/* 10H, date of file creation */
+	UINT16	DIR_LstAccDate;				/* 12H, the date of the last access operation */
 	UINT16	DIR_FstClusHI;				/* 14H */
 	UINT16	DIR_WrtTime;				/* 16H, file modification time, refer to the macro MAKE_FILE_TIME */
-	UINT16	DIR_WrtDate;				/* 18H,文件修改日期,参考宏MAKE_FILE_DATA */
+	UINT16	DIR_WrtDate;				/* 18H, file modification date, refer to the macro MAKE_FILE_DATA */
 	UINT16	DIR_FstClusLO;				/* 1AH */
-	UINT32	DIR_FileSize;				/* 1CH,文件长度 */
+	UINT32	DIR_FileSize;				/* 1CH, file length */
 } FAT_DIR_INFO;							/* 20H */
 
 typedef FAT_DIR_INFO *PX_FAT_DIR_INFO;
 
-/* 文件属性 */
+/* File properties */
 #define ATTR_READ_ONLY			0x01	/* File is read-only attribute */
 #define ATTR_HIDDEN				0x02	/* Files are implicit attributes */
 #define ATTR_SYSTEM				0x04	/* File is a system attribute */
 #define ATTR_VOLUME_ID			0x08	/* Coil label */
-#define ATTR_DIRECTORY			0x10	/* 子目录 */
-#define ATTR_ARCHIVE			0x20	/* 文件为存档属性 */
+#define ATTR_DIRECTORY			0x10	/* Subdirectory */
+#define ATTR_ARCHIVE			0x20	/* File is archive attribute */
 #define ATTR_LONG_NAME			( ATTR_READ_ONLY | ATTR_HIDDEN | ATTR_SYSTEM | ATTR_VOLUME_ID )
-/* 文件属性 UINT8 */
+/* File properties UINT8 */
 /* bit0 bit1 bit2 bit3 bit4 bit5 bit6 bit7 */
 /*  只   隐   系   卷   目   存   未定义   */
 /* Reading and hiding record files */
@@ -122,7 +122,7 @@ typedef FAT_DIR_INFO *PX_FAT_DIR_INFO;
 #define MAKE_FILE_DATE( y, m, d )	( ((y-1980)<<9) + (m<<5) + d )	/* Generate file date data for the specified year, month and date */
 
 /* file name */
-#define PATH_WILDCARD_CHAR		0x2A	/* 路径名的通配符 '*' */
+#define PATH_WILDCARD_CHAR		0x2A	/* Wildcard character '*' for pathname */
 #define PATH_SEPAR_CHAR1		0x5C	/* The delimiter of the pathname '\' */
 #define PATH_SEPAR_CHAR2		0x2F	/* The delimiter of the pathname '/' */
 #ifndef MAX_PATH_LEN
@@ -150,16 +150,16 @@ typedef union _CMD_PARAM {
 	} Close;							/* CMD_FileClose, close the current file */
 	struct {
 		UINT8	mPathName[ MAX_PATH_LEN ];	/* Input parameters: Path: [Disk letter, colon, slash, directory name or file name and extension..., ending character 00H], where the drive letter and colon can be omitted, such as "C:\DIR1.EXT\DIR2\FILENAME.EXT",00H */
-	} Create;							/* CMD_FileCreate, 新建文件并打开,如果文件已经存在则先删除后再新建 */
+	} Create;							/* CMD_FileCreate, create a new file and open it. If the file already exists, delete it first and then create it again. */
 	struct {
 		UINT8	mPathName[ MAX_PATH_LEN ];	/* Input parameters: Path: [Disk letter, colon, slash, directory name or file name and extension..., ending character 00H], where the drive letter and colon can be omitted, such as "C:\DIR1.EXT\DIR2\FILENAME.EXT",00H */
-	} Erase;							/* CMD_FileErase, 删除文件并关闭 */
+	} Erase;							/* CMD_FileErase, delete the file and close it */
 	struct {
-		UINT32	mFileSize;				/* 输入参数: 新的文件长度,为0FFFFFFFFH则不修改, 返回: 原长度 */
+		UINT32	mFileSize;				/* Input parameters: The new file length is 0FFFFFFH and will not be modified. Return: Original length */
 		UINT16	mFileDate;				/* Input parameters: If the new file date is 0FFFFH, it will not be modified. Return to: Original date */
-		UINT16	mFileTime;				/* 输入参数: 新的文件时间,为0FFFFH则不修改, 返回: 原时间 */
+		UINT16	mFileTime;				/* Input parameters: The new file time is 0FFFFH and will not be modified. Return to: Original time */
 		UINT8	mFileAttr;				/* Input parameters: New file attribute, if it is 0FFH, it will not be modified. Return to: Original attribute */
-	} Modify;							/* CMD_FileQuery, 查询当前文件的信息; CMD_FileModify, 查询或者修改当前文件的信息 */
+	} Modify;							/* CMD_FileQuery, query the information of the current file; CMD_FileModify, query or modify the information of the current file */
 	struct {
 		UINT32	mSaveCurrClus;
 		UINT32	mSaveLastClus;
@@ -173,7 +173,7 @@ typedef union _CMD_PARAM {
 		UINT8	mActCnt;
 		UINT8	mLbaCount;
 		UINT8	mRemainCnt;
-		PUINT8	mDataBuffer;			/* 输入参数: 缓冲区起始地址, 返回: 缓冲区当前地址 */
+		PUINT8	mDataBuffer;			/* Enter parameters: Buffer start address, return: Buffer current address */
 		UINT32	mLbaStart;
 	} Read;								/* CMD_FileRead, read data from the current file */
 	struct {
@@ -184,26 +184,26 @@ typedef union _CMD_PARAM {
 		PUINT8	mDataBuffer;			/* Enter parameters: Buffer start address, return: Buffer current address */
 		UINT32	mLbaStart;
 		UINT32	mSaveValue;
-	} Write;							/* CMD_FileWrite, 向当前文件写入数据 */
+	} Write;							/* CMD_FileWrite, write data to the current file */
 	struct {
 		UINT32	mDiskSizeSec;			/* Return: The total number of sectors of the entire physical disk, only returned on the first call */
-	} DiskReady;						/* CMD_DiskReady, 查询磁盘就绪 */
+	} DiskReady;						/* CMD_DiskReady, query disk ready */
 	struct {
-		UINT32	mByteOffset;			/* 输入参数: 以字节为单位的偏移量, 以字节为单位的文件指针, 返回: 当前文件指针对应的绝对线性扇区号, 0FFFFFFFFH则已到文件尾 */
+		UINT32	mByteOffset;			/* Input parameters: Offset in bytes, file pointer in bytes, return: The current file refers to the corresponding absolute linear sector number, 0FFFFFFFH is at the end of the file */
 		UINT32	mLastOffset;
-	} ByteLocate;						/* CMD_ByteLocate, 以字节为单位移动当前文件指针 */
+	} ByteLocate;						/* CMD_ByteLocate, moves the current file pointer in bytes */
 	struct {
 		UINT16	mByteCount;				/* Input parameters: The number of bytes to be read, return: The number of bytes actually read */
 		PUINT8	mByteBuffer;			/* 输入参数: 指向存放读出数据块的缓冲区 */
 		UINT16	mActCnt;
 	} ByteRead;							/* CMD_ByteRead, reads data blocks from the current file in units of bytes */
 	struct {
-		UINT16	mByteCount;				/* 输入参数: 准备写入的字节数, 返回: 实际写入的字节数 */
+		UINT16	mByteCount;				/* Input parameters: The number of bytes to be written, return: The number of bytes actually written */
 		PUINT8	mByteBuffer;			/* Input parameters: Point to the buffer where the read data block is stored */
 		UINT16	mActCnt;
 	} ByteWrite;						/* CMD_ByteWrite, 以字节为单位向当前文件写入数据块 */
 	struct {
-		UINT8	mSaveVariable;			/* 输入参数: 为0则恢复单个U盘的变量,为0x80则恢复多个U盘的变量,其它值则备份/保存变量 */
+		UINT8	mSaveVariable;			/* Input parameters: If it is 0, the variables of a single USB disk will be restored. If it is 0x80, the variables of multiple USB disks will be restored. If it is other values, the variables will be backed up/save. */
 		UINT8	mReserved[3];
 		PUINT8	mBuffer;				/* Input parameters: Backup buffer of variables pointing to subroutine library, with a length of no less than 80 bytes */
 	} SaveVariable;						/* CMD_SaveVariable, Backup/Save/Restore variables of the subroutine library */
@@ -233,33 +233,33 @@ typedef CMD_PARAM CMD_PARAM_I;
 #define DISK_BASE_BUF_LEN		512		/* The default disk data buffer size is 512 bytes. It is recommended to select USB disks with 2048 or even 4096 to support certain large sectors. If 0 is, the buffer is prohibited from being defined in the .H file and specified by the application in pDISK_BASE_BUF. */
 #endif
 
-/* 子程序库中提供的变量 */
-extern	UINT8V	CHRV3IntStatus;				/* CHRV3操作的中断状态 */
+/* Variables provided in the subroutine library */
+extern	UINT8V	CHRV3IntStatus;				/* Interrupt status of CHRV3 operation */
 extern	UINT8V	CHRV3DiskStatus;			/* Disk and file status */
 extern	UINT8	CHRV3vDiskFat;				/* FAT flag of the logical disk: 1=FAT12, 2=FAT16, 3=FAT32 */
 extern	UINT8	CHRV3vSecPerClus;			/* Number of sectors per cluster of logical disks */
 extern	UINT8	CHRV3vSectorSizeB;			/* log2(CHRV3vSectorSize) */
 extern	UINT32	CHRV3vStartLba;				/* The start absolute sector number of the logical disk LBA */
 extern	UINT32	CHRV3vDiskRoot;				/* For FAT16 disks, the number of sectors occupied by the root directory, for FAT32 disks, the number of the root directory starts cluster */
-extern	UINT32	CHRV3vDataStart;			/* 逻辑盘的数据区域的起始LBA */
+extern	UINT32	CHRV3vDataStart;			/* Start LBA of the data area of ​​the logical disk */
 extern	UINT32	CHRV3vStartCluster;			/* The starting cluster number of the current file or directory */
 extern	UINT32	CHRV3vFileSize;				/* The length of the current file */
 extern	UINT32	CHRV3vCurrentOffset;		/* Current file pointer, byte offset of current read and write position */
-extern	UINT32	CHRV3vFdtLba;				/* 当前FDT所在的LBA地址 */
-extern	UINT32	CHRV3vLbaCurrent;			/* 当前读写的磁盘起始LBA地址 */
+extern	UINT32	CHRV3vFdtLba;				/* The LBA address where the current FDT is located */
+extern	UINT32	CHRV3vLbaCurrent;			/* The current disk start LBA address of read and write */
 extern	UINT16	CHRV3vFdtOffset;			/* The offset address of the current FDT in the sector */
 extern	UINT16	CHRV3vSectorSize;			/* Disk sector size */
 extern	UINT8	CHRV3vCurrentLun;			/* The current logical unit number of the disk */
-extern	BOOL	CHRV3vSubClassIs6;			/* USB存储类设备的子类为6,0则非6 */
-extern	PUINT8	pDISK_BASE_BUF;		/* 指向外部RAM的磁盘数据缓冲区,缓冲区长度不小于CHRV3vSectorSize,由应用程序初始化 */
+extern	BOOL	CHRV3vSubClassIs6;			/* The subclass of USB storage device is 6, 0 is not 6 */
+extern	PUINT8	pDISK_BASE_BUF;		/* The disk data buffer pointing to the external RAM, the buffer length is not less than CHRV3vSectorSize, initialized by the application */
 extern	PUINT8	pDISK_FAT_BUF;		/* The disk FAT data buffer pointing to external RAM, the buffer length is not less than CHRV3vSectorSize, initialized by the application */
-extern	UINT16	CHRV3vPacketSize;			/* USB存储类设备的最大包长度:64@FS,512@HS/SS,由应用程序初始化 */
+extern	UINT16	CHRV3vPacketSize;			/* Maximum package length of USB storage device: 64@FS, 512@HS/SS, initialized by the application */
 extern	PUINT32	pTX_DMA_A_REG;				/* Point to the send DMA address register, initialized by the application */
 extern	PUINT32	pRX_DMA_A_REG;				/* Point to the receiving DMA address register, initialized by the application */
 extern	PUINT16	pTX_LEN_REG;				/* Point to the send length register, initialized by the application */
 extern	PUINT16	pRX_LEN_REG;				/* Point to the receive length register, initialized by the application */
 
-extern	CMD_PARAM_I	mCmdParam;				/* 命令参数 */
+extern	CMD_PARAM_I	mCmdParam;				/* Command parameters */
 
 extern	UINT8	RxBuffer[ MAX_PACKET_SIZE ];  // IN, must even address
 extern	UINT8	TxBuffer[ MAX_PACKET_SIZE ];  // OUT, must even address
@@ -279,17 +279,17 @@ extern	UINT8	TxBuffer[ MAX_PACKET_SIZE ];  // OUT, must even address
 #endif
 
 #if		DISK_BASE_BUF_LEN > 0
-//extern	UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ];	/* 外部RAM的磁盘数据缓冲区,缓冲区长度为一个扇区的长度 */
+// extern UINT8 DISK_BASE_BUF[ DISK_BASE_BUF_LEN ]; /* The disk data buffer of external RAM, the buffer length is the length of one sector */
 #endif
 extern	UINT8	CHRV3ReadSector( UINT8 SectCount, PUINT8 DataBuf );	/* Read data from multiple sectors into the buffer from disk */
 #ifdef	EN_DISK_WRITE
-extern	UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf );	/* 将缓冲区中的多个扇区的数据块写入磁盘 */
+extern	UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf );	/* Write data blocks of multiple sectors in the buffer to disk */
 #endif
 
-extern	UINT8	CHRV3DiskConnect( void );	/* 检查磁盘是否连接并更新磁盘状态 */
-extern	void	xFileNameEnumer( void );	/* 调用外部定义的子程序,文件名枚举回调子程序 */
+extern	UINT8	CHRV3DiskConnect( void );	/* Check if the disk is connected and update the disk status */
+extern	void	xFileNameEnumer( void );	/* Calling externally defined subroutines, file name enumeration callback subroutines */
 
-extern	UINT8	CHRV3LibInit( void );		/* 初始化CHRV3程序库,操作成功返回0 */
+extern	UINT8	CHRV3LibInit( void );		/* Initialize the CHRV3 program library, the operation returns 0 successfully */
 
 /* Subroutines provided in the subroutine library */
 /* In the following subroutines, both the file operation subroutine CHRV3File* and the disk query subroutine CHRV3DiskQuery may use the disk data buffer pDISK_BASE_BUF,
@@ -298,44 +298,44 @@ If there is less RAM, to use pDISK_BASE_BUF temporarily for other purposes, then
 extern	UINT8	CHRV3GetVer( void );		/* Get the version number of the current subroutine library */
 extern	void	CHRV3DirtyBuffer( void );	/* Clear the disk buffer */
 extern	UINT8	CHRV3BulkOnlyCmd( PUINT8 DataBuf );	/* Execute commands based on BulkOnly protocol */
-extern	UINT8	CHRV3DiskReady( void );		/* 查询磁盘是否准备好 */
+extern	UINT8	CHRV3DiskReady( void );		/* Query if the disk is ready */
 extern	UINT8	CHRV3AnalyzeError( UINT8 iMode );	/* USB operation failed analysis CHRV3IntStatus returns error status */
 extern	UINT8	CHRV3FileOpen( void );		/* Open a file or enumerate a file */
-extern	UINT8	CHRV3FileClose( void );		/* 关闭当前文件 */
+extern	UINT8	CHRV3FileClose( void );		/* Close the current file */
 #ifdef	EN_DISK_WRITE
-extern	UINT8	CHRV3FileErase( void );		/* 删除文件并关闭 */
+extern	UINT8	CHRV3FileErase( void );		/* Delete the file and close it */
 extern	UINT8	CHRV3FileCreate( void );	/* Create a new file and open it. If the file already exists, delete it first and then create it. */
-extern	UINT8	CHRV3FileAlloc( void );		/* 根据文件长度调整为文件分配的磁盘空间 */
+extern	UINT8	CHRV3FileAlloc( void );		/* Adjust the disk space allocated to the file according to the file length */
 #endif
-extern	UINT8	CHRV3FileModify( void );	/* 查询或者修改当前文件的信息 */
+extern	UINT8	CHRV3FileModify( void );	/* Query or modify the information of the current file */
 extern	UINT8	CHRV3FileQuery( void );		/* Query the information of the current file */
 extern	UINT8	CHRV3FileLocate( void );	/* Move the current file pointer */
-extern	UINT8	CHRV3FileRead( void );		/* 从当前文件读取数据到指定缓冲区 */
+extern	UINT8	CHRV3FileRead( void );		/* Read data from the current file to the specified buffer */
 #ifdef	EN_DISK_WRITE
 extern	UINT8	CHRV3FileWrite( void );		/* Write data from the specified buffer to the current file */
 #endif
 extern	UINT8	CHRV3ByteLocate( void );	/* Move the current file pointer in bytes */
 extern	UINT8	CHRV3ByteRead( void );		/* Read data blocks from the current location in units of bytes */
 #ifdef	EN_DISK_WRITE
-extern	UINT8	CHRV3ByteWrite( void );		/* 以字节为单位向当前位置写入数据块 */
+extern	UINT8	CHRV3ByteWrite( void );		/* Write data blocks to the current location in units of bytes */
 #endif
-extern	UINT8	CHRV3DiskQuery( void );		/* 查询磁盘信息 */
+extern	UINT8	CHRV3DiskQuery( void );		/* Query disk information */
 extern	void	CHRV3SaveVariable( void );	/* Backup/save/restore variables of the subroutine library, used to switch the subroutine library between multiple chips or USB flash drives */
 
 extern	void	mDelayuS( UINT16 n );		// Delay in uS units
 extern	void	mDelaymS( UINT16 n );		// Delay in mS
 extern	UINT8	USBHostTransact( UINT8 endp_pid, UINT8 tog, UINT32 timeout );	// CHRV3 transmits transactions, input destination endpoint address/PID token, synchronization flag, NAK retry time, return 0 successful, timeout/error retry
 extern	UINT8	HostCtrlTransfer( PUINT8 DataBuf, PUINT8 RetLen );	// Execute control transmission, 8-byte request code in pSetupReq, DataBuf is an optional sending and receiving buffer, and the actual sending and receiving length is returned in the variable pointed to by ReqLen.
-//extern	void	CopySetupReqPkg( PCCHAR pReqPkt );  // 复制控制传输的请求包
+// extern void CopySetupReqPkg( PCCHAR pReqPkt ); // Copy control transfer request packet
 //extern	UINT8	CtrlGetDeviceDescrTB( void );  // 获取设备描述符,返回在TxBuffer中
-extern	UINT8	CtrlGetConfigDescrTB( void );  // 获取配置描述符,返回在TxBuffer中
-//extern	UINT8	CtrlSetUsbAddress( UINT8 addr );  // 设置USB设备地址
+extern	UINT8	CtrlGetConfigDescrTB( void );  // Get the configuration descriptor, return it in TxBuffer
+// extern UINT8 CtrlSetUsbAddress(UINT8 addr); // Set the USB device address
 extern	UINT8	CtrlSetUsbConfig( UINT8 cfg );  // Set up USB device configuration
 extern	UINT8	CtrlClearEndpStall( UINT8 endp );  // Clear endpoint STALL
 #ifndef	FOR_ROOT_UDISK_ONLY
 // extern UINT8 CtrlGetHubDescr( void ); // Get the HUB descriptor and return it in TxBuffer
-extern	UINT8	HubGetPortStatus( UINT8 HubPortIndex );  // 查询HUB端口状态,返回在TxBuffer中
-//extern	UINT8	HubSetPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt );  // 设置HUB端口特性
+extern	UINT8	HubGetPortStatus( UINT8 HubPortIndex );  // Query the HUB port status and return it in TxBuffer
+// extern UINT8 HubSetPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt ); // Set the HUB port characteristics
 extern	UINT8	HubClearPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt );  // Clear HUB port features
 #endif
 

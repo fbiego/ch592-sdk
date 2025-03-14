@@ -83,15 +83,14 @@ void SPI0_DataMode(ModeBitOrderTypeDef m)
     }
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterSendByte
- *
- * @brief   发送单字节 (buffer)
- *
- * @param   d       - 发送字节
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_MasterSendByte
+*
+* @brief Send a single byte (buffer)
+*
+* @param d - Send bytes
+*
+* @return none */
 void SPI0_MasterSendByte(uint8_t d)
 {
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR;
@@ -145,16 +144,15 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len)
     while(R8_SPI0_FIFO_COUNT != 0); // Wait for all data in FIFO to be sent to complete
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterRecv
- *
- * @brief   使用FIFO连续接收多字节
- *
- * @param   pbuf    - 待接收的数据首地址
- * @param   len     - 待接收的数据长度，最大4095
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_MasterRecv
+*
+* @brief Receive multibytes continuously using FIFO
+*
+* @param pbuf - The first address of the data to be received
+* @param len - The length of data to be received, maximum of 4095
+*
+* @return none */
 void SPI0_MasterRecv(uint8_t *pbuf, uint16_t len)
 {
     uint16_t readlen;
@@ -195,16 +193,15 @@ void SPI0_MasterDMATrans(uint8_t *pbuf, uint16_t len)
     R8_SPI0_CTRL_CFG &= ~RB_SPI_DMA_ENABLE;
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterDMARecv
- *
- * @brief   DMA方式连续接收数据
- *
- * @param   pbuf    - 待接收数据存放起始地址,需要四字节对其
- * @param   len     - 待接收数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_MasterDMARecv
+*
+* @brief DMA mode continuously receives data
+*
+* @param pbuf - The starting address of data to be received, four bytes are required to store it
+* @param len - length of data to be received
+*
+* @return none */
 void SPI0_MasterDMARecv(uint8_t *pbuf, uint16_t len)
 {
     R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR;
@@ -230,13 +227,12 @@ void SPI0_SlaveInit(void)
     R8_SPI0_CTRL_CFG |= RB_SPI_AUTO_IF;
 }
 
-/*********************************************************************
- * @fn      SPI0_SlaveRecvByte
- *
- * @brief   从机模式，接收一字节数据
- *
- * @return  接收到数据
- */
+/* ***************************************************************************
+* @fn SPI0_SlaveRecvByte
+*
+* @brief slave mode, receive one byte of data
+*
+* @return Received data */
 uint8_t SPI0_SlaveRecvByte(void)
 {
     R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR;
@@ -259,16 +255,15 @@ void SPI0_SlaveSendByte(uint8_t d)
     while(R8_SPI0_FIFO_COUNT != 0); // Wait for the sending to complete
 }
 
-/*********************************************************************
- * @fn      SPI0_SlaveRecv
- *
- * @brief   从机模式，接收多字节数据
- *
- * @param   pbuf    - 接收收数据存放起始地址
- * @param   len     - 请求接收数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_SlaveRecv
+*
+* @brief slave mode, receive multibyte data
+*
+* @param pbuf - Start address for receiving and receiving data storage
+* @param len - Request received data length
+*
+* @return none */
 __HIGH_CODE
 void SPI0_SlaveRecv(uint8_t *pbuf, uint16_t len)
 {

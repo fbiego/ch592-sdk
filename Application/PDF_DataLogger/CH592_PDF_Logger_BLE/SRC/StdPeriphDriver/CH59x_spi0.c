@@ -129,7 +129,7 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len)
 
     sendlen = len;
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR; // Set the data direction to output
-    R16_SPI0_TOTAL_CNT = sendlen;         // 设置要发送的数据长度
+    R16_SPI0_TOTAL_CNT = sendlen;         // Set the length of data to be sent
     R8_SPI0_INT_FLAG = RB_SPI_IF_CNT_END;
     while(sendlen)
     {
@@ -158,7 +158,7 @@ void SPI0_MasterRecv(uint8_t *pbuf, uint16_t len)
 
     readlen = len;
     R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR; // Set the data direction to input
-    R16_SPI0_TOTAL_CNT = len;            // 设置需要接收的数据长度，FIFO方向为输入长度不为0则会启动传输 */
+    R16_SPI0_TOTAL_CNT = len;            // Set the length of data to be received. If the FIFO direction is input length not 0, the transmission will be started */
     R8_SPI0_INT_FLAG = RB_SPI_IF_CNT_END;
     while(readlen)
     {
@@ -311,16 +311,15 @@ void SPI0_SlaveTrans(uint8_t *pbuf, uint16_t len)
     while(R8_SPI0_FIFO_COUNT != 0); // Wait for all data in FIFO to be sent to complete
 }
 
-/*********************************************************************
- * @fn      SPI0_SlaveDMARecv
- *
- * @brief   DMA方式连续接收数据
- *
- * @param   pbuf    - 待接收数据存放起始地址,需要四字节对其
- * @param   len     - 待接收数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_SlaveDMARecv
+*
+* @brief DMA mode continuously receives data
+*
+* @param pbuf - The starting address of data to be received, four bytes are required to store it
+* @param len - length of data to be received
+*
+* @return none */
 void SPI0_SlaveDMARecv(uint8_t *pbuf, uint16_t len)
 {
     R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR;

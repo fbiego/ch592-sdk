@@ -34,7 +34,7 @@ extern "C" {
  */
 typedef enum
 {
-    PWM_Times_1 = 0, // PWM 有效输出重复1次数
+    PWM_Times_1 = 0, // PWM valid output repeats 1 times
     PWM_Times_4,     // PWM valid output repeats 4 times
     PWM_Times_8,     // PWM valid output repeats 8 times
     PWM_Times_16,    // PWM valid output repeats 16 times
@@ -60,18 +60,16 @@ typedef enum
     Mode_LOOP,       // Loop mode
 } DMAModeTypeDef;
 
-/**
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- */
+/* *
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864 */
 void TMR0_TimerInit(uint32_t t);
 
-/**
- * @brief   获取当前定时器值，最大67108864
- *
- * @return  当前定时器值
- */
+/* *
+* @brief Get the current timer value, maximum 67108864
+*
+* @return Current timer value */
 #define TMR0_GetCurrentTimer()    R32_TMR0_COUNT
 
 /* *
@@ -86,11 +84,10 @@ void TMR0_EXTSingleCounterInit(CapModeTypeDef cap);
 * @param cyc - Counting statistics overflow size */
 #define TMR0_CountOverflowCfg(cyc)    (R32_TMR0_CNT_END = (cyc + 2))
 
-/**
- * @brief   获取当前计数值，最大67108862
- *
- * @return  当前计数值
- */
+/* *
+* @brief Get the current count value, maximum 67108862
+*
+* @return Current count value */
 #define TMR0_GetCurrentCount()        R32_TMR0_COUNT
 
 /* *
@@ -405,11 +402,10 @@ void TMR2_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, DMAModeTypeDef
 * @param f - refer to TMR interrupt bit define */
 #define TMR2_GetITFlag(f)      (R8_TMR2_INT_FLAG & f)
 
-/**
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- */
+/* *
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864 */
 void TMR3_TimerInit(uint32_t t);
 
 /* *
@@ -424,11 +420,10 @@ void TMR3_TimerInit(uint32_t t);
 * @param cap - Collection count type */
 void TMR3_EXTSingleCounterInit(CapModeTypeDef cap);
 
-/**
- * @brief   设置计数统计溢出大小，最大67108862
- *
- * @param   cyc     - 计数统计溢出大小
- */
+/* *
+* @brief Set count statistics overflow size, maximum 67108862
+*
+* @param cyc - Counting statistics overflow size */
 #define TMR3_CountOverflowCfg(cyc)    (R32_TMR3_CNT_END = (cyc + 2))
 
 /* *

@@ -45,11 +45,10 @@ typedef enum
 * @brief The default initialization configuration of the serial port */
 void UART0_DefInit(void);
 
-/**
- * @brief   串口波特率配置
- *
- * @param   baudrate    - 波特率
- */
+/* *
+* @brief Serial port baud rate configuration
+*
+* @param baudrate - baudrate */
 void UART0_BaudRateCfg(uint32_t baudrate);
 
 /* *
@@ -136,16 +135,15 @@ void UART1_BaudRateCfg(uint32_t baudrate);
 * @param b - trigger byte count refer to UARTByteTRIGTypeDef */
 void UART1_ByteTrigCfg(UARTByteTRIGTypeDef b);
 
-/**
- * @brief   串口中断配置
- *
- * @param   s       - 中断控制状态，是否使能相应中断
- * @param   i       - 中断类型
- *                    RB_IER_MODEM_CHG  - 调制解调器输入状态变化中断使能位（仅 UART0 支持）
- *                    RB_IER_LINE_STAT  - 接收线路状态中断
- *                    RB_IER_THR_EMPTY  - 发送保持寄存器空中断
- *                    RB_IER_RECV_RDY   - 接收数据中断
- */
+/* *
+* @brief Serial port interrupt configuration
+*
+* @param s - Interrupt control status, whether corresponding interrupt can be enabled
+* @param i - interrupt type
+* RB_IER_MODEM_CHG - Modem input state change interrupt enable bit (only supported by UART0)
+* RB_IER_LINE_STAT - Receive line status interrupt
+* RB_IER_THR_EMPTY - Send hold register air interrupt
+* RB_IER_RECV_RDY - Received data interrupt */
 void UART1_INTCfg(FunctionalState s, uint8_t i);
 
 /* *
@@ -199,9 +197,8 @@ void UART1_SendString(uint8_t *buf, uint16_t l);
 * @return Read data length */
 uint16_t UART1_RecvString(uint8_t *buf);
 
-/**
- * @brief   串口默认初始化配置
- */
+/* *
+* @brief The default initialization configuration of the serial port */
 void UART2_DefInit(void);
 
 /* *
@@ -305,9 +302,8 @@ void UART3_ByteTrigCfg(UARTByteTRIGTypeDef b);
 * RB_IER_RECV_RDY - Received data interrupt */
 void UART3_INTCfg(FunctionalState s, uint8_t i);
 
-/**
- * @brief   串口软件复位
- */
+/* *
+* @brief serial port software reset */
 void UART3_Reset(void);
 
 /* *
@@ -318,11 +314,10 @@ void UART3_Reset(void);
 * @brief Clear the currently sent FIFO */
 #define UART3_CLR_TXFIFO()    (R8_UART3_FCR |= RB_FCR_TX_FIFO_CLR)
 
-/**
- * @brief   获取当前中断标志
- *
- * @return  当前中断标志
- */
+/* *
+* @brief Get the current interrupt flag
+*
+* @return Current interrupt flag */
 #define UART3_GetITFlag()     (R8_UART3_IIR & RB_IIR_INT_MASK)
 
 /* *

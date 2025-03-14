@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      PWR_DCDCCfg
- *
- * @brief   启用内部DC/DC电源，用于节约系统功耗
- *
- * @param   s       - 是否打开DCDC电源
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_DCDCCfg
+*
+* @brief Enable internal DC/DC power supply to save system power consumption
+*
+* @param s - Whether to turn on DCDC power
+*
+* @return none */
 void PWR_DCDCCfg(FunctionalState s)
 {
     uint16_t adj = R16_AUX_POWER_ADJ;
@@ -30,7 +29,7 @@ void PWR_DCDCCfg(FunctionalState s)
     {
         
         adj &= ~RB_DCDC_CHARGE;
-        plan &= ~(RB_PWR_DCDC_EN | RB_PWR_DCDC_PRE); // 旁路 DC/DC
+        plan &= ~(RB_PWR_DCDC_EN | RB_PWR_DCDC_PRE); // Bypass DC/DC
         sys_safe_access_enable();
         R16_AUX_POWER_ADJ = adj;
         R16_POWER_PLAN = plan;
@@ -57,16 +56,15 @@ void PWR_DCDCCfg(FunctionalState s)
     }
 }
 
-/*********************************************************************
- * @fn      PWR_UnitModCfg
- *
- * @brief   可控单元模块的电源控制
- *
- * @param   s       - 是否打开电源
- * @param   unit    - please refer to unit of controllable power supply
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PWR_UnitModCfg
+*
+* @brief Power control of controllable unit module
+*
+* @param s - Whether to power on
+* @param unit - please refer to unit of controlled power supply
+*
+* @return none */
 void PWR_UnitModCfg(FunctionalState s, uint8_t unit)
 {
     uint8_t ck32k_cfg = R8_CK32K_CONFIG;
@@ -165,16 +163,15 @@ void PWR_PeriphWakeUpCfg(FunctionalState s, uint8_t perph, WakeUP_ModeypeDef mod
     }
 }
 
-/*********************************************************************
- * @fn      PowerMonitor
- *
- * @brief   电源监控
- *
- * @param   s       - 是否打开此功能
- * @param   vl      - refer to VolM_LevelypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn PowerMonitor
+*
+* @brief Power Monitoring
+*
+* @param s - Whether to turn on this feature
+* @param vl - refer to VolM_LevelypeDef
+*
+* @return none */
 void PowerMonitor(FunctionalState s, VolM_LevelypeDef vl)
 {
     uint8_t ctrl = R8_BAT_DET_CTRL;
@@ -231,15 +228,14 @@ void LowPower_Idle(void)
     __nop();
 }
 
-/*********************************************************************
- * @fn      LowPower_Halt
- *
- * @brief   低功耗-Halt模式，此低功耗切到HSI/5时钟运行，唤醒后需要用户自己重新选择系统时钟源
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LowPower_Halt
+*
+* @brief Low power consumption - Halt mode, this low power consumption cuts to the HSI/5 clock operation, and after wake-up, the user needs to re-select the system clock source by himself
+*
+* @param none
+*
+* @return none */
 __HIGH_CODE
 void LowPower_Halt(void)
 {
@@ -249,7 +245,7 @@ void LowPower_Halt(void)
     R8_FLASH_CTRL = 0x04; // flash close
     x32Kpw = R8_XT32K_TUNE;
     x32Mpw = R8_XT32M_TUNE;
-    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150%额定电流
+    x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
     {                                    // More than 500ms
         x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
@@ -301,7 +297,7 @@ void LowPower_Sleep(uint16_t rm)
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
     {                                    // More than 500ms
-        x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
+        x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
     }
 
     sys_safe_access_enable();
@@ -372,7 +368,7 @@ void LowPower_Shutdown(uint16_t rm)
     x32Mpw = (x32Mpw & 0xfc) | 0x03; // 150% rated current
     if(R16_RTC_CNT_32K > 0x3fff)
     {                                    // More than 500ms
-        x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE驱动电流降低到额定电流
+        x32Kpw = (x32Kpw & 0xfc) | 0x01; // LSE drive current is reduced to rated current
     }
 
     sys_safe_access_enable();

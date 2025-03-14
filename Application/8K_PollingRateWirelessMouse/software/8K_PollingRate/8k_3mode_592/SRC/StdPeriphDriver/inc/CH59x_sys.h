@@ -38,7 +38,7 @@ typedef enum
  */
 typedef enum
 {
-    INFO_ROM_READ = 0, // FlashROM 代码和数据区 是否可读
+    INFO_ROM_READ = 0, // FlashROM code and data area is readable
     INFO_RESET_EN = 2, // Is the RST# external manual reset input function enabled?
     INFO_BOOT_EN,      // System boot program: BootLoader is enabled
     INFO_DEBUG_EN,     // Is the system simulation debugging interface enabled?
@@ -97,11 +97,10 @@ void SYS_ResetExecute(void);
 * @param pirqv - Currently reserved interrupt value */
 void SYS_DisableAllIrq(uint32_t *pirqv);
 
-/**
- * @brief   恢复之前关闭的中断值
- *
- * @param   irq_status  - 当前保留中断值
- */
+/* *
+* @brief restores the interrupt value that was closed before
+*
+* @param irq_status - currently retained interrupt value */
 void SYS_RecoverIrq(uint32_t irq_status);
 
 /* *

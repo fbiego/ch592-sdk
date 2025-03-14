@@ -51,9 +51,9 @@ extern "C" {
  */
 typedef enum
 {
-    GPIO_ModeIN_Floating, //浮空输入
+    GPIO_ModeIN_Floating, // Floating input
     GPIO_ModeIN_PU,       // Pull-up input
-    GPIO_ModeIN_PD,       //下拉输入
+    GPIO_ModeIN_PD,       // Pull down input
     GPIO_ModeOut_PP_5mA,  // Push-pull output maximum 5mA
     GPIO_ModeOut_PP_20mA, // Push-pull output maximum 20mA
 
@@ -64,7 +64,7 @@ typedef enum
  */
 typedef enum
 {
-    GPIO_ITMode_LowLevel,  //低电平触发
+    GPIO_ITMode_LowLevel,  // Low level trigger
     GPIO_ITMode_HighLevel, // High level trigger
     GPIO_ITMode_FallEdge,  // Falling edge trigger
     GPIO_ITMode_RiseEdge,  // Rising edge trigger
@@ -103,18 +103,16 @@ void GPIOB_ModeCfg(uint32_t pin, GPIOModeTypeDef mode);
 * @param pin - PB0-PB23 */
 #define GPIOB_ResetBits(pin)      (R32_PB_CLR |= pin)
 
-/**
- * @brief   GPIOB端口引脚输出置高
- *
- * @param   pin     - PB0-PB23
- */
+/* *
+* @brief GPIOB port pin output set high
+*
+* @param pin - PB0-PB23 */
 #define GPIOB_SetBits(pin)        (R32_PB_OUT |= pin)
 
-/**
- * @brief   GPIOA端口引脚输出电平翻转
- *
- * @param   pin     - PA0-PA15
- */
+/* *
+* @brief GPIOA port pin output level flip
+*
+* @param pin - PA0-PA15 */
 #define GPIOA_InverseBits(pin)    (R32_PA_OUT ^= pin)
 
 /* *
@@ -177,13 +175,12 @@ void GPIOB_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode);
 * @return GPIOB port interrupt flag status */
 #define GPIOB_ReadITFlagPort()       ((R16_PB_INT_IF & (~((GPIO_Pin_22 | GPIO_Pin_23) >> 14))) | ((R16_PB_INT_IF << 14) & (GPIO_Pin_22 | GPIO_Pin_23)))
 
-/**
- * @brief   读取GPIOA端口引脚中断标志状态
- *
- * @param   pin     - PA0-PA15
- *
- * @return  GPIOA端口引脚中断标志状态
- */
+/* *
+* @brief Read the status of the GPIOA port pin interrupt flag
+*
+* @param pin - PA0-PA15
+*
+* @return GPIOA port pin interrupt flag status */
 #define GPIOA_ReadITFlagBit(pin)     (R16_PA_INT_IF & (pin))
 
 /* *

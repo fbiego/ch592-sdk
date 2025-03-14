@@ -50,19 +50,18 @@ void FLASH_ROM_READ(uint32_t StartAddr, void *Buffer, uint32_t len)
     }
 }
 
-/*********************************************************************
- * @fn      UserOptionByteConfig
- *
- * @brief   Configure User Option Byte.需在调用用户配置字生效函数后生效,且每次烧录后只能修改一次
- *          (使用该函数，必须使用官方提供的.S文件，同时调用该函数后，两次上电后，两线调试接口默认关闭)
- *
- * @param   RESET_EN        - 外部复位引脚使能
- * @param   BOOT_PIN        - ENABLE-使用默认boot脚-PB22,DISABLE-使用boot脚-PB11
- * @param   UART_NO_KEY_EN  - 串口免按键下载使能
- * @param   FLASHProt_Size  - 写保护大小(单位4K)
- *
- * @return  0-Success, 1-Err
- */
+/* ***************************************************************************
+* @fn UserOptionByteConfig
+*
+* @brief Configure User Option Byte. It needs to be effective after calling the user configuration word effect function, and can only be modified once each time it is burned.
+* (With this function, you must use the .S file provided by the official. After calling the function at the same time, after powering on twice, the two-wire debugging interface will be closed by default)
+*
+* @param RESET_EN - External reset pin enable
+* @param BOOT_PIN - ENABLE-Use default boot pin-PB22, DISABLE-Use boot pin-PB11
+* @param UART_NO_KEY_EN - Serial port key-free download enable
+* @param FLASHProt_Size - Write-protect size (unit 4K)
+*
+* @return 0-Success, 1-Err */
 uint8_t UserOptionByteConfig(FunctionalState RESET_EN, FunctionalState BOOT_PIN, FunctionalState UART_NO_KEY_EN,
                            uint32_t FLASHProt_Size)
 {
@@ -108,14 +107,13 @@ uint8_t UserOptionByteConfig(FunctionalState RESET_EN, FunctionalState BOOT_PIN,
     return 1;
 }
 
-/*********************************************************************
- * @fn      UserOptionByteClose_SWD
- *
- * @brief   关两线调试接口，其余配置值保持不变.需在调用用户配置字生效函数后生效,且每次烧录后只能修改一次
- *          (使用该函数，必须使用官方提供的.S文件，同时调用该函数后，两次上电后，两线调试接口默认关闭)
- *
- * @return  0-Success, 1-Err
- */
+/* ***************************************************************************
+* @fn UserOptionByteClose_SWD
+*
+* @brief Close the two-wire debugging interface, and the remaining configuration values ​​remain unchanged. It needs to be effective after calling the user configuration word effect function, and can only be modified once each time it is burned.
+* (With this function, you must use the .S file provided by the official. After calling the function at the same time, after powering on twice, the two-wire debugging interface will be closed by default)
+*
+* @return 0-Success, 1-Err */
 uint8_t UserOptionByteClose_SWD(void)
 {
     uint32_t s, t;
@@ -147,13 +145,12 @@ uint8_t UserOptionByteClose_SWD(void)
     return 1;
 }
 
-/*********************************************************************
- * @fn      UserOptionByte_Active
- *
- * @brief   用户配置字生效函数，执行后自动复位
- *
- * @return  0-Success, 1-Err
- */
+/* ***************************************************************************
+* @fn UserOptionByte_Active
+*
+* @brief The user configures the word effective function and automatically reset after execution
+*
+* @return 0-Success, 1-Err */
 void UserOptionByte_Active(void)
 {
     FLASH_ROM_SW_RESET();

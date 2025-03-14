@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      TMR1_TimerInit
- *
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR1_TimerInit
+*
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864
+*
+* @return none */
 void TMR1_TimerInit(uint32_t t)
 {
     R32_TMR1_CNT_END = t;
@@ -28,15 +27,14 @@ void TMR1_TimerInit(uint32_t t)
     R8_TMR1_CTRL_MOD = RB_TMR_COUNT_EN;
 }
 
-/*********************************************************************
- * @fn      TMR1_EXTSingleCounterInit
- *
- * @brief   边沿计数功能初始化
- *
- * @param   cap     - 采集计数类型
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR1_EXTSingleCounterInit
+*
+* @brief edge counting function initialization
+*
+* @param cap - Collection count type
+*
+* @return none */
 void TMR1_EXTSingleCounterInit(CapModeTypeDef cap)
 {
     R8_TMR1_CTRL_MOD = RB_TMR_ALL_CLEAR;

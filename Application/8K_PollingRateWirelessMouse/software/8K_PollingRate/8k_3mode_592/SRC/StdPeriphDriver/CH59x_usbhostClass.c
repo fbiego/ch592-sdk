@@ -66,7 +66,7 @@ uint8_t AnalyzeHidIntEndp(uint8_t *buf, uint8_t HubPortIndex)
             s++;
             if(s >= 4)
             {
-                break; //只分析4个端点
+                break; // Only 4 endpoints are analyzed
             }
         }
         l = ((PUSB_ENDP_DESCR)(buf + i))->bLength; // Current descriptor length, skip
@@ -99,7 +99,7 @@ uint8_t AnalyzeBulkEndp(uint8_t *buf, uint8_t HubPortIndex)
     }
     else
     {
-        memset(ThisUsbDev.GpVar, 0, sizeof(ThisUsbDev.GpVar)); //清空数组
+        memset(ThisUsbDev.GpVar, 0, sizeof(ThisUsbDev.GpVar)); // Clear the array
     }
 
     for(i = 0; i < ((PUSB_CFG_DESCR)buf)->wTotalLength; i += l) // Search for interrupt endpoint descriptors, skip configuration descriptors and interface descriptors
@@ -163,7 +163,7 @@ uint8_t InitRootDevice(void)
     uint8_t cfg, dv_cls, if_cls;
 
     PRINT("Reset host port\n");
-    ResetRootHubPort(); // 检测到设备后,复位相应端口的USB总线
+    ResetRootHubPort(); // After detecting the device, reset the USB bus of the corresponding port
     for(i = 0, s = 0; i < 100; i++)
     { // Wait for the USB device to reset and reconnect, 100mS timeout
         mDelaymS(1);
@@ -234,13 +234,13 @@ uint8_t InitRootDevice(void)
                         ThisUsbDev.DeviceStatus = ROOT_DEV_SUCCESS;
                         ThisUsbDev.DeviceType = USB_DEV_CLASS_STORAGE;
                         PRINT("USB-Disk Ready\n");
-                        SetUsbSpeed(1); // 默认为全速
+                        SetUsbSpeed(1); // Default is full speed
                         return (ERR_SUCCESS);
                     }
                 }
                 else if((dv_cls == 0x00) && (if_cls == USB_DEV_CLASS_PRINTER) && ((PUSB_CFG_DESCR_LONG)Com_Buffer)->itf_descr.bInterfaceSubClass == 0x01)
                 {                              // It is a printer device
-                    s = CtrlSetUsbConfig(cfg); // 设置USB设备配置
+                    s = CtrlSetUsbConfig(cfg); // Set up USB device configuration
                     if(s == ERR_SUCCESS)
                     {
                         // Endpoint information needs to be saved for the main program to perform USB transmission
@@ -277,13 +277,13 @@ uint8_t InitRootDevice(void)
                             ThisUsbDev.DeviceType = DEV_TYPE_KEYBOARD;
                             // Further initialization, such as device keyboard indicator LED, etc.
                             PRINT("USB-Keyboard Ready\n");
-                            SetUsbSpeed(1); // 默认为全速
+                            SetUsbSpeed(1); // Default is full speed
                             return (ERR_SUCCESS);
                         }
                         else if(if_cls == 2)
                         {
                             ThisUsbDev.DeviceType = DEV_TYPE_MOUSE;
-                            //	为了以后查询鼠标状态,应该分析描述符,取得中断端口的地址,长度等信息
+                            // In order to query the mouse status in the future, the descriptor should be analyzed and the address, length and other information of the interrupt port should be obtained.
                             PRINT("USB-Mouse Ready\n");
                             SetUsbSpeed(1); // Default is full speed
                             return (ERR_SUCCESS);
@@ -347,7 +347,7 @@ uint8_t InitRootDevice(void)
 #else
     ThisUsbDev.DeviceStatus = ROOT_DEV_FAILED;
 #endif
-    SetUsbSpeed(1); // 默认为全速
+    SetUsbSpeed(1); // Default is full speed
     return (s);
 }
 
@@ -408,7 +408,7 @@ uint8_t InitDevOnHub(uint8_t HubPortIndex)
             PRINT("%02x ", (uint16_t)DevOnHubPort[HubPortIndex - 1].GpVar[i]);
         }
         PRINT("\n");
-        s = CtrlSetUsbConfig(cfg); // 设置USB设备配置
+        s = CtrlSetUsbConfig(cfg); // Set up USB device configuration
         if(s == ERR_SUCCESS)
         {
             DevOnHubPort[HubPortIndex - 1].DeviceStatus = ROOT_DEV_SUCCESS;
@@ -472,7 +472,7 @@ uint8_t InitDevOnHub(uint8_t HubPortIndex)
             s = ERR_USB_UNSUPPORT;
         }
     }
-    else if(dv_cls == USB_DEV_CLASS_HUB) // 是HUB类设备,集线器等
+    else if(dv_cls == USB_DEV_CLASS_HUB) // It is HUB equipment, hubs, etc.
     {
         DevOnHubPort[HubPortIndex - 1].DeviceType = USB_DEV_CLASS_HUB;
         PRINT("This program don't support Level 2 HUB\n"); // If you need to support multi-level HUB cascade, please refer to this program for extension.
@@ -528,7 +528,7 @@ uint8_t EnumHubPort()
             return (s); // Maybe the HUB is disconnected
         }
         if(((Com_Buffer[0] & (1 << (HUB_PORT_CONNECTION & 0x07))) && (Com_Buffer[2] & (1 << (HUB_C_PORT_CONNECTION & 0x07)))) || (Com_Buffer[2] == 0x10))
-        {                                                          // 发现有设备连接
+        {                                                          // Found a device connected
             DevOnHubPort[i - 1].DeviceStatus = ROOT_DEV_CONNECTED; // Connected with equipment
             DevOnHubPort[i - 1].DeviceAddress = 0x00;
             s = HubGetPortStatus(i); // Get the port status

@@ -37,7 +37,7 @@ static uint8_t halPentaClickFlag = 0; // Count the number of times the key is pr
 static uint16_t shutdown_time_count = 0;
 
 //
-///* 准备进入shutdown标志 */
+// /* Prepare to enter the shutdown logo */
 //uint8_t SHUTDOWN_FLAG = 0;
 //
 // /* Key Idle Time */
@@ -46,7 +46,7 @@ static uint16_t shutdown_time_count = 0;
 // /* The button is idle and turns on the sleep time, the default is 5s */
 //uint16_t KeyIdleTimeout = 5;
 //
-///* 按键轮询的标志标志 */
+// /* Key polling logo */
 //uint8_t KeyPollEnFlag = 0;
 
 
@@ -179,7 +179,7 @@ void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
         }
     }
 
-    halPrevValidKeys = keys; //保存有效键值
+    halPrevValidKeys = keys; // Save valid key values
 }
 
 
@@ -191,7 +191,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
         {
             halPentaClickFlag = 0;
             DeviceStatus = DEF_DEVICE_STATUS_FACTORY;
-            LOG_INFO("Penta clik\n"); //按键间隔4s以内有效
+            LOG_INFO("Penta clik\n"); // The key interval is valid within 4 seconds
 
             tmos_start_task(Peripheral_TaskID, SBP_DISABLE_ADV_EVT, MS1_TO_SYSTEM_TIME(20));
 
@@ -213,7 +213,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
         }
     }
 
-    halPrevValidKeys = keys; //保存有效键值
+    halPrevValidKeys = keys; // Save valid key values
 }
 
 //void HAL_KeyProcessFunction_FactoryStatus(uint8_t keys)
@@ -281,7 +281,7 @@ void HAL_KeyProcessFunction_NormalStatus(uint8_t keys)
 ////        if(shutdown_time_count > (4000/HAL_KEY_POLLING_PERIOD))
 ////        {
 ////            shutdown_time_count = 0;
-////            halPentaClickFlag = 0; //短按时间清零
+// // halPentaClickFlag = 0; //Clear the zero for a short press time
 ////#if DEBUG1
 ////            PRINT("Clear shutdown time count\n");
 ////#endif

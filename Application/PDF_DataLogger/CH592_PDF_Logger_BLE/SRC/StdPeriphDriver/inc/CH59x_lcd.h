@@ -25,7 +25,7 @@
   */
 typedef enum
 {
-	LCD_PS_3V3 = 0,					// 3.3V 驱动
+	LCD_PS_3V3 = 0,					// 3.3V driver
 	LCD_PS_2V5,						// 2.5V driver
 }LCDDrvPowerTypeDef; 
 
@@ -34,7 +34,7 @@ typedef enum
   */
 typedef enum
 {
-	LCD_1_2_Bias = 0,				// 2级分压
+	LCD_1_2_Bias = 0,				// 2-stage pressure
 	LCD_1_3_Bias,					// 3-stage pressure
 }LCDBiasTypeDef;
 
@@ -68,13 +68,13 @@ void LCD_Init(LCDDutyTypeDef duty, LCDBiasTypeDef bias);
 // Input value reference LCDDrvPowerTypeDef
 #define LCD_PowerCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_VLCD_SEL) | (d<<7))			/* Configure the power supply voltage selection of LCD */
 // Input value reference LCDSCANCLKTypeDef
-#define LCD_ScanCLKCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_SCAN_CLK) | (d<<5))			/* 配置LCD的 扫描时钟选择 */
+#define LCD_ScanCLKCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_SCAN_CLK) | (d<<5))			/* Configure the scan clock selection of LCD */
 // Input value reference LCDDutyTypeDef
-#define LCD_DutyCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_DUTY) | (d<<3))				/* 配置LCD的 duty选择 */
+#define LCD_DutyCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_DUTY) | (d<<3))				/* Configure the duty selection of LCD */
 // Input value reference LCDBiasTypeDef
 #define LCD_BiasCfg( d )		(R32_LCD_CMD = (R32_LCD_CMD & ~RB_LCD_BIAS) | (d<<2))				/* Configure the bias selection of LCD */
 	 
-#define LCD_WriteData0( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)d))			/* 填充SEG0驱动数值 */
+#define LCD_WriteData0( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffffff00) | ((UINT32)d))			/* Fill in SEG0 driver value */
 #define LCD_WriteData1( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xffff00ff) | ((UINT32)d<<8))		/* Fill in SEG1 driver value */
 #define LCD_WriteData2( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0xff00ffff) | ((UINT32)d<<16))		/* Fill in SEG2 driver values */
 #define LCD_WriteData3( d )		(R32_LCD_RAM0 = (R32_LCD_RAM0 & 0x00ffffff) | ((UINT32)d<<24))		/* Fill in SEG3 driver values */

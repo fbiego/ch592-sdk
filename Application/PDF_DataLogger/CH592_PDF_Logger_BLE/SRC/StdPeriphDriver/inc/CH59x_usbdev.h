@@ -17,7 +17,7 @@
 extern "C" {
 #endif
 
-/* HID类请求 */
+/* HID class request */
 #define DEF_USB_GET_IDLE           0x02                                         /* get idle for key or mouse */
 #define DEF_USB_GET_PROTOCOL       0x03                                         /* get protocol for bios type */
 #define DEF_USB_SET_REPORT         0x09                                         /* set report for key */
@@ -45,9 +45,8 @@ extern uint8_t *pEP3_RAM_Addr; //ep3_out(64)+ep3_in(64)
 * @brief USB device function initialization, 4 endpoints, 8 channels. */
 void USB_DeviceInit(void);
 
-/**
- * @brief   USB设备应答传输处理
- */
+/* *
+* @brief USB device reply transmission processing */
 void USB_DevTransProcess(void);
 
 /* *
@@ -56,11 +55,10 @@ void USB_DevTransProcess(void);
 * @param l - Pending data length (<64B) */
 void DevEP1_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点2下传数据处理
- *
- * @param   l   - 待处理数据长度(<64B)
- */
+/* *
+* @brief endpoint 2 download data processing
+*
+* @param l - Pending data length (<64B) */
 void DevEP2_OUT_Deal(uint8_t l);
 
 /* *

@@ -73,18 +73,16 @@ void DevEP3_OUT_Deal(uint8_t l);
 * @param l - Pending data length (<64B) */
 void DevEP4_OUT_Deal(uint8_t l);
 
-/**
- * @brief   端点1数据上传
- *
- * @param   l   - 上传数据长度(<64B)
- */
+/* *
+* @brief Endpoint 1 data upload
+*
+* @param l - Upload data length (<64B) */
 void DevEP1_IN_Deal(uint8_t l);
 
-/**
- * @brief   端点2数据上传
- *
- * @param   l   - 上传数据长度(<64B)
- */
+/* *
+* @brief Endpoint 2 data upload
+*
+* @param l - Upload data length (<64B) */
 void DevEP2_IN_Deal(uint8_t l);
 
 /* *
@@ -99,18 +97,16 @@ void DevEP3_IN_Deal(uint8_t l);
 * @param l - Upload data length (<64B) */
 void DevEP4_IN_Deal(uint8_t l);
 
-/**
- * @brief   查询端点1是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 1 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP1_GetINSta()    (R8_UEP1_CTRL & UEP_T_RES_NAK)
 
-/**
- * @brief   查询端点2是否上传完成
- *
- * @return  0-未完成  (!0)-已完成
- */
+/* *
+* @brief query whether endpoint 2 is uploaded
+*
+* @return 0-not completed (!0)-completed */
 #define EP2_GetINSta()    (R8_UEP2_CTRL & UEP_T_RES_NAK)
 
 /* *
@@ -129,9 +125,8 @@ void DevEP4_IN_Deal(uint8_t l);
 * @brief Turn off USB pull-up resistor */
 #define USB_DisablePin()  (R16_PIN_ANALOG_IE &= ~(RB_PIN_USB_IE | RB_PIN_USB_DP_PU))
 
-/**
- * @brief   关闭USB
- */
+/* *
+* @brief Close USB */
 #define USB_Disable()     (R32_USB_CONTROL = 0)
 
 #ifdef __cplusplus

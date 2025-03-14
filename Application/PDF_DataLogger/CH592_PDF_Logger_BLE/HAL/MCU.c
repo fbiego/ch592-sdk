@@ -11,7 +11,7 @@
 ********************************************************************************************* */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 #include "spi_flash.h"
 #include "peripheral.h"
@@ -36,15 +36,14 @@ uint32_t g_LLE_IRQLibHandlerLocation;
 uint8_t FlashClearFlag = 0;
 uint16_t FlashSectorCount = 0;
 
-/*******************************************************************************
- * @fn      Lib_Calibration_LSI
- *
- * @brief   内部32k校准
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn Lib_Calibration_LSI
+*
+* @brief internal 32k calibration
+*
+* @param None.
+*
+* @return None. */
 void Lib_Calibration_LSI(void)
 {
     Calibration_LSI(Level_64);
@@ -87,15 +86,14 @@ uint32_t Lib_Write_Flash(uint32_t addr, uint32_t num, uint32_t *pBuf)
 }
 #endif
 
-/*******************************************************************************
- * @fn      CH59x_BLEInit
- *
- * @brief   BLE 库初始化
- *
- * @param   None.
- *
- * @return  None.
- */
+/* *********************************************************************************************
+* @fn CH59x_BLEInit
+*
+* @brief BLE library initialization
+*
+* @param None.
+*
+* @return None. */
 void CH59x_BLEInit(void)
 {
     uint8_t     i;
@@ -138,7 +136,7 @@ void CH59x_BLEInit(void)
   #endif
 #endif
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
-    cfg.idleCB = CH59x_LowPower; // 启用睡眠
+    cfg.idleCB = CH59x_LowPower; // Enable sleep
 #endif
 #if(defined(BLE_MAC)) && (BLE_MAC == TRUE)
     for(i = 0; i < 6; i++)
@@ -195,7 +193,7 @@ tmosEvents HAL_ProcessEvent(tmosTaskID task_id, tmosEvents events)
     if(events & HAL_REG_INIT_EVENT)
     {
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE) // Calibration task, the single calibration takes less than 10ms
-        BLE_RegInit();                                                  // 校准RF
+        BLE_RegInit();                                                  // Calibrate RF
   #if(CLK_OSC32K)
         Lib_Calibration_LSI(); // Calibrate internal RC
   #endif

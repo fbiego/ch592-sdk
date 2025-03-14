@@ -55,9 +55,8 @@ typedef enum
 
 } HSECurrentTypeDef;
 
-/**
- * @brief  32M晶振内部电容挡位
- */
+/* *
+* @brief 32M crystal oscillator internal capacitor gear */
 typedef enum
 {
     HSECap_10p = 0,
@@ -71,9 +70,8 @@ typedef enum
 
 } HSECapTypeDef;
 
-/**
- * @brief  32K晶振电流挡位
- */
+/* *
+* @brief 32K crystal oscillator current gear */
 typedef enum
 {
     LSE_RCur_70 = 0,
@@ -83,9 +81,8 @@ typedef enum
 
 } LSECurrentTypeDef;
 
-/**
- * @brief  32K晶振内部电容挡位
- */
+/* *
+* @brief 32K crystal oscillator internal capacitor gear */
 typedef enum
 {
     LSECap_2p = 0,
@@ -124,13 +121,13 @@ typedef enum
 typedef enum
 {
     Period_0_125_S = 0, // 0.125s cycle
-    Period_0_25_S,      // 0.25s 周期
+    Period_0_25_S,      // 0.25s cycle
     Period_0_5_S,       // 0.5s cycle
-    Period_1_S,         // 1s 周期
+    Period_1_S,         // 1s cycle
     Period_2_S,         // 2s cycle
     Period_4_S,         // 4s cycle
     Period_8_S,         // 8s cycle
-    Period_16_S,        // 16s 周期
+    Period_16_S,        // 16s cycle
 } RTC_TMRCycTypeDef;
 
 /**
@@ -168,11 +165,10 @@ typedef enum
 * @param hc - Choose 32K to use internal or external */
 void LClk32K_Select(LClk32KTypeDef hc);
 
-/**
- * @brief   HSE晶体 偏置电流配置
- *
- * @param   c   - 75%,100%,125%,150%
- */
+/* *
+* @brief HSE crystal Bias current configuration
+*
+* @param c - 75%, 100%, 125%, 150% */
 void HSECFG_Current(HSECurrentTypeDef c);
 
 /* *
@@ -193,7 +189,7 @@ void LSECFG_Current(LSECurrentTypeDef c);
 * @param c - refer to LSECapTypeDef */
 void LSECFG_Capacitance(LSECapTypeDef c);
 
-void Calibration_LSI(Cali_LevelTypeDef cali_Lv); /* 用主频校准内部32K时钟 */
+void Calibration_LSI(Cali_LevelTypeDef cali_Lv); /* Calibrate the internal 32K clock with main frequency */
 
 /* *
 * @brief RTC clock initialization current time
@@ -223,18 +219,16 @@ void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint1
 * @param cyc - Configure the initial value of the cycle count, MAX_CYC = 0xA8BFFFF = 2831155199 */
 void RTC_SetCycle32k(uint32_t cyc);
 
-/**
- * @brief   基于LSE/LSI时钟，获取当前RTC 周期数
- *
- * @return  当前周期数，MAX_CYC = 0xA8BFFFFF = 2831155199
- */
+/* *
+* @brief Get the current number of RTC cycles based on the LSE/LSI clock
+*
+* @return Current cycle number, MAX_CYC = 0xA8BFFFF = 2831155199 */
 uint32_t RTC_GetCycle32k(void);
 
-/**
- * @brief   RTC定时模式配置（注意定时基准固定为32768Hz）
- *
- * @param   t   - refer to RTC_TMRCycTypeDef
- */
+/* *
+* @brief RTC timing mode configuration (note that the timing reference is fixed to 32768Hz)
+*
+* @param t - refer to RTC_TMRCycTypeDef */
 void RTC_TRIGFunCfg(uint32_t cyc);
 
 /* *
@@ -243,11 +237,10 @@ void RTC_TRIGFunCfg(uint32_t cyc);
 * @param t - refer to RTC_TMRCycTypeDef */
 void RTC_TMRFunCfg(RTC_TMRCycTypeDef t);
 
-/**
- * @brief   RTC 模式功能关闭
- *
- * @param   m   - 需要关闭的当前模式
- */
+/* *
+* @brief RTC mode function is turned off
+*
+* @param m - Current mode that needs to be turned off */
 void RTC_ModeFunDisable(RTC_MODETypeDef m);
 
 /* *

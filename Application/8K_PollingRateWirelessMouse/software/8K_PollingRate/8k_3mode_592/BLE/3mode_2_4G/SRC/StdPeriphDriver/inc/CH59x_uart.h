@@ -21,7 +21,7 @@ extern "C" {
  * @brief	LINE error and status define
  */
 #define STA_ERR_BREAK     RB_LSR_BREAK_ERR    // Data interval error
-#define STA_ERR_FRAME     RB_LSR_FRAME_ERR    // 数据帧错误
+#define STA_ERR_FRAME     RB_LSR_FRAME_ERR    // Data frame error
 #define STA_ERR_PAR       RB_LSR_PAR_ERR      // Parity bit error
 #define STA_ERR_FIFOOV    RB_LSR_OVER_ERR     // Received data overflow
 
@@ -86,11 +86,10 @@ void UART0_Reset(void);
 * @return Current interrupt flag */
 #define UART0_GetITFlag()     (R8_UART0_IIR & RB_IIR_INT_MASK)
 
-/**
- * @brief   获取当前通讯状态
- *
- * @return  refer to LINE error and status define
- */
+/* *
+* @brief Get the current communication status
+*
+* @return refer to LINE error and status define */
 #define UART0_GetLinSTA()     (R8_UART0_LSR)
 
 /* *
@@ -198,9 +197,8 @@ void UART1_SendString(uint8_t *buf, uint16_t l);
 * @return Read data length */
 uint16_t UART1_RecvString(uint8_t *buf);
 
-/**
- * @brief   串口默认初始化配置
- */
+/* *
+* @brief The default initialization configuration of the serial port */
 void UART2_DefInit(void);
 
 /* *
@@ -308,27 +306,24 @@ void UART3_INTCfg(FunctionalState s, uint8_t i);
 * @brief serial port software reset */
 void UART3_Reset(void);
 
-/**
- * @brief   清除当前接收FIFO
- */
+/* *
+* @brief Clear the currently received FIFO */
 #define UART3_CLR_RXFIFO()    (R8_UART3_FCR |= RB_FCR_RX_FIFO_CLR)
 
 /* *
 * @brief Clear the currently sent FIFO */
 #define UART3_CLR_TXFIFO()    (R8_UART3_FCR |= RB_FCR_TX_FIFO_CLR)
 
-/**
- * @brief   获取当前中断标志
- *
- * @return  当前中断标志
- */
+/* *
+* @brief Get the current interrupt flag
+*
+* @return Current interrupt flag */
 #define UART3_GetITFlag()     (R8_UART3_IIR & RB_IIR_INT_MASK)
 
-/**
- * @brief   获取当前通讯状态
- *
- * @return  refer to LINE error and status define
- */
+/* *
+* @brief Get the current communication status
+*
+* @return refer to LINE error and status define */
 #define UART3_GetLinSTA()     (R8_UART3_LSR)
 
 /* *

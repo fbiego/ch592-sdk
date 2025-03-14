@@ -99,15 +99,14 @@ void HSECFG_Current(HSECurrentTypeDef c)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      HSECFG_Capacitance
- *
- * @brief   HSE晶体 负载电容配置
- *
- * @param   c   - refer to HSECapTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn HSECFG_Capacitance
+*
+* @brief HSE crystal Load capacitor configuration
+*
+* @param c - refer to HSECapTypeDef
+*
+* @return none */
 void HSECFG_Capacitance(HSECapTypeDef c)
 {
     uint8_t x32M_c;
@@ -140,15 +139,14 @@ void LSECFG_Current(LSECurrentTypeDef c)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      LSECFG_Capacitance
- *
- * @brief   LSE晶体 负载电容配置
- *
- * @param   c   - refer to LSECapTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn LSECFG_Capacitance
+*
+* @brief LSE crystal Load capacitor configuration
+*
+* @param c - refer to LSECapTypeDef
+*
+* @return none */
 void LSECFG_Capacitance(LSECapTypeDef c)
 {
     uint8_t x32K_c;
@@ -244,7 +242,7 @@ void Calibration_LSI(Cali_LevelTypeDef cali_Lv)
         sys_safe_access_disable();
     }
 
-    // 细调
+    // Fine adjustment
     // After configuring the parameters carefully, discard the capture value twice (software behavior) and judge that it has been once, only once is left here.
     sys_safe_access_enable();
     R8_OSC_CAL_CTRL &= ~RB_OSC_CNT_TOTAL;
@@ -270,7 +268,7 @@ void Calibration_LSI(Cali_LevelTypeDef cali_Lv)
         sys_safe_access_disable();
     }
 
-    while(!(R8_OSC_CAL_CTRL & RB_OSC_CNT_HALT)); // 用于丢弃
+    while(!(R8_OSC_CAL_CTRL & RB_OSC_CNT_HALT)); // For discarding
 
     sys_safe_access_enable();
     R8_OSC_CAL_CTRL &= ~RB_OSC_CNT_EN;
@@ -366,20 +364,19 @@ void RTC_InitTime(uint16_t y, uint16_t mon, uint16_t d, uint16_t h, uint16_t m, 
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      RTC_GetTime
- *
- * @brief   获取当前时间
- *
- * @param   py      - 获取到的年，MAX_Y = BEGYEAR + 44
- * @param   pmon    - 获取到的月，MAX_MON = 12
- * @param   pd      - 获取到的日，MAX_D = 31
- * @param   ph      - 获取到的小时，MAX_H = 23
- * @param   pm      - 获取到的分钟，MAX_M = 59
- * @param   ps      - 获取到的秒，MAX_S = 59
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RTC_GetTime
+*
+* @brief Get the current time
+*
+* @param py - year obtained, MAX_Y = BEGYEAR + 44
+* @param pmon - month obtained, MAX_MON = 12
+* @param pd - the day obtained, MAX_D = 31
+* @param ph - The hour obtained, MAX_H = 23
+* @param pm - minute obtained, MAX_M = 59
+* @param ps - the seconds obtained, MAX_S = 59
+*
+* @return none */
 void RTC_GetTime(uint16_t *py, uint16_t *pmon, uint16_t *pd, uint16_t *ph, uint16_t *pm, uint16_t *ps)
 {
     uint32_t t;
@@ -454,15 +451,14 @@ uint32_t RTC_GetCycle32k(void)
 
     return (i);
 }
-/*********************************************************************
- * @fn      RTC_TMRFunCfg
- *
- * @brief   RTC定时模式配置（注意定时基准固定为32768Hz）
- *
- * @param   t   - refer to RTC_TMRCycTypeDef
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RTC_TMRFunCfg
+*
+* @brief RTC timing mode configuration (note that the timing reference is fixed to 32768Hz)
+*
+* @param t - refer to RTC_TMRCycTypeDef
+*
+* @return none */
 void RTC_TMRFunCfg(RTC_TMRCycTypeDef t)
 {
     sys_safe_access_enable();
@@ -497,15 +493,14 @@ void RTC_TRIGFunCfg(uint32_t cyc)
     sys_safe_access_disable();
 }
 
-/*********************************************************************
- * @fn      RTC_ModeFunDisable
- *
- * @brief   RTC 模式功能关闭
- *
- * @param   m   - 需要关闭的当前模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn RTC_ModeFunDisable
+*
+* @brief RTC mode function is turned off
+*
+* @param m - Current mode that needs to be turned off
+*
+* @return none */
 void RTC_ModeFunDisable(RTC_MODETypeDef m)
 {
     uint8_t i = 0;

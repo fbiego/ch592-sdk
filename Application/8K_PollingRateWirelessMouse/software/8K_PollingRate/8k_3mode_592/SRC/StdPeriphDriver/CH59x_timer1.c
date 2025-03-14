@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      TMR1_TimerInit
- *
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR1_TimerInit
+*
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864
+*
+* @return none */
 void TMR1_TimerInit(uint32_t t)
 {
     R32_TMR1_CNT_END = t;

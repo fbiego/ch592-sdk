@@ -50,7 +50,7 @@
 #define IMAGE_IAP_SIZE         12 * 1024
 
 /* IAP definition */
-#define IAP_STATE_SUCCESS      0x00               // IAP成功
+#define IAP_STATE_SUCCESS      0x00               // IAP Success
 #define IAP_STATE_RETRAN       0x01               // IAP retransmission
 #define IAP_STATE_FAILURE      0xFF               // IAP failed
 
@@ -110,8 +110,8 @@ typedef union
     } end;                       /* End command */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x82 */
-        unsigned char len;              /* 后续数据长度 */
+        unsigned char cmd;              /* Command code 0x82 */
+        unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* Verification address */
         unsigned char buf[IAP_LEN - 4]; /* Verify data */
     } verify;                           /* Verification command */
@@ -120,11 +120,11 @@ typedef union
         unsigned char cmd;              /* Command code 0x80 */
         unsigned char len;              /* Subsequent data length */
         unsigned char addr[2];          /* address */
-        unsigned char buf[IAP_LEN - 4]; /* 后续数据 */
-    } program;                          /* 编程命令 */
+        unsigned char buf[IAP_LEN - 4]; /* Follow-up data */
+    } program;                          /* Programming commands */
     struct
     {
-        unsigned char cmd;              /* 命令码 0x84 */
+        unsigned char cmd;              /* Command code 0x84 */
         unsigned char len;              /* Subsequent data length */
         unsigned char buf[IAP_LEN - 2]; /* Follow-up data */
     } info;                             /* Programming commands */

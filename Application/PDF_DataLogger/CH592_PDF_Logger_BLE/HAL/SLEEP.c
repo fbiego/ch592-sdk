@@ -11,18 +11,17 @@
 ****************************************************************************** */
 
 /******************************************************************************/
-/* 头文件包含 */
+/* The header file contains */
 #include "HAL.h"
 
-/*******************************************************************************
- * @fn          CH59x_LowPower
- *
- * @brief       启动睡眠
- *
- * @param   time    - 唤醒的时间点（RTC绝对值）
- *
- * @return      state.
- */
+/* *********************************************************************************************
+* @fn CH59x_LowPower
+*
+* @brief Start sleep
+*
+* @param time - Wake-up time point (RTC absolute value)
+*
+* @return state. */
 uint32_t CH59x_LowPower(uint32_t time)
 {
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
@@ -30,7 +29,7 @@ uint32_t CH59x_LowPower(uint32_t time)
     uint32_t time_sleep, time_curr;
     unsigned long irq_status;
     
-    // 提前唤醒
+    // Wake up in advance
     if (time <= WAKE_UP_RTC_MAX_TIME) {
         time = time + (RTC_MAX_COUNT - WAKE_UP_RTC_MAX_TIME);
     } else {

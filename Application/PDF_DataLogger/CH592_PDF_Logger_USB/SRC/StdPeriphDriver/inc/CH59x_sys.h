@@ -22,13 +22,13 @@ extern "C" {
  */
 typedef enum
 {
-    RST_STATUS_SW = 0, // 软件复位
+    RST_STATUS_SW = 0, // Software Reset
     RST_STATUS_RPOR,   // Power-on reset
     RST_STATUS_WTR,    // Watchdog timeout reset
-    RST_STATUS_MR,     // 外部手动复位
+    RST_STATUS_MR,     // External manual reset
     RST_STATUS_LRM0,   // Wake-up reset-caused by soft reset
     RST_STATUS_GPWSM,  // Power-off mode wake-up reset
-    RST_STATUS_LRM1,   //	唤醒复位-看门狗引起
+    RST_STATUS_LRM1,   // Wake-up reset-caused by watchdog
     RST_STATUS_LRM2,   // Wake-up reset - manual reset causes
 
 } SYS_ResetStaTypeDef;
@@ -39,7 +39,7 @@ typedef enum
 typedef enum
 {
     INFO_ROM_READ = 0, // FlashROM code and data area is readable
-    INFO_RESET_EN = 2, // RST#外部手动复位输入功能是否开启
+    INFO_RESET_EN = 2, // Is the RST# external manual reset input function enabled?
     INFO_BOOT_EN,      // System boot program: BootLoader is enabled
     INFO_DEBUG_EN,     // Is the system simulation debugging interface enabled?
     INFO_LOADER,       // Is the current system in the Bootloader area?
@@ -47,9 +47,8 @@ typedef enum
 
 } SYS_InfoStaTypeDef;
 
-/**
- * @brief  获取芯片ID类，一般为固定值
- */
+/* *
+* @brief Get the chip ID class, generally a fixed value */
 #define SYS_GetChipID()      R8_CHIP_ID
 
 /* *
@@ -62,11 +61,10 @@ typedef enum
 * @param sc - System clock source selection refer to SYS_CLKTypeDef */
 void SetSysClock(SYS_CLKTypeDef sc);
 
-/**
- * @brief   获取当前系统时钟
- *
- * @return  Hz
- */
+/* *
+* @brief Get the current system clock
+*
+* @return Hz */
 uint32_t GetSysClock(void);
 
 /* *
@@ -83,9 +81,8 @@ uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i);
 * @return refer to SYS_ResetStaTypeDef */
 #define SYS_GetLastResetSta()    (R8_RESET_STATUS & RB_RESET_FLAG)
 
-/**
- * @brief   执行系统软件复位
- */
+/* *
+* @brief Execute system software reset */
 void SYS_ResetExecute(void);
 
 /* *
@@ -94,11 +91,10 @@ void SYS_ResetExecute(void);
 * @param i - refer to SYS_InfoStaTypeDef */
 #define SYS_ResetKeepBuf(d)    (R8_GLOB_RESET_KEEP = d)
 
-/**
- * @brief   关闭所有中断，并保留当前中断值
- *
- * @param   pirqv   - 当前保留中断值
- */
+/* *
+* @brief Close all interrupts and keep the current interrupt value
+*
+* @param pirqv - Currently reserved interrupt value */
 void SYS_DisableAllIrq(uint32_t *pirqv);
 
 /* *
@@ -113,11 +109,10 @@ void SYS_RecoverIrq(uint32_t irq_status);
 * @return Current count value */
 uint32_t SYS_GetSysTickCnt(void);
 
-/**
- * @brief   加载看门狗计数初值，递增型
- *
- * @param   c       - 看门狗计数初值
- */
+/* *
+* @brief Load the initial value of the watchdog count, incremental
+*
+* @param c - Watchdog count initial value */
 #define WWDG_SetCounter(c)    (R8_WDOG_COUNT = c)
 
 /* *
@@ -126,11 +121,10 @@ uint32_t SYS_GetSysTickCnt(void);
 * @param s - whether the overflow is interrupted */
 void WWDG_ITCfg(FunctionalState s);
 
-/**
- * @brief   看门狗定时器复位功能
- *
- * @param   s       - 溢出是否复位
- */
+/* *
+* @brief Watchdog timer reset function
+*
+* @param s - Whether to reset overflow */
 void WWDG_ResetCfg(FunctionalState s);
 
 /* *

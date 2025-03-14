@@ -29,7 +29,7 @@ void USB_DeviceInit(void)
 {
     R8_USB_CTRL = 0x00; // Set the mode first, cancel RB_UC_CLR_ALL
 
-    R8_UEP4_1_MOD = RB_UEP4_RX_EN | RB_UEP4_TX_EN | RB_UEP1_RX_EN | RB_UEP1_TX_EN; // 端点4 OUT+IN,端点1 OUT+IN
+    R8_UEP4_1_MOD = RB_UEP4_RX_EN | RB_UEP4_TX_EN | RB_UEP1_RX_EN | RB_UEP1_TX_EN; // Endpoint 4 OUT+IN, Endpoint 1 OUT+IN
     R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP2_TX_EN | RB_UEP3_RX_EN | RB_UEP3_TX_EN; // Endpoint 2 OUT+IN, Endpoint 3 OUT+IN
 
     R16_UEP0_DMA = (uint16_t)(uint32_t)pEP0_RAM_Addr;
@@ -44,8 +44,8 @@ void USB_DeviceInit(void)
     R8_UEP4_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
 
     R8_USB_DEV_AD = 0x00;
-    R8_USB_CTRL = RB_UC_DEV_PU_EN | RB_UC_INT_BUSY | RB_UC_DMA_EN; // 启动USB设备及DMA，在中断期间中断标志未清除前自动返回NAK
-    R16_PIN_ANALOG_IE |= RB_PIN_USB_IE | RB_PIN_USB_DP_PU;         // 防止USB端口浮空及上拉电阻
+    R8_USB_CTRL = RB_UC_DEV_PU_EN | RB_UC_INT_BUSY | RB_UC_DMA_EN; // Start the USB device and DMA, and automatically return to NAK before the interrupt flag is not cleared during the interrupt period.
+    R16_PIN_ANALOG_IE |= RB_PIN_USB_IE | RB_PIN_USB_DP_PU;         // Prevent the USB port from floating and pull-up resistor
     R8_USB_INT_FG = 0xFF;                                          // Clear interrupt sign
     R8_UDEV_CTRL = RB_UD_PD_DIS | RB_UD_PORT_EN;                   // Allow USB ports
     R8_USB_INT_EN = RB_UIE_SUSPEND | RB_UIE_BUS_RST | RB_UIE_TRANSFER;

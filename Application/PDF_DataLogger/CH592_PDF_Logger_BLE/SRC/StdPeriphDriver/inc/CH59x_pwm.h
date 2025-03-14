@@ -21,12 +21,12 @@ extern "C" {
  * @brief  channel of PWM define
  */
 #define CH_PWM4     0x01  // PWM4 Channel
-#define CH_PWM5     0x02  // PWM5 通道
+#define CH_PWM5     0x02  // PWM5 Channel
 #define CH_PWM6     0x04  // PWM6 Channel
 #define CH_PWM7     0x08  // PWM7 Channel
 #define CH_PWM8     0x10  // PWM8 Channel
 #define CH_PWM9     0x20  // PWM9 Channel
-#define CH_PWM10    0x40  // PWM10 通道
+#define CH_PWM10    0x40  // PWM10 Channel
 #define CH_PWM11    0x80  // PWM11 Channel
 
 /**
@@ -95,11 +95,10 @@ void PWMX_CycleCfg(PWMX_CycleTypeDef cyc);
 * @param d - Effective data pulse width */
 #define PWM8_ActDataWidth(d)     (R8_PWM8_DATA = d)
 
-/**
- * @brief   设置 PWM9 有效数据脉宽
- *
- * @param   d   - 有效数据脉宽
- */
+/* *
+* @brief Set PWM9 valid data pulse width
+*
+* @param d - Effective data pulse width */
 #define PWM9_ActDataWidth(d)     (R8_PWM9_DATA = d)
 
 /**

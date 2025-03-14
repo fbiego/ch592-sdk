@@ -85,11 +85,10 @@ uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i);
 * @brief Execute system software reset */
 void SYS_ResetExecute(void);
 
-/**
- * @brief   设置复位保存寄存器的值，不受手动复位、 软件复位、 看门狗复位或者普通唤醒复位的影响
- *
- * @param   i       - refer to SYS_InfoStaTypeDef
- */
+/* *
+* @brief Set the value of the reset save register, not affected by manual reset, software reset, watchdog reset or normal wake-up reset
+*
+* @param i - refer to SYS_InfoStaTypeDef */
 #define SYS_ResetKeepBuf(d)    (R8_GLOB_RESET_KEEP = d)
 
 /* *
@@ -138,11 +137,10 @@ void WWDG_ResetCfg(FunctionalState s);
 * @brief Clear the watchdog interrupt flag, and reload the count value can also be cleared */
 void WWDG_ClearFlag(void);
 
-/**
- * @brief   uS 延时
- *
- * @param   t       - 时间参数
- */
+/* *
+* @brief uS Delay
+*
+* @param t - Time parameters */
 void mDelayuS(uint16_t t);
 
 /* *

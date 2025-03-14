@@ -45,9 +45,8 @@
 #include <stdio.h>
 #endif
 
-/**
- * @brief  系统主频时钟（Hz）
- */
+/* *
+* @brief System main frequency clock (Hz) */
 #ifndef	 FREQ_SYS
 #define  FREQ_SYS		60000000
 #endif

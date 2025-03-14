@@ -85,15 +85,14 @@ void UART2_INTCfg(FunctionalState s, uint8_t i)
     }
 }
 
-/*********************************************************************
- * @fn      UART2_Reset
- *
- * @brief   串口软件复位
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART2_Reset
+*
+* @brief serial port software reset
+*
+* @param none
+*
+* @return none */
 void UART2_Reset(void)
 {
     R8_UART2_IER = RB_IER_RESET;

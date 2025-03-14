@@ -122,7 +122,7 @@ void GPIOA_ITModeCfg(uint32_t pin, GPIOITModeTpDef mode)
             R32_PA_CLR |= pin;
             break;
 
-        case GPIO_ITMode_HighLevel: // 高电平触发
+        case GPIO_ITMode_HighLevel: // High level trigger
             R16_PA_INT_MODE &= ~pin;
             R32_PA_OUT |= pin;
             break;

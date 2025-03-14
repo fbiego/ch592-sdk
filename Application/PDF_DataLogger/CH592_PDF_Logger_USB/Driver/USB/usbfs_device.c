@@ -229,7 +229,7 @@ void USB_DevTransProcess(void)
         if((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // Not idle
         {
             switch(R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))
-            // 分析操作令牌和端点号
+            // Analyze operation tokens and endpoint numbers
             {
                 /* end-point 0 data in interrupt */
                 case UIS_TOKEN_IN | DEF_UEP0:
@@ -328,7 +328,7 @@ void USB_DevTransProcess(void)
                     errflag = 0xFF; /* Non-standard request */
                 }
             }
-            else /* 标准请求 */
+            else /* Standard request */
             {
                 switch(USBFS_SetupReqCode)
                 {
@@ -520,7 +520,7 @@ void USB_DevTransProcess(void)
 * @return none */
 __INTERRUPT
 __HIGH_CODE
-void USB_IRQHandler(void) /* USB中断服务程序,使用寄存器组1 */
+void USB_IRQHandler(void) /* USB interrupt service program, use register group 1 */
 {
     USB_DevTransProcess();
 }

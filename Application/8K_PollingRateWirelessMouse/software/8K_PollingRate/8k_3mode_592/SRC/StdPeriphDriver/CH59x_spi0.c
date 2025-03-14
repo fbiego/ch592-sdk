@@ -83,15 +83,14 @@ void SPI0_DataMode(ModeBitOrderTypeDef m)
     }
 }
 
-/*********************************************************************
- * @fn      SPI0_MasterSendByte
- *
- * @brief   发送单字节 (buffer)
- *
- * @param   d       - 发送字节
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn SPI0_MasterSendByte
+*
+* @brief Send a single byte (buffer)
+*
+* @param d - Send bytes
+*
+* @return none */
 void SPI0_MasterSendByte(uint8_t d)
 {
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR;
@@ -110,7 +109,7 @@ void SPI0_MasterSendByte(uint8_t d)
 uint8_t SPI0_MasterRecvByte(void)
 {
     R8_SPI0_CTRL_MOD &= ~RB_SPI_FIFO_DIR;
-    R8_SPI0_BUFFER = 0xFF; // 启动传输
+    R8_SPI0_BUFFER = 0xFF; // Start the transfer
     while(!(R8_SPI0_INT_FLAG & RB_SPI_FREE));
     return (R8_SPI0_BUFFER);
 }
@@ -141,7 +140,7 @@ void SPI0_MasterTrans(uint8_t *pbuf, uint16_t len)
             sendlen--;
         }
     }
-    while(R8_SPI0_FIFO_COUNT != 0); // 等待FIFO中的数据全部发送完成
+    while(R8_SPI0_FIFO_COUNT != 0); // Wait for all data in FIFO to be sent to complete
 }
 
 /* ***************************************************************************
@@ -158,7 +157,7 @@ void SPI0_MasterRecv(uint8_t *pbuf, uint16_t len)
     uint16_t readlen;
 
     readlen = len;
-    R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR; // 设置数据方向为输入
+    R8_SPI0_CTRL_MOD |= RB_SPI_FIFO_DIR; // Set the data direction to input
     R16_SPI0_TOTAL_CNT = len;            // Set the length of data to be received. If the FIFO direction is input length not 0, the transmission will be started */
     R8_SPI0_INT_FLAG = RB_SPI_IF_CNT_END;
     while(readlen)

@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      TMR2_TimerInit
- *
- * @brief   定时功能初始化
- *
- * @param   t       - 定时时间，基于当前系统时钟Tsys, 最长定时周期 67108864
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR2_TimerInit
+*
+* @brief timing function initialization
+*
+* @param t - timing time, based on the current system clock Tsys, maximum timing period 67108864
+*
+* @return none */
 void TMR2_TimerInit(uint32_t t)
 {
     R32_TMR2_CNT_END = t;
@@ -71,18 +70,17 @@ void TMR2_CapInit(CapModeTypeDef cap)
     R8_TMR2_CTRL_MOD = RB_TMR_COUNT_EN | RB_TMR_MODE_IN | (cap << 6);
 }
 
-/*********************************************************************
- * @fn      TMR2_DMACfg
- *
- * @brief   配置DMA功能
- *
- * @param   s           - 是否打开DMA功能
- * @param   startAddr   - DMA 起始地址
- * @param   endAddr     - DMA 结束地址
- * @param   m           - 配置DMA模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn TMR2_DMACfg
+*
+* @brief Configure DMA function
+*
+* @param s - Whether to turn on the DMA function
+* @param startAddr - DMA Start Address
+* @param endAddr - DMA end address
+* @param m - Configure DMA mode
+*
+* @return none */
 void TMR2_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, DMAModeTypeDef m)
 {
     if(s == DISABLE)

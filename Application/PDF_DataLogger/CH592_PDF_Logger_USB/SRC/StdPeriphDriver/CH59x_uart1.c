@@ -29,15 +29,14 @@ void UART1_DefInit(void)
     R8_UART1_DIV = 1;
 }
 
-/*********************************************************************
- * @fn      UART1_BaudRateCfg
- *
- * @brief   串口波特率配置
- *
- * @param   baudrate    - 波特率
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART1_BaudRateCfg
+*
+* @brief Serial port baud rate configuration
+*
+* @param baudrate - baudrate
+*
+* @return none */
 void UART1_BaudRateCfg(uint32_t baudrate)
 {
     uint32_t x;
@@ -86,30 +85,28 @@ void UART1_INTCfg(FunctionalState s, uint8_t i)
     }
 }
 
-/*********************************************************************
- * @fn      UART1_Reset
- *
- * @brief   串口软件复位
- *
- * @param   none
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART1_Reset
+*
+* @brief serial port software reset
+*
+* @param none
+*
+* @return none */
 void UART1_Reset(void)
 {
     R8_UART1_IER = RB_IER_RESET;
 }
 
-/*********************************************************************
- * @fn      UART1_SendString
- *
- * @brief   串口多字节发送
- *
- * @param   buf     - 待发送的数据内容首地址
- * @param   l       - 待发送的数据长度
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn UART1_SendString
+*
+* @brief Serial port multibyte send
+*
+* @param buf - The first address of the data content to be sent
+* @param l - length of data to be sent
+*
+* @return none */
 void UART1_SendString(uint8_t *buf, uint16_t l)
 {
     uint16_t len = l;
@@ -124,15 +121,14 @@ void UART1_SendString(uint8_t *buf, uint16_t l)
     }
 }
 
-/*********************************************************************
- * @fn      UART1_RecvString
- *
- * @brief   串口读取多字节
- *
- * @param   buf     - 读取数据存放缓存区首地址
- *
- * @return  读取数据长度
- */
+/* ***************************************************************************
+* @fn UART1_RecvString
+*
+* @brief read multibytes on the serial port
+*
+* @param buf - Read data storage cache area first address
+*
+* @return Read data length */
 uint16_t UART1_RecvString(uint8_t *buf)
 {
     uint16_t len = 0;

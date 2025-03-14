@@ -12,15 +12,14 @@
 
 #include "CH59x_common.h"
 
-/*********************************************************************
- * @fn      ADC_DataCalib_Rough
- *
- * @brief   采样数据粗调,获取偏差值,必须先配置ADC后调用此函数获取校准值
- *
- * @param   none
- *
- * @return  偏差
- */
+/* ***************************************************************************
+* @fn ADC_DataCalib_Rough
+*
+* @brief sample data to roughly tune, get the deviation value, you must first configure the ADC and then call this function to get the calibration value
+*
+* @param none
+*
+* @return deviation */
 signed short ADC_DataCalib_Rough(void) // Sampling data roughly tuned to obtain deviation value
 {
     uint16_t i;
@@ -190,18 +189,17 @@ void ADC_AutoConverCycle(uint8_t cycle)
     R8_ADC_AUTO_CYCLE = cycle;
 }
 
-/*********************************************************************
- * @fn      ADC_DMACfg
- *
- * @brief   配置DMA功能
- *
- * @param   s           - 是否打开DMA功能
- * @param   startAddr   - DMA 起始地址
- * @param   endAddr     - DMA 结束地址
- * @param   m           - 配置DMA模式
- *
- * @return  none
- */
+/* ***************************************************************************
+* @fn ADC_DMACfg
+*
+* @brief Configure DMA function
+*
+* @param s - Whether to turn on the DMA function
+* @param startAddr - DMA Start Address
+* @param endAddr - DMA end address
+* @param m - Configure DMA mode
+*
+* @return none */
 void ADC_DMACfg(uint8_t s, uint32_t startAddr, uint32_t endAddr, ADC_DMAModeTypeDef m)
 {
     if(s == DISABLE)
